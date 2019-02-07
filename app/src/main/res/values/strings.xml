@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Jobni</string>
+    <string name="splash_screen_text_1">ЛУЧШАЯ РАБОТА</string>
+    <string name="splash_screen_text_2">ЛУЧШИМ СПЕЦИАЛИСТАМ</string>
 </resources>
