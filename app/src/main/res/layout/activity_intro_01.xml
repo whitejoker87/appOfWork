@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".SplashScreenActivity">
-
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
     <ImageView
-            android:id="@+id/symbol"
-            android:layout_width="190dp"
-            android:layout_height="270dp"
-            app:srcCompat="@drawable/ic_symbol"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:id="@+id/logo"
+            app:srcCompat="@drawable/ic_logo"
+            android:layout_width="335dp"
+            android:layout_height="119dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.30"
+            app:layout_constraintVertical_bias="0.35"
     />
     <TextView
-            android:id="@+id/theBestWork"
-            android:text="@string/splash_screen_text_1"
+            android:id="@+id/activity_intro_1_1"
+            android:text="@string/activity_intro_1_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -36,11 +33,11 @@
             android:textColor="@color/font_color"
             android:textStyle="bold"
             android:textSize="18sp"
-            app:layout_constraintVertical_bias="0.75"
+            app:layout_constraintVertical_bias="0.65"
     />
     <TextView
-            android:id="@+id/theBestSpecialists"
-            android:text="@string/splash_screen_text_2"
+            android:id="@+id/activity_intro_1_2"
+            android:text="@string/activity_intro_1_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -52,6 +49,6 @@
             android:textColor="@color/font_color"
             android:textStyle="bold"
             android:textSize="18sp"
-            app:layout_constraintVertical_bias="0.80"
+            app:layout_constraintVertical_bias="0.70"
     />
 </androidx.constraintlayout.widget.ConstraintLayout>

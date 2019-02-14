@@ -13,7 +13,13 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-        switchToMainActivity()
+        // Bundle - свежий старт активности. А нам нужно загружаться только в 1 раз - поэтому проверка
+        // TODO: Изучить Bundle
+
+        if (savedInstanceState == null) {
+            switchToMainActivity()
+        }
+
 
         //scheduleSplashScreen()
     }
