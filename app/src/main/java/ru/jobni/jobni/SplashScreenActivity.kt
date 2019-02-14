@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -19,9 +18,6 @@ class SplashScreenActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             switchToMainActivity()
         }
-
-
-        //scheduleSplashScreen()
     }
 
     private fun switchToMainActivity(){

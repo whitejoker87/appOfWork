@@ -5,15 +5,15 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="background">#F5F5F5</color>
-    <color name="theme_1_color_1">#FFC400</color>
-    <color name="theme_1_color_2">#FFAB00</color>
+    <color name="theme_1_color_1">#FFC200</color>
+    <color name="theme_1_color_2">#FFC400</color>
     <color name="theme_1_card">#FFFDE7</color>
     <color name="theme_1_hover">#EBEBEB</color>
     <color name="theme_2_color_1">#2196F3</color>
     <color name="theme_2_color_2">#1E88E5</color>
     <color name="theme_2_card">#E3F2FD</color>
     <color name="theme_2_hover">#DCDCDC</color>
-    <color name="font_color">#4C3E39</color>
+    <color name="font_color">#4C3E40</color>
     <color name="font_color_error_validation">#FF5252</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#111111</color>
