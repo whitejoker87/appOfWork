@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
+
+    <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/tabLayout"
+
+    >
+        <com.google.android.material.tabs.TabItem
+                android:text="@string/tab_layout_bottom_1"
+                android:icon="@drawable/ic_search"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+        />
+        <com.google.android.material.tabs.TabItem
+                android:text="@string/tab_layout_bottom_2"
+                android:icon="@drawable/ic_bell"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+        />
+        <com.google.android.material.tabs.TabItem
+                android:text="@string/tab_layout_bottom_3"
+                android:icon="@drawable/ic_comments"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+        />
+        <com.google.android.material.tabs.TabItem
+                android:text="@string/tab_layout_bottom_4"
+                android:icon="@drawable/ic_calendar"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+        />
+        <com.google.android.material.tabs.TabItem
+                android:text="@string/tab_layout_bottom_5"
+                android:icon="@drawable/ic_user"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+        />
+
+    </com.google.android.material.tabs.TabLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

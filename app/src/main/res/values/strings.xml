@@ -12,4 +12,10 @@
     <string name="activity_intro_4_2">В чате общайся с работодателем, выбирай день и время встречи и используй карту, чтобы узнать, как добраться до выбранной компании</string>
     <string name="activity_intro_5_1">Не упускай момент</string>
     <string name="activity_intro_5_2">Используй планировщик, чтобы не путаться в назначенных встречах и не забывать о предстоящих собеседованиях</string>
+    <string name="tab_layout_bottom_1">Поиск</string>
+    <string name="tab_layout_bottom_2">Уведомления</string>
+    <string name="tab_layout_bottom_3">Чаты</string>
+    <string name="tab_layout_bottom_4">Планировщик</string>
+    <string name="tab_layout_bottom_5">Профиль</string>
+
 </resources>
