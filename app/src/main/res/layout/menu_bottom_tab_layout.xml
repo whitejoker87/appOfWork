@@ -8,8 +8,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/tabLayout"
-
+            style="@style/tabLayoutMenuBottom"
     >
         <com.google.android.material.tabs.TabItem
                 android:text="@string/tab_layout_bottom_1"

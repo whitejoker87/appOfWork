@@ -12,8 +12,8 @@
         <item name="colorPrimaryDark">@color/font_color</item>
     </style>
 
-    <style name="tabLayout" parent="Base.Widget.Design.TabLayout">
-        <item name="tabTextAppearance">@style/tabLayoutText</item>
+    <style name="tabLayoutMenuBottom" parent="Base.Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/tabLayoutTextBottom</item>
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
         <item name="tabTextColor">@color/font_color</item>
@@ -22,7 +22,22 @@
         <item name="android:background">@color/theme_1_color_1</item>
     </style>
 
-    <style name="tabLayoutText" parent="TextAppearance.AppCompat.Button">
+    <style name="tabLayoutTextBottom" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="tabLayoutMenuLeft" parent="Base.Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/tabLayoutTextLeft</item>
+        <item name="tabPaddingStart">0dp</item>
+        <item name="tabPaddingEnd">0dp</item>
+        <item name="tabTextColor">@color/font_color</item>
+        <item name="tabSelectedTextColor">@color/font_color</item>
+        <item name="tabIndicatorColor">@color/font_color</item>
+        <item name="android:background">@color/theme_1_color_1</item>
+    </style>
+
+    <style name="tabLayoutTextLeft" parent="TextAppearance.AppCompat.Button">
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">normal</item>
     </style>
