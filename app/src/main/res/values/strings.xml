@@ -7,15 +7,29 @@
     <string name="activity_intro_2_1">Будь работодателем и соискателем одновременно</string>
     <string name="activity_intro_2_2">Используй одну учетную запись для поиска работы и сотрудников</string>
     <string name="activity_intro_3_1">Находи и забирай лучшее</string>
-    <string name="activity_intro_3_2">Сохраняй фильтры, просматривай историю поиска, получай уведомления обо всех подходящих вакансиях и резюме</string>
+    <string name="activity_intro_3_2">Сохраняй фильтры, просматривай историю поиска, получай уведомления обо всех
+        подходящих вакансиях и резюме
+    </string>
     <string name="activity_intro_4_1">Сразу же записывайся на собеседование</string>
-    <string name="activity_intro_4_2">В чате общайся с работодателем, выбирай день и время встречи и используй карту, чтобы узнать, как добраться до выбранной компании</string>
+    <string name="activity_intro_4_2">В чате общайся с работодателем, выбирай день и время встречи и используй карту,
+        чтобы узнать, как добраться до выбранной компании
+    </string>
     <string name="activity_intro_5_1">Не упускай момент</string>
-    <string name="activity_intro_5_2">Используй планировщик, чтобы не путаться в назначенных встречах и не забывать о предстоящих собеседованиях</string>
+    <string name="activity_intro_5_2">Используй планировщик, чтобы не путаться в назначенных встречах и не забывать о
+        предстоящих собеседованиях
+    </string>
     <string name="tab_layout_bottom_1">Поиск</string>
     <string name="tab_layout_bottom_2">Уведомления</string>
     <string name="tab_layout_bottom_3">Чаты</string>
     <string name="tab_layout_bottom_4">Планировщик</string>
     <string name="tab_layout_bottom_5">Профиль</string>
+    <string name="search">Компетенция</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

@@ -8,8 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="appTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimaryDark">@android:color/white</item>
+    <style name="appTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/font_color</item>
     </style>
 
     <style name="tabLayout" parent="Base.Widget.Design.TabLayout">
