@@ -31,5 +31,9 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
+    <string name="card_close_name">Программист 1С</string>
+    <string name="card_close_newbie">Н - 20 000 р</string>
+    <string name="card_close_experienced">О - 20 000 р</string>
+    <string name="card_close_required_competencies_headline">Требуемые компетенции:</string>
+    <string name="card_close_required_competencies_text">HTML, CSS, JavaScript, Vue, Vuetify, Python, Django, NGINX</string>
 </resources>
