@@ -18,11 +18,16 @@
     <string name="activity_intro_5_2">Используй планировщик, чтобы не путаться в назначенных встречах и не забывать о
         предстоящих собеседованиях
     </string>
-    <string name="tab_layout_bottom_1">Поиск</string>
-    <string name="tab_layout_bottom_2">Уведомления</string>
-    <string name="tab_layout_bottom_3">Чаты</string>
-    <string name="tab_layout_bottom_4">Планировщик</string>
-    <string name="tab_layout_bottom_5">Профиль</string>
+    <string name="menu_bottom_tabLayout_1">Поиск</string>
+    <string name="menu_bottom_tabLayout_2">Уведомления</string>
+    <string name="menu_bottom_tabLayout_3">Чаты</string>
+    <string name="menu_bottom_tabLayout_4">Планировщик</string>
+    <string name="menu_bottom_tabLayout_5">Профиль</string>
+    <string name="menu_bottom_bottomNavigationView_1">Поиск</string>
+    <string name="menu_bottom_bottomNavigationView_2">Уведомления</string>
+    <string name="menu_bottom_bottomNavigationView_3">Чаты</string>
+    <string name="menu_bottom_bottomNavigationView_4">Планировщик</string>
+    <string name="menu_bottom_bottomNavigationView_5">Профиль</string>
     <string name="search">Компетенция</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -31,9 +36,29 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="card_close_name">Программист 1С</string>
+    <string name="card_close_vacancy_name">Программист 1С</string>
     <string name="card_close_newbie">Н - 20 000 р</string>
     <string name="card_close_experienced">О - 20 000 р</string>
     <string name="card_close_required_competencies_headline">Требуемые компетенции:</string>
     <string name="card_close_required_competencies_text">HTML, CSS, JavaScript, Vue, Vuetify, Python, Django, NGINX</string>
+    <string name="card_close_work_format_headline">Формат работы:</string>
+    <string name="card_close_work_format_text">Не имеет значения</string>>
+    <string name="card_close_employment_headline">Занятость:</string>
+    <string name="card_close_employment_text">Полный день, Частичная занятость, Работа в вечернее время, Работа в ночное время, Работа в выходные, Свободный график</string>
+    <string name="card_open_company_description_headline">Описание Компании:</string>
+    <string name="card_open_company_description_text">С другой стороны постоянное информационно-пропагандистское обеспечение нашей деятельности требуют определения и уточнения позиций, занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же постоянный количественный рост и сфера нашей активности позволяет оценить значение форм развития</string>
+    <string name="card_open_vacancy_description_headline">Описание Вакансии:</string>
+    <string name="card_open_vacancy_description_text">С другой стороны постоянное информационно-пропагандистское обеспечение нашей деятельности требуют определения и уточнения позиций, занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же постоянный количественный рост и сфера нашей активности позволяет оценить значение форм развития</string>
+    <string name="card_open_requirements_description_headline">Требования:</string>
+    <string name="card_open_requirements_description_text">Водительский стаж от 3 лет\nЛичный легковой автомобиль\nОтветственность, коммуникабельность</string>
+    <string name="card_open_duties_description_headline">Обязанности:</string>
+    <string name="card_open_duties_description_text">Поездки по городу и области (забираем картриджи, отвозим картриджи)\nВыполнение поручений руководителя</string>
+    <string name="card_open_conditions_description_headline">Условия:</string>
+    <string name="card_open_conditions_description_text">Компенсация ГСМ\nАмортизация\nКорпоративная сотовая связь</string>
+    <string name="card_close_company_name">Jobni</string>
+    <string name="card_close_distance">0.2 км</string>
+    <string name="card_close_address">Россия,г. Екатеринбург, ул. Фронтовых Бригад 22, офис 2</string>
+    <string name="card_close_bottomNavigationView_1">Написать</string>
+    <string name="card_close_bottomNavigationView_2">Позвонить</string>
+    <string name="card_close_bottomNavigationView_3">Откликнуться</string>
 </resources>

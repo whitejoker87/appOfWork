@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/bottomNavigationView_1"
+            android:icon="@drawable/ic_write"
+            android:title="@string/menu_bottom_bottomNavigationView_1"
+    />
+    <item
+            android:id="@+id/bottomNavigationView_2"
+            android:icon="@drawable/ic_phone"
+            android:title="@string/menu_bottom_bottomNavigationView_2"
+    />
+    <item
+            android:id="@+id/bottomNavigationView_3"
+            android:icon="@drawable/ic_respond"
+            android:title="@string/menu_bottom_bottomNavigationView_3"
+    />
+    <item
+            android:id="@+id/bottomNavigationView_4"
+            android:icon="@drawable/ic_phone"
+            android:title="@string/menu_bottom_bottomNavigationView_4"
+    />
+    <item
+            android:id="@+id/bottomNavigationView_5"
+            android:icon="@drawable/ic_respond"
+            android:title="@string/menu_bottom_bottomNavigationView_5"
+    />
+</menu>
