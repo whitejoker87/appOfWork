@@ -13,35 +13,35 @@
     >
         <com.google.android.material.tabs.TabItem
                 android:id="@+id/tabLayout_1"
-                android:text="@string/menu_bottom_tabLayout_1"
+                android:text="@string/menu_bottom_1"
                 android:icon="@drawable/ic_search"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
         />
         <com.google.android.material.tabs.TabItem
                 android:id="@+id/tabLayout_2"
-                android:text="@string/menu_bottom_tabLayout_2"
+                android:text="@string/menu_bottom_2"
                 android:icon="@drawable/ic_bell"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
         />
         <com.google.android.material.tabs.TabItem
                 android:id="@+id/tabLayout_3"
-                android:text="@string/menu_bottom_tabLayout_3"
+                android:text="@string/menu_bottom_3"
                 android:icon="@drawable/ic_comments"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
         />
         <com.google.android.material.tabs.TabItem
                 android:id="@+id/tabLayout_4"
-                android:text="@string/menu_bottom_tabLayout_4"
+                android:text="@string/menu_bottom_4"
                 android:icon="@drawable/ic_calendar"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
         />
         <com.google.android.material.tabs.TabItem
                 android:id="@+id/tabLayout_5"
-                android:text="@string/menu_bottom_tabLayout_5"
+                android:text="@string/menu_bottom_5"
                 android:icon="@drawable/ic_user"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"

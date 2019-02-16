@@ -14,9 +14,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@color/theme_1_color_1"
-
-            app:itemIconTint="@drawable/dsdf"
-            app:itemTextColor="@drawable/dsdf"
+            app:itemIconTint="@drawable/menu_bottom_bottomNavigationView_selector"
+            app:itemTextColor="@drawable/menu_bottom_bottomNavigationView_selector"
+            app:labelVisibilityMode="labeled"
     >
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.constraintlayout.widget.ConstraintLayout>
