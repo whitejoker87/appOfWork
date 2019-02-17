@@ -386,7 +386,7 @@
     />
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/menu"
-            app:menu="@menu/card_bottomNavigationView_item"
+            app:menu="@menu/card_bottom_navigation_view_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@+id/card_close"

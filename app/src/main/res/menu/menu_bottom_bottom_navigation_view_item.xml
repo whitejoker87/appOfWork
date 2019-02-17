@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-            android:id="@+id/bottomNavigationView_1"
+            android:id="@+id/bottom_navigation_view_1"
             android:icon="@drawable/ic_search"
             android:title="@string/menu_bottom_1"
     />
     <item
-            android:id="@+id/bottomNavigationView_2"
+            android:id="@+id/bottom_navigation_view_2"
             android:icon="@drawable/ic_bell"
             android:title="@string/menu_bottom_2"
     />
     <item
-            android:id="@+id/bottomNavigationView_3"
+            android:id="@+id/bottom_navigation_view_3"
             android:icon="@drawable/ic_comments"
             android:title="@string/menu_bottom_3"
     />
