@@ -61,4 +61,5 @@
     <string name="card_close_bottomNavigationView_1">Написать</string>
     <string name="card_close_bottomNavigationView_2">Позвонить</string>
     <string name="card_close_bottomNavigationView_3">Откликнуться</string>
+    <string name="search_item_text">Менеджер по продажам</string>
 </resources>
