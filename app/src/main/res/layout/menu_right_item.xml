@@ -6,12 +6,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <TextView
+    <CheckBox
             android:id="@+id/item"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="16dp"
-            android:text="@string/search_item"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_right_item"
+            android:checked="true"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:textColor="@color/font_color"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"

@@ -5,42 +5,42 @@
                                                    android:layout_height="match_parent">
 
     <com.google.android.material.tabs.TabLayout
-            android:id="@+id/menu_bottom_tabLayout"
-            style="@style/menu_left_tabLayout"
+            android:id="@+id/menu_bottom_tab_layout"
+            style="@style/menu_left_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
     >
         <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabLayout_1"
+                android:id="@+id/tab_layout_1"
                 android:text="@string/menu_bottom_1"
                 android:icon="@drawable/ic_search"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
         />
         <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabLayout_2"
+                android:id="@+id/tab_layout_2"
                 android:text="@string/menu_bottom_2"
                 android:icon="@drawable/ic_bell"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
         />
         <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabLayout_3"
+                android:id="@+id/tab_layout_3"
                 android:text="@string/menu_bottom_3"
                 android:icon="@drawable/ic_comments"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
         />
         <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabLayout_4"
+                android:id="@+id/tab_layout_4"
                 android:text="@string/menu_bottom_4"
                 android:icon="@drawable/ic_calendar"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
         />
         <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabLayout_5"
+                android:id="@+id/tab_layout_5"
                 android:text="@string/menu_bottom_5"
                 android:icon="@drawable/ic_user"
                 android:layout_height="match_parent"

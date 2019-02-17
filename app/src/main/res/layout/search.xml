@@ -19,7 +19,7 @@
     />
     <Button
             android:id="@+id/search_work"
-            android:text="@string/search_button_search_work"
+            android:text="@string/search_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@+id/search_view"
