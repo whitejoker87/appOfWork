@@ -1,13 +1,50 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
+## Java
+*.class
+*.war
+*.ear
+hs_err_pid*
+
+# generated files
+/bin
+/gen
+/build
+/out
+/captures
+
+## Android Studio and Intellij and Android in general
+android/libs/armeabi/
+android/libs/armeabi-v7a/
+android/libs/x86/
+android/gen/
+
+/.idea
+.idea
+.idea/
+.idea/caches
+/.idea/caches/build_file_checksums.ser
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+*.ipr
+*.iws
+*.iml
+com_crashlytics_export_strings.xml
+
+## Gradle
+.gradle
+
+## OS Specific
 .DS_Store
-/build
-/captures
+
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Local configuration file (sdk path, etc)
+/local.properties
+/secret.properties
+*.p12
 .externalNativeBuild
