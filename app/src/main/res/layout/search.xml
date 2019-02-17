@@ -7,7 +7,7 @@
         android:layout_height="match_parent">
 
     <SearchView
-            android:id="@+id/searchView"
+            android:id="@+id/search_view"
             android:layout_width="0dp"
             android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -18,13 +18,13 @@
             android:layout_marginEnd="16dp"
     />
     <Button
+            android:id="@+id/search_work"
             android:text="@string/search_button_search_work"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/search_work"
-            app:layout_constraintStart_toStartOf="@+id/searchView"
-            app:layout_constraintEnd_toEndOf="@+id/searchView"
-            app:layout_constraintTop_toBottomOf="@+id/searchView"
+            app:layout_constraintStart_toStartOf="@+id/search_view"
+            app:layout_constraintEnd_toEndOf="@+id/search_view"
+            app:layout_constraintTop_toBottomOf="@+id/search_view"
             android:layout_marginTop="16dp"
             android:textColor="@color/font_color"
             android:background="@color/theme_1_color_1"
