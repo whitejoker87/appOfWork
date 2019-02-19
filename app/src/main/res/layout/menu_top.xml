@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
+
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -13,7 +14,7 @@
             android:background="@color/theme_1_color_1"
             app:layout_constraintTop_toTopOf="parent"
     />
-    <SearchView
+    <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
