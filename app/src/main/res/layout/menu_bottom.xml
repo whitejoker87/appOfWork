@@ -7,7 +7,7 @@
         tools:context=".MainActivity">
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/menu_bottom"
-            app:menu="@menu/menu_bottom_item"
+            app:menu="@menu/bottom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
