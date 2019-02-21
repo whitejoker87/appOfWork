@@ -7,7 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Button
+import android.widget.Toast
 import ru.jobni.jobni.R
 
 private const val ARG_PARAM1 = "param1"
@@ -15,7 +16,8 @@ private const val ARG_PARAM1 = "param1"
 
 class FragmentIntroSlide : Fragment() {
     private var param1: Int = 0
-    //private var listener: OnFragmentInteractionListener? = null
+    private var listener: OnClickBtnStartListener? = null
+    private lateinit var btnStart: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,27 +30,31 @@ class FragmentIntroSlide : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(param1, container, false)
+        val view = inflater.inflate(param1, container, false);
+        if (param1 == R.layout.intro_05){
+            btnStart = view.findViewById(R.id.start)
+            btnStart.setOnClickListener{onButtonStartPressed()}
         }
+        return view
+    }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    fun onButtonPressed(uri: Uri) {
-//        listener?.onFragmentInteraction(uri)
-//    }
+    fun onButtonStartPressed() {
+        listener?.onClickBtnStart()
+    }
 
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if (context is OnFragmentInteractionListener) {
-//            listener = context
-//        } else {
-//            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-//        }
-//    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnClickBtnStartListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnClickBtnStartListener")
+        }
+    }
 
-//    override fun onDetach() {
-//        super.onDetach()
-//        listener = null
-//    }
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -61,10 +67,9 @@ class FragmentIntroSlide : Fragment() {
      * (http://developer.android.com/training/basics/fragments/communicating.html)
      * for more information.
      */
-//    interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        fun onFragmentInteraction(uri: Uri)
-//    }
+    interface OnClickBtnStartListener {
+        fun onClickBtnStart()
+    }
 
     companion object {
         @JvmStatic
