@@ -32,9 +32,6 @@ import javax.net.ssl.X509TrustManager
 import javax.security.cert.CertificateException
 
 
-// TODO: Изучить Android Navigation Component
-// https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
-
 class FragmentMain : Fragment() {
 
     private val BASE_URL = "https://test.jobni.ru/"
