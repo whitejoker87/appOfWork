@@ -1,11 +1,43 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="appTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="appTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/font_color</item>
+    </style>
+
+    <style name="menu_bottom_tab_layout" parent="Base.Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/menu_bottom_tab_layout_text</item>
+        <item name="tabPaddingStart">0dp</item>
+        <item name="tabPaddingEnd">0dp</item>
+        <item name="tabTextColor">@color/font_color</item>
+        <item name="tabSelectedTextColor">@color/font_color</item>
+        <item name="tabIndicatorColor">@color/font_color</item>
+        <item name="android:background">@color/theme_1_color_1</item>
+    </style>
+
+    <style name="menu_bottom_tab_layout_text" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="menu_left_tab_layout" parent="Base.Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/menu_left_tab_layout_text</item>
+        <item name="tabTextColor">@color/font_color</item>
+        <item name="tabSelectedTextColor">@color/font_color</item>
+        <item name="tabIndicatorColor">@color/font_color</item>
+        <item name="android:background">@color/theme_1_color_1</item>
+    </style>
+
+    <style name="menu_left_tab_layout_text" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
 </resources>
