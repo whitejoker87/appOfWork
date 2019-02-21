@@ -26,14 +26,6 @@
                 android:id="@+id/bottom_5"
                 android:title="@string/menu_bottom_profile_logged_in_5"
         />
-        <item
-                android:id="@+id/bottom_6"
-                android:title="@string/menu_bottom_profile_logged_in_6"
-        />
-        <item
-                android:id="@+id/bottom_7"
-                android:title="@string/menu_bottom_profile_logged_in_7"
-        />
     </group>
     <group>
         <item

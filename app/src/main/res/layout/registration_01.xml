@@ -20,6 +20,7 @@
             app:layout_constraintVertical_bias="0.0"
     />
     <EditText
+            android:visibility="invisible"
             android:id="@+id/referral_link"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,7 +32,19 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:textSize="18sp"
-            android:textColor="@color/font_color"
+    />
+    <TextView
+            android:visibility="invisible"
+            android:id="@+id/referral_message"
+            android:text="@string/registration_01_referral_message"
+            android:textSize="18sp"
+            android:textColor="@color/online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/referral_link"
+            app:layout_constraintStart_toStartOf="@+id/referral_link"
+            app:layout_constraintEnd_toEndOf="@+id/referral_link"
+            android:layout_marginTop="16dp"
     />
 
     <ImageButton
@@ -74,8 +87,8 @@
             android:layout_height="48dp"
             android:background="@drawable/shape_button"
             app:layout_constraintStart_toStartOf="@+id/bottom_09"
+            app:layout_constraintTop_toBottomOf="@+id/referral_message"
             app:layout_constraintEnd_toEndOf="@+id/bottom_10"
-            app:layout_constraintTop_toBottomOf="@+id/referral_link"
             android:layout_marginTop="16dp"
     />
     <ImageButton
@@ -156,10 +169,11 @@
             android:layout_marginStart="16dp"
     />
     <EditText
+            android:visibility="invisible"
             android:id="@+id/registration_mail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/registration_01_registration_mail"
+            android:hint="@string/registration_01_registration_mail_1"
             app:layout_constraintTop_toBottomOf="@+id/bottom_09"
             app:layout_constraintStart_toStartOf="@+id/background"
             app:layout_constraintEnd_toEndOf="@id/background"
@@ -170,10 +184,11 @@
             android:inputType="textEmailAddress"
     />
     <EditText
+            android:visibility="invisible"
             android:id="@+id/registration_password_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/registration_01_registration_password_01"
+            android:hint="@string/registration_01_registration_password_1"
             app:layout_constraintTop_toBottomOf="@+id/registration_mail"
             app:layout_constraintStart_toStartOf="@+id/registration_mail"
             app:layout_constraintEnd_toEndOf="@+id/registration_mail"
@@ -183,11 +198,12 @@
             android:inputType="textPassword|numberPassword"
     />
     <EditText
+            android:visibility="invisible"
             android:id="@+id/registration_password_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="textPassword|numberPassword"
-            android:hint="@string/registration_01_registration_password_2"
+            android:hint="@string/registration_01_registration_password_4"
             app:layout_constraintTop_toBottomOf="@+id/registration_password_1"
             app:layout_constraintStart_toStartOf="@+id/registration_mail"
             app:layout_constraintEnd_toEndOf="@+id/registration_mail"
@@ -196,6 +212,7 @@
             android:textColor="@color/font_color"
     />
     <EditText
+            android:visibility="invisible"
             android:id="@+id/registration_phone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -209,6 +226,7 @@
             android:inputType="phone"
     />
     <EditText
+            android:visibility="invisible"
             android:id="@+id/registration_phone_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -222,8 +240,9 @@
             android:inputType="numberPassword"
     />
     <Button
+            android:visibility="gone"
             android:id="@+id/close"
-            android:text="@string/registration_01_close"
+            android:text="@string/button_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/bind_account"
@@ -233,6 +252,7 @@
             android:background="@drawable/shape_button"
     />
     <Button
+            android:visibility="gone"
             android:id="@+id/bind_account"
             android:text="@string/registration_01_bind_account"
             android:layout_width="wrap_content"
@@ -244,8 +264,33 @@
             android:background="@drawable/shape_button"
     />
     <Button
+            android:visibility="gone"
+            android:id="@+id/mail_change"
+            android:text="@string/registration_01_mail_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/password_change"
+            app:layout_constraintBottom_toBottomOf="@+id/password_change"
+            app:layout_constraintEnd_toStartOf="@+id/password_change"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_button"
+    />
+    <Button
+            android:visibility="gone"
+            android:id="@+id/password_change"
+            android:text="@string/registration_01_password_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/background"
+            app:layout_constraintBottom_toTopOf="@+id/next"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/shape_button"
+    />
+    <Button
+            android:visibility="gone"
             android:id="@+id/next"
-            android:text="@string/registration_01_next"
+            android:text="@string/button_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@+id/background"
