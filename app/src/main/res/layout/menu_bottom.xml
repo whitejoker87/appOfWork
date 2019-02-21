@@ -7,15 +7,15 @@
         tools:context=".MainActivity">
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/menu_bottom"
-            app:menu="@menu/menu_bottom_item"
+            app:menu="@menu/bottom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@color/theme_1_color_1"
-            app:itemIconTint="@drawable/menu_bottom_bottom_navigation_view_selector"
-            app:itemTextColor="@drawable/menu_bottom_bottom_navigation_view_selector"
+            app:itemIconTint="@drawable/menu_selector"
+            app:itemTextColor="@drawable/menu_selector"
             app:labelVisibilityMode="labeled"
     >
     </com.google.android.material.bottomnavigation.BottomNavigationView>
