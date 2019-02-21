@@ -3,21 +3,21 @@
 
     <group>
         <item
-                android:id="@+id/bottom_1"
+                android:id="@+id/bottom_01"
                 android:title="@string/menu_bottom_profile_logged_in_1"
         />
         <item
-                android:id="@+id/bottom_2"
+                android:id="@+id/bottom_02"
                 android:title="@string/menu_bottom_profile_logged_in_2"
         />
     </group>
     <group>
         <item
-                android:id="@+id/bottom_3"
+                android:id="@+id/bottom_03"
                 android:title="@string/menu_bottom_profile_logged_in_3"
         />
         <item
-                android:id="@+id/bottom_4"
+                android:id="@+id/bottom_04"
                 android:title="@string/menu_bottom_profile_logged_in_4"
         />
     </group>

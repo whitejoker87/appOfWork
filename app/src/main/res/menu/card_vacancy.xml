@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-            android:id="@+id/bottom_1"
+            android:id="@+id/bottom_01"
             android:icon="@drawable/ic_write"
             android:title="@string/card_vacancy_close_menu_1"
     />
     <item
-            android:id="@+id/bottom_2"
+            android:id="@+id/bottom_02"
             android:icon="@drawable/ic_phone"
             android:title="@string/card_vacancy_close_menu_2"
     />
     <item
-            android:id="@+id/bottom_3"
+            android:id="@+id/bottom_03"
             android:icon="@drawable/ic_respond"
             android:title="@string/card_vacancy_close_menu_3"
     />

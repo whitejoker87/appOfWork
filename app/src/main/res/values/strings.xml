@@ -23,25 +23,46 @@
     <string name="menu_bottom_3">Чаты</string>
     <string name="menu_bottom_4">Планировщик</string>
     <string name="menu_bottom_5">Профиль</string>
+    <string name="menu_registration_1">Регистрационные данные</string>
+    <string name="menu_registration_2">Основная инфомрация</string>
+    <string name="menu_registration_3">Контактные данные</string>
     <string name="card_vacancy_close_vacancy_name">Программист 1С</string>
     <string name="card_vacancy_close_newbie">Н - 20 000 р</string>
     <string name="card_vacancy_close_experienced">О - 20 000 р</string>
     <string name="card_vacancy_close_required_competencies_headline">Требуемые компетенции:</string>
-    <string name="card_vacancy_close_required_competencies_text">HTML, CSS, JavaScript, Vue, Vuetify, Python, Django, NGINX</string>
+    <string name="card_vacancy_close_required_competencies_text">HTML, CSS, JavaScript, Vue, Vuetify, Python, Django,
+        NGINX
+    </string>
     <string name="card_vacancy_close_work_format_headline">Формат работы:</string>
     <string name="card_vacancy_close_work_format_text">Не имеет значения</string>>
     <string name="card_vacancy_close_employment_headline">Занятость:</string>
-    <string name="card_vacancy_close_employment_text">Полный день, Частичная занятость, Работа в вечернее время, Работа в ночное время, Работа в выходные, Свободный график</string>
+    <string name="card_vacancy_close_employment_text">Полный день, Частичная занятость, Работа в вечернее время, Работа
+        в ночное время, Работа в выходные, Свободный график
+    </string>
     <string name="card_vacancy_open_company_description_headline">Описание Компании:</string>
-    <string name="card_vacancy_open_company_description_text">С другой стороны постоянное информационно-пропагандистское обеспечение нашей деятельности требуют определения и уточнения позиций, занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же постоянный количественный рост и сфера нашей активности позволяет оценить значение форм развития</string>
+    <string name="card_vacancy_open_company_description_text">С другой стороны постоянное информационно-пропагандистское
+        обеспечение нашей деятельности требуют определения и уточнения позиций, занимаемых участниками в отношении
+        поставленных задач. Задача организации, в особенности же постоянный количественный рост и сфера нашей активности
+        позволяет оценить значение форм развития
+    </string>
     <string name="card_vacancy_open_vacancy_description_headline">Описание Вакансии:</string>
-    <string name="card_vacancy_open_vacancy_description_text">С другой стороны постоянное информационно-пропагандистское обеспечение нашей деятельности требуют определения и уточнения позиций, занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же постоянный количественный рост и сфера нашей активности позволяет оценить значение форм развития</string>
+    <string name="card_vacancy_open_vacancy_description_text">С другой стороны постоянное информационно-пропагандистское
+        обеспечение нашей деятельности требуют определения и уточнения позиций, занимаемых участниками в отношении
+        поставленных задач. Задача организации, в особенности же постоянный количественный рост и сфера нашей активности
+        позволяет оценить значение форм развития
+    </string>
     <string name="card_vacancy_open_requirements_description_headline">Требования:</string>
-    <string name="card_vacancy_open_requirements_description_text">Водительский стаж от 3 лет\nЛичный легковой автомобиль\nОтветственность, коммуникабельность</string>
+    <string name="card_vacancy_open_requirements_description_text">Водительский стаж от 3 лет\nЛичный легковой
+        автомобиль\nОтветственность, коммуникабельность
+    </string>
     <string name="card_vacancy_open_duties_description_headline">Обязанности:</string>
-    <string name="card_vacancy_open_duties_description_text">Поездки по городу и области (забираем картриджи, отвозим картриджи)\nВыполнение поручений руководителя</string>
+    <string name="card_vacancy_open_duties_description_text">Поездки по городу и области (забираем картриджи, отвозим
+        картриджи)\nВыполнение поручений руководителя
+    </string>
     <string name="card_vacancy_open_conditions_description_headline">Условия:</string>
-    <string name="card_vacancy_open_conditions_description_text">Компенсация ГСМ\nАмортизация\nКорпоративная сотовая связь</string>
+    <string name="card_vacancy_open_conditions_description_text">Компенсация ГСМ\nАмортизация\nКорпоративная сотовая
+        связь
+    </string>
     <string name="card_vacancy_close_company_name">Jobni</string>
     <string name="card_vacancy_close_distance">0.2 км</string>
     <string name="card_vacancy_close_address">Россия,г. Екатеринбург, ул. Фронтовых Бригад 22, офис 2</string>
@@ -56,12 +77,22 @@
     <string name="menu_bottom_profile_not_logged_in_1">Авторизация</string>
     <string name="menu_bottom_profile_not_logged_in_2">Регистрация</string>
     <string name="menu_bottom_profile_not_logged_in_3">Восстановление пароля</string>
-    <string name="menu_bottom_profile_logged_in_1">ID: </string>
-    <string name="menu_bottom_profile_logged_in_2">REF: </string>
+    <string name="menu_bottom_profile_logged_in_1">ID:</string>
+    <string name="menu_bottom_profile_logged_in_2">REF:</string>
     <string name="menu_bottom_profile_logged_in_3">Реферальная программа</string>
     <string name="menu_bottom_profile_logged_in_4">Cashback</string>
     <string name="menu_bottom_profile_logged_in_5">Учетные данные</string>
     <string name="menu_bottom_profile_logged_in_6">Смена пароля</string>
     <string name="menu_bottom_profile_logged_in_7">Смена почты</string>
     <string name="menu_bottom_profile_logged_in_8">Выход</string>
+    <string name="registration_01_referral_link">Реферальная ссылка</string>
+    <string name="registration_01_registration_mail">Почта</string>
+    <string name="registration_01_registration_password_01">Пароль</string>
+    <string name="registration_01_registration_password_2">Подтвердите пароль</string>
+    <string name="registration_01_registration_phone">Телефон</string>
+    <string name="registration_01_registration_phone_code">Код</string>
+    <string name="registration_01_close">Закрыть</string>
+    <string name="registration_01_bind_account">Привязать аккаунт</string>
+    <string name="registration_01_next">Далее</string>
+    <string name="intro_05_start">Старт</string>
 </resources>
