@@ -33,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="@+id/background"/>
     <Button
             android:id="@+id/back"
-            android:text="@string/button_back"
+            android:text="@string/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@+id/background"
@@ -44,7 +44,7 @@
     />
     <Button
             android:id="@+id/registration"
-            android:text="@string/button_ready"
+            android:text="@string/registration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@+id/background"
