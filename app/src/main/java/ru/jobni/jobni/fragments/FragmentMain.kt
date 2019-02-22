@@ -58,7 +58,6 @@ class FragmentMain : Fragment() {
         val fakeLayout = view.findViewById(R.id.constraint_layout_fake) as ConstraintLayout
 
         searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
-        hideProgressBar(searchReal)
 
         initRetrofit()
 
@@ -80,7 +79,6 @@ class FragmentMain : Fragment() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 timer.cancel()
-                showProgressBar(searchReal)
                 timer = Timer()
                 timer.schedule(
                     object : TimerTask() {
@@ -148,7 +146,6 @@ class FragmentMain : Fragment() {
                         val adapter = ArrayAdapter<String>(context!!, R.layout.search_item, R.id.item, suggestions)
                         searchReal.setAdapter<ArrayAdapter<String>>(adapter)
                         adapter.notifyDataSetChanged()
-                        hideProgressBar(searchReal)
                     }
                 }
             }
