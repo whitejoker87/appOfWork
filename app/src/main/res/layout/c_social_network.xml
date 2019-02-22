@@ -52,7 +52,7 @@
     />
     <ImageButton
             android:id="@+id/button_05"
-            app:srcCompat="@drawable/ic_discord"
+            app:srcCompat="@drawable/ic_instagram"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/shape_button"
@@ -63,7 +63,7 @@
     />
     <ImageButton
             android:id="@+id/button_06"
-            app:srcCompat="@drawable/ic_mail_ru"
+            app:srcCompat="@drawable/ic_telegram"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/shape_button"
@@ -74,7 +74,7 @@
     />
     <ImageButton
             android:id="@+id/bottom_07"
-            app:srcCompat="@drawable/ic_instagram"
+            app:srcCompat="@drawable/ic_gmail"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/shape_button"
@@ -85,7 +85,7 @@
     />
     <ImageButton
             android:id="@+id/bottom_08"
-            app:srcCompat="@drawable/ic_microsoft"
+            app:srcCompat="@drawable/ic_facebook"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/shape_button"
@@ -96,7 +96,7 @@
     />
     <ImageButton
             android:id="@+id/bottom_09"
-            app:srcCompat="@drawable/ic_facebook"
+            app:srcCompat="@drawable/ic_mail_ru"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/shape_button"
@@ -109,7 +109,7 @@
     />
     <ImageButton
             android:id="@+id/bottom_10"
-            app:srcCompat="@drawable/ic_telegram"
+            app:srcCompat="@drawable/ic_discord"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/shape_button"
@@ -120,7 +120,7 @@
     />
     <ImageButton
             android:id="@+id/bottom_11"
-            app:srcCompat="@drawable/ic_gmail"
+            app:srcCompat="@drawable/ic_microsoft"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/shape_button"

@@ -97,9 +97,11 @@
     <string name="password_4">Подтвердите пароль</string>
     <string name="phone">Телефон</string>
     <string name="phone_code">Код</string>
+    <string name="phone_number">+79222224623</string>
     <string name="bind_account">Привязать аккаунт</string>
-    <string name="mail_change">Смена почты</string>
-    <string name="password_change">Смена пароля</string>
+    <string name="mail_change">Сменить почту</string>
+    <string name="password_change">Сменить пароль</string>
+    <string name="password_recovery">Восстановить пароль</string>
     <string name="surname">Фамилия</string>
     <string name="name">Имя</string>
     <string name="middle_name">Отчество</string>

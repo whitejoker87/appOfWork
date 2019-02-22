@@ -30,7 +30,7 @@
             android:layout_margin="16dp"
     />
     <EditText
-            android:id="@+id/registration_mail"
+            android:id="@+id/mail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/mail_1"
@@ -44,27 +44,27 @@
             android:inputType="textEmailAddress"
     />
     <EditText
-            android:id="@+id/registration_password_1"
+            android:id="@+id/password_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/password_1"
-            app:layout_constraintTop_toBottomOf="@+id/registration_mail"
-            app:layout_constraintStart_toStartOf="@+id/registration_mail"
-            app:layout_constraintEnd_toEndOf="@+id/registration_mail"
+            app:layout_constraintTop_toBottomOf="@+id/mail"
+            app:layout_constraintStart_toStartOf="@+id/mail"
+            app:layout_constraintEnd_toEndOf="@+id/mail"
             android:layout_marginTop="16dp"
             android:textSize="18sp"
             android:textColor="@color/font_color"
             android:inputType="textPassword|numberPassword"
     />
     <EditText
-            android:id="@+id/registration_password_2"
+            android:id="@+id/password_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="textPassword|numberPassword"
             android:hint="@string/password_4"
-            app:layout_constraintTop_toBottomOf="@+id/registration_password_1"
-            app:layout_constraintStart_toStartOf="@+id/registration_mail"
-            app:layout_constraintEnd_toEndOf="@+id/registration_mail"
+            app:layout_constraintTop_toBottomOf="@+id/password_1"
+            app:layout_constraintStart_toStartOf="@+id/mail"
+            app:layout_constraintEnd_toEndOf="@+id/mail"
             android:layout_marginTop="16dp"
             android:textSize="18sp"
             android:textColor="@color/font_color"
@@ -87,5 +87,5 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_button"
             app:layout_constraintStart_toStartOf="@+id/background" app:layout_constraintEnd_toEndOf="@+id/background"
-            android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/registration_password_2"/>
+            android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/password_2"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
