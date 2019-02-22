@@ -39,7 +39,7 @@
     />
     <Button
             android:id="@+id/start"
-            android:text="@string/button_ready"
+            android:text="@string/ready"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
