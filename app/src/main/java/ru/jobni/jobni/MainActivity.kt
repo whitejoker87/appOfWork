@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
-        saveLaunchFlag(true)
+        //saveLaunchFlag(true)
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
         }

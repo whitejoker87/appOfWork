@@ -4,17 +4,20 @@ import android.app.SearchManager
 import android.database.MatrixCursor
 import android.os.Bundle
 import android.provider.BaseColumns
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.NonNull
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.cursoradapter.widget.CursorAdapter
 import androidx.cursoradapter.widget.SimpleCursorAdapter
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.legacy.app.ActionBarDrawerToggle
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -43,12 +46,32 @@ class FragmentMain : Fragment() {
     private lateinit var searchItem: SearchView
     private val SEARCH_VIEW_LIMIT_COUNT = 10
 
+    private lateinit var drawerLayout: DrawerLayout
+    private var actionBarDrawerToggle: ActionBarDrawerToggle? = null
+    private lateinit var btnList: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true);
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         toolbar.title = ""
+
+//        val actionbar: ActionBar? = (activity as AppCompatActivity).supportActionBar
+//        actionbar?.apply {
+//            setDisplayHomeAsUpEnabled(true)
+//            setHomeAsUpIndicator(R.drawable.ic_bell)
+//        }
+
+        drawerLayout = view.findViewById(R.id.drawer_layout)
+
+        btnList = view.findViewById(R.id.btn_list)
+        btnList.setOnClickListener { drawerLayout.openDrawer(GravityCompat.END) }
 
         searchItem = view.findViewById(R.id.search_view) as SearchView
         searchItem.queryHint = getString(R.string.search_view_hint)
@@ -209,4 +232,20 @@ class FragmentMain : Fragment() {
             throw RuntimeException(e)
         }
     }
+
+//    override fun onCreateOptionsMenu(menu:Menu, inflater:MenuInflater) {
+//    inflater.inflate(R.menu., menu);
+//    super.onCreateOptionsMenu(menu, inflater);
+//}
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            android.R.id.home -> {
+//                drawerLayout.openDrawer(GravityCompat.END)
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
+
 }
