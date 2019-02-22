@@ -98,19 +98,19 @@
     <string name="phone">Телефон</string>
     <string name="phone_code">Код</string>
     <string name="phone_number">+79222224623</string>
-    <string name="bind_account">Привязать аккаунт</string>
-    <string name="mail_change">Сменить почту</string>
-    <string name="password_change">Сменить пароль</string>
-    <string name="password_recovery">Восстановить пароль</string>
     <string name="surname">Фамилия</string>
     <string name="name">Имя</string>
     <string name="middle_name">Отчество</string>
     <string name="phone_code_send">Отправить код</string>
+    <string name="bind_account">Привязать аккаунт</string>
+    <string name="mail_change">Сменить почту</string>
+    <string name="password_change">Сменить пароль</string>
+    <string name="password_recovery">Восстановить пароль</string>
     <string name="next">Далее</string>
     <string name="back">Назад</string>
     <string name="begin">Старт</string>
     <string name="ready">Готово</string>
     <string name="close">Закрыть</string>
-    <string name="enter">Войти</string>
     <string name="registration">Зарегистрироваться</string>
+    <string name="enter">Войти</string>
 </resources>
