@@ -1,49 +1,6 @@
 package ru.jobni.jobni.model
 
 import com.google.gson.annotations.SerializedName
-import kotlin.reflect.KVisibility
-import kotlin.reflect.full.memberProperties
-
-//class DetailVacancy {
-//
-//    @SerializedName("competence")
-//    @Expose
-//    var competence: String? = null
-//    @SerializedName("languages")
-//    @Expose
-//    var languages: String? = null
-//    @SerializedName("work_places")
-//    @Expose
-//    var workPlaces: String? = null
-//    @SerializedName("employment")
-//    @Expose
-//    var employment: String? = null
-//    @SerializedName("format_of_work")
-//    @Expose
-//    var formatOfWork: String? = null
-//    @SerializedName("field_of_activity")
-//    @Expose
-//    var fieldOfActivity: String? = null
-//    @SerializedName("age_company")
-//    @Expose
-//    var ageCompany: String? = null
-//    @SerializedName("required_number_of_people")
-//    @Expose
-//    var requiredNumberOfPeople: String? = null
-//    @SerializedName("zarplata")
-//    @Expose
-//    var zarplata: ZarplataDetailVacancy? = null
-//    @SerializedName("social_packet")
-//    @Expose
-//    var socialPacket: SocialPacketDetailVacancy? = null
-//    @SerializedName("auto")
-//    @Expose
-//    var auto: AutoDetailVacancy? = null
-//    @SerializedName("raiting")
-//    @Expose
-//    var raiting: RaitingDetailVacancy? = null
-//
-//}
 
 data class DetailVacancy (
 
