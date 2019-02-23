@@ -187,6 +187,55 @@
           <section>
             <rule>
               <match>
+                <NAME>android:padding</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:paddingVertical</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:paddingHorizontal</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:paddingTop</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:paddingBottom</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:paddingStart</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:paddingEnd</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
                 <NAME>style</NAME>
               </match>
             </rule>
@@ -237,6 +286,41 @@
             <rule>
               <match>
                 <NAME>android:text</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:radius</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:topLeftRadius</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:topRightRadius</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:bottomLeftRadius</NAME>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <NAME>android:bottomRightRadius</NAME>
               </match>
             </rule>
           </section>
