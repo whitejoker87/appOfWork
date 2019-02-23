@@ -118,13 +118,15 @@
 	<string name = "chats_item_hr">Колесников Вячеслав Владимирович</string>
 	<string name = "chats_item_post">Исполнительный директор</string>
 	<string name = "chats_item_vacancy">Заместитель Исполнительного директора</string>
+	<string name = "chats_message_text_quoted_message">Цитируемое сообщение</string>
+	<string name = "chats_message_text_forwarded_message">Пересланное сообщение</string>
 	<string name = "chats_message_text_big">Равным образом новая модель организационной деятельности способствует подготовки и
-		реализациимодели развития. Товарищи! новая модель организационной деятельности способствует подготовки и
-		реализации позиций, занимаемых участниками в отношении поставленных задач. Равным образом постоянный
-		количественный рост и сфера нашей активности способствует подготовки и реализации форм развития
-	</string>
-	<string name = "chats_message_text_small">Равным образом новая модель организационной деятельности способствует подготовки и
 		реализациимодели развития
 	</string>
+	<string name = "chats_message_text_small">Равным образом новая модель организационной</string>
 	<string name = "chats_message_time">16:37</string>
+	<string name = "menu_chat_list_context_1">Заблокировать Компанию</string>
+	<string name = "menu_chat_list_context_2">Заблокировать HR</string>
+	<string name = "menu_chat_list_context_3">Закрепить</string>
+	<string name = "menu_chat_list_context_4">Открепить</string>
 </resources>

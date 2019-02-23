@@ -4,5 +4,5 @@
 	android:width = "32dp"
 	android:height = "32dp">
 	<path android:fillColor = "@color/font_color"
-		android:pathData = "M9,16.2L4.8,12l-1.4,1.4L9,19 21,7l-1.4,-1.4L9,16.2z"/>
+		android:pathData = "M7.41,7.84L12,12.42l4.59,-4.58L18,9.25l-6,6 -6,-6z"/>
 </vector>

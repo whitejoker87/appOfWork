@@ -13,7 +13,7 @@
 		app:layout_constraintEnd_toEndOf = "parent"
 		android:background = "@color/theme_1_color_1"
 		app:menu = "@menu/bottom"
-		app:itemIconTint = "@drawable/menu_selector"
-		app:itemTextColor = "@drawable/menu_selector"
+		app:itemIconTint = "@drawable/selector_menu"
+		app:itemTextColor = "@drawable/selector_menu"
 		app:labelVisibilityMode = "labeled"></com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,7 @@
 		android:layout_marginStart = "8dp"
 		android:layout_marginEnd = "8dp"
 		android:layout_alignParentBottom = "true"
-		app:tabBackground = "@drawable/tab_selector"
+		app:tabBackground = "@drawable/selector_tab"
 		app:tabGravity = "center"
 		app:tabIndicatorHeight = "0dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
