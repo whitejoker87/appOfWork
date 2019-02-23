@@ -6,21 +6,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <CheckBox
-            android:id="@+id/item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/menu_right_item"
-            android:checked="true"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:textColor="@color/font_color"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-    />
-    <View
+    <!--<CheckBox
+        android:id="@+id/item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="@string/menu_right_item"
+        android:textColor="@color/font_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <TextView
+        android:id="@+id/lblListHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:paddingRight="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:textColor="@color/font_color"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/item"
+        app:layout_constraintStart_toEndOf="@+id/item"
+        app:layout_constraintTop_toTopOf="@+id/item" />
+
+<!--    <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -28,6 +42,6 @@
             app:layout_constraintTop_toBottomOf="@+id/item"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-    />
+    />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
