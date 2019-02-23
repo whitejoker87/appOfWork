@@ -1,20 +1,20 @@
 package ru.jobni.jobni.fragments
 
-import android.app.SearchManager
-import android.database.MatrixCursor
 import android.os.Bundle
-import android.provider.BaseColumns
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.cursoradapter.widget.CursorAdapter
-import androidx.cursoradapter.widget.SimpleCursorAdapter
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.transition.TransitionManager
+import kotlinx.android.synthetic.main.fragment_main.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -23,7 +23,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.jobni.jobni.R
-import ru.jobni.jobni.utils.CompanyRequest
 import ru.jobni.jobni.utils.RetrofitQuery
 import java.util.*
 import javax.net.ssl.SSLContext
@@ -37,11 +36,13 @@ class FragmentMain : Fragment() {
     private val BASE_URL = "https://test.jobni.ru/"
     private lateinit var retrofitQuery: RetrofitQuery
 
-    private var lastRequestTime = 0L
-    private var requestTimeout = 2000L // 2 sec
+    private lateinit var searchReal: AutoCompleteTextView
+    private lateinit var searchFake: SearchView
 
-    private lateinit var searchItem: SearchView
-    private val SEARCH_VIEW_LIMIT_COUNT = 10
+    private lateinit var button: Button
+    private lateinit var progressBar: ProgressBar
+
+    private val DELAY_SERVER_RESPONSE: Long = 1000 // 1 sec
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
@@ -50,117 +51,110 @@ class FragmentMain : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         toolbar.title = ""
 
-        searchItem = view.findViewById(R.id.search_view) as SearchView
-        searchItem.queryHint = getString(R.string.search_view_hint)
+        progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
+
+        searchFake = view.findViewById(R.id.search_view_fake) as SearchView
+        button = view.findViewById(R.id.search_work) as Button
+        val fakeLayout = view.findViewById(R.id.constraint_layout_fake) as ConstraintLayout
+
+        searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
 
         initRetrofit()
 
-        search()
+        initSearchFake(view, fakeLayout)
+        initSearch()
 
         return view
     }
 
-    private fun search() {
-        val (suggestionAdapter: CursorAdapter, suggestions: List<String>) = searchSuggestion()
-
-        searchItem.suggestionsAdapter = suggestionAdapter
-
-        searchItem.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
-            override fun onSuggestionSelect(position: Int): Boolean {
+    private fun initSearch() {
+        searchReal.onItemClickListener = object : AdapterView.OnItemClickListener {
+            override fun onItemClick(arg0: AdapterView<*>, arg1: View, arg2: Int, arg3: Long) {
                 Toast.makeText(context, "onSuggestionSelect", Toast.LENGTH_SHORT).show()
-                return true
+            }
+        }
+
+        searchReal.addTextChangedListener(object : TextWatcher {
+            private var timer = Timer()
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                    object : TimerTask() {
+                        override fun run() {
+                            doSearchOnTextChange(s.toString())
+                        }
+                    },
+                    DELAY_SERVER_RESPONSE
+                )
             }
 
-            override fun onSuggestionClick(position: Int): Boolean {
-                searchItem.setQuery((suggestions as ArrayList<String>)[position], false)
-                searchItem.clearFocus()
-                doSearchOnClick(suggestions[position])
-                Toast.makeText(context, "onSuggestionClick", Toast.LENGTH_SHORT).show()
-                return true
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+
             }
         })
-
-        searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Toast.makeText(context, "onQueryTextSubmit", Toast.LENGTH_SHORT).show()
-                return true
-            }
-
-            override fun onQueryTextChange(query: String): Boolean {
-                doSearchOnTextChange(query, suggestions, suggestionAdapter)
-                return true
-            }
-        })
     }
 
-    private fun searchSuggestion(): Pair<CursorAdapter, List<String>> {
-        val suggestionAdapter: CursorAdapter = SimpleCursorAdapter(
-            context,
-            android.R.layout.simple_list_item_1,
-            null,
-            arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1),
-            intArrayOf(android.R.id.text1),
-            0
-        )
-
-        val suggestions: List<String> = ArrayList()
-        return Pair(suggestionAdapter, suggestions)
+    fun showProgressBar(searchView: AutoCompleteTextView) {
+        val id = searchView.context.resources.getIdentifier("android:id/search_plate", null, null)
+        progressBar.animate().setDuration(200).alpha(1f).start()
     }
 
-    private fun doSearchOnClick(query: String) {
-        //"not implemented"
+    fun hideProgressBar(searchView: AutoCompleteTextView) {
+        val id = searchView.context.resources.getIdentifier("android:id/search_plate", null, null)
+        progressBar.animate().setDuration(200).alpha(0f).start()
     }
 
-    private fun doSearchOnTextChange(
-        query: String,
-        suggestions: List<String>,
-        suggestionAdapter: CursorAdapter
-    ) {
-        // Частота запросов на сервер для формирования списка
-        if (System.currentTimeMillis() - lastRequestTime > requestTimeout) {
-            lastRequestTime = System.currentTimeMillis()
+    private fun initSearchFake(view: View, fakeLayout: ConstraintLayout) {
+        button.setOnClickListener {
+            TransitionManager.beginDelayedTransition(constraint_layout_fake)
+            fakeLayout.visibility = View.GONE
+        }
 
-            retrofitQuery.loadCompany(query).enqueue(object : Callback<CompanyRequest> {
-                override fun onResponse(@NonNull call: Call<CompanyRequest>, @NonNull response: Response<CompanyRequest>) {
-                    if (response.body() != null) {
+        searchFake.setOnClickListener {
+            TransitionManager.beginDelayedTransition(constraint_layout_fake)
+            fakeLayout.visibility = View.GONE
+        }
 
-                        val resultList = arrayOf(response.body()?.results)
-                        val resultListItem = resultList[0]
+        searchFake.setOnSearchClickListener {
+            TransitionManager.beginDelayedTransition(constraint_layout_fake)
+            fakeLayout.visibility = View.GONE
+        }
+    }
 
-                        (suggestions as ArrayList<String>).clear()
+    private fun doSearchOnTextChange(query: String) {
+        retrofitQuery.loadCompetence(query).enqueue(object : Callback<List<String>> {
+            override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
+                if (response.body() != null) {
 
-                        if (response.body()?.results!!.isEmpty()) {
-                            suggestions.add(getString(R.string.search_view_suggestions_empty))
-                        } else {
-                            for (i in 0 until resultListItem!!.size) {
-                                if (i < SEARCH_VIEW_LIMIT_COUNT) {
-                                    val result = resultListItem[i]
-                                    suggestions.add(result.name.toString())
-                                }
-                            }
+                    val resultList = response.body()
+
+                    val suggestions: List<String> = ArrayList()
+                    (suggestions as ArrayList<String>).clear()
+
+                    if (response.body()!!.isEmpty()) {
+                        suggestions.add(getString(R.string.search_view_suggestions_empty))
+                    } else {
+                        for (i in 0 until response.body()!!.size) {
+                            suggestions.add(resultList!![i])
                         }
-
-                        val columns = arrayOf(
-                            BaseColumns._ID,
-                            SearchManager.SUGGEST_COLUMN_TEXT_1,
-                            SearchManager.SUGGEST_COLUMN_INTENT_DATA
-                        )
-
-                        val cursor = MatrixCursor(columns)
-
-                        for (i in 0 until suggestions.size) {
-                            val tmp = arrayOf(Integer.toString(i), suggestions[i], suggestions[i])
-                            cursor.addRow(tmp)
-                        }
-                        suggestionAdapter.swapCursor(cursor)
+                        val adapter = ArrayAdapter<String>(context!!, R.layout.search_item, R.id.item, suggestions)
+                        searchReal.setAdapter<ArrayAdapter<String>>(adapter)
+                        adapter.notifyDataSetChanged()
                     }
                 }
+            }
 
-                override fun onFailure(@NonNull call: Call<CompanyRequest>, @NonNull t: Throwable) {
-                    Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
+            override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 
     private fun initRetrofit() {

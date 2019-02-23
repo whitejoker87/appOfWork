@@ -5,6 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RetrofitQuery {
-    @GET("api/company/")
-    fun loadCompany(@Query("by_name") companyName: String): Call<CompanyRequest>
+    @GET("api/search_competence_by_vacancy/")
+    fun loadCompetence(@Query("name") competenceName: String): Call<List<String>>
 }
