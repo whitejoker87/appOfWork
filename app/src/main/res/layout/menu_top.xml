@@ -30,29 +30,24 @@
             android:singleLine="true"
     />
     <Button
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_list"
-            app:layout_constraintStart_toEndOf="@+id/bars"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
             android:id="@+id/bars"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="16dp"
             android:background="@drawable/ic_bars"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btn_list"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             android:layout_margin="16dp"
+    />
+    <Button
+            android:id="@+id/list"
             android:background="@drawable/ic_list"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            android:layout_margin="16dp"
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,6 @@
 package ru.jobni.jobni.fragments
 
-import android.app.SearchManager
 import android.content.Context
-import android.database.MatrixCursor
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import android.provider.BaseColumns
-import android.view.*
 import android.widget.Button
 import android.widget.ExpandableListAdapter
 import android.widget.ExpandableListView
@@ -22,31 +18,20 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
-import androidx.cursoradapter.widget.CursorAdapter
-import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.fragment_main.*
 import com.google.android.material.navigation.NavigationView
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
 import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.model.*
-import ru.jobni.jobni.utils.CompanyRequest
-import ru.jobni.jobni.utils.RetrofitQuery
 import java.util.*
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
-import javax.security.cert.CertificateException
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.reflect.full.memberProperties
 
 
 class FragmentMain : Fragment() {
@@ -76,22 +61,19 @@ class FragmentMain : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        val toolbar = view.findViewById(R.id.toolbar) as Toolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        toolbar.title = ""
+        //val toolbar = view.findViewById(R.id.toolbar) as Toolbar
+        //(activity as AppCompatActivity).setSupportActionBar(toolbar)
+        //toolbar.title = ""
 
         progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
         drawerLayout = view.findViewById(R.id.drawer_layout)
 
-        btnList = view.findViewById(R.id.btn_list)
+        btnList = view.findViewById(R.id.list)
         btnList.setOnClickListener { openRightMenu() }
 
         expandableListView = view.findViewById(R.id.exp_list_view)
 
         val navigationView: NavigationView = view.findViewById(R.id.navigation_view);
-
-        searchItem = view.findViewById(R.id.search_view) as SearchView
-        searchItem.queryHint = getString(R.string.search_view_hint)
 
         searchFake = view.findViewById(R.id.search_view_fake) as SearchView
         button = view.findViewById(R.id.search_work) as Button
@@ -109,7 +91,6 @@ class FragmentMain : Fragment() {
         searchReal.onItemClickListener = object : AdapterView.OnItemClickListener {
             override fun onItemClick(arg0: AdapterView<*>, arg1: View, arg2: Int, arg3: Long) {
                 Toast.makeText(context, "onSuggestionSelect", Toast.LENGTH_SHORT).show()
-                return true
             }
         }
 
@@ -196,53 +177,6 @@ class FragmentMain : Fragment() {
             })
     }
 
-    private fun initRetrofit() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL) //Базовая часть адреса
-            .addConverterFactory(GsonConverterFactory.create()) //Конвертер для преобразования JSON'а в объекты
-            .client(getUnsafeOkHttpClient())
-            .build()
-
-        //Создаем объект, при помощи которого будем выполнять запросы
-        retrofitQuery = retrofit.create(RetrofitQuery::class.java)
-    }
-
-    private fun getUnsafeOkHttpClient(): OkHttpClient {
-        try {
-            // Эмуляция положительных запросов при отсутствующем сертификате на сервере
-            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-
-                @Throws(CertificateException::class)
-                override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
-                }
-
-                @Throws(CertificateException::class)
-                override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
-                }
-
-                override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
-                    return arrayOf()
-                }
-            })
-
-            // Менеджер для запросов
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
-            // SSL Socket для менеджера
-            val sslSocketFactory = sslContext.socketFactory
-
-            val builder = OkHttpClient.Builder()
-            builder.sslSocketFactory(sslSocketFactory)
-            builder.hostnameVerifier { _, _ -> true }
-            return builder
-                //Для дебага запросов Retrofit GET/POST
-                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .build()
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
     private fun prepareListData() {
 
         val top250 = ArrayList<String>()
@@ -260,7 +194,7 @@ class FragmentMain : Fragment() {
     }
 
     fun openRightMenu() {
-        retrofitQuery.loadDetailVacancy().enqueue(object : Callback<DetailVacancy> {
+        Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
             override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
                 if (response.body() != null) {
                     val(competence,languages,work_places,employment,format_of_work,field_of_activity,age_company,required_number_of_people, zarplata, social_packet,auto,raiting) = response.body()!!
