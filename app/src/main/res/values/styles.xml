@@ -25,8 +25,8 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="dffdg">
-        <item name="android:radius">8dp</item>
+    <style name="text_color_and_size">
+        <item name="android:textColor">@color/font_color</item>
+        <item name="android:textSize">18sp</item>
     </style>
-
 </resources>
