@@ -17,6 +17,7 @@
             app:itemIconTint="@drawable/menu_selector"
             app:itemTextColor="@drawable/menu_selector"
             app:labelVisibilityMode="labeled"
+            android:visibility="gone"
     >
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.constraintlayout.widget.ConstraintLayout>

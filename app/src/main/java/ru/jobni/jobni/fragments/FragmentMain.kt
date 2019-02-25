@@ -21,6 +21,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_main.*
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
@@ -46,6 +47,7 @@ class FragmentMain : Fragment() {
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var btnList: Button
 
     private lateinit var expandableListAdapter: ExpandableListAdapter
@@ -61,19 +63,14 @@ class FragmentMain : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        //val toolbar = view.findViewById(R.id.toolbar) as Toolbar
-        //(activity as AppCompatActivity).setSupportActionBar(toolbar)
-        //toolbar.title = ""
-
         progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
-        drawerLayout = view.findViewById(R.id.drawer_layout)
+        drawerLayout = activity!!.findViewById(R.id.drawer_layout)
+        bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
 
         btnList = view.findViewById(R.id.list)
         btnList.setOnClickListener { openRightMenu() }
 
-        expandableListView = view.findViewById(R.id.exp_list_view)
-
-        val navigationView: NavigationView = view.findViewById(R.id.navigation_view);
+        expandableListView = activity!!.findViewById(R.id.exp_list_view)
 
         searchFake = view.findViewById(R.id.search_view_fake) as SearchView
         button = view.findViewById(R.id.search_work) as Button
@@ -85,6 +82,11 @@ class FragmentMain : Fragment() {
         initSearch()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bottomNavigationView.visibility = View.VISIBLE
     }
 
     private fun initSearch() {
@@ -178,7 +180,6 @@ class FragmentMain : Fragment() {
     }
 
     private fun prepareListData() {
-
         val top250 = ArrayList<String>()
         top250.add("The Shawshank Redemption")
         top250.add("The Godfather")
@@ -197,15 +198,11 @@ class FragmentMain : Fragment() {
         Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
             override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
                 if (response.body() != null) {
-                    val(competence,languages,work_places,employment,format_of_work,field_of_activity,age_company,required_number_of_people, zarplata, social_packet,auto,raiting) = response.body()!!
-//                      Вариант выдвчи инфы о полях класса
-//                    DetailVacancy::class.memberProperties.forEach { member ->
-//                        val name = member.name
-//                        val value = member.get(instance) as String
-//
-//                        findTextViewByName(name).text = value
-//                    }
-                    val detailList: MutableList<Any> = mutableListOf(competence,languages,work_places,employment,format_of_work,field_of_activity,age_company,required_number_of_people, zarplata, social_packet,auto,raiting)
+                    val(competence, languages, work_places, employment, format_of_work, field_of_activity,
+                        age_company, required_number_of_people, zarplata, social_packet, auto,raiting) = response.body()!!
+                    val detailList: MutableList<Any> = mutableListOf(competence,
+                        languages,work_places,employment,format_of_work,field_of_activity,
+                        age_company,required_number_of_people, zarplata, social_packet,auto,raiting)
                     detailList.forEach { str:Any ->
                             if (str is String)headerList.add(str)
                             else when(str) {
@@ -216,7 +213,7 @@ class FragmentMain : Fragment() {
                             }
                     }
 
-                    prepareListData()
+                    prepareListData()//Заглушка для второго уровня правого меню
 
                     expandableListAdapter = ExpandableListAdapter(activity as Context, headerList, childList)
                     expandableListView.setAdapter(expandableListAdapter)
@@ -229,5 +226,4 @@ class FragmentMain : Fragment() {
         })
         drawerLayout.openDrawer(GravityCompat.END)
     }
-
 }

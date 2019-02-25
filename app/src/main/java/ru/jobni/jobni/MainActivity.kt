@@ -2,6 +2,9 @@ package ru.jobni.jobni
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ru.jobni.jobni.fragments.FragmentIntroSlide
@@ -9,20 +12,29 @@ import ru.jobni.jobni.fragments.FragmentMain
 import ru.jobni.jobni.fragments.FragmentSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import ru.jobni.jobni.fragments.ProfileBottomDialogFragment
 
 
 // TODO: Изучить Android Navigation Component
 // https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
 
-class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListener {
+class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListener, ProfileBottomDialogFragment.Listener {
+    override fun onItemClicked(position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private val firstLaunchFlag = "firstLaunch"
     private lateinit var sPref: SharedPreferences
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        bottomNavigationView = findViewById(R.id.menu_bottom)
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
         sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
         saveLaunchFlag(true)//отладка первого запуска
         if (savedInstanceState == null) {
@@ -40,6 +52,32 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
         }
     }
 
+    private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
+
+        override fun onNavigationItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.bottom_01 -> {
+                    setFragment(FragmentMain())
+                    return true
+                }
+                R.id.bottom_02 -> {
+                    return true
+                }
+                R.id.bottom_03 -> {
+                    return true
+                }
+                R.id.bottom_04 -> {
+                    return true
+                }
+                R.id.bottom_5 -> {
+                    ProfileBottomDialogFragment.newInstance(3).show(supportFragmentManager, "dialog")
+                    return true
+                }
+            }
+            return false
+        }
+    }
+
     override fun onClickBtnStart() {
         saveLaunchFlag()
         setFragment(FragmentMain())
@@ -48,6 +86,7 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
     fun setFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
+            //.addToBackStack(null)
             .commit()
     }
 
