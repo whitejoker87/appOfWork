@@ -8,31 +8,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import android.widget.Button
 import android.widget.ExpandableListAdapter
-import android.widget.ExpandableListView
-import android.widget.Toast
 import androidx.annotation.NonNull
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
-import kotlinx.android.synthetic.main.fragment_main.*
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.fragment_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
-import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.model.*
+import ru.jobni.jobni.model.network.vacancy.ResultsVacancy
+import ru.jobni.jobni.model.network.vacancy.VacancyRequest
+import ru.jobni.jobni.utils.RecyclerAdapter
+import ru.jobni.jobni.utils.Retrofit
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-
 
 class FragmentMain : Fragment() {
 
@@ -52,6 +49,12 @@ class FragmentMain : Fragment() {
     private lateinit var expandableListView: ExpandableListView
     private val  headerList = ArrayList<String>()
     private val childList = HashMap<String, List<String>>()
+
+    private lateinit var mVacancyList: ArrayList<VacancyEntity>
+
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mAdapter: RecyclerAdapter
+    private lateinit var mLayoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +87,31 @@ class FragmentMain : Fragment() {
         initSearchFake(view, fakeLayout)
         initSearch()
 
+        mRecyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
+        mVacancyList = ArrayList()
+
+        buildRecyclerView()
+
         return view
+    }
+
+    private fun buildRecyclerView() {
+        mRecyclerView.setHasFixedSize(true)
+        mLayoutManager = LinearLayoutManager(context)
+        mAdapter = RecyclerAdapter(mVacancyList)
+
+        mRecyclerView.layoutManager = mLayoutManager
+        mRecyclerView.adapter = mAdapter
+
+        mAdapter.setOnItemClickListener(object : RecyclerAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                Toast.makeText(context, "onItemClick!", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onEyeClick(v: View, position: Int) {
+                Toast.makeText(context, "onEyeClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun initSearch() {
@@ -134,6 +161,7 @@ class FragmentMain : Fragment() {
         button.setOnClickListener {
             TransitionManager.beginDelayedTransition(constraint_layout_fake)
             fakeLayout.visibility = View.GONE
+            doBtnOnClick()
         }
 
         searchFake.setOnClickListener {
@@ -230,4 +258,46 @@ class FragmentMain : Fragment() {
         drawerLayout.openDrawer(GravityCompat.END)
     }
 
+    private fun doBtnOnClick() {
+        Retrofit.api?.loadVacancy()
+            ?.enqueue(object : Callback<VacancyRequest> {
+                override fun onResponse(@NonNull call: Call<VacancyRequest>, @NonNull response: Response<VacancyRequest>) {
+                    if (response.body() != null) {
+
+                        val list: List<ResultsVacancy> = response.body()!!.results
+
+                        val position = 0
+                        for (i in 0 until list.size) {
+                            val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                            list[i].employment.forEach { employment ->
+                                tmpEmploymentList.add(employment.name)
+                            }
+
+                            val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                            list[i].competences.forEach { competences ->
+                                tmpCompetenceList.add(competences.name)
+                            }
+
+                            mVacancyList.add(
+                                position,
+                                VacancyEntity(
+                                    list[i].name,
+                                    list[i].company.name,
+                                    list[i].salary_level_newbie.toString(),
+                                    list[i].salary_level_experienced.toString(),
+                                    list[i].format_of_work.name,
+                                    tmpEmploymentList,
+                                    tmpCompetenceList
+                                )
+                            )
+                        }
+                        mAdapter.notifyItemInserted(position) // Обновить список после добавления элемента
+                    }
+                }
+
+                override fun onFailure(@NonNull call: Call<VacancyRequest>, @NonNull t: Throwable) {
+                    Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
 }
