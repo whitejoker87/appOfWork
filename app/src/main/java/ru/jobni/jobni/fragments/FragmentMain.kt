@@ -1,5 +1,6 @@
 package ru.jobni.jobni.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,20 +8,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import android.widget.Button
+import android.widget.ExpandableListAdapter
+import android.widget.ExpandableListView
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.fragment_main.*
+import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
 import ru.jobni.jobni.utils.Retrofit
+import ru.jobni.jobni.model.*
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class FragmentMain : Fragment() {
@@ -34,14 +45,35 @@ class FragmentMain : Fragment() {
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var btnList: Button
+
+    private lateinit var expandableListAdapter: ExpandableListAdapter
+    private lateinit var expandableListView: ExpandableListView
+    private val  headerList = ArrayList<String>()
+    private val childList = HashMap<String, List<String>>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true);
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        val toolbar = view.findViewById(R.id.toolbar) as Toolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        toolbar.title = ""
+        //val toolbar = view.findViewById(R.id.toolbar) as Toolbar
+        //(activity as AppCompatActivity).setSupportActionBar(toolbar)
+        //toolbar.title = ""
 
         progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
+        drawerLayout = view.findViewById(R.id.drawer_layout)
+
+        btnList = view.findViewById(R.id.list)
+        btnList.setOnClickListener { openRightMenu() }
+
+        expandableListView = view.findViewById(R.id.exp_list_view)
+
+        val navigationView: NavigationView = view.findViewById(R.id.navigation_view);
 
         searchFake = view.findViewById(R.id.search_view_fake) as SearchView
         button = view.findViewById(R.id.search_work) as Button
@@ -144,4 +176,58 @@ class FragmentMain : Fragment() {
                 }
             })
     }
+
+    private fun prepareListData() {
+
+        val top250 = ArrayList<String>()
+        top250.add("The Shawshank Redemption")
+        top250.add("The Godfather")
+        top250.add("The Godfather: Part II")
+        top250.add("Pulp Fiction")
+        top250.add("The Good, the Bad and the Ugly")
+        top250.add("The Dark Knight")
+        top250.add("12 Angry Men")
+
+        headerList.forEach {  str ->
+            childList.put(str, top250)
+        }
+    }
+
+    fun openRightMenu() {
+        Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+            override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+                if (response.body() != null) {
+                    val(competence,languages,work_places,employment,format_of_work,field_of_activity,age_company,required_number_of_people, zarplata, social_packet,auto,raiting) = response.body()!!
+//                      Вариант выдвчи инфы о полях класса
+//                    DetailVacancy::class.memberProperties.forEach { member ->
+//                        val name = member.name
+//                        val value = member.get(instance) as String
+//
+//                        findTextViewByName(name).text = value
+//                    }
+                    val detailList: MutableList<Any> = mutableListOf(competence,languages,work_places,employment,format_of_work,field_of_activity,age_company,required_number_of_people, zarplata, social_packet,auto,raiting)
+                    detailList.forEach { str:Any ->
+                            if (str is String)headerList.add(str)
+                            else when(str) {
+                                is Zarplata -> headerList.add("Зарплата")
+                                is Social_packet -> headerList.add("Социальный пакет")
+                                is Auto -> headerList.add("Авто")
+                                is Raiting -> headerList.add("Рейтинг")
+                            }
+                    }
+
+                    prepareListData()
+
+                    expandableListAdapter = ExpandableListAdapter(activity as Context, headerList, childList)
+                    expandableListView.setAdapter(expandableListAdapter)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error in download for menu!", Toast.LENGTH_LONG).show()
+            }
+        })
+        drawerLayout.openDrawer(GravityCompat.END)
+    }
+
 }
