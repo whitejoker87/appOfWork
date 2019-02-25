@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment
 import ru.jobni.jobni.fragments.FragmentIntroSlide
 import ru.jobni.jobni.fragments.FragmentMain
 import ru.jobni.jobni.fragments.FragmentSplashScreen
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+
+
 
 // TODO: Изучить Android Navigation Component
 // https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
@@ -23,6 +27,16 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
         saveLaunchFlag(true)//отладка первого запуска
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
+        }
+    }
+
+    override fun onBackPressed() {
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+
+        when {
+            drawer.isDrawerOpen(GravityCompat.END) -> drawer.closeDrawer(GravityCompat.END)
+            //supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
+            else -> super.onBackPressed()
         }
     }
 
