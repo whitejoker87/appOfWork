@@ -2,7 +2,7 @@ package ru.jobni.jobni.model.network.vacancy
 
 import com.google.gson.annotations.SerializedName
 
-data class VacancyRequest(
+data class CardVacancy(
     @SerializedName("count") val count: Int,
     @SerializedName("next") val next: String,
     @SerializedName("previous") val previous: String,
