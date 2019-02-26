@@ -157,6 +157,11 @@ class FragmentMain : Fragment() {
             TransitionManager.beginDelayedTransition(constraint_layout_fake)
             fakeLayout.visibility = View.GONE
         }
+
+        searchFake.setOnQueryTextFocusChangeListener { _: View, _: Boolean ->
+            TransitionManager.beginDelayedTransition(constraint_layout_fake)
+            fakeLayout.visibility = View.GONE
+        }
     }
 
     private fun doSearchOnTextChange(query: String) {
