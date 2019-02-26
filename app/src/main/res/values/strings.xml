@@ -23,7 +23,7 @@
 	<string name = "menu_bottom_3">Чаты</string>
 	<string name = "menu_bottom_4">Планировщик</string>
 	<string name = "menu_bottom_5">Профиль</string>
-	<string name = "card_vacancy_close_vacancy_name">Программист 1С</string>
+	<string name = "vacancy">МЕНЕДЖЕР ПО ПРОДАЖАМ</string>
 	<string name = "card_vacancy_close_newbie">Н - 20 000 р</string>
 	<string name = "card_vacancy_close_experienced">О - 20 000 р</string>
 	<string name = "card_vacancy_close_required_competencies_headline">Требуемые компетенции:</string>
@@ -60,12 +60,14 @@
 	<string name = "card_vacancy_open_conditions_description_text">Компенсация ГСМ\nАмортизация\nКорпоративная сотовая
 		связь
 	</string>
-	<string name = "card_vacancy_close_company_name">Jobni</string>
+	<string name = "company">Jobni</string>
 	<string name = "card_vacancy_close_distance">0.2 км</string>
-	<string name = "card_vacancy_close_address">Россия,г. Екатеринбург, ул. Фронтовых Бригад 22, офис 2</string>
 	<string name = "card_vacancy_close_menu_1">Написать</string>
 	<string name = "card_vacancy_close_menu_2">Позвонить</string>
 	<string name = "card_vacancy_close_menu_3">Откликнуться</string>
+	<string name = "card_vacancy_map_job">Работа</string>
+	<string name = "card_vacancy_map_interviews">Собеседования</string>
+	<string name = "card_vacancy_map_together">Все</string>
 	<string name = "search_item">Менеджер по продажам</string>
 	<string name = "search_button">НАЙТИ РАБОТУ</string>
 	<string name = "menu_right_item">Java</string>
@@ -114,14 +116,10 @@
 	<string name = "registration">Зарегистрироваться</string>
 	<string name = "enter">Войти</string>
 	<string name = "headline">Чаты (соискатель)</string>
-	<string name = "chats_item_company">Межрегиональная Распределительная Сетевая Компания Урала</string>
-	<string name = "chats_item_hr">Колесников Вячеслав Владимирович</string>
-	<string name = "chats_item_post">Исполнительный директор</string>
-	<string name = "chats_item_vacancy">Заместитель Исполнительного директора</string>
 	<string name = "chats_message_text_quoted_message">Цитируемое сообщение</string>
 	<string name = "chats_message_text_forwarded_message">Пересланное сообщение</string>
-	<string name = "chats_message_text_big">Равным образом новая модель организационной деятельности способствует подготовки и
-		реализациимодели развития
+	<string name = "chats_message_text_big">Равным образом новая модель организационной деятельности способствует
+		подготовки и реализациимодели развития
 	</string>
 	<string name = "chats_message_text_small">Равным образом новая модель организационной</string>
 	<string name = "chats_message_time">16:37</string>
@@ -129,4 +127,7 @@
 	<string name = "menu_chat_list_context_2">Заблокировать HR</string>
 	<string name = "menu_chat_list_context_3">Закрепить</string>
 	<string name = "menu_chat_list_context_4">Открепить</string>
+	<string name = "number_of_unread_messages">111</string>
+	<string name = "company_contact_face_full_name">Колесников Вячеслав Владимирович</string>
+	<string name = "company_contact_face_position">HR менеджер</string>
 </resources>

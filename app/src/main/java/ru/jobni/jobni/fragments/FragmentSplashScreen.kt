@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import ru.jobni.jobni.fragments.FragmentIntro
 import ru.jobni.jobni.R
 
 class FragmentSplashScreen : Fragment() {
@@ -17,7 +16,7 @@ class FragmentSplashScreen : Fragment() {
     private lateinit var sPref: SharedPreferences
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.splash_screen, container, false)
+        val view = inflater.inflate(R.layout.e_splash_screen, container, false)
 
         // Bundle - свежий старт активности. А нам нужно загружаться только в 1 раз - поэтому проверка
         // TODO: Изучить Bundle

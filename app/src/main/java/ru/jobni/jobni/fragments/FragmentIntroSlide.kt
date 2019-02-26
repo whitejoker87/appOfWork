@@ -1,14 +1,12 @@
 package ru.jobni.jobni.fragments
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import ru.jobni.jobni.R
 
 private const val ARG_PARAM1 = "param1"
@@ -31,7 +29,7 @@ class FragmentIntroSlide : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(param1, container, false);
-        if (param1 == R.layout.intro_05){
+        if (param1 == R.layout.c_intro_05){
             btnStart = view.findViewById(R.id.start)
             btnStart.setOnClickListener{onButtonStartPressed()}
         }
