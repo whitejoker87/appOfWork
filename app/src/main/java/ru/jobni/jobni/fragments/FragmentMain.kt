@@ -257,8 +257,8 @@ class FragmentMain : Fragment() {
 
     private fun doBtnOnClick() {
         Retrofit.api?.loadVacancy()
-            ?.enqueue(object : Callback<VacancyRequest> {
-                override fun onResponse(@NonNull call: Call<VacancyRequest>, @NonNull response: Response<VacancyRequest>) {
+            ?.enqueue(object : Callback<CardVacancy> {
+                override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
                     if (response.body() != null) {
 
                         val list: List<ResultsVacancy> = response.body()!!.results
@@ -292,7 +292,7 @@ class FragmentMain : Fragment() {
                     }
                 }
 
-                override fun onFailure(@NonNull call: Call<VacancyRequest>, @NonNull t: Throwable) {
+                override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
                     Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
                 }
             })
