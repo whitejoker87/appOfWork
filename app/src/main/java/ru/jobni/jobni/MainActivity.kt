@@ -7,8 +7,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import ru.jobni.jobni.fragments.FragmentIntroSlide
-import ru.jobni.jobni.fragments.FragmentMain
 import ru.jobni.jobni.fragments.FragmentSplashScreen
+import ru.jobni.jobni.fragments.FragmentWelcome
 
 class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartListener {
 
@@ -30,19 +30,20 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
 
         when {
             drawer.isDrawerOpen(GravityCompat.END) -> drawer.closeDrawer(GravityCompat.END)
-            //supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
+            supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
             else -> super.onBackPressed()
         }
     }
 
     override fun onClickBtnStart() {
         saveLaunchFlag()
-        setFragment(FragmentMain())
+        setFragment(FragmentWelcome())
     }
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
             .commit()
     }
 

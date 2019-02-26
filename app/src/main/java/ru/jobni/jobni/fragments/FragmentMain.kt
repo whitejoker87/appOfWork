@@ -10,15 +10,11 @@ import android.view.ViewGroup
 import android.widget.*
 import android.widget.ExpandableListAdapter
 import androidx.annotation.NonNull
-import androidx.appcompat.widget.SearchView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
-import kotlinx.android.synthetic.main.fragment_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,9 +28,7 @@ import java.util.*
 class FragmentMain : Fragment() {
 
     private lateinit var searchReal: AutoCompleteTextView
-    private lateinit var searchFake: SearchView
 
-    private lateinit var buttonFake: Button
     private lateinit var progressBar: ProgressBar
 
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
@@ -70,19 +64,15 @@ class FragmentMain : Fragment() {
 
         expandableListView = view.findViewById(R.id.exp_list_view)
 
-        searchFake = view.findViewById(R.id.search_view_fake) as SearchView
-        buttonFake = view.findViewById(R.id.search_work) as Button
-        val fakeLayout = view.findViewById(R.id.constraint_layout_fake) as ConstraintLayout
-
         searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
 
-        initSearchFake(view, fakeLayout)
         initSearch()
 
         mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
         mVacancyList = ArrayList()
 
         buildRecyclerView()
+        buildCardsList()
 
         return view
     }
@@ -136,29 +126,6 @@ class FragmentMain : Fragment() {
 
             }
         })
-    }
-
-    private fun initSearchFake(view: View, fakeLayout: ConstraintLayout) {
-        buttonFake.setOnClickListener {
-            TransitionManager.beginDelayedTransition(constraint_layout_fake)
-            fakeLayout.visibility = View.GONE
-            doBtnOnClick()
-        }
-
-        searchFake.setOnClickListener {
-            TransitionManager.beginDelayedTransition(constraint_layout_fake)
-            fakeLayout.visibility = View.GONE
-        }
-
-        searchFake.setOnSearchClickListener {
-            TransitionManager.beginDelayedTransition(constraint_layout_fake)
-            fakeLayout.visibility = View.GONE
-        }
-
-        searchFake.setOnQueryTextFocusChangeListener { _: View, _: Boolean ->
-            TransitionManager.beginDelayedTransition(constraint_layout_fake)
-            fakeLayout.visibility = View.GONE
-        }
     }
 
     private fun doSearchOnTextChange(query: String) {
@@ -252,7 +219,7 @@ class FragmentMain : Fragment() {
         drawerLayout.openDrawer(GravityCompat.END)
     }
 
-    private fun doBtnOnClick() {
+    private fun buildCardsList() {
         Retrofit.api?.loadVacancy()?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
                 if (response.body() != null) {
