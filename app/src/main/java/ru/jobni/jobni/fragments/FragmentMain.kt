@@ -18,15 +18,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
-import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.fragment_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
-import ru.jobni.jobni.model.*
-import ru.jobni.jobni.model.network.vacancy.ResultsVacancy
-import ru.jobni.jobni.model.network.vacancy.VacancyRequest
+import ru.jobni.jobni.model.VacancyEntity
+import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.RecyclerAdapter
 import ru.jobni.jobni.utils.Retrofit
 import java.util.*
@@ -36,7 +34,7 @@ class FragmentMain : Fragment() {
     private lateinit var searchReal: AutoCompleteTextView
     private lateinit var searchFake: SearchView
 
-    private lateinit var button: Button
+    private lateinit var buttonFake: Button
     private lateinit var progressBar: ProgressBar
 
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
@@ -47,7 +45,7 @@ class FragmentMain : Fragment() {
 
     private lateinit var expandableListAdapter: ExpandableListAdapter
     private lateinit var expandableListView: ExpandableListView
-    private val  headerList = ArrayList<String>()
+    private val headerList = ArrayList<String>()
     private val childList = HashMap<String, List<String>>()
 
     private lateinit var mVacancyList: ArrayList<VacancyEntity>
@@ -58,15 +56,11 @@ class FragmentMain : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
-
-        //val toolbar = view.findViewById(R.id.toolbar) as Toolbar
-        //(activity as AppCompatActivity).setSupportActionBar(toolbar)
-        //toolbar.title = ""
 
         progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
         drawerLayout = view.findViewById(R.id.drawer_layout)
@@ -76,10 +70,8 @@ class FragmentMain : Fragment() {
 
         expandableListView = view.findViewById(R.id.exp_list_view)
 
-        val navigationView: NavigationView = view.findViewById(R.id.navigation_view);
-
         searchFake = view.findViewById(R.id.search_view_fake) as SearchView
-        button = view.findViewById(R.id.search_work) as Button
+        buttonFake = view.findViewById(R.id.search_work) as Button
         val fakeLayout = view.findViewById(R.id.constraint_layout_fake) as ConstraintLayout
 
         searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
@@ -87,7 +79,7 @@ class FragmentMain : Fragment() {
         initSearchFake(view, fakeLayout)
         initSearch()
 
-        mRecyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
+        mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
         mVacancyList = ArrayList()
 
         buildRecyclerView()
@@ -115,10 +107,12 @@ class FragmentMain : Fragment() {
     }
 
     private fun initSearch() {
-        searchReal.onItemClickListener = object : AdapterView.OnItemClickListener {
-            override fun onItemClick(arg0: AdapterView<*>, arg1: View, arg2: Int, arg3: Long) {
-                Toast.makeText(context, "onSuggestionSelect", Toast.LENGTH_SHORT).show()
-            }
+        searchReal.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
+            Toast.makeText(
+                context,
+                "onSuggestionSelect",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         searchReal.addTextChangedListener(object : TextWatcher {
@@ -147,18 +141,8 @@ class FragmentMain : Fragment() {
         })
     }
 
-    fun showProgressBar(searchView: AutoCompleteTextView) {
-        val id = searchView.context.resources.getIdentifier("android:id/search_plate", null, null)
-        progressBar.animate().setDuration(200).alpha(1f).start()
-    }
-
-    fun hideProgressBar(searchView: AutoCompleteTextView) {
-        val id = searchView.context.resources.getIdentifier("android:id/search_plate", null, null)
-        progressBar.animate().setDuration(200).alpha(0f).start()
-    }
-
     private fun initSearchFake(view: View, fakeLayout: ConstraintLayout) {
-        button.setOnClickListener {
+        buttonFake.setOnClickListener {
             TransitionManager.beginDelayedTransition(constraint_layout_fake)
             fakeLayout.visibility = View.GONE
             doBtnOnClick()
@@ -216,8 +200,9 @@ class FragmentMain : Fragment() {
         top250.add("The Dark Knight")
         top250.add("12 Angry Men")
 
-        headerList.forEach {  str ->
-            childList.put(str, top250)
+        headerList.forEach { str ->
+            // java ver. childList.put(str, top250)
+            childList[str] = top250
         }
     }
 
@@ -225,23 +210,30 @@ class FragmentMain : Fragment() {
         Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
             override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
                 if (response.body() != null) {
-                    val(competence,languages,work_places,employment,format_of_work,field_of_activity,age_company,required_number_of_people, zarplata, social_packet,auto,raiting) = response.body()!!
-//                      Вариант выдвчи инфы о полях класса
-//                    DetailVacancy::class.memberProperties.forEach { member ->
-//                        val name = member.name
-//                        val value = member.get(instance) as String
-//
-//                        findTextViewByName(name).text = value
-//                    }
-                    val detailList: MutableList<Any> = mutableListOf(competence,languages,work_places,employment,format_of_work,field_of_activity,age_company,required_number_of_people, zarplata, social_packet,auto,raiting)
-                    detailList.forEach { str:Any ->
-                            if (str is String)headerList.add(str)
-                            else when(str) {
-                                is Zarplata -> headerList.add("Зарплата")
-                                is Social_packet -> headerList.add("Социальный пакет")
-                                is Auto -> headerList.add("Авто")
-                                is Raiting -> headerList.add("Рейтинг")
-                            }
+                    val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
+
+                    val detailList: MutableList<Any> = mutableListOf(
+                        competence,
+                        languages,
+                        work_places,
+                        employment,
+                        format_of_work,
+                        field_of_activity,
+                        age_company,
+                        required_number_of_people,
+                        zarplata,
+                        social_packet,
+                        auto,
+                        raiting
+                    )
+                    detailList.forEach { str: Any ->
+                        if (str is String) headerList.add(str)
+                        else when (str) {
+                            is Zarplata -> headerList.add("Зарплата")
+                            is Social_packet -> headerList.add("Социальный пакет")
+                            is Auto -> headerList.add("Авто")
+                            is Raiting -> headerList.add("Рейтинг")
+                        }
                     }
 
                     prepareListData()

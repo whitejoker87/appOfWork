@@ -11,7 +11,6 @@ import ru.jobni.jobni.model.VacancyEntity
 import java.util.*
 
 
-
 class RecyclerAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     private var clickListener: OnItemClickListener? = null
@@ -70,9 +69,9 @@ class RecyclerAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
         holder.salaryLevelExperiencedText.text = currentItem.salaryLevelExperienced
         holder.workFormatText.text = currentItem.formatOfWork
         holder.employmentListText.text = currentItem.employmentList.toString()
-            .replace("[","",true).replace("]","",true)
+            .replace("[", "", true).replace("]", "", true)
         holder.competenceListText.text = currentItem.competenceList.toString()
-            .replace("[","",true).replace("]","",true)
+            .replace("[", "", true).replace("]", "", true)
     }
 
     override fun getItemCount(): Int {

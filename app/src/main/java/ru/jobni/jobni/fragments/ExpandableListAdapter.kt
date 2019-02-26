@@ -1,13 +1,13 @@
 package ru.jobni.jobni.fragments
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.TextView
 import ru.jobni.jobni.R
-import android.graphics.Typeface
 
 
 class ExpandableListAdapter(
@@ -18,8 +18,7 @@ class ExpandableListAdapter(
 ) : BaseExpandableListAdapter() {
 
     override fun getChild(groupPosition: Int, childPosititon: Int): Any {
-        return this._listDataChild[this._listDataHeader[groupPosition]]!!
-            .get(childPosititon)
+        return this._listDataChild[this._listDataHeader[groupPosition]]!![childPosititon]
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {

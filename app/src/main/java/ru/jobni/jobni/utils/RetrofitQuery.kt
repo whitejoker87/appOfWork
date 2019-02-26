@@ -3,7 +3,7 @@ package ru.jobni.jobni.utils
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.jobni.jobni.model.DetailVacancy
+import ru.jobni.jobni.model.network.vacancy.DetailVacancy
 import ru.jobni.jobni.model.network.vacancy.VacancyRequest
 
 interface RetrofitQuery {

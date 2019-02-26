@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import ru.jobni.jobni.fragments.FragmentIntro
 import ru.jobni.jobni.R
 
 class FragmentSplashScreen : Fragment() {
@@ -38,17 +37,18 @@ class FragmentSplashScreen : Fragment() {
                 ?.replace(R.id.fragment_container, FragmentMain())
                 ?.commit()
         */
-        val fragment:Fragment
+        val fragment: Fragment
         if (sPref.getBoolean(firstLaunchFlag, true))
             fragment = FragmentIntro()
         else
             fragment = FragmentMain()
 
-        Handler().postDelayed({setFragment(fragment)
+        Handler().postDelayed({
+            setFragment(fragment)
         }, duration)
     }
 
-    fun setFragment(fragment: Fragment){
+    private fun setFragment(fragment: Fragment) {
         activity!!.supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
