@@ -6,7 +6,7 @@
         android:layout_height="match_parent">
 
     <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view_fake"
+            android:id="@+id/search_view_welcome"
             android:layout_width="0dp"
             android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,9 +23,9 @@
             android:text="@string/search_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/search_view_fake"
-            app:layout_constraintEnd_toEndOf="@+id/search_view_fake"
-            app:layout_constraintTop_toBottomOf="@+id/search_view_fake"
+            app:layout_constraintStart_toStartOf="@+id/search_view_welcome"
+            app:layout_constraintEnd_toEndOf="@+id/search_view_welcome"
+            app:layout_constraintTop_toBottomOf="@+id/search_view_welcome"
             android:layout_marginTop="16dp"
             android:textColor="@color/font_color"
             android:background="@color/theme_1_color_1"

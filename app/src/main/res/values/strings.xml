@@ -113,4 +113,5 @@
     <string name="close">Закрыть</string>
     <string name="registration">Зарегистрироваться</string>
     <string name="enter">Войти</string>
+    <string name="search_response_empty">Нет рузультатов!</string>
 </resources>
