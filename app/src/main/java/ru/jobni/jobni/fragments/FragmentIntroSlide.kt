@@ -27,9 +27,9 @@ class FragmentIntroSlide : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(param1, container, false);
-        if (param1 == R.layout.intro_05) {
+        if (param1 == R.layout.c_intro_05){
             btnStart = view.findViewById(R.id.start)
-            btnStart.setOnClickListener { onButtonStartPressed() }
+            btnStart.setOnClickListener{onButtonStartPressed()}
         }
         return view
     }

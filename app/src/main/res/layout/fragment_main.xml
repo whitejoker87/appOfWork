@@ -33,7 +33,7 @@
         <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/search_loading_icon"
+                layout="@layout/c_search_loading_icon"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

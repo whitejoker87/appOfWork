@@ -55,7 +55,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'com.google.android.material:material:1.1.0-alpha03'//для TabLayout
+    implementation 'com.google.android.material:material:1.1.0-alpha03'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'//для TabLayout
 
     // Gradle Groovy DLS
     implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
