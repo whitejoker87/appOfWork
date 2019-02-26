@@ -25,7 +25,7 @@ class FragmentWelcome : Fragment() {
         searchWelcome = view.findViewById(R.id.search_view_welcome) as SearchView
         buttonWelcome = view.findViewById(R.id.search_work) as Button
 
-        initSearchFake(view)
+        initElements(view)
 
         return view
     }
@@ -37,7 +37,7 @@ class FragmentWelcome : Fragment() {
             ?.commit()
     }
 
-    private fun initSearchFake(view: View) {
+    private fun initElements(view: View) {
         buttonWelcome.setOnClickListener {
             setFragment(FragmentMain())
         }
