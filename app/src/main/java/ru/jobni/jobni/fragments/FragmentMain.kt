@@ -108,11 +108,8 @@ class FragmentMain : Fragment() {
 
     private fun initSearch() {
         searchReal.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
-            Toast.makeText(
-                context,
-                "onSuggestionSelect",
-                Toast.LENGTH_SHORT
-            ).show()
+            val searchItem: String = searchReal.text.toString()
+            doSearchOnClick(searchItem)
         }
 
         searchReal.addTextChangedListener(object : TextWatcher {
@@ -175,16 +172,16 @@ class FragmentMain : Fragment() {
                         val suggestions: List<String> = ArrayList()
                         (suggestions as ArrayList<String>).clear()
 
-                        if (response.body()!!.isEmpty()) {
+                        if (resultList!!.isEmpty()) {
                             suggestions.add(getString(R.string.search_view_suggestions_empty))
-                        } else {
-                            for (i in 0 until response.body()!!.size) {
-                                suggestions.add(resultList!![i])
-                            }
-                            val adapter = ArrayAdapter<String>(context!!, R.layout.search_item, R.id.item, suggestions)
-                            searchReal.setAdapter<ArrayAdapter<String>>(adapter)
-                            adapter.notifyDataSetChanged()
                         }
+
+                        for (i in 0 until response.body()!!.size) {
+                            suggestions.add(resultList[i])
+                        }
+                        val adapter = ArrayAdapter<String>(context!!, R.layout.search_item, R.id.item, suggestions)
+                        searchReal.setAdapter<ArrayAdapter<String>>(adapter)
+                        adapter.notifyDataSetChanged()
                     }
                 }
 
@@ -211,7 +208,7 @@ class FragmentMain : Fragment() {
         }
     }
 
-    fun openRightMenu() {
+    private fun openRightMenu() {
         Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
             override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
                 if (response.body() != null) {
@@ -256,45 +253,97 @@ class FragmentMain : Fragment() {
     }
 
     private fun doBtnOnClick() {
-        Retrofit.api?.loadVacancy()
-            ?.enqueue(object : Callback<CardVacancy> {
-                override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
-                    if (response.body() != null) {
+        Retrofit.api?.loadVacancy()?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.body() != null) {
 
-                        val list: List<ResultsVacancy> = response.body()!!.results
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
 
-                        val position = 0
-                        for (i in 0 until list.size) {
-                            val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-                            list[i].employment.forEach { employment ->
-                                tmpEmploymentList.add(employment.name)
-                            }
-
-                            val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-                            list[i].competences.forEach { competences ->
-                                tmpCompetenceList.add(competences.name)
-                            }
-
-                            mVacancyList.add(
-                                position,
-                                VacancyEntity(
-                                    list[i].name,
-                                    list[i].company.name,
-                                    list[i].salary_level_newbie.toString(),
-                                    list[i].salary_level_experienced.toString(),
-                                    list[i].format_of_work.name,
-                                    tmpEmploymentList,
-                                    tmpCompetenceList
-                                )
-                            )
-                        }
-                        mAdapter.notifyItemInserted(position) // Обновить список после добавления элемента
+                    if (resultList.isEmpty()) {
+                        Toast.makeText(context, R.string.search_response_empty, Toast.LENGTH_SHORT).show()
                     }
-                }
 
-                override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
-                    Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+                    val position = 0
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        mVacancyList.add(
+                            position,
+                            VacancyEntity(
+                                resultList[i].name,
+                                resultList[i].company.name,
+                                resultList[i].salary_level_newbie.toString(),
+                                resultList[i].salary_level_experienced.toString(),
+                                resultList[i].format_of_work.name,
+                                tmpEmploymentList,
+                                tmpCompetenceList
+                            )
+                        )
+                    }
+                    mAdapter.notifyItemInserted(position) // Обновить список после добавления элемента
+
                 }
-            })
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun doSearchOnClick(query: String) {
+        Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
+
+                    //Отчистить список для новых результатов
+                    mVacancyList.clear()
+                    mAdapter.notifyDataSetChanged()
+
+                    if (resultList.isEmpty()) {
+                        Toast.makeText(context, R.string.search_response_empty, Toast.LENGTH_SHORT).show()
+                    }
+
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        mVacancyList.add(
+                            VacancyEntity(
+                                resultList[i].name,
+                                resultList[i].company.name,
+                                resultList[i].salary_level_newbie.toString(),
+                                resultList[i].salary_level_experienced.toString(),
+                                resultList[i].format_of_work.name,
+                                tmpEmploymentList,
+                                tmpCompetenceList
+                            )
+                        )
+                    }
+                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элемента
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

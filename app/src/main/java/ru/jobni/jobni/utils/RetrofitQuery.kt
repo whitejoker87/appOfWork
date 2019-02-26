@@ -15,4 +15,7 @@ interface RetrofitQuery {
 
     @GET("api/vacancy/")
     fun loadVacancy(): Call<CardVacancy>
+
+    @GET("api/vacancy/")
+    fun loadVacancyByCompetence(@Query("by_competence") competenceName: String): Call<CardVacancy>
 }
