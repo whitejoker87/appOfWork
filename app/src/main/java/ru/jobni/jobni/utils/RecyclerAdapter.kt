@@ -56,7 +56,7 @@ class RecyclerAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.card_vacancy, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.c_card_vacancy_close, parent, false)
         return ViewHolder(v, clickListener)
     }
 

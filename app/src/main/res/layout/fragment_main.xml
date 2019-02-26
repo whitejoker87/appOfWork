@@ -12,24 +12,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <include android:id="@+id/include_01"
-                 layout="@layout/c_menu_top"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 app:layout_constraintTop_toTopOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintEnd_toEndOf="parent"/>
-        <include android:id="@+id/include_02"
-                 layout="@layout/c_menu_bottom"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 app:layout_constraintBottom_toBottomOf="parent"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintEnd_toEndOf="parent"/>
+        <include
+                layout="@layout/menu_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/include_01"
+        />
+        <include
+                layout="@layout/c_menu_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/include_02"
+        />
         <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/search_loading_icon"
+                layout="@layout/c_search_loading_icon"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

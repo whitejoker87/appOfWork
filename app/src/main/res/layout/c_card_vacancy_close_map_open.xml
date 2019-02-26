@@ -30,7 +30,7 @@
 				android:textStyle = "bold"
 				android:textColor = "@color/font_color"
 				android:textSize = "18sp"
-				android:text = "@string/vacancy"/>
+				android:text = "@string/card_vacancy_close_vacancy_name"/>
 			<ImageView android:id = "@+id/eye"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
