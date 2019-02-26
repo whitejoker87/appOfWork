@@ -3,15 +3,14 @@ package ru.jobni.jobni
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import ru.jobni.jobni.fragments.FragmentIntroSlide
-import ru.jobni.jobni.fragments.FragmentMain
 import ru.jobni.jobni.fragments.FragmentSplashScreen
+import ru.jobni.jobni.fragments.FragmentWelcome
 
-// TODO: Изучить Android Navigation Component
-// https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
-
-class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListener {
+class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartListener {
 
     private val firstLaunchFlag = "firstLaunch"
     private lateinit var sPref: SharedPreferences
@@ -20,33 +19,43 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
-        saveLaunchFlag(true)
+        saveLaunchFlag(true)//отладка первого запуска
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
         }
     }
 
-    override fun onClickBtnStart() {
-        saveLaunchFlag()
-        setFragment(FragmentMain())
+    override fun onBackPressed() {
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+
+        when {
+            drawer.isDrawerOpen(GravityCompat.END) -> drawer.closeDrawer(GravityCompat.END)
+            supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
+            else -> super.onBackPressed()
+        }
     }
 
-    fun setFragment(fragment: Fragment){
+    override fun onClickBtnStart() {
+        saveLaunchFlag()
+        setFragment(FragmentWelcome())
+    }
+
+    private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
             .commit()
     }
 
-    fun saveLaunchFlag() {
+    private fun saveLaunchFlag() {
         val editor = sPref.edit()
         editor?.putBoolean(firstLaunchFlag, false)
         editor?.apply()
     }
 
-    fun saveLaunchFlag(reset: Boolean) {//для отладки первого запуска
+    private fun saveLaunchFlag(reset: Boolean) {//для отладки первого запуска
         val editor = sPref.edit()
         editor.putBoolean(firstLaunchFlag, reset)
         editor.apply()
     }
-
 }

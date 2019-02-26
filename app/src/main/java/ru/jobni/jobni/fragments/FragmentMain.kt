@@ -1,212 +1,316 @@
 package ru.jobni.jobni.fragments
 
-import android.app.SearchManager
-import android.database.MatrixCursor
+import android.content.Context
 import android.os.Bundle
-import android.provider.BaseColumns
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
+import android.widget.ExpandableListAdapter
 import androidx.annotation.NonNull
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
-import androidx.cursoradapter.widget.CursorAdapter
-import androidx.cursoradapter.widget.SimpleCursorAdapter
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import ru.jobni.jobni.R
-import ru.jobni.jobni.utils.CompanyRequest
-import ru.jobni.jobni.utils.RetrofitQuery
+import ru.jobni.jobni.model.VacancyEntity
+import ru.jobni.jobni.model.network.vacancy.*
+import ru.jobni.jobni.utils.RecyclerAdapter
+import ru.jobni.jobni.utils.Retrofit
 import java.util.*
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
-import javax.security.cert.CertificateException
-
 
 class FragmentMain : Fragment() {
 
-    private val BASE_URL = "https://test.jobni.ru/"
-    private lateinit var retrofitQuery: RetrofitQuery
+    private lateinit var searchReal: AutoCompleteTextView
 
-    private var lastRequestTime = 0L
-    private var requestTimeout = 2000L // 2 sec
+    private lateinit var progressBar: ProgressBar
 
-    private lateinit var searchItem: SearchView
-    private val SEARCH_VIEW_LIMIT_COUNT = 10
+    private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
+    private val SERVER_RESPONSE_MAX_COUNT: Int = 10
+
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var btnList: Button
+
+    private lateinit var expandableListAdapter: ExpandableListAdapter
+    private lateinit var expandableListView: ExpandableListView
+    private val headerList = ArrayList<String>()
+    private val childList = HashMap<String, List<String>>()
+
+    private lateinit var mVacancyList: ArrayList<VacancyEntity>
+
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mAdapter: RecyclerAdapter
+    private lateinit var mLayoutManager: RecyclerView.LayoutManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        val toolbar = view.findViewById(R.id.toolbar) as Toolbar
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        toolbar.title = ""
+        progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
+        drawerLayout = view.findViewById(R.id.drawer_layout)
 
-        searchItem = view.findViewById(R.id.search_view) as SearchView
-        searchItem.queryHint = getString(R.string.search_view_hint)
+        btnList = view.findViewById(R.id.list)
+        btnList.setOnClickListener { openRightMenu() }
 
-        initRetrofit()
+        expandableListView = view.findViewById(R.id.exp_list_view)
 
-        search()
+        searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
+
+        initSearch()
+
+        mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
+        mVacancyList = ArrayList()
+
+        buildRecyclerView()
+        buildCardsList()
 
         return view
     }
 
-    private fun search() {
-        val (suggestionAdapter: CursorAdapter, suggestions: List<String>) = searchSuggestion()
+    private fun buildRecyclerView() {
+        mRecyclerView.setHasFixedSize(true)
+        mLayoutManager = LinearLayoutManager(context)
+        mAdapter = RecyclerAdapter(mVacancyList)
 
-        searchItem.suggestionsAdapter = suggestionAdapter
+        mRecyclerView.layoutManager = mLayoutManager
+        mRecyclerView.adapter = mAdapter
 
-        searchItem.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
-            override fun onSuggestionSelect(position: Int): Boolean {
-                Toast.makeText(context, "onSuggestionSelect", Toast.LENGTH_SHORT).show()
-                return true
+        mAdapter.setOnItemClickListener(object : RecyclerAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                Toast.makeText(context, "onItemClick!", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onSuggestionClick(position: Int): Boolean {
-                searchItem.setQuery((suggestions as ArrayList<String>)[position], false)
-                searchItem.clearFocus()
-                doSearchOnClick(suggestions[position])
-                Toast.makeText(context, "onSuggestionClick", Toast.LENGTH_SHORT).show()
-                return true
-            }
-        })
-
-        searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Toast.makeText(context, "onQueryTextSubmit", Toast.LENGTH_SHORT).show()
-                return true
-            }
-
-            override fun onQueryTextChange(query: String): Boolean {
-                doSearchOnTextChange(query, suggestions, suggestionAdapter)
-                return true
+            override fun onEyeClick(v: View, position: Int) {
+                Toast.makeText(context, "onEyeClick!", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun searchSuggestion(): Pair<CursorAdapter, List<String>> {
-        val suggestionAdapter: CursorAdapter = SimpleCursorAdapter(
-            context,
-            android.R.layout.simple_list_item_1,
-            null,
-            arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1),
-            intArrayOf(android.R.id.text1),
-            0
-        )
+    private fun initSearch() {
+        searchReal.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
+            val searchItem: String = searchReal.text.toString()
+            doSearchOnClick(searchItem)
+        }
 
-        val suggestions: List<String> = ArrayList()
-        return Pair(suggestionAdapter, suggestions)
+        searchReal.addTextChangedListener(object : TextWatcher {
+            private var timer = Timer()
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                    object : TimerTask() {
+                        override fun run() {
+                            doSearchOnTextChange(s.toString())
+                        }
+                    },
+                    SERVER_RESPONSE_DELAY
+                )
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+
+            }
+        })
     }
 
-    private fun doSearchOnClick(query: String) {
-        //"not implemented"
-    }
-
-    private fun doSearchOnTextChange(
-        query: String,
-        suggestions: List<String>,
-        suggestionAdapter: CursorAdapter
-    ) {
-        // Частота запросов на сервер для формирования списка
-        if (System.currentTimeMillis() - lastRequestTime > requestTimeout) {
-            lastRequestTime = System.currentTimeMillis()
-
-            retrofitQuery.loadCompany(query).enqueue(object : Callback<CompanyRequest> {
-                override fun onResponse(@NonNull call: Call<CompanyRequest>, @NonNull response: Response<CompanyRequest>) {
+    private fun doSearchOnTextChange(query: String) {
+        Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
+            ?.enqueue(object : Callback<List<String>> {
+                override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
                     if (response.body() != null) {
 
-                        val resultList = arrayOf(response.body()?.results)
-                        val resultListItem = resultList[0]
+                        val resultList = response.body()
 
+                        val suggestions: List<String> = ArrayList()
                         (suggestions as ArrayList<String>).clear()
 
-                        if (response.body()?.results!!.isEmpty()) {
+                        if (resultList!!.isEmpty()) {
                             suggestions.add(getString(R.string.search_view_suggestions_empty))
-                        } else {
-                            for (i in 0 until resultListItem!!.size) {
-                                if (i < SEARCH_VIEW_LIMIT_COUNT) {
-                                    val result = resultListItem[i]
-                                    suggestions.add(result.name.toString())
-                                }
-                            }
                         }
 
-                        val columns = arrayOf(
-                            BaseColumns._ID,
-                            SearchManager.SUGGEST_COLUMN_TEXT_1,
-                            SearchManager.SUGGEST_COLUMN_INTENT_DATA
-                        )
-
-                        val cursor = MatrixCursor(columns)
-
-                        for (i in 0 until suggestions.size) {
-                            val tmp = arrayOf(Integer.toString(i), suggestions[i], suggestions[i])
-                            cursor.addRow(tmp)
+                        for (i in 0 until response.body()!!.size) {
+                            suggestions.add(resultList[i])
                         }
-                        suggestionAdapter.swapCursor(cursor)
+                        val adapter = ArrayAdapter<String>(context!!, R.layout.search_item, R.id.item, suggestions)
+                        searchReal.setAdapter<ArrayAdapter<String>>(adapter)
+                        adapter.notifyDataSetChanged()
                     }
                 }
 
-                override fun onFailure(@NonNull call: Call<CompanyRequest>, @NonNull t: Throwable) {
+                override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
                     Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    private fun prepareListData() {
+
+        val top250 = ArrayList<String>()
+        top250.add("The Shawshank Redemption")
+        top250.add("The Godfather")
+        top250.add("The Godfather: Part II")
+        top250.add("Pulp Fiction")
+        top250.add("The Good, the Bad and the Ugly")
+        top250.add("The Dark Knight")
+        top250.add("12 Angry Men")
+
+        headerList.forEach { str ->
+            // java ver. childList.put(str, top250)
+            childList[str] = top250
         }
     }
 
-    private fun initRetrofit() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL) //Базовая часть адреса
-            .addConverterFactory(GsonConverterFactory.create()) //Конвертер для преобразования JSON'а в объекты
-            .client(getUnsafeOkHttpClient())
-            .build()
+    private fun openRightMenu() {
+        Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+            override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+                if (response.body() != null) {
+                    val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
 
-        //Создаем объект, при помощи которого будем выполнять запросы
-        retrofitQuery = retrofit.create(RetrofitQuery::class.java)
+                    val detailList: MutableList<Any> = mutableListOf(
+                        competence,
+                        languages,
+                        work_places,
+                        employment,
+                        format_of_work,
+                        field_of_activity,
+                        age_company,
+                        required_number_of_people,
+                        zarplata,
+                        social_packet,
+                        auto,
+                        raiting
+                    )
+                    detailList.forEach { str: Any ->
+                        if (str is String) headerList.add(str)
+                        else when (str) {
+                            is Zarplata -> headerList.add("Зарплата")
+                            is Social_packet -> headerList.add("Социальный пакет")
+                            is Auto -> headerList.add("Авто")
+                            is Raiting -> headerList.add("Рейтинг")
+                        }
+                    }
+
+                    prepareListData()
+
+                    expandableListAdapter = ExpandableListAdapter(activity as Context, headerList, childList)
+                    expandableListView.setAdapter(expandableListAdapter)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error in download for menu!", Toast.LENGTH_LONG).show()
+            }
+        })
+        drawerLayout.openDrawer(GravityCompat.END)
     }
 
-    private fun getUnsafeOkHttpClient(): OkHttpClient {
-        try {
-            // Эмуляция положительных запросов при отсутствующем сертификате на сервере
-            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+    private fun buildCardsList() {
+        Retrofit.api?.loadVacancy()?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.body() != null) {
 
-                @Throws(CertificateException::class)
-                override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
+
+                    if (resultList.isEmpty()) {
+                        Toast.makeText(context, R.string.search_response_empty, Toast.LENGTH_SHORT).show()
+                    }
+
+                    val position = 0
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        mVacancyList.add(
+                            position,
+                            VacancyEntity(
+                                resultList[i].name,
+                                resultList[i].company.name,
+                                resultList[i].salary_level_newbie.toString(),
+                                resultList[i].salary_level_experienced.toString(),
+                                resultList[i].format_of_work.name,
+                                tmpEmploymentList,
+                                tmpCompetenceList
+                            )
+                        )
+                    }
+                    mAdapter.notifyItemInserted(position) // Обновить список после добавления элемента
+
                 }
+            }
 
-                @Throws(CertificateException::class)
-                override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun doSearchOnClick(query: String) {
+        Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
+
+                    //Отчистить список для новых результатов
+                    mVacancyList.clear()
+                    mAdapter.notifyDataSetChanged()
+
+                    if (resultList.isEmpty()) {
+                        Toast.makeText(context, R.string.search_response_empty, Toast.LENGTH_SHORT).show()
+                    }
+
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        mVacancyList.add(
+                            VacancyEntity(
+                                resultList[i].name,
+                                resultList[i].company.name,
+                                resultList[i].salary_level_newbie.toString(),
+                                resultList[i].salary_level_experienced.toString(),
+                                resultList[i].format_of_work.name,
+                                tmpEmploymentList,
+                                tmpCompetenceList
+                            )
+                        )
+                    }
+                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элемента
                 }
+            }
 
-                override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
-                    return arrayOf()
-                }
-            })
-
-            // Менеджер для запросов
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
-            // SSL Socket для менеджера
-            val sslSocketFactory = sslContext.socketFactory
-
-            val builder = OkHttpClient.Builder()
-            builder.sslSocketFactory(sslSocketFactory)
-            builder.hostnameVerifier { _, _ -> true }
-            return builder
-                //Для дебага запросов Retrofit GET/POST
-                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .build()
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

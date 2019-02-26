@@ -2,17 +2,15 @@ package ru.jobni.jobni.fragments
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import ru.jobni.jobni.R
 
-private const val ARG_PARAM1 = "param1"
-
-
 class FragmentIntroSlide : Fragment() {
+
     private var param1: Int = 0
     private var listener: OnClickBtnStartListener? = null
     private lateinit var btnStart: Button
@@ -36,7 +34,7 @@ class FragmentIntroSlide : Fragment() {
         return view
     }
 
-    fun onButtonStartPressed() {
+    private fun onButtonStartPressed() {
         listener?.onClickBtnStart()
     }
 
@@ -45,7 +43,7 @@ class FragmentIntroSlide : Fragment() {
         if (context is OnClickBtnStartListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnClickBtnStartListener")
+            throw RuntimeException("$context must implement OnClickBtnStartListener")
         }
     }
 
@@ -77,5 +75,7 @@ class FragmentIntroSlide : Fragment() {
                     putInt(ARG_PARAM1, num)
                 }
             }
+
+        private const val ARG_PARAM1 = "param1"
     }
 }

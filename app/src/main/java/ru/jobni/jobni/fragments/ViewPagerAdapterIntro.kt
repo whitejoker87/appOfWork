@@ -8,13 +8,6 @@ import ru.jobni.jobni.R
 
 class ViewPagerAdapterIntro(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-//    private lateinit var onclickBtnSlide: IOnclickBtnSlide
-//
-//    init {
-//        this.onclickBtnSlide = onclickBtnSlide
-//    }
-
-
     override fun getItem(position: Int): Fragment {
         when (position) {
             0 -> return FragmentIntroSlide.newInstance(R.layout.c_intro_01)
@@ -26,7 +19,7 @@ class ViewPagerAdapterIntro(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         return FragmentIntroSlide.newInstance(R.layout.c_intro_01)
     }
 
-    override fun getCount(): Int= 5
+    override fun getCount(): Int = 5
 
     override fun getPageTitle(position: Int): CharSequence? = null
 
