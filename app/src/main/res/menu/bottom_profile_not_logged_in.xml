@@ -14,3 +14,4 @@
             android:id="@+id/rec_pass_bottom_not_logged"
             android:title="@string/menu_bottom_profile_not_logged_in_3"
     />
+</menu>

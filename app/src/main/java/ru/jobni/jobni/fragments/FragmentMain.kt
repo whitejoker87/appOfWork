@@ -179,7 +179,7 @@ class FragmentMain : Fragment() {
 
         headerList.forEach { str ->
             // java ver. childList.put(str, top250)
-            childList[str] = top250)
+            childList[str] = top250
         }
     }
 

@@ -49,9 +49,9 @@ class FragmentRegAuth : Fragment() {
     ): View? {
         var layout  = 0
         if (param1.equals("reg"))
-           layout = R.layout.registration_01_mail
+           layout = R.layout.c_registration_01_mail
         else if (param1.equals("auth"))
-            layout = R.layout.authorization_mail
+            layout = R.layout.c_authorization_mail
         val view = inflater.inflate(layout, container, false)
         return view
     }
