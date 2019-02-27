@@ -36,20 +36,20 @@
     <string name="card_vacancy_close_work_format_headline">Формат работы:</string>
     <string name="card_vacancy_close_work_format_text">Не имеет значения</string>>
     <string name="card_vacancy_close_employment_headline">Занятость:</string>
-    <string name="card_vacancy_close_employment_text">Полный день, Частичная занятость, Работа в вечернее время, Работа
-        в ночное время, Работа в выходные, Свободный график
+    <string name="card_vacancy_close_employment_text">Полный день, Частичная занятость, Работа в вечернее время,
+        Работа в ночное время, Работа в выходные, Свободный график
     </string>
     <string name="card_vacancy_open_company_description_headline">Описание Компании:</string>
-    <string name="card_vacancy_open_company_description_text">С другой стороны постоянное информационно-пропагандистское
-        обеспечение нашей деятельности требуют определения и уточнения позиций, занимаемых участниками в отношении
-        поставленных задач. Задача организации, в особенности же постоянный количественный рост и сфера нашей активности
-        позволяет оценить значение форм развития
+    <string name="card_vacancy_open_company_description_text">С другой стороны постоянное
+        информационно-пропагандистское обеспечение нашей деятельности требуют определения и уточнения позиций,
+        занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же постоянный
+        количественный рост и сфера нашей активности позволяет оценить значение форм развития
     </string>
     <string name="card_vacancy_open_vacancy_description_headline">Описание Вакансии:</string>
-    <string name="card_vacancy_open_vacancy_description_text">С другой стороны постоянное информационно-пропагандистское
-        обеспечение нашей деятельности требуют определения и уточнения позиций, занимаемых участниками в отношении
-        поставленных задач. Задача организации, в особенности же постоянный количественный рост и сфера нашей активности
-        позволяет оценить значение форм развития
+    <string name="card_vacancy_open_vacancy_description_text">С другой стороны постоянное
+        информационно-пропагандистское обеспечение нашей деятельности требуют определения и уточнения позиций,
+        занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же постоянный
+        количественный рост и сфера нашей активности позволяет оценить значение форм развития
     </string>
     <string name="card_vacancy_open_requirements_description_headline">Требования:</string>
     <string name="card_vacancy_open_requirements_description_text">Водительский стаж от 3 лет\nЛичный легковой
@@ -63,17 +63,20 @@
     <string name="card_vacancy_open_conditions_description_text">Компенсация ГСМ\nАмортизация\nКорпоративная сотовая
         связь
     </string>
-    <string name="card_vacancy_close_company_name">Jobni</string>
+    <string name="company">Jobni</string>
     <string name="card_vacancy_close_distance">0.2 км</string>
     <string name="card_vacancy_close_address">Россия,г. Екатеринбург, ул. Фронтовых Бригад 22, офис 2</string>
     <string name="card_vacancy_close_menu_1">Написать</string>
     <string name="card_vacancy_close_menu_2">Позвонить</string>
     <string name="card_vacancy_close_menu_3">Откликнуться</string>
+    <string name="card_vacancy_map_job">Работа</string>
+    <string name="card_vacancy_map_interviews">Собеседования</string>
+    <string name="card_vacancy_map_together">Все</string>
     <string name="search_item">Менеджер по продажам</string>
     <string name="search_button">НАЙТИ РАБОТУ</string>
     <string name="menu_right_item">Java</string>
-    <string name="search_view_hint">Search View Hint</string>
-    <string name="search_view_suggestions_empty">Nothing to Search</string>
+    <string name="search_view_hint">Введите Компетенцию</string>
+    <string name="search_view_suggestions_empty">Нет совпадений</string>
     <string name="menu_bottom_profile_not_logged_in_1">Авторизация</string>
     <string name="menu_bottom_profile_not_logged_in_2">Регистрация</string>
     <string name="menu_bottom_profile_not_logged_in_3">Восстановление пароля</string>
@@ -85,6 +88,9 @@
     <string name="menu_bottom_profile_logged_in_6">Смена пароля</string>
     <string name="menu_bottom_profile_logged_in_7">Смена почты</string>
     <string name="menu_bottom_profile_logged_in_8">Выход</string>
+    <string name="menu_bottom_chats_1">Соискатель</string>
+    <string name="menu_bottom_chats_2">Работодатель</string>
+    <string name="menu_bottom_chats_3">Jobni</string>
     <string name="referral_link">Реферальная ссылка</string>
     <string name="referral_message">Вам будет зачислен бонус 150 р</string>
     <string name="mail_1">Почта</string>
@@ -113,7 +119,20 @@
     <string name="close">Закрыть</string>
     <string name="registration">Зарегистрироваться</string>
     <string name="enter">Войти</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="headline">Чаты (соискатель)</string>
+    <string name="chats_message_text_quoted_message">Цитируемое сообщение</string>
+    <string name="chats_message_text_forwarded_message">Пересланное сообщение</string>
+    <string name="chats_message_text_big">Равным образом новая модель организационной деятельности способствует
+        подготовки и реализациимодели развития
+    </string>
+    <string name="chats_message_text_small">Равным образом новая модель организационной</string>
+    <string name="chats_message_time">16:37</string>
+    <string name="menu_chat_list_context_1">Заблокировать Компанию</string>
+    <string name="menu_chat_list_context_2">Заблокировать HR</string>
+    <string name="menu_chat_list_context_3">Закрепить</string>
+    <string name="menu_chat_list_context_4">Открепить</string>
+    <string name="number_of_unread_messages">111</string>
+    <string name="company_contact_face_full_name">Колесников Вячеслав Владимирович</string>
+    <string name="company_contact_face_position">HR менеджер</string>
+    <string name="search_response_empty">Нет рузультатов!</string>
 </resources>

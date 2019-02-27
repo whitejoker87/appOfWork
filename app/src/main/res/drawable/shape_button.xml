@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid
-            android:color="@color/theme_1_color_1"
-    />
-    <corners
-            android:radius="4dp"
-    />
-    <padding
-            android:bottom="16dp"
-            android:left="16dp"
-            android:right="16dp"
-            android:top="16dp"
-    />
+<shape xmlns:android = "http://schemas.android.com/apk/res/android">
+	<solid android:color = "@color/theme_1_color_1"/>
+	<corners android:radius = "4dp"/>
+	<padding android:bottom = "16dp"
+		android:left = "16dp"
+		android:right = "16dp"
+		android:top = "16dp"/>
 </shape>

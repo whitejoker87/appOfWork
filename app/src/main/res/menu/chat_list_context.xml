@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- делать через BottomSheetDialogFragment -->
+<menu xmlns:android = "http://schemas.android.com/apk/res/android">
+	<item android:id = "@+id/bottom_01"
+		android:icon = "@drawable/ic_block"
+		android:title = "@string/menu_chat_list_context_1"/>
+	<item android:id = "@+id/bottom_02"
+		android:icon = "@drawable/ic_block"
+		android:title = "@string/menu_chat_list_context_2"/>
+	<item android:id = "@+id/bottom_03"
+		android:icon = "@drawable/ic_lock"
+		android:title = "@string/menu_chat_list_context_3"/>
+	<item android:id = "@+id/bottom_04"
+		android:icon = "@drawable/ic_unlock"
+		android:title = "@string/menu_chat_list_context_4"/>
+</menu>

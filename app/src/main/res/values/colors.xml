@@ -1,40 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-
-    <color name="background">#F5F5F5</color>
-    <color name="theme_1_color_1">#FFC400</color>
-    <color name="theme_1_color_2">#FFAB00</color>
-    <color name="theme_1_card">#FFFDE7</color>
-    <color name="theme_1_hover">#EBEBEB</color>
-    <color name="font_color">#4C3E40</color>
-    <color name="font_color_error_validation">#FF5252</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#111111</color>
-    <color name="online">#64DD17</color>
-    <color name="offline">#DD2C00</color>
-    <!--
-        100% — FF
-        95% — F2
-        90% — E6
-        85% — D9
-        80% — CC
-        75% — BF
-        70% — B3
-        65% — A6
-        60% — 99
-        55% — 8C
-        50% — 80
-        45% — 73
-        40% — 66
-        35% — 59
-        30% — 4D
-        25% — 40
-        20% — 33
-        15% — 26
-        10% — 1A
-        5% — 0D
-        0% — 00 -->
+	<color name = "colorPrimary">#008577</color>
+	<color name = "colorPrimaryDark">#00574B</color>
+	<color name = "colorAccent">#D81B60</color>
+	<color name = "background">#F5F5F5</color>
+	<color name = "theme_1_color_1">#FFC400</color>
+	<color name = "theme_1_color_1_50">#14FFC400</color>
+	<color name = "theme_1_color_2">#FFAB00</color>
+	<color name = "theme_1_card">#FFFDE7</color>
+	<color name = "theme_1_hover">#EBEBEB</color>
+	<color name = "font_color">#4C3E40</color>
+	<color name = "font_color_error_validation">#FF5252</color>
+	<color name = "white">#FFFFFF</color>
+	<color name = "black">#111111</color>
+	<color name = "online">#64DD17</color>
+	<color name = "offline">#DD2C00</color>
+	<color name = "message_read">#FF33B5E5</color>
 </resources>

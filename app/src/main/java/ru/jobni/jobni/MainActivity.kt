@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
 
         when {
             drawer.isDrawerOpen(GravityCompat.END) -> drawer.closeDrawer(GravityCompat.END)
-            //supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
+            supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
             else -> super.onBackPressed()
         }
     }
@@ -97,26 +97,25 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
 
     override fun onClickBtnStart() {
         saveLaunchFlag()
-        setFragment(FragmentMain())
+        setFragment(FragmentWelcome())
     }
 
-    fun setFragment(fragment: Fragment){
+    private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
-            //.addToBackStack(null)
+            .addToBackStack(null)
             .commit()
     }
 
-    fun saveLaunchFlag() {
+    private fun saveLaunchFlag() {
         val editor = sPref.edit()
         editor?.putBoolean(firstLaunchFlag, false)
         editor?.apply()
     }
 
-    fun saveLaunchFlag(reset: Boolean) {//для отладки первого запуска
+    private fun saveLaunchFlag(reset: Boolean) {//для отладки первого запуска
         val editor = sPref.edit()
         editor.putBoolean(firstLaunchFlag, reset)
         editor.apply()
     }
-
 }
