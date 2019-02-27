@@ -12,9 +12,8 @@ import android.widget.TextView
 import ru.jobni.jobni.R;
 import kotlinx.android.synthetic.main.fragment_profile_bottom_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_bottom_dialog_item.view.*
-
-// TODO: Customize parameter argument names
-const val ARG_ITEM_COUNT = "item_count"
+import java.lang.reflect.Array
+import java.util.ArrayList
 
 /**
  *
@@ -39,7 +38,7 @@ class ProfileBottomDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         list.layoutManager = LinearLayoutManager(context)
-        list.adapter = ItemAdapter(arguments!!.getInt(ARG_ITEM_COUNT))
+        list.adapter = ItemAdapter(arguments!!.getStringArray(LIST_MENU))
     }
 
     override fun onAttach(context: Context) {
@@ -76,7 +75,7 @@ class ProfileBottomDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private inner class ItemAdapter internal constructor(private val mItemCount: Int) :
+    private inner class ItemAdapter internal constructor(private val listMenu: kotlin.Array<String>) :
         RecyclerView.Adapter<ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -84,23 +83,27 @@ class ProfileBottomDialogFragment : BottomSheetDialogFragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.text.text = position.toString()
+            holder.text.text = listMenu[position]
         }
 
         override fun getItemCount(): Int {
-            return mItemCount
+            return listMenu.size
         }
     }
 
     companion object {
 
-        // TODO: Customize parameters
-        fun newInstance(itemCount: Int): ProfileBottomDialogFragment =
+        fun newInstance(isLogged: Boolean): ProfileBottomDialogFragment =
             ProfileBottomDialogFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_ITEM_COUNT, itemCount)
+                    if (isLogged) putStringArray(LIST_MENU, listMeniuLogged)
+                    else putStringArray(LIST_MENU, listMenuNotLogged)
                 }
             }
 
+        private const val LIST_MENU = "list_menu"
+
+        private val listMenuNotLogged = arrayOf("Авторизация", "Регистрация", "Восстановление пароля")
+        private val listMeniuLogged = arrayOf("ID:", "REF:", "Реферальная программа", "Cashback", "Учетная запись", "Выход")
     }
 }
