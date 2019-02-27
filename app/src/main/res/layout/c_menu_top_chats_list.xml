@@ -18,7 +18,7 @@
 		app:layout_constraintStart_toStartOf = "@+id/toolbar"
 		android:layout_margin = "16dp"
 		android:background = "@drawable/ic_back"/>
-	<TextView android:id = "@+id/search_view"
+	<TextView android:id = "@+id/headline_chat_candidate"
 		android:layout_width = "0dp"
 		android:layout_height = "wrap_content"
 		app:layout_constraintTop_toTopOf = "@+id/toolbar"
@@ -28,7 +28,7 @@
 		android:layout_marginStart = "16dp"
 		android:layout_marginEnd = "16dp"
 		style = "@style/text_color_and_size"
-		android:text = "@string/headline"/>
+		android:text = "@string/chat_candidate"/>
 	<Button android:id = "@+id/list"
 		android:layout_width = "32dp"
 		android:layout_height = "32dp"

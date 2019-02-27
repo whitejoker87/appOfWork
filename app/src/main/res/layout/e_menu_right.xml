@@ -18,7 +18,7 @@
 			android:layout_height = "match_parent"></ExpandableListView>
 	</com.google.android.material.navigation.NavigationView>
 	<include android:id = "@+id/include_01"
-		layout = "@layout/c_menu_top"
+		layout = "@layout/c_menu_top_search"
 		android:layout_width = "match_parent"
 		android:layout_height = "wrap_content"
 		app:layout_constraintTop_toTopOf = "parent"

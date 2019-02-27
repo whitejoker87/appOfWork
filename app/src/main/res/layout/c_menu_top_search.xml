@@ -10,6 +10,17 @@
 		android:layout_height = "60dp"
 		app:layout_constraintTop_toTopOf = "parent"
 		android:background = "@color/theme_1_color_1"/>
+	<androidx.appcompat.widget.SearchView android:id = "@+id/search_view"
+		android:layout_width = "0dp"
+		android:layout_height = "wrap_content"
+		app:layout_constraintTop_toTopOf = "@+id/toolbar"
+		app:layout_constraintBottom_toBottomOf = "@+id/toolbar"
+		app:layout_constraintStart_toEndOf = "@+id/bars"
+		app:layout_constraintEnd_toStartOf = "@+id/list"
+		android:layout_marginStart = "16dp"
+		android:layout_marginEnd = "16dp"
+		android:background = "@color/white"
+		android:inputType = "text"/>
 	<Button android:id = "@+id/bars"
 		android:layout_width = "32dp"
 		android:layout_height = "32dp"
