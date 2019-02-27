@@ -7,13 +7,13 @@ import android.view.View
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import ru.jobni.jobni.fragments.FragmentIntroSlide
-import ru.jobni.jobni.fragments.FragmentMain
-import ru.jobni.jobni.fragments.FragmentSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import ru.jobni.jobni.fragments.ProfileBottomDialogFragment
+import android.view.MenuInflater
+import androidx.appcompat.widget.PopupMenu
+import android.widget.Toast
+import ru.jobni.jobni.fragments.*
 
 
 // TODO: Изучить Android Navigation Component
@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
     private val firstLaunchFlag = "firstLaunch"
     private lateinit var sPref: SharedPreferences
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var popup: PopupMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,19 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
 
         bottomNavigationView = findViewById(R.id.menu_bottom)
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_5))
+        val inflater = popup.getMenuInflater()
+        inflater.inflate(R.menu.bottom_profile_not_logged_in, popup.getMenu())
+        popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem): Boolean {
+                when (item.itemId) {
+                    R.id.reg_bottom_not_logged -> setFragment(FragmentRegAuth.newInstance("reg"))
+                    R.id.auth_bottom_not_logged -> setFragment(FragmentRegAuth.newInstance("auth"))
+                }
+                return true
+            }
+        })
 
         sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
         saveLaunchFlag(true)//отладка первого запуска
@@ -70,13 +84,16 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
                     return true
                 }
                 R.id.bottom_5 -> {
-                    ProfileBottomDialogFragment.newInstance(3).show(supportFragmentManager, "dialog")
+                    popup.show()
+                    //ProfileBottomDialogFragment.newInstance(3).show(supportFragmentManager, "dialog")
                     return true
                 }
             }
             return false
         }
     }
+
+
 
     override fun onClickBtnStart() {
         saveLaunchFlag()
