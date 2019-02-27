@@ -11,7 +11,7 @@
 		app:layout_constraintStart_toStartOf = "parent"
 		app:layout_constraintEnd_toEndOf = "parent"/>
 	<include android:id = "@+id/headline"
-		layout = "@layout/c_chats_message_headline_item"
+		layout = "@layout/c_menu_headline_chats_message_item"
 		android:layout_width = "0dp"
 		android:layout_height = "wrap_content"
 		app:layout_constraintTop_toBottomOf = "@+id/menu"

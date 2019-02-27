@@ -73,7 +73,7 @@
     <string name="card_vacancy_map_interviews">Собеседования</string>
     <string name="card_vacancy_map_together">Все</string>
     <string name="search_item">Менеджер по продажам</string>
-    <string name="search_button">НАЙТИ РАБОТУ</string>
+    <string name="search_button">Поиск</string>
     <string name="menu_right_item">Java</string>
     <string name="search_view_hint">Введите Компетенцию</string>
     <string name="search_view_suggestions_empty">Нет совпадений</string>
@@ -119,7 +119,9 @@
     <string name="close">Закрыть</string>
     <string name="registration">Зарегистрироваться</string>
     <string name="enter">Войти</string>
-    <string name="headline">Чаты (соискатель)</string>
+    <string name="chat_candidate">Чаты (соискатель)</string>
+    <string name="chat_employer">Чаты (работодатель)</string>
+    <string name="notifications">Уведомления</string>
     <string name="chats_message_text_quoted_message">Цитируемое сообщение</string>
     <string name="chats_message_text_forwarded_message">Пересланное сообщение</string>
     <string name="chats_message_text_big">Равным образом новая модель организационной деятельности способствует
@@ -135,4 +137,8 @@
     <string name="company_contact_face_full_name">Колесников Вячеслав Владимирович</string>
     <string name="company_contact_face_position">HR менеджер</string>
     <string name="search_response_empty">Нет рузультатов!</string>
+	<string name = "search_tab_vacancy">Вакансии</string>
+    <string name = "search_tab_company">Компании</string>
+    <string name = "search_tab_resume">Резюме</string>
+    <string name = "search_tab_candidate">Кандидаты</string>
 </resources>

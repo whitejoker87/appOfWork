@@ -22,8 +22,8 @@ class FragmentWelcome : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_welcome, container, false)
 
-        searchWelcome = view.findViewById(R.id.search_view_welcome) as SearchView
-        buttonWelcome = view.findViewById(R.id.search_work) as Button
+        searchWelcome = view.findViewById(R.id.search_welcome) as SearchView
+        buttonWelcome = view.findViewById(R.id.search_button) as Button
 
         initElements(view)
 
