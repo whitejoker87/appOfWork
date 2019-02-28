@@ -146,7 +146,7 @@ class FragmentMain : Fragment() {
                         for (i in 0 until response.body()!!.size) {
                             suggestions.add(resultList[i])
                         }
-                        val adapter = ArrayAdapter<String>(context!!, R.layout.c_search_vacancy_item, R.id.item, suggestions)
+                        val adapter = ArrayAdapter<String>(context!!, R.layout.c_search_item, R.id.item, suggestions)
                         searchReal.setAdapter<ArrayAdapter<String>>(adapter)
                         adapter.notifyDataSetChanged()
                     }

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.appcompat.widget.SearchView
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import ru.jobni.jobni.R
 
