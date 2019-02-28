@@ -12,8 +12,6 @@ import android.widget.TextView
 import ru.jobni.jobni.R;
 import kotlinx.android.synthetic.main.fragment_profile_bottom_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_bottom_dialog_item.view.*
-import java.lang.reflect.Array
-import java.util.ArrayList
 
 /**
  *
@@ -40,6 +38,7 @@ class ProfileBottomDialogFragment : BottomSheetDialogFragment() {
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = ItemAdapter(arguments!!.getStringArray(LIST_MENU))
     }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

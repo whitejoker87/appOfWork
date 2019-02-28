@@ -12,7 +12,7 @@
 	<color name = "font_color">#4C3E40</color>
 	<color name = "font_color_error_validation">#FF5252</color>
 	<color name = "white">#FFFFFF</color>
-	<color name = "black">#111111</color>
+	<color name = "black">#000000</color>
 	<color name = "online">#64DD17</color>
 	<color name = "offline">#DD2C00</color>
 	<color name = "message_read">#FF33B5E5</color>

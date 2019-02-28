@@ -7,8 +7,10 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -184,38 +186,49 @@ class FragmentMain : Fragment() {
     }
 
     private fun openRightMenu() {
-        Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
-            override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
-                if (response.body() != null) {
-                    val(competence,languages,work_places,employment,format_of_work,field_of_activity,
-                        age_company,required_number_of_people, zarplata, social_packet,auto,raiting) = response.body()!!
+        if (headerList.isEmpty()) {
+            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+                    if (response.body() != null) {
+                        val (competence, languages, work_places, employment, format_of_work, field_of_activity,
+                            age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
 
-                    val detailList: MutableList<Any> = mutableListOf(competence,
-                        languages,work_places,employment,format_of_work,field_of_activity,
-                        age_company,required_number_of_people, zarplata, social_packet,auto,raiting)
+                        val detailList: MutableList<Any> = mutableListOf(
+                            competence,
+                            languages, work_places, employment, format_of_work, field_of_activity,
+                            age_company, required_number_of_people, zarplata, social_packet, auto, raiting
+                        )
 
-                    detailList.forEach { str:Any ->
-                            if (str is String)headerList.add(str)
-                            else when(str) {
+                        detailList.forEach { str: Any ->
+                            if (str is String) headerList.add(str)
+                            else when (str) {
                                 is Zarplata -> headerList.add("Зарплата")
                                 is Social_packet -> headerList.add("Социальный пакет")
                                 is Auto -> headerList.add("Авто")
                                 is Raiting -> headerList.add("Рейтинг")
                             }
+                        }
+
+                        prepareListData()//Заглушка для второго уровня правого меню
+
+
+                        expandableListAdapter = ExpandableListAdapter(activity as Context, headerList, childList)
+                        expandableListView.setAdapter(expandableListAdapter)
                     }
-
-                    prepareListData()//Заглушка для второго уровня правого меню
-
-                    expandableListAdapter = ExpandableListAdapter(activity as Context, headerList, childList)
-                    expandableListView.setAdapter(expandableListAdapter)
                 }
-            }
 
-            override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error in download for menu!", Toast.LENGTH_LONG).show()
-            }
-        })
+                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+                    Toast.makeText(context, "Error in download for menu!", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
         drawerLayout.openDrawer(GravityCompat.END)
+        //ниже закрываем клавиатуру если открыта
+        val view = activity!!.currentFocus
+        view?.let { v ->
+            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+        }
     }
 
     private fun buildCardsList() {
