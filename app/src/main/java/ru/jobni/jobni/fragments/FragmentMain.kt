@@ -7,14 +7,19 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import android.widget.ExpandableListAdapter
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.transition.TransitionManager
+import kotlinx.android.synthetic.main.fragment_main.*
+import com.google.android.material.navigation.NavigationView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,6 +40,7 @@ class FragmentMain : Fragment() {
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var btnList: Button
 
     private lateinit var expandableListAdapter: ExpandableListAdapter
@@ -57,12 +63,13 @@ class FragmentMain : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
-        drawerLayout = view.findViewById(R.id.drawer_layout)
+        drawerLayout = activity!!.findViewById(R.id.drawer_layout)
+        bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
 
         btnList = view.findViewById(R.id.list)
         btnList.setOnClickListener { openRightMenu() }
 
-        expandableListView = view.findViewById(R.id.exp_list_view)
+        expandableListView = activity!!.findViewById(R.id.exp_list_view)
 
         searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
 
@@ -75,6 +82,13 @@ class FragmentMain : Fragment() {
         buildCardsList()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bottomNavigationView.visibility = View.VISIBLE
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+
     }
 
     private fun buildRecyclerView() {
@@ -159,7 +173,6 @@ class FragmentMain : Fragment() {
     }
 
     private fun prepareListData() {
-
         val top250 = ArrayList<String>()
         top250.add("The Shawshank Redemption")
         top250.add("The Godfather")
@@ -176,47 +189,56 @@ class FragmentMain : Fragment() {
     }
 
     private fun openRightMenu() {
-        Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
-            override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
-                if (response.body() != null) {
-                    val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
+        if (headerList.isEmpty()){
+            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+                    if (response.body() != null) {
+                        val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
 
-                    val detailList: MutableList<Any> = mutableListOf(
-                        competence,
-                        languages,
-                        work_places,
-                        employment,
-                        format_of_work,
-                        field_of_activity,
-                        age_company,
-                        required_number_of_people,
-                        zarplata,
-                        social_packet,
-                        auto,
-                        raiting
-                    )
-                    detailList.forEach { str: Any ->
-                        if (str is String) headerList.add(str)
-                        else when (str) {
-                            is Zarplata -> headerList.add("Зарплата")
-                            is Social_packet -> headerList.add("Социальный пакет")
-                            is Auto -> headerList.add("Авто")
-                            is Raiting -> headerList.add("Рейтинг")
+                        val detailList: MutableList<Any> = mutableListOf(
+                            competence,
+                            languages,
+                            work_places,
+                            employment,
+                            format_of_work,
+                            field_of_activity,
+                            age_company,
+                            required_number_of_people,
+                            zarplata,
+                            social_packet,
+                            auto,
+                            raiting
+                        )
+                        detailList.forEach { str: Any ->
+                            if (str is String) headerList.add(str)
+                            else when (str) {
+                                is Zarplata -> headerList.add("Зарплата")
+                                is Social_packet -> headerList.add("Социальный пакет")
+                                is Auto -> headerList.add("Авто")
+                                is Raiting -> headerList.add("Рейтинг")
+                            }
                         }
+
+                        prepareListData()
+
+                        expandableListAdapter = ExpandableListAdapter(activity as Context, headerList, childList)
+                        expandableListView.setAdapter(expandableListAdapter)
                     }
-
-                    prepareListData()
-
-                    expandableListAdapter = ExpandableListAdapter(activity as Context, headerList, childList)
-                    expandableListView.setAdapter(expandableListAdapter)
                 }
-            }
 
-            override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error in download for menu!", Toast.LENGTH_LONG).show()
-            }
-        })
+                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+                    Toast.makeText(context, "Error in download for menu!", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+
         drawerLayout.openDrawer(GravityCompat.END)
+        //ниже закрываем клавиатуру если открыта
+        val view = activity!!.currentFocus
+        view?.let { v ->
+            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+        }
     }
 
     private fun buildCardsList() {
