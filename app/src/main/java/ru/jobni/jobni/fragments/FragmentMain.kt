@@ -87,6 +87,8 @@ class FragmentMain : Fragment() {
     override fun onResume() {
         super.onResume()
         bottomNavigationView.visibility = View.VISIBLE
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+
     }
 
     private fun buildRecyclerView() {
@@ -187,19 +189,26 @@ class FragmentMain : Fragment() {
     }
 
     private fun openRightMenu() {
-        if (headerList.isEmpty()) {
+        if (headerList.isEmpty()){
             Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
                 override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
                     if (response.body() != null) {
-                        val (competence, languages, work_places, employment, format_of_work, field_of_activity,
-                            age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
+                        val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
 
                         val detailList: MutableList<Any> = mutableListOf(
                             competence,
-                            languages, work_places, employment, format_of_work, field_of_activity,
-                            age_company, required_number_of_people, zarplata, social_packet, auto, raiting
+                            languages,
+                            work_places,
+                            employment,
+                            format_of_work,
+                            field_of_activity,
+                            age_company,
+                            required_number_of_people,
+                            zarplata,
+                            social_packet,
+                            auto,
+                            raiting
                         )
-
                         detailList.forEach { str: Any ->
                             if (str is String) headerList.add(str)
                             else when (str) {
@@ -210,8 +219,7 @@ class FragmentMain : Fragment() {
                             }
                         }
 
-                        prepareListData()//Заглушка для второго уровня правого меню
-
+                        prepareListData()
 
                         expandableListAdapter = ExpandableListAdapter(activity as Context, headerList, childList)
                         expandableListView.setAdapter(expandableListAdapter)
@@ -223,6 +231,7 @@ class FragmentMain : Fragment() {
                 }
             })
         }
+
         drawerLayout.openDrawer(GravityCompat.END)
         //ниже закрываем клавиатуру если открыта
         val view = activity!!.currentFocus

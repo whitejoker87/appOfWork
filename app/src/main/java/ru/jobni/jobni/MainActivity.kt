@@ -33,15 +33,19 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
     private lateinit var sPref: SharedPreferences
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
+    private lateinit var drawer: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        drawer = findViewById(R.id.drawer_layout)
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+
         bottomNavigationView = findViewById(R.id.menu_bottom)
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_5))
+        popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_menu_profile))
         val inflater = popup.getMenuInflater()
         inflater.inflate(R.menu.bottom_profile_not_logged_in, popup.getMenu())
         popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
@@ -62,8 +66,6 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-
         when {
             drawer.isDrawerOpen(GravityCompat.END) -> drawer.closeDrawer(GravityCompat.END)
             supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
@@ -75,20 +77,17 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
 
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
-                R.id.bottom_01 -> {
+                R.id.bottom_menu_search -> {
                     setFragment(FragmentMain())
                     return true
                 }
-                R.id.bottom_02 -> {
+                R.id.bottom_menu_notification -> {
                     return true
                 }
-                R.id.bottom_03 -> {
+                R.id.bottom_menu_chat -> {
                     return true
                 }
-                R.id.bottom_04 -> {
-                    return true
-                }
-                R.id.bottom_5 -> {
+                R.id.bottom_menu_profile -> {
                     popup.show()
                     //ProfileBottomDialogFragment.newInstance(false).show(supportFragmentManager, "dialog")
                     return true
