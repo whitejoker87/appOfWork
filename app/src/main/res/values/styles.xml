@@ -14,15 +14,40 @@
 	<style name = "menu_left_tab_layout"
 		parent = "Base.Widget.Design.TabLayout">
 		<item name = "tabTextAppearance">@style/menu_left_tab_layout_text</item>
+		<item name = "tabBackground">@color/theme_1_color_1</item>
+		<item name = "tabIndicatorColor">@color/font_color</item>
 		<item name = "tabTextColor">@color/font_color</item>
 		<item name = "tabSelectedTextColor">@color/font_color</item>
-		<item name = "tabIndicatorColor">@color/font_color</item>
-		<item name = "android:background">@color/theme_1_color_1</item>
 	</style>
 	<style name = "menu_left_tab_layout_text"
-		parent = "TextAppearance.AppCompat.Button">
+		parent = "TextAppearance.Design.Tab">
 		<item name = "android:textSize">10sp</item>
-		<item name = "android:textStyle">normal</item>
+	</style>
+	<style name = "notifications_tab_layout_headline"
+		parent = "Base.Widget.Design.TabLayout">
+		<item name = "tabTextAppearance">@style/menu_left_tab_layout_text</item>
+		<item name = "tabBackground">@color/theme_1_card</item>
+		<item name = "tabIndicatorColor">@color/font_color</item>
+		<item name = "tabTextColor">@color/font_color</item>
+		<item name = "tabSelectedTextColor">@color/font_color</item>
+	</style>
+	<style name = "notifications_tab_layout_headline_text"
+		parent = "TextAppearance.Design.Tab">
+		<item name = "android:textSize">10sp</item>
+	</style>
+	<style name = "search_tab_layout"
+		parent = "Base.Widget.Design.TabLayout">
+		<item name = "tabTextAppearance">@style/search_tab_layout_text</item>
+		<item name = "tabBackground">@color/theme_1_color_1</item>
+		<item name = "tabIndicatorColor">@color/font_color</item>
+		<item name = "tabTextColor">@color/font_color</item>
+		<item name = "tabSelectedTextColor">@color/font_color</item>
+		<item name = "tabPaddingStart">4dp</item>
+		<item name = "tabPaddingEnd">4dp</item>
+	</style>
+	<style name = "search_tab_layout_text"
+		parent = "TextAppearance.Design.Tab">
+		<item name = "android:textSize">12dp</item>
 	</style>
 	<style name = "text_color_and_size">
 		<item name = "android:textColor">@color/font_color</item>

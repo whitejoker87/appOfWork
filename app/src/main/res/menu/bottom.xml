@@ -9,10 +9,7 @@
 	<item android:id = "@+id/bottom_03"
 		android:icon = "@drawable/ic_comments"
 		android:title = "@string/menu_bottom_3"/>
-	<item android:id = "@+id/bottom_04"
-		android:icon = "@drawable/ic_calendar"
-		android:title = "@string/menu_bottom_4"/>
-	<item android:id = "@+id/bottom_5"
+	<item android:id = "@+id/bottom_4"
 		android:icon = "@drawable/ic_user"
 		android:title = "@string/menu_bottom_5"/>
 </menu>
