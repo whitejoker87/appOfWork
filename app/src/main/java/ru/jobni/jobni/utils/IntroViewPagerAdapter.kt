@@ -1,12 +1,13 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.utils
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import ru.jobni.jobni.R
+import ru.jobni.jobni.fragments.FragmentIntroSlide
 
 
-class ViewPagerAdapterIntro(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class IntroViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         when (position) {

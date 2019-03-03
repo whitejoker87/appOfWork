@@ -7,72 +7,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
-import androidx.fragment.app.FragmentPagerAdapter
-import android.graphics.Color
-import androidx.fragment.app.FragmentManager
-import com.google.android.material.tabs.TabLayout
 import ru.jobni.jobni.R
-import ru.jobni.jobni.utils.VerticalViewPager
-import ru.jobni.jobni.utils.VerticalViewPagerAdapter
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [FragmentAuth.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [FragmentAuth.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
-class FragmentRegAuth : Fragment() {
+class FragmentRegViewPagerThree : Fragment() {
     // TODO: Rename and change types of parameters
-       private var param1: String? = null
-    private lateinit var adapter: VerticalViewPagerAdapter
-    private lateinit var pager: VerticalViewPager
-    private lateinit var tabLayout: TabLayout
-
-//    private lateinit var etReferalLink: EditText
-//    private lateinit var tvReferalMes: TextView
-//    private lateinit var etConfirmPass: EditText
-//    private lateinit var
-//    private lateinit var
+    private var param1: String? = null
+    private var param2: String? = null
 //    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
         }
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var layout  = 0
-        if (param1.equals("reg"))
-           layout = ru.jobni.jobni.R.layout.fragment_reg_viewpager
-        else if (param1.equals("auth"))
-            layout = ru.jobni.jobni.R.layout.c_authorization_mail
-        val view = inflater.inflate(layout, container, false)
-        tabLayout = view.findViewById(R.id.tabReg)
-        adapter = VerticalViewPagerAdapter(activity!!.supportFragmentManager)
-        pager = view.findViewById(R.id.viewpager_reg)
-        tabLayout.setupWithViewPager(pager, true)
-        pager.adapter = adapter
-        return view
+        val v = inflater.inflate(R.layout.c_registration_03, container, false)
+        return v
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+//    // TODO: Rename method, update argument and hook method into UI event
 //    fun onButtonPressed(uri: Uri) {
 //        listener?.onFragmentInteraction(uri)
 //    }
@@ -113,17 +73,19 @@ class FragmentRegAuth : Fragment() {
          * this fragment using the provided parameters.
          *
          * @param param1 Parameter 1.
-         * @return A new instance of fragment FragmentAuth.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment FragmentRegViewPagerThree.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String) =
-            FragmentRegAuth().apply {
+        fun newInstance(param1: String, param2: String) =
+            FragmentRegViewPagerThree().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
             }
         private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
     }
-
 }

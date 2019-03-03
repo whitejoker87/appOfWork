@@ -137,8 +137,11 @@
     <string name="company_contact_face_full_name">Колесников Вячеслав Владимирович</string>
     <string name="company_contact_face_position">HR менеджер</string>
     <string name="search_response_empty">Нет рузультатов!</string>
-	<string name = "search_tab_vacancy">Вакансии</string>
-    <string name = "search_tab_company">Компании</string>
-    <string name = "search_tab_resume">Резюме</string>
-    <string name = "search_tab_candidate">Кандидаты</string>
+	<string name="search_tab_vacancy">Вакансии</string>
+    <string name="search_tab_company">Компании</string>
+    <string name="search_tab_resume">Резюме</string>
+    <string name="search_tab_candidate">Кандидаты</string>
+
+	<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

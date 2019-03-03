@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import ru.jobni.jobni.R
+import ru.jobni.jobni.utils.IntroViewPagerAdapter
 
 class FragmentIntro : Fragment() {
 
@@ -18,7 +19,7 @@ class FragmentIntro : Fragment() {
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
 
-    private var adapter: ViewPagerAdapterIntro? = null
+    private var adapter: IntroViewPagerAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +36,7 @@ class FragmentIntro : Fragment() {
 
         tabLayout.setupWithViewPager(viewPager, true)
 
-        adapter = ViewPagerAdapterIntro(activity!!.supportFragmentManager)
+        adapter = IntroViewPagerAdapter(activity!!.supportFragmentManager)
         viewPager.adapter = adapter
     }
 }
