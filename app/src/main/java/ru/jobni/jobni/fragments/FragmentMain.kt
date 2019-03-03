@@ -245,47 +245,6 @@ class FragmentMain : Fragment() {
         }, SERVER_RESPONSE_DELAY)
     }
 
-    private fun buildCardsListNext(limitNext: Int, offsetNext: Int): ArrayList<VacancyEntity> {
-        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
-            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
-                if (response.body() != null) {
-
-                    val resultList: List<ResultsVacancy> = response.body()!!.results
-
-                    for (i in 0 until resultList.size) {
-                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].employment.forEach { employment ->
-                            tmpEmploymentList.add(employment.name)
-                        }
-
-                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].competences.forEach { competences ->
-                            tmpCompetenceList.add(competences.name)
-                        }
-
-                        mVacancyList.add(
-                                VacancyEntity(
-                                        resultList[i].name,
-                                        resultList[i].company.name,
-                                        resultList[i].salary_level_newbie.toString(),
-                                        resultList[i].salary_level_experienced.toString(),
-                                        resultList[i].format_of_work.name,
-                                        tmpEmploymentList,
-                                        tmpCompetenceList
-                                )
-                        )
-                    }
-                    mAdapter.notifyDataSetChanged()
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-        return mVacancyList
-    }
-
     private fun doSearchCompetence(query: String) {
         Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
                 ?.enqueue(object : Callback<List<String>> {
@@ -422,6 +381,47 @@ class FragmentMain : Fragment() {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun buildCardsListNext(limitNext: Int, offsetNext: Int): ArrayList<VacancyEntity> {
+        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
+
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        mVacancyList.add(
+                            VacancyEntity(
+                                resultList[i].name,
+                                resultList[i].company.name,
+                                resultList[i].salary_level_newbie.toString(),
+                                resultList[i].salary_level_experienced.toString(),
+                                resultList[i].format_of_work.name,
+                                tmpEmploymentList,
+                                tmpCompetenceList
+                            )
+                        )
+                    }
+                    mAdapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+        return mVacancyList
     }
 
     private fun doSearchOnClick(query: String) {
