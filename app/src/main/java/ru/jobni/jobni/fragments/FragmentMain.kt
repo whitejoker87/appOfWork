@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.ExpandableListView
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -53,6 +51,18 @@ class FragmentMain : Fragment() {
     private lateinit var searchListView: ListView
     private var suggestionsNamesList = ArrayList<SuggestionEntity>()
 
+    companion object {
+        private val ARG_SET: String = "argSet"
+
+        fun newInstance(str: String): FragmentMain {
+            val fragment = FragmentMain()
+            val args = Bundle()
+            args.putString(ARG_SET, str)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
@@ -68,14 +78,84 @@ class FragmentMain : Fragment() {
         expandableListView = activity!!.findViewById(R.id.exp_list_view)
 
         mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
-        mVacancyList = ArrayList()
 
-        buildRecyclerView()
+        buildCardsRecyclerView()
         initScrollListener()
-//        buildCardsList()
+
+        searchView = view.findViewById(R.id.search_main) as SearchView
+        buildSearchView(view)
 
         searchListView = view.findViewById(R.id.lv_suggestions) as ListView
 
+        buildSearchListView()
+
+        if (arguments != null) {
+            if (arguments!!.getString(ARG_SET) == "SetFocus") {
+                buildSearchTip()
+            }
+
+            if (arguments!!.getString(ARG_SET) == "SetCards") {
+                buildCardsList()
+            }
+        }
+
+        return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bottomNavigationView.visibility = View.VISIBLE
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_right_menu -> {
+                openRightMenu()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun buildSearchView(view: View) {
+        searchView.queryHint = getString(R.string.search_view_hint)
+        searchView.setOnQueryTextListener(onQuerySearchView)
+
+        // Get the search close button image view
+        val closeButton = view.findViewById(R.id.search_close_btn) as ImageView
+
+        // Set on click listener
+        closeButton.setOnClickListener {
+            //Find EditText view
+            val et = view.findViewById(R.id.search_src_text) as EditText
+
+            //Clear the text from EditText view
+            et.setText("")
+
+            //Clear query
+            searchView.setQuery("", false)
+            //Collapse the action view
+            searchView.onActionViewCollapsed()
+        }
+    }
+
+    private fun buildSearchTip() {
+        searchView.requestFocus()
+        //открываем клавиатуру
+        val view = activity?.currentFocus
+        view?.let { v ->
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(v, 0)
+        }
+    }
+
+    private fun buildSearchListView() {
         suggestionsNamesList = ArrayList()
 
         searchListAdapter = SearchLVAdapter(context!!, suggestionsNamesList)
@@ -86,8 +166,52 @@ class FragmentMain : Fragment() {
             searchView.setQuery(suggestionsNamesList[position].suggestionName, true)
             searchListView.visibility = View.GONE
         }
+    }
 
-        return view
+    private val onQuerySearchView = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String): Boolean {
+            return false
+        }
+
+        override fun onQueryTextChange(query: String): Boolean {
+            var timer = Timer()
+
+            if (query.isEmpty()) {
+                suggestionsNamesList.clear()
+                searchListAdapter.notifyDataSetChanged()
+            } else {
+                searchListView.visibility = View.VISIBLE
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                doSearchOnTextChange(query)
+                            }
+                        },
+                        SERVER_RESPONSE_DELAY
+                )
+            }
+            return false
+        }
+    }
+
+    private fun buildCardsRecyclerView() {
+        mVacancyList = ArrayList()
+
+        mRecyclerView.setHasFixedSize(true)
+        mAdapter = CardRVAdapter(mVacancyList)
+        mRecyclerView.adapter = mAdapter
+
+        mAdapter.setOnItemClickListener(object : CardRVAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                Toast.makeText(context, "onItemClick!", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onEyeClick(v: View, position: Int) {
+                Toast.makeText(context, "onEyeClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun initScrollListener() {
@@ -156,78 +280,6 @@ class FragmentMain : Fragment() {
         return mVacancyList
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_main, menu)
-
-        val searchItem = menu.findItem(R.id.menu_search)
-        searchView = searchItem?.actionView as SearchView
-
-        searchView.queryHint = this.getString(R.string.search_view_hint)
-
-        searchView.setOnQueryTextListener(onQuerySearchView)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_right_menu -> {
-                openRightMenu()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private val onQuerySearchView = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String): Boolean {
-            return false
-        }
-
-        override fun onQueryTextChange(query: String): Boolean {
-            var timer = Timer()
-
-            if (query.isEmpty()) {
-                suggestionsNamesList.clear()
-                searchListAdapter.notifyDataSetChanged()
-            } else {
-                searchListView.visibility = View.VISIBLE
-                timer.cancel()
-                timer = Timer()
-                timer.schedule(
-                        object : TimerTask() {
-                            override fun run() {
-                                doSearchOnTextChange(query)
-                            }
-                        },
-                        SERVER_RESPONSE_DELAY
-                )
-            }
-            return false
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        bottomNavigationView.visibility = View.VISIBLE
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    }
-
-    private fun buildRecyclerView() {
-        mRecyclerView.setHasFixedSize(true)
-        mAdapter = CardRVAdapter(mVacancyList)
-        mRecyclerView.adapter = mAdapter
-
-        mAdapter.setOnItemClickListener(object : CardRVAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                Toast.makeText(context, "onItemClick!", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onEyeClick(v: View, position: Int) {
-                Toast.makeText(context, "onEyeClick!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
     private fun doSearchOnTextChange(query: String) {
         Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
                 ?.enqueue(object : Callback<List<String>> {
@@ -255,22 +307,6 @@ class FragmentMain : Fragment() {
                         Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
                     }
                 })
-    }
-
-    private fun prepareListData() {
-        val top250 = ArrayList<String>()
-        top250.add("The Shawshank Redemption")
-        top250.add("The Godfather")
-        top250.add("The Godfather: Part II")
-        top250.add("Pulp Fiction")
-        top250.add("The Good, the Bad and the Ugly")
-        top250.add("The Dark Knight")
-        top250.add("12 Angry Men")
-
-        headerList.forEach { str ->
-            // java ver. childList.put(str, top250)
-            childList[str] = top250
-        }
     }
 
     private fun openRightMenu() {
@@ -323,6 +359,22 @@ class FragmentMain : Fragment() {
         view?.let { v ->
             val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+        }
+    }
+
+    private fun prepareListData() {
+        val top250 = ArrayList<String>()
+        top250.add("The Shawshank Redemption")
+        top250.add("The Godfather")
+        top250.add("The Godfather: Part II")
+        top250.add("Pulp Fiction")
+        top250.add("The Good, the Bad and the Ugly")
+        top250.add("The Dark Knight")
+        top250.add("12 Angry Men")
+
+        headerList.forEach { str ->
+            // java ver. childList.put(str, top250)
+            childList[str] = top250
         }
     }
 
