@@ -3,6 +3,7 @@ package ru.jobni.jobni.fragments
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -127,14 +128,15 @@ class FragmentMain : Fragment() {
         searchView.queryHint = getString(R.string.search_view_hint)
         searchView.setOnQueryTextListener(onQuerySearchView)
 
+        //Find EditText view
+        val et = view.findViewById(R.id.search_src_text) as EditText
+        et.setTextSize(TypedValue.COMPLEX_UNIT_SP,16F)
+
         // Get the search close button image view
         val closeButton = view.findViewById(R.id.search_close_btn) as ImageView
 
         // Set on click listener
         closeButton.setOnClickListener {
-            //Find EditText view
-            val et = view.findViewById(R.id.search_src_text) as EditText
-
             //Clear the text from EditText view
             et.setText("")
 
