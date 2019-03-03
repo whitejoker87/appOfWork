@@ -4,12 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -30,14 +30,11 @@ class FragmentMain : Fragment() {
 
     private lateinit var searchReal: AutoCompleteTextView
 
-    private lateinit var progressBar: ProgressBar
-
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var btnList: Button
 
     private lateinit var expandableListAdapter: ExpandableListAdapter
     private lateinit var expandableListView: ExpandableListView
@@ -50,33 +47,47 @@ class FragmentMain : Fragment() {
     private lateinit var mAdapter: RecyclerAdapter
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
         drawerLayout = activity!!.findViewById(R.id.drawer_layout)
         bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
 
-        btnList = view.findViewById(R.id.list)
-        btnList.setOnClickListener { openRightMenu() }
+        setHasOptionsMenu(true)
+
+        val toolbar = view.findViewById(R.id.toolbar) as Toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        toolbar.title = ""
 
         expandableListView = activity!!.findViewById(R.id.exp_list_view)
 
-        searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
+//        searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
 
-        initSearch()
+//        initSearch()
 
         mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
         mVacancyList = ArrayList()
 
         buildRecyclerView()
+        buildCardsList()
 
         return view
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.clear()    //remove all items
+        activity?.menuInflater?.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_right_menu -> {
+                openRightMenu()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
