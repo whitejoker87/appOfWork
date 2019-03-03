@@ -2,6 +2,7 @@ package ru.jobni.jobni.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
@@ -24,14 +25,12 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.*
-import ru.jobni.jobni.utils.RecyclerAdapter
+import ru.jobni.jobni.utils.CardRVAdapter
 import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.SearchLVAdapter
 import java.util.*
 
 class FragmentMain : Fragment() {
-
-    private val TAG = "mainFragmentTag"
 
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
@@ -47,8 +46,7 @@ class FragmentMain : Fragment() {
     private lateinit var mVacancyList: ArrayList<VacancyEntity>
 
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: RecyclerAdapter
-    private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private lateinit var mAdapter: CardRVAdapter
 
     private lateinit var searchView: SearchView
     private lateinit var searchListAdapter: SearchLVAdapter
@@ -73,6 +71,7 @@ class FragmentMain : Fragment() {
         mVacancyList = ArrayList()
 
         buildRecyclerView()
+        initScrollListener()
 //        buildCardsList()
 
         searchListView = view.findViewById(R.id.lv_suggestions) as ListView
@@ -89,6 +88,72 @@ class FragmentMain : Fragment() {
         }
 
         return view
+    }
+
+    private fun initScrollListener() {
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+
+                if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mVacancyList.size - 1) {
+                    //Нашли конец списка
+                    loadMoreCards()
+                }
+            }
+        })
+    }
+
+    private fun loadMoreCards() {
+        val handler = Handler()
+        handler.postDelayed({
+            val nextLimit = mVacancyList.size + 10
+            val nextOffset = nextLimit - 10
+
+            buildCardsListNext(nextLimit, nextOffset)
+        }, SERVER_RESPONSE_DELAY)
+    }
+
+    private fun buildCardsListNext(limitNext: Int, offsetNext: Int): ArrayList<VacancyEntity> {
+        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
+
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        mVacancyList.add(
+                                VacancyEntity(
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList
+                                )
+                        )
+                    }
+                    mAdapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+        return mVacancyList
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -149,13 +214,10 @@ class FragmentMain : Fragment() {
 
     private fun buildRecyclerView() {
         mRecyclerView.setHasFixedSize(true)
-        mLayoutManager = LinearLayoutManager(context)
-        mAdapter = RecyclerAdapter(mVacancyList)
-
-        mRecyclerView.layoutManager = mLayoutManager
+        mAdapter = CardRVAdapter(mVacancyList)
         mRecyclerView.adapter = mAdapter
 
-        mAdapter.setOnItemClickListener(object : RecyclerAdapter.OnItemClickListener {
+        mAdapter.setOnItemClickListener(object : CardRVAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 Toast.makeText(context, "onItemClick!", Toast.LENGTH_SHORT).show()
             }
