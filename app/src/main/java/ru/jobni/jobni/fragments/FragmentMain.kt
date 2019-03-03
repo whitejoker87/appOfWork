@@ -58,10 +58,10 @@ class FragmentMain : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
+        setHasOptionsMenu(true)
+
         drawerLayout = activity!!.findViewById(R.id.drawer_layout)
         bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
-
-        setHasOptionsMenu(true)
 
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
@@ -145,7 +145,6 @@ class FragmentMain : Fragment() {
         super.onResume()
         bottomNavigationView.visibility = View.VISIBLE
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-
     }
 
     private fun buildRecyclerView() {
@@ -295,7 +294,7 @@ class FragmentMain : Fragment() {
                                 )
                         )
                     }
-                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элемента
+                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
                 }
             }
 
@@ -339,7 +338,7 @@ class FragmentMain : Fragment() {
                                 )
                         )
                     }
-                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элемента
+                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
                 }
             }
 
