@@ -2,13 +2,14 @@ package ru.jobni.jobni.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.ExpandableListView
+import android.widget.ListView
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -20,15 +21,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.RecyclerAdapter
 import ru.jobni.jobni.utils.Retrofit
+import ru.jobni.jobni.utils.SearchLVAdapter
 import java.util.*
 
 class FragmentMain : Fragment() {
 
-    private lateinit var searchReal: AutoCompleteTextView
+    private val TAG = "mainFragmentTag"
 
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
@@ -47,6 +50,11 @@ class FragmentMain : Fragment() {
     private lateinit var mAdapter: RecyclerAdapter
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
 
+    private lateinit var searchView: SearchView
+    private lateinit var searchListAdapter: SearchLVAdapter
+    private lateinit var searchListView: ListView
+    private var suggestionsNamesList = ArrayList<SuggestionEntity>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
@@ -61,23 +69,38 @@ class FragmentMain : Fragment() {
 
         expandableListView = activity!!.findViewById(R.id.exp_list_view)
 
-//        searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
-
-//        initSearch()
-
         mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
         mVacancyList = ArrayList()
 
         buildRecyclerView()
-        buildCardsList()
+//        buildCardsList()
+
+        searchListView = view.findViewById(R.id.lv_suggestions) as ListView
+
+        suggestionsNamesList = ArrayList()
+
+        searchListAdapter = SearchLVAdapter(context!!, suggestionsNamesList)
+        searchListView.adapter = searchListAdapter
+
+        searchListView.setOnItemClickListener { parent, viewClick, position, id ->
+            doSearchOnClick(suggestionsNamesList[position].suggestionName)
+            searchView.setQuery(suggestionsNamesList[position].suggestionName, true)
+            searchListView.visibility = View.GONE
+        }
 
         return view
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.clear()    //remove all items
-        activity?.menuInflater?.inflate(R.menu.menu_main, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_main, menu)
+
+        val searchItem = menu.findItem(R.id.menu_search)
+        searchView = searchItem?.actionView as SearchView
+
+        searchView.queryHint = this.getString(R.string.search_view_hint)
+
+        searchView.setOnQueryTextListener(onQuerySearchView)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -87,6 +110,34 @@ class FragmentMain : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private val onQuerySearchView = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String): Boolean {
+            return false
+        }
+
+        override fun onQueryTextChange(query: String): Boolean {
+            var timer = Timer()
+
+            if (query.isEmpty()) {
+                suggestionsNamesList.clear()
+                searchListAdapter.notifyDataSetChanged()
+            } else {
+                searchListView.visibility = View.VISIBLE
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                doSearchOnTextChange(query)
+                            }
+                        },
+                        SERVER_RESPONSE_DELAY
+                )
+            }
+            return false
         }
     }
 
@@ -116,66 +167,33 @@ class FragmentMain : Fragment() {
         })
     }
 
-    private fun initSearch() {
-        searchReal.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
-            val searchItem: String = searchReal.text.toString()
-            doSearchOnClick(searchItem)
-        }
-
-        searchReal.addTextChangedListener(object : TextWatcher {
-            private var timer = Timer()
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                timer.cancel()
-                timer = Timer()
-                timer.schedule(
-                    object : TimerTask() {
-                        override fun run() {
-                            doSearchOnTextChange(s.toString())
-                        }
-                    },
-                    SERVER_RESPONSE_DELAY
-                )
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable) {
-
-            }
-        })
-    }
-
     private fun doSearchOnTextChange(query: String) {
         Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
-            ?.enqueue(object : Callback<List<String>> {
-                override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
-                    if (response.body() != null) {
+                ?.enqueue(object : Callback<List<String>> {
+                    override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
+                        if (response.body() != null) {
 
-                        val resultList = response.body()
+                            val resultList = response.body()
 
-                        val suggestions: List<String> = ArrayList()
-                        (suggestions as ArrayList<String>).clear()
+                            suggestionsNamesList.clear()
 
-                        if (resultList!!.isEmpty()) {
-                            suggestions.add(getString(R.string.search_view_suggestions_empty))
+                            if (response.body()!!.isEmpty()) {
+                                suggestionsNamesList.add(SuggestionEntity(getString(R.string.search_view_suggestions_empty)))
+                                searchListAdapter.notifyDataSetChanged()
+                            }
+
+                            for (i in 0 until response.body()!!.size) {
+                                val suggestionName = SuggestionEntity(resultList!![i])
+                                suggestionsNamesList.add(suggestionName)
+                                searchListAdapter.notifyDataSetChanged()
+                            }
                         }
-
-                        for (i in 0 until response.body()!!.size) {
-                            suggestions.add(resultList[i])
-                        }
-                        val adapter = ArrayAdapter<String>(context!!, R.layout.c_search_item, R.id.item, suggestions)
-                        searchReal.setAdapter<ArrayAdapter<String>>(adapter)
-                        adapter.notifyDataSetChanged()
                     }
-                }
 
-                override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
-                    Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-                }
-            })
+                    override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
+                        Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+                    }
+                })
     }
 
     private fun prepareListData() {
@@ -195,25 +213,25 @@ class FragmentMain : Fragment() {
     }
 
     private fun openRightMenu() {
-        if (headerList.isEmpty()){
+        if (headerList.isEmpty()) {
             Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
                 override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
                     if (response.body() != null) {
                         val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
 
                         val detailList: MutableList<Any> = mutableListOf(
-                            competence,
-                            languages,
-                            work_places,
-                            employment,
-                            format_of_work,
-                            field_of_activity,
-                            age_company,
-                            required_number_of_people,
-                            zarplata,
-                            social_packet,
-                            auto,
-                            raiting
+                                competence,
+                                languages,
+                                work_places,
+                                employment,
+                                format_of_work,
+                                field_of_activity,
+                                age_company,
+                                required_number_of_people,
+                                zarplata,
+                                social_packet,
+                                auto,
+                                raiting
                         )
                         detailList.forEach { str: Any ->
                             if (str is String) headerList.add(str)
@@ -266,19 +284,18 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            VacancyEntity(
-                                resultList[i].name,
-                                resultList[i].company.name,
-                                resultList[i].salary_level_newbie.toString(),
-                                resultList[i].salary_level_experienced.toString(),
-                                resultList[i].format_of_work.name,
-                                tmpEmploymentList,
-                                tmpCompetenceList
-                            )
+                                VacancyEntity(
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList
+                                )
                         )
                     }
                     mAdapter.notifyDataSetChanged() // Обновить список после добавления элемента
-
                 }
             }
 
@@ -299,10 +316,6 @@ class FragmentMain : Fragment() {
                     mVacancyList.clear()
                     mAdapter.notifyDataSetChanged()
 
-                    if (resultList.isEmpty()) {
-                        Toast.makeText(context, R.string.search_response_empty, Toast.LENGTH_SHORT).show()
-                    }
-
                     for (i in 0 until resultList.size) {
                         val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
                         resultList[i].employment.forEach { employment ->
@@ -315,15 +328,15 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            VacancyEntity(
-                                resultList[i].name,
-                                resultList[i].company.name,
-                                resultList[i].salary_level_newbie.toString(),
-                                resultList[i].salary_level_experienced.toString(),
-                                resultList[i].format_of_work.name,
-                                tmpEmploymentList,
-                                tmpCompetenceList
-                            )
+                                VacancyEntity(
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList
+                                )
                         )
                     }
                     mAdapter.notifyDataSetChanged() // Обновить список после добавления элемента
