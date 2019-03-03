@@ -10,13 +10,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.transition.TransitionManager
-import kotlinx.android.synthetic.main.fragment_main.*
-import com.google.android.material.navigation.NavigationView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -79,7 +75,6 @@ class FragmentMain : Fragment() {
         mVacancyList = ArrayList()
 
         buildRecyclerView()
-        buildCardsList()
 
         return view
     }
@@ -248,11 +243,6 @@ class FragmentMain : Fragment() {
 
                     val resultList: List<ResultsVacancy> = response.body()!!.results
 
-                    if (resultList.isEmpty()) {
-                        Toast.makeText(context, R.string.search_response_empty, Toast.LENGTH_SHORT).show()
-                    }
-
-                    val position = 0
                     for (i in 0 until resultList.size) {
                         val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
                         resultList[i].employment.forEach { employment ->
@@ -265,7 +255,6 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            position,
                             VacancyEntity(
                                 resultList[i].name,
                                 resultList[i].company.name,
@@ -277,7 +266,7 @@ class FragmentMain : Fragment() {
                             )
                         )
                     }
-                    mAdapter.notifyItemInserted(position) // Обновить список после добавления элемента
+                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элемента
 
                 }
             }
