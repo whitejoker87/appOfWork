@@ -140,10 +140,13 @@ class FragmentMain : Fragment() {
             //Clear the text from EditText view
             et.setText("")
 
-            //Clear query
-            searchView.setQuery("", false)
-            //Collapse the action view
-            searchView.onActionViewCollapsed()
+            //скрываем клавиатуру
+            val viewCloseButton = activity?.currentFocus
+            viewCloseButton?.let { v ->
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+            searchView.clearFocus()
         }
     }
 
@@ -172,6 +175,7 @@ class FragmentMain : Fragment() {
 
     private val onQuerySearchView = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String): Boolean {
+            doSearchCompetence(query)
             return false
         }
 
@@ -188,7 +192,7 @@ class FragmentMain : Fragment() {
                 timer.schedule(
                         object : TimerTask() {
                             override fun run() {
-                                doSearchOnTextChange(query)
+                                doSearchCompetence(query)
                             }
                         },
                         SERVER_RESPONSE_DELAY
@@ -282,7 +286,7 @@ class FragmentMain : Fragment() {
         return mVacancyList
     }
 
-    private fun doSearchOnTextChange(query: String) {
+    private fun doSearchCompetence(query: String) {
         Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
                 ?.enqueue(object : Callback<List<String>> {
                     override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
