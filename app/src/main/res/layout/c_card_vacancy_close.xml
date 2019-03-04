@@ -3,7 +3,7 @@
 	xmlns:app = "http://schemas.android.com/apk/res-auto"
 	xmlns:tools = "http://schemas.android.com/tools"
 	android:layout_width = "match_parent"
-	android:layout_height = "match_parent"
+	android:layout_height = "wrap_content"
 	tools:context = ".MainActivity">
 	<ScrollView android:layout_width = "match_parent"
 		android:layout_height = "match_parent"
@@ -12,7 +12,7 @@
 		app:layout_constraintStart_toStartOf = "parent"
 		app:layout_constraintEnd_toEndOf = "parent">
 		<androidx.constraintlayout.widget.ConstraintLayout android:layout_width = "match_parent"
-			android:layout_height = "match_parent">
+			android:layout_height = "wrap_content">
 			<ImageView android:id = "@+id/background"
 				android:layout_width = "match_parent"
 				android:layout_height = "0dp"
@@ -20,9 +20,9 @@
 				app:layout_constraintBottom_toBottomOf = "@+id/menu"
 				app:layout_constraintStart_toStartOf = "parent"
 				app:layout_constraintEnd_toEndOf = "parent"
-				android:layout_marginTop = "16dp"
-				android:layout_marginStart = "16dp"
-				android:layout_marginEnd = "16dp"
+				android:layout_marginTop = "8dp"
+				android:layout_marginStart = "8dp"
+				android:layout_marginEnd = "8dp"
 				android:background = "@drawable/shape_card"/>
 			<TextView android:id = "@+id/name"
 				android:layout_width = "wrap_content"
@@ -34,15 +34,16 @@
 				android:textStyle = "bold"
 				android:textColor = "@color/font_color"
 				android:textSize = "18sp"
-				android:text = "@string/card_vacancy_close_vacancy_name"/>
-			<ImageView android:id = "@+id/eye"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				app:layout_constraintTop_toTopOf = "@+id/name"
-				app:layout_constraintBottom_toBottomOf = "@+id/name"
-				app:layout_constraintStart_toEndOf = "@+id/name"
-				android:layout_marginStart = "8dp"
-				app:srcCompat = "@drawable/ic_eye"/>
+				android:maxWidth="270dp"
+				android:maxLength="60"
+				tools:text = "@string/card_vacancy_close_vacancy_name"/>
+			<ImageView android:id="@+id/eye"
+					   android:layout_width="wrap_content"
+					   android:layout_height="wrap_content"
+					   app:layout_constraintTop_toTopOf="@+id/name"
+					   app:layout_constraintBottom_toBottomOf="@+id/name"
+					   app:srcCompat="@drawable/ic_eye" app:layout_constraintEnd_toStartOf="@+id/newbie"
+					   android:layout_marginEnd="8dp"/>
 			<TextView android:id = "@+id/newbie"
 				android:layout_width = "wrap_content"
 				android:layout_height = "wrap_content"
@@ -378,7 +379,9 @@
 				app:menu = "@menu/card_vacancy"
 				app:itemIconTint = "@color/font_color"
 				app:itemTextColor = "@color/font_color"
-				app:labelVisibilityMode = "labeled"></com.google.android.material.bottomnavigation.BottomNavigationView>
+				app:labelVisibilityMode = "labeled">
+
+			</com.google.android.material.bottomnavigation.BottomNavigationView>
 		</androidx.constraintlayout.widget.ConstraintLayout>
 	</ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

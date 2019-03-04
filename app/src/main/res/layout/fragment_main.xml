@@ -1,37 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	xmlns:tools = "http://schemas.android.com/tools"
+	android:layout_width = "match_parent"
+	android:layout_height = "match_parent"
+	>
 
-        <include
-            layout="@layout/menu_top"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/include_01"/>
-    <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/c_search_loading_icon"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="0.022"/>
+	<include
+		android:id = "@+id/toolbar"
+		layout = "@layout/toolbar_main"
+		/>
 
+	<Button
+		android:id="@+id/bars"
+		android:background="@drawable/ic_bars"
+		android:layout_width="32dp"
+		android:layout_height="32dp"
+		app:layout_constraintStart_toStartOf="@+id/toolbar"
+		app:layout_constraintTop_toTopOf="@+id/toolbar"
+		app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+		android:layout_margin="16dp"
+		/>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_cards"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/include_01"
-            app:layout_constraintBottom_toTopOf="@+id/include_02"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+	<androidx.appcompat.widget.SearchView
+		android:id = "@+id/search_main"
+		android:layout_width = "0dp"
+		android:layout_height = "46dp"
+		app:layout_constraintTop_toTopOf = "parent"
+		app:layout_constraintBottom_toBottomOf = "parent"
+		app:layout_constraintStart_toStartOf = "parent"
+		app:layout_constraintEnd_toEndOf = "parent"
+		android:layout_marginStart = "60dp"
+		android:layout_marginEnd = "60dp"
+		android:background = "@color/white"
+		app:iconifiedByDefault = "false"
+		app:layout_constraintHorizontal_bias = "1.0"
+		app:layout_constraintVertical_bias = "0.01"
+		/>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id = "@+id/rv_cards"
+		android:layout_width = "match_parent"
+		android:layout_height = "0dp"
+		app:layout_constraintTop_toBottomOf = "@+id/toolbar"
+		app:layout_constraintBottom_toBottomOf = "parent"
+		app:layoutManager = "androidx.recyclerview.widget.LinearLayoutManager"
+		android:scrollbars = "vertical"
+		/>
+
+	<ListView
+		android:id = "@+id/lv_suggestions"
+		android:layout_width = "match_parent"
+		android:layout_height = "wrap_content"
+		app:layout_constraintTop_toBottomOf = "@+id/toolbar"
+		android:background = "@color/white"
+		tools:layout_editor_absoluteX = "0dp"
+		/>
+</androidx.constraintlayout.widget.ConstraintLayout>
