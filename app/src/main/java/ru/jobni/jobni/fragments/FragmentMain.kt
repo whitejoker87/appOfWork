@@ -185,6 +185,7 @@ class FragmentMain : Fragment() {
             if (query.isEmpty()) {
                 suggestionsNamesList.clear()
                 searchListAdapter.notifyDataSetChanged()
+                searchListView.visibility = View.GONE
             } else {
                 searchListView.visibility = View.VISIBLE
                 timer.cancel()
