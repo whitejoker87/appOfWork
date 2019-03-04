@@ -60,16 +60,14 @@ class FragmentMain : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-//        val toolbar = view.findViewById(R.id.toolbar) as Toolbar
-//        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-//        toolbar.title = ""
-
         mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
 
         buildCardsRecyclerView()
         initScrollListener()
 
-        searchView = view.findViewById(R.id.search_main) as SearchView
+        searchView = activity?.findViewById(R.id.search_main) as SearchView
+        //В глобальном тулбаре поле поиска отключено - включаем!
+        searchView.visibility = View.VISIBLE
         buildSearchView(view)
 
         searchListView = view.findViewById(R.id.lv_suggestions) as ListView
@@ -94,11 +92,11 @@ class FragmentMain : Fragment() {
         searchView.setOnQueryTextListener(onQuerySearchView)
 
         //Find EditText view
-        val et = view.findViewById(R.id.search_src_text) as EditText
+        val et = activity?.findViewById(R.id.search_src_text) as EditText
         et.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
 
         // Get the search close button image view
-        val closeButton = view.findViewById(R.id.search_close_btn) as ImageView
+        val closeButton = activity?.findViewById(R.id.search_close_btn) as ImageView
 
         // Set on click listener
         closeButton.setOnClickListener {
