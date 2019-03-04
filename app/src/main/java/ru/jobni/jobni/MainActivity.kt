@@ -1,15 +1,27 @@
 package ru.jobni.jobni
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.ExpandableListView
+import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.jobni.jobni.fragments.*
+import ru.jobni.jobni.model.network.vacancy.*
+import ru.jobni.jobni.utils.Retrofit
+import java.util.*
 
 
 // TODO: Изучить Android Navigation Component
@@ -30,6 +42,12 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
     private lateinit var popup: PopupMenu
     private lateinit var drawer: DrawerLayout
 
+    private lateinit var expandableListAdapter: ExpandableListAdapter
+    private lateinit var expandableListView: ExpandableListView
+    private val headerList = ArrayList<String>()
+    private val childList = HashMap<String, List<String>>()
+    private lateinit var btnList: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,6 +57,11 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
 
         bottomNavigationView = findViewById(R.id.menu_bottom)
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        expandableListView = findViewById(R.id.exp_list_view)
+
+        btnList = findViewById(R.id.list)
+        btnList.setOnClickListener { openRightMenu() }
 
         popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_menu_profile))
         val inflater = popup.getMenuInflater()
@@ -115,5 +138,74 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
         val editor = sPref.edit()
         editor.putBoolean(firstLaunchFlag, reset)
         editor.apply()
+    }
+
+    private fun openRightMenu() {
+        if (headerList.isEmpty()) {
+            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+                    if (response.body() != null) {
+                        val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
+
+                        val detailList: MutableList<Any> = mutableListOf(
+                                competence,
+                                languages,
+                                work_places,
+                                employment,
+                                format_of_work,
+                                field_of_activity,
+                                age_company,
+                                required_number_of_people,
+                                zarplata,
+                                social_packet,
+                                auto,
+                                raiting
+                        )
+                        detailList.forEach { str: Any ->
+                            if (str is String) headerList.add(str)
+                            else when (str) {
+                                is Zarplata -> headerList.add("Зарплата")
+                                is Social_packet -> headerList.add("Социальный пакет")
+                                is Auto -> headerList.add("Авто")
+                                is Raiting -> headerList.add("Рейтинг")
+                            }
+                        }
+
+                        prepareListData()
+
+                        expandableListAdapter = ExpandableListAdapter(applicationContext, headerList, childList)
+                        expandableListView.setAdapter(expandableListAdapter)
+                    }
+                }
+
+                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+                    Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+
+        drawer.openDrawer(GravityCompat.END)
+        //ниже закрываем клавиатуру если открыта
+        val view = this.currentFocus
+        view?.let { v ->
+            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+        }
+    }
+
+    private fun prepareListData() {
+        val top250 = ArrayList<String>()
+        top250.add("The Shawshank Redemption")
+        top250.add("The Godfather")
+        top250.add("The Godfather: Part II")
+        top250.add("Pulp Fiction")
+        top250.add("The Good, the Bad and the Ugly")
+        top250.add("The Dark Knight")
+        top250.add("12 Angry Men")
+
+        headerList.forEach { str ->
+            // java ver. childList.put(str, top250)
+            childList[str] = top250
+        }
     }
 }

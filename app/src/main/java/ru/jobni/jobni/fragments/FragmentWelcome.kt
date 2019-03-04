@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.jobni.jobni.R
@@ -23,6 +25,8 @@ class FragmentWelcome : Fragment() {
     private val SET_CARDS: String = "SetCards"
 
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var constraintLayout: ConstraintLayout
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,8 +36,11 @@ class FragmentWelcome : Fragment() {
         buttonWelcome = view.findViewById(R.id.search_button) as Button
 
         bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
+        constraintLayout = activity!!.findViewById(R.id.constraint_layout_menu_top)
 
-        initElements(view)
+        drawerLayout = activity!!.findViewById(R.id.drawer_layout)
+
+        initElements()
 
         return view
     }
@@ -41,6 +48,8 @@ class FragmentWelcome : Fragment() {
     override fun onResume() {
         super.onResume()
         bottomNavigationView.visibility = View.VISIBLE
+        constraintLayout.visibility = View.VISIBLE
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
 
     private fun setFragment(fragment: Fragment) {
@@ -50,7 +59,7 @@ class FragmentWelcome : Fragment() {
                 ?.commit()
     }
 
-    private fun initElements(view: View) {
+    private fun initElements() {
         buttonWelcome.setOnClickListener {
             setFragment(FragmentMain.newInstance(SET_CARDS))
         }
