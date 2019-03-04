@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
@@ -52,6 +54,8 @@ class FragmentMain : Fragment() {
     private lateinit var searchListView: ListView
     private var suggestionsNamesList = ArrayList<SuggestionEntity>()
 
+    private lateinit var btnList: Button
+
     companion object {
         private val ARG_SET: String = "argSet"
 
@@ -67,14 +71,15 @@ class FragmentMain : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        setHasOptionsMenu(true)
-
         drawerLayout = activity!!.findViewById(R.id.drawer_layout)
         bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
 
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         toolbar.title = ""
+
+        btnList = view.findViewById(R.id.list)
+        btnList.setOnClickListener { openRightMenu() }
 
         expandableListView = activity!!.findViewById(R.id.exp_list_view)
 
@@ -107,21 +112,6 @@ class FragmentMain : Fragment() {
         super.onResume()
         bottomNavigationView.visibility = View.VISIBLE
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_right_menu -> {
-                openRightMenu()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun buildSearchView(view: View) {
