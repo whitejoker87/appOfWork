@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.jobni.jobni.R
 
 class FragmentWelcome : Fragment() {
@@ -21,6 +22,8 @@ class FragmentWelcome : Fragment() {
     private val SET_FOCUS: String = "SetFocus"
     private val SET_CARDS: String = "SetCards"
 
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_welcome, container, false)
@@ -28,9 +31,16 @@ class FragmentWelcome : Fragment() {
         searchWelcome = view.findViewById(R.id.search_welcome) as ImageButton
         buttonWelcome = view.findViewById(R.id.search_button) as Button
 
+        bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
+
         initElements(view)
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bottomNavigationView.visibility = View.VISIBLE
     }
 
     private fun setFragment(fragment: Fragment) {

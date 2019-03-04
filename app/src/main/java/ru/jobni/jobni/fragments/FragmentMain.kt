@@ -18,7 +18,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +36,6 @@ class FragmentMain : Fragment() {
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var bottomNavigationView: BottomNavigationView
 
     private lateinit var expandableListAdapter: ExpandableListAdapter
     private lateinit var expandableListView: ExpandableListView
@@ -72,7 +70,6 @@ class FragmentMain : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         drawerLayout = activity!!.findViewById(R.id.drawer_layout)
-        bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
 
         val toolbar = view.findViewById(R.id.toolbar) as Toolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
@@ -110,7 +107,6 @@ class FragmentMain : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        bottomNavigationView.visibility = View.VISIBLE
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
 
@@ -120,7 +116,7 @@ class FragmentMain : Fragment() {
 
         //Find EditText view
         val et = view.findViewById(R.id.search_src_text) as EditText
-        et.setTextSize(TypedValue.COMPLEX_UNIT_SP,16F)
+        et.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
 
         // Get the search close button image view
         val closeButton = view.findViewById(R.id.search_close_btn) as ImageView
@@ -393,15 +389,15 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            VacancyEntity(
-                                resultList[i].name,
-                                resultList[i].company.name,
-                                resultList[i].salary_level_newbie.toString(),
-                                resultList[i].salary_level_experienced.toString(),
-                                resultList[i].format_of_work.name,
-                                tmpEmploymentList,
-                                tmpCompetenceList
-                            )
+                                VacancyEntity(
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList
+                                )
                         )
                     }
                     mAdapter.notifyDataSetChanged()
