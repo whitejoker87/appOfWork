@@ -16,6 +16,10 @@ import com.google.android.material.tabs.TabLayout
 import ru.jobni.jobni.R
 import ru.jobni.jobni.utils.VerticalViewPager
 import ru.jobni.jobni.utils.VerticalViewPagerAdapter
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import ru.jobni.jobni.utils.RegRecyclerAdapter
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,9 +39,8 @@ import ru.jobni.jobni.utils.VerticalViewPagerAdapter
 class FragmentRegAuth : Fragment() {
     // TODO: Rename and change types of parameters
        private var param1: String? = null
-    private lateinit var adapter: VerticalViewPagerAdapter
-    private lateinit var pager: VerticalViewPager
-    private lateinit var tabLayout: TabLayout
+        private lateinit var recycler_reg: RecyclerView
+
 
 //    private lateinit var etReferalLink: EditText
 //    private lateinit var tvReferalMes: TextView
@@ -60,15 +63,11 @@ class FragmentRegAuth : Fragment() {
     ): View? {
         var layout  = 0
         if (param1.equals("reg"))
-           layout = ru.jobni.jobni.R.layout.fragment_reg_viewpager
+           layout = R.layout.fragment_reg_auth_mail
         else if (param1.equals("auth"))
-            layout = ru.jobni.jobni.R.layout.c_authorization_mail
+            layout = R.layout.c_authorization_mail
         val view = inflater.inflate(layout, container, false)
-        tabLayout = view.findViewById(R.id.tabReg)
-        adapter = VerticalViewPagerAdapter(activity!!.supportFragmentManager)
-        pager = view.findViewById(R.id.viewpager_reg)
-        tabLayout.setupWithViewPager(pager, true)
-        pager.adapter = adapter
+
         return view
     }
 
