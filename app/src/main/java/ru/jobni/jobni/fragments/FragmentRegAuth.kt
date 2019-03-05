@@ -38,8 +38,9 @@ import ru.jobni.jobni.utils.RegRecyclerAdapter
  */
 class FragmentRegAuth : Fragment() {
     // TODO: Rename and change types of parameters
-       private var param1: String? = null
-        private lateinit var recycler_reg: RecyclerView
+    private var param1: String? = null
+    private lateinit var recycler_reg: RecyclerView
+    private lateinit var adapter: RegRecyclerAdapter
 
 
 //    private lateinit var etReferalLink: EditText
@@ -58,15 +59,20 @@ class FragmentRegAuth : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         var layout  = 0
         if (param1.equals("reg"))
-           layout = R.layout.fragment_reg_auth_mail
+            layout = R.layout.fragment_reg_recycler
         else if (param1.equals("auth"))
             layout = R.layout.c_authorization_mail
         val view = inflater.inflate(layout, container, false)
+
+        recycler_reg = view.findViewById(R.id.recycler_reg)
+        adapter = RegRecyclerAdapter(activity as Context)
+        recycler_reg.layoutManager = LinearLayoutManager(activity)
+        recycler_reg.adapter = adapter
 
         return view
     }
@@ -117,11 +123,11 @@ class FragmentRegAuth : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String) =
-            FragmentRegAuth().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                FragmentRegAuth().apply {
+                    arguments = Bundle().apply {
+                        putString(ARG_PARAM1, param1)
+                    }
                 }
-            }
         private const val ARG_PARAM1 = "param1"
     }
 

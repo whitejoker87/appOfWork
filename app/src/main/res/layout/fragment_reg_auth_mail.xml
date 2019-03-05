@@ -7,34 +7,86 @@
 	android:layout_height = "match_parent"
 	>
 
-	<LinearLayout
-		xmlns:android = "http://schemas.android.com/apk/res/android"
-		xmlns:app = "http://schemas.android.com/apk/res-auto"
-		xmlns:tools = "http://schemas.android.com/tools"
-		android:orientation="vertical"
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id = "@+id/linearLayout"
 		android:layout_width = "match_parent"
 		android:layout_height = "wrap_content"
 		>
 
+		<TextView
+			android:id = "@+id/reg_phase_one"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toTopOf = "parent"
+			app:layout_constraintBottom_toTopOf = "@+id/reg_mail_01"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			android:background = "@drawable/shape_button"
+			android:textColor = "@color/white"
+			android:textSize = "18sp"
+			android:text = "1.Регистрационные данные"
+			app:layout_constraintVertical_chainStyle = "packed"
+			/>
+
 		<include
 			android:id = "@+id/reg_mail_01"
 			layout = "@layout/c_registration_01_mail"
-			android:layout_width = "match_parent"
+			android:layout_width = "0dp"
 			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/reg_phase_one"
+			app:layout_constraintBottom_toTopOf = "@+id/reg_phase_two"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			/>
+
+		<TextView
+			android:id = "@+id/reg_phase_two"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/reg_mail_01"
+			app:layout_constraintBottom_toTopOf = "@+id/reg_phase_three"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			android:background = "@drawable/shape_button"
+			android:textSize = "18sp"
+			android:text = "2.Основная информация"
 			/>
 
 		<include
 			android:id = "@+id/reg_mail_02"
 			layout = "@layout/c_registration_02"
-			android:layout_width = "match_parent"
+			android:visibility = "gone"
+			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toTopOf = "parent"
+			app:layout_constraintBottom_toTopOf = "parent"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toStartOf = "parent"
+			/>
+
+		<TextView
+			android:id = "@+id/reg_phase_three"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/reg_phase_two"
+			app:layout_constraintBottom_toBottomOf = "parent"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			android:background = "@drawable/shape_button"
+			android:textSize = "18sp"
+			android:text = "3.Контактные данные"
 			/>
 
 		<include
 			android:id = "@+id/reg_mail_03"
 			layout = "@layout/c_registration_03"
-			android:layout_width = "match_parent"
+			android:visibility = "gone"
+			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toTopOf = "parent"
+			app:layout_constraintBottom_toTopOf = "parent"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toStartOf = "parent"
 			/>
-	</LinearLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
