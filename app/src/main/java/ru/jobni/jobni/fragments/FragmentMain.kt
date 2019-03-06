@@ -45,7 +45,7 @@ class FragmentMain : Fragment() {
     private lateinit var searchListView: ListView
     private var suggestionsNamesList = ArrayList<SuggestionEntity>()
 
-    var isLoading = false
+    var isLoading = true
 
     companion object {
         private val ARG_SET: String = "argSet"
@@ -141,7 +141,7 @@ class FragmentMain : Fragment() {
     private val onQuerySearchView = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String): Boolean {
             doSearchOnClick(query)
-            isLoading = true
+            isLoading = false
             searchListView.visibility = View.GONE
 
             return false
@@ -196,11 +196,11 @@ class FragmentMain : Fragment() {
 
                 val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
 
-                if (!isLoading) {
+                if (isLoading) {
                     if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mVacancyList.size - 1) {
                         //Нашли конец списка
                         loadMoreCards()
-                        isLoading = true
+                        isLoading = false
                     }
                 }
             }
@@ -214,7 +214,7 @@ class FragmentMain : Fragment() {
             val nextOffset = nextLimit - 10
 
             buildCardsListNext(nextLimit, nextOffset)
-            isLoading = false
+            isLoading = true
         }, SERVER_RESPONSE_DELAY)
     }
 
