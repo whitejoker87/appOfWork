@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
+import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.jobni.jobni.R
 
 class FragmentWelcome : Fragment() {
@@ -15,22 +18,43 @@ class FragmentWelcome : Fragment() {
         fun newInstance() = FragmentWelcome()
     }
 
-    private lateinit var searchWelcome: ImageButton
-    private lateinit var buttonWelcome: Button
+    private lateinit var buttonSearch: Button
+    private lateinit var buttonFind: Button
 
     private val SET_FOCUS: String = "SetFocus"
     private val SET_CARDS: String = "SetCards"
+
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var constraintLayout: ConstraintLayout
+    private lateinit var drawerLayout: DrawerLayout
+
+    private lateinit var searchViewMain: SearchView
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_welcome, container, false)
 
-        searchWelcome = view.findViewById(R.id.search_welcome) as ImageButton
-        buttonWelcome = view.findViewById(R.id.search_button) as Button
+        buttonSearch = view.findViewById(R.id.search_welcome) as Button
+        buttonFind = view.findViewById(R.id.search_button_welcome) as Button
 
-        initElements(view)
+        bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
+        constraintLayout = activity!!.findViewById(R.id.constraint_layout_menu_top)
+
+        drawerLayout = activity!!.findViewById(R.id.drawer_layout)
+
+        searchViewMain = activity!!.findViewById(R.id.search_main)
+
+        initElements()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bottomNavigationView.visibility = View.VISIBLE
+        constraintLayout.visibility = View.VISIBLE
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        searchViewMain.visibility = View.GONE
     }
 
     private fun setFragment(fragment: Fragment) {
@@ -40,12 +64,12 @@ class FragmentWelcome : Fragment() {
                 ?.commit()
     }
 
-    private fun initElements(view: View) {
-        buttonWelcome.setOnClickListener {
+    private fun initElements() {
+        buttonFind.setOnClickListener {
             setFragment(FragmentMain.newInstance(SET_CARDS))
         }
 
-        searchWelcome.setOnClickListener {
+        buttonSearch.setOnClickListener {
             setFragment(FragmentMain.newInstance(SET_FOCUS))
         }
     }

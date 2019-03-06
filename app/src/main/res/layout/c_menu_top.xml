@@ -1,29 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-	xmlns:tools = "http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android = "http://schemas.android.com/apk/res/android"
 	xmlns:app = "http://schemas.android.com/apk/res-auto"
 	android:layout_width = "match_parent"
-	android:layout_height = "match_parent"
-	tools:context = ".MainActivity">
-	<androidx.appcompat.widget.Toolbar android:id = "@+id/toolbar"
+	android:layout_height = "wrap_content"
+	android:visibility="gone"
+	android:id="@+id/constraint_layout_menu_top"
+	android:focusableInTouchMode="true"
+	>
+
+	<androidx.appcompat.widget.Toolbar
+		android:id = "@+id/toolbar"
 		android:layout_width = "match_parent"
-		android:layout_height = "60dp"
+		android:layout_height = "?attr/actionBarSize"
 		app:layout_constraintTop_toTopOf = "parent"
-		android:background = "@color/theme_1_color_1"/>
-	<Button android:id = "@+id/bars"
+		android:background = "@color/theme_1_color_1"
+		/>
+
+	<androidx.appcompat.widget.SearchView
+		android:id = "@+id/search_main"
+		android:layout_width = "0dp"
+		android:layout_height = "46dp"
+		app:layout_constraintTop_toTopOf = "parent"
+		app:layout_constraintStart_toEndOf = "@+id/bars"
+		app:layout_constraintEnd_toStartOf = "@+id/list"
+		android:layout_marginTop = "6dp"
+		android:layout_marginStart = "16dp"
+		android:layout_marginEnd = "16dp"
+		android:background = "@color/white"
+		app:iconifiedByDefault = "false"
+		android:singleLine = "true"
+		app:queryBackground = "@android:color/transparent"
+		app:layout_constraintHorizontal_bias = "0.494"
+		android:visibility="gone"
+		/>
+
+	<Button
+		android:id = "@+id/bars"
 		android:layout_width = "32dp"
 		android:layout_height = "32dp"
 		app:layout_constraintTop_toTopOf = "@+id/toolbar"
 		app:layout_constraintBottom_toBottomOf = "@+id/toolbar"
 		app:layout_constraintStart_toStartOf = "@+id/toolbar"
 		android:layout_margin = "16dp"
-		android:background = "@drawable/ic_bars"/>
-	<Button android:id = "@+id/list"
+		android:background = "@drawable/ic_bars"
+		/>
+
+	<Button
+		android:id = "@+id/list"
 		android:layout_width = "32dp"
 		android:layout_height = "32dp"
 		app:layout_constraintTop_toTopOf = "@+id/toolbar"
 		app:layout_constraintBottom_toBottomOf = "@+id/toolbar"
 		app:layout_constraintEnd_toEndOf = "@+id/toolbar"
 		android:layout_margin = "16dp"
-		android:background = "@drawable/ic_list"/>
+		android:background = "@drawable/ic_list"
+		/>
 </androidx.constraintlayout.widget.ConstraintLayout>
