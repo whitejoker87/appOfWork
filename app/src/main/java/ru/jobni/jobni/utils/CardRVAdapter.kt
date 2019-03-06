@@ -79,13 +79,25 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
 
         viewHolder.vacancyNameText.text = item.vacancyName
         viewHolder.companyNameText.text = item.companyName
-        viewHolder.salaryLevelNewbieText.text = item.salaryLevelNewbie
-        viewHolder.salaryLevelExperiencedText.text = item.salaryLevelExperienced
+        viewHolder.salaryLevelNewbieText.text = convertWithSpaces(item.salaryLevelNewbie)
+        viewHolder.salaryLevelExperiencedText.text = convertWithSpaces(item.salaryLevelExperienced)
         viewHolder.workFormatText.text = item.formatOfWork
         viewHolder.employmentListText.text = item.employmentList.toString()
                 .replace("[", "", true).replace("]", "", true)
         viewHolder.competenceListText.text = item.competenceList.toString()
                 .replace("[", "", true).replace("]", "", true)
 
+    }
+
+    private fun convertWithSpaces(item: String): String {
+        val sb = StringBuffer(item)
+        when {
+            item.length < 5 -> {
+                //do nothing
+            }
+            item.length == 6 -> sb.insert(3, " ")
+            else -> sb.insert(2, " ")
+        }
+        return sb.toString()
     }
 }

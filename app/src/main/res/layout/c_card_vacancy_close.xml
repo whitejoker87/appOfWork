@@ -64,7 +64,7 @@
 
 			<TextView
 				android:id = "@+id/newbie"
-				android:layout_width = "50dp"
+				android:layout_width = "60dp"
 				android:layout_height = "wrap_content"
 				app:layout_constraintTop_toTopOf = "@+id/newbie_money"
 				app:layout_constraintEnd_toStartOf = "@+id/newbie_money"
@@ -102,7 +102,7 @@
 
 			<TextView
 				android:id = "@+id/experienced"
-				android:layout_width = "50dp"
+				android:layout_width = "60dp"
 				android:layout_height = "wrap_content"
 				app:layout_constraintTop_toTopOf = "@+id/experienced_money"
 				app:layout_constraintEnd_toStartOf = "@+id/experienced_money"
