@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
         })
 
         sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
-        saveLaunchFlag(false)//отладка первого запуска true
+        saveLaunchFlag(true)//отладка первого запуска true
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
         }
