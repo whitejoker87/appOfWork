@@ -15,14 +15,8 @@ import ru.jobni.jobni.fragments.*
 // TODO: Изучить Android Navigation Component
 // https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
 
-class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartListener/*, ProfileBottomDialogFragment.Listener*/ {
-//    override fun onItemClicked(position: Int) {
-//        when (position) {
-//            0 -> setFragment(FragmentRegAuth.newInstance("auth"))
-//            1 -> setFragment(FragmentRegAuth.newInstance("reg"))
-//            else -> setFragment(FragmentRegAuth.newInstance("reg"))
-//        }
-//    }
+class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartListener {
+
 
     private val firstLaunchFlag = "firstLaunch"
     private lateinit var sPref: SharedPreferences
@@ -84,7 +78,6 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
                 }
                 R.id.bottom_menu_profile -> {
                     popup.show()
-                    //ProfileBottomDialogFragment.newInstance(false).show(supportFragmentManager, "dialog")
                     return true
                 }
             }
