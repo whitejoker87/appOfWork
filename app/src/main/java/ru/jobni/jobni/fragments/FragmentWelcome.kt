@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.drawerlayout.widget.DrawerLayout
@@ -19,8 +18,8 @@ class FragmentWelcome : Fragment() {
         fun newInstance() = FragmentWelcome()
     }
 
-    private lateinit var searchWelcome: ImageButton
-    private lateinit var buttonWelcome: Button
+    private lateinit var buttonSearch: Button
+    private lateinit var buttonFind: Button
 
     private val SET_FOCUS: String = "SetFocus"
     private val SET_CARDS: String = "SetCards"
@@ -35,8 +34,8 @@ class FragmentWelcome : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_welcome, container, false)
 
-        searchWelcome = view.findViewById(R.id.search_welcome) as ImageButton
-        buttonWelcome = view.findViewById(R.id.search_button_welcome) as Button
+        buttonSearch = view.findViewById(R.id.search_welcome) as Button
+        buttonFind = view.findViewById(R.id.search_button_welcome) as Button
 
         bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
         constraintLayout = activity!!.findViewById(R.id.constraint_layout_menu_top)
@@ -66,11 +65,11 @@ class FragmentWelcome : Fragment() {
     }
 
     private fun initElements() {
-        buttonWelcome.setOnClickListener {
+        buttonFind.setOnClickListener {
             setFragment(FragmentMain.newInstance(SET_CARDS))
         }
 
-        searchWelcome.setOnClickListener {
+        buttonSearch.setOnClickListener {
             setFragment(FragmentMain.newInstance(SET_FOCUS))
         }
     }
