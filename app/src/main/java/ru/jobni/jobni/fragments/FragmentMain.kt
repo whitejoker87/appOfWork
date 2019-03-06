@@ -10,13 +10,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.transition.TransitionManager
-import kotlinx.android.synthetic.main.fragment_main.*
-import com.google.android.material.navigation.NavigationView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +22,7 @@ import retrofit2.Response
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.*
+import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.utils.RecyclerAdapter
 import ru.jobni.jobni.utils.Retrofit
 import java.util.*

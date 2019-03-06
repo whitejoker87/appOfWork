@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.utils
 
 import android.content.Context
 import android.graphics.Typeface

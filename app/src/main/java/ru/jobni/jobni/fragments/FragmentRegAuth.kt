@@ -1,53 +1,22 @@
 package ru.jobni.jobni.fragments
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
-import androidx.fragment.app.FragmentPagerAdapter
-import android.graphics.Color
-import androidx.fragment.app.FragmentManager
-import com.google.android.material.tabs.TabLayout
-import ru.jobni.jobni.R
-import ru.jobni.jobni.utils.VerticalViewPager
-import ru.jobni.jobni.utils.VerticalViewPagerAdapter
-import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ru.jobni.jobni.R
 import ru.jobni.jobni.utils.RegRecyclerAdapter
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [FragmentAuth.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [FragmentAuth.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
 class FragmentRegAuth : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private lateinit var recycler_reg: RecyclerView
     private lateinit var adapter: RegRecyclerAdapter
 
-
-//    private lateinit var etReferalLink: EditText
-//    private lateinit var tvReferalMes: TextView
-//    private lateinit var etConfirmPass: EditText
-//    private lateinit var
-//    private lateinit var
 //    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +31,7 @@ class FragmentRegAuth : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        var layout  = 0
+        var layout = 0
         if (param1.equals("reg"))
             layout = R.layout.fragment_reg_recycler
         else if (param1.equals("auth"))
@@ -113,14 +82,7 @@ class FragmentRegAuth : Fragment() {
 //    }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @return A new instance of fragment FragmentAuth.
-         */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance(param1: String) =
                 FragmentRegAuth().apply {
@@ -128,7 +90,7 @@ class FragmentRegAuth : Fragment() {
                         putString(ARG_PARAM1, param1)
                     }
                 }
+
         private const val ARG_PARAM1 = "param1"
     }
-
 }
