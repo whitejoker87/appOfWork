@@ -20,6 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.model.network.vacancy.*
+import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.utils.Retrofit
 import java.util.*
 
