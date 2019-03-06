@@ -2,14 +2,17 @@ package ru.jobni.jobni.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.TypedValue
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -20,25 +23,22 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
-import ru.jobni.jobni.utils.RecyclerAdapter
+import ru.jobni.jobni.utils.CardRVAdapter
 import ru.jobni.jobni.utils.Retrofit
+import ru.jobni.jobni.utils.SearchLVAdapter
 import java.util.*
 
 class FragmentMain : Fragment() {
-
-    private lateinit var searchReal: AutoCompleteTextView
-
-    private lateinit var progressBar: ProgressBar
 
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var btnList: Button
 
     private lateinit var expandableListAdapter: ExpandableListAdapter
     private lateinit var expandableListView: ExpandableListView
@@ -48,35 +48,60 @@ class FragmentMain : Fragment() {
     private lateinit var mVacancyList: ArrayList<VacancyEntity>
 
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: RecyclerAdapter
-    private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private lateinit var mAdapter: CardRVAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+    private lateinit var searchView: SearchView
+    private lateinit var searchListAdapter: SearchLVAdapter
+    private lateinit var searchListView: ListView
+    private var suggestionsNamesList = ArrayList<SuggestionEntity>()
+
+    companion object {
+        private val ARG_SET: String = "argSet"
+
+        fun newInstance(str: String): FragmentMain {
+            val fragment = FragmentMain()
+            val args = Bundle()
+            args.putString(ARG_SET, str)
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
+        setHasOptionsMenu(true)
+
         drawerLayout = activity!!.findViewById(R.id.drawer_layout)
         bottomNavigationView = activity!!.findViewById(R.id.menu_bottom)
 
-        btnList = view.findViewById(R.id.list)
-        btnList.setOnClickListener { openRightMenu() }
+        val toolbar = view.findViewById(R.id.toolbar) as Toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        toolbar.title = ""
 
         expandableListView = activity!!.findViewById(R.id.exp_list_view)
 
-        searchReal = view.findViewById(R.id.search_view_real) as AutoCompleteTextView
-
-        initSearch()
-
         mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
-        mVacancyList = ArrayList()
 
-        buildRecyclerView()
-        buildCardsList()
+        buildCardsRecyclerView()
+        initScrollListener()
+
+        searchView = view.findViewById(R.id.search_main) as SearchView
+        buildSearchView(view)
+
+        searchListView = view.findViewById(R.id.lv_suggestions) as ListView
+
+        buildSearchListView()
+
+        if (arguments != null) {
+            if (arguments!!.getString(ARG_SET) == "SetFocus") {
+                buildSearchTip()
+            }
+
+            if (arguments!!.getString(ARG_SET) == "SetCards") {
+                buildCardsList()
+            }
+        }
 
         return view
     }
@@ -85,18 +110,109 @@ class FragmentMain : Fragment() {
         super.onResume()
         bottomNavigationView.visibility = View.VISIBLE
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-
     }
 
-    private fun buildRecyclerView() {
-        mRecyclerView.setHasFixedSize(true)
-        mLayoutManager = LinearLayoutManager(context)
-        mAdapter = RecyclerAdapter(mVacancyList)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
-        mRecyclerView.layoutManager = mLayoutManager
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_right_menu -> {
+                openRightMenu()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun buildSearchView(view: View) {
+        searchView.queryHint = getString(R.string.search_view_hint)
+        searchView.setOnQueryTextListener(onQuerySearchView)
+
+        //Find EditText view
+        val et = view.findViewById(R.id.search_src_text) as EditText
+        et.setTextSize(TypedValue.COMPLEX_UNIT_SP,16F)
+
+        // Get the search close button image view
+        val closeButton = view.findViewById(R.id.search_close_btn) as ImageView
+
+        // Set on click listener
+        closeButton.setOnClickListener {
+            //Clear the text from EditText view
+            et.setText("")
+
+            //скрываем клавиатуру
+            val viewCloseButton = activity?.currentFocus
+            viewCloseButton?.let { v ->
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+            searchView.clearFocus()
+        }
+    }
+
+    private fun buildSearchTip() {
+        searchView.requestFocus()
+        //открываем клавиатуру
+        val view = activity?.currentFocus
+        view?.let { v ->
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(v, 0)
+        }
+    }
+
+    private fun buildSearchListView() {
+        suggestionsNamesList = ArrayList()
+
+        searchListAdapter = SearchLVAdapter(context!!, suggestionsNamesList)
+        searchListView.adapter = searchListAdapter
+
+        searchListView.setOnItemClickListener { parent, viewClick, position, id ->
+            doSearchOnClick(suggestionsNamesList[position].suggestionName)
+            searchView.setQuery(suggestionsNamesList[position].suggestionName, true)
+            searchListView.visibility = View.GONE
+        }
+    }
+
+    private val onQuerySearchView = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String): Boolean {
+            doSearchCompetence(query)
+            return false
+        }
+
+        override fun onQueryTextChange(query: String): Boolean {
+            var timer = Timer()
+
+            if (query.isEmpty()) {
+                suggestionsNamesList.clear()
+                searchListAdapter.notifyDataSetChanged()
+            } else {
+                searchListView.visibility = View.VISIBLE
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                doSearchCompetence(query)
+                            }
+                        },
+                        SERVER_RESPONSE_DELAY
+                )
+            }
+            return false
+        }
+    }
+
+    private fun buildCardsRecyclerView() {
+        mVacancyList = ArrayList()
+
+        mRecyclerView.setHasFixedSize(true)
+        mAdapter = CardRVAdapter(mVacancyList)
         mRecyclerView.adapter = mAdapter
 
-        mAdapter.setOnItemClickListener(object : RecyclerAdapter.OnItemClickListener {
+        mAdapter.setOnItemClickListener(object : CardRVAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 Toast.makeText(context, "onItemClick!", Toast.LENGTH_SHORT).show()
             }
@@ -107,104 +223,80 @@ class FragmentMain : Fragment() {
         })
     }
 
-    private fun initSearch() {
-        searchReal.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ ->
-            val searchItem: String = searchReal.text.toString()
-            doSearchOnClick(searchItem)
-        }
+    private fun initScrollListener() {
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
-        searchReal.addTextChangedListener(object : TextWatcher {
-            private var timer = Timer()
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                timer.cancel()
-                timer = Timer()
-                timer.schedule(
-                    object : TimerTask() {
-                        override fun run() {
-                            doSearchOnTextChange(s.toString())
-                        }
-                    },
-                    SERVER_RESPONSE_DELAY
-                )
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable) {
-
+                if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mVacancyList.size - 1) {
+                    //Нашли конец списка
+                    loadMoreCards()
+                }
             }
         })
     }
 
-    private fun doSearchOnTextChange(query: String) {
-        Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
-            ?.enqueue(object : Callback<List<String>> {
-                override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
-                    if (response.body() != null) {
+    private fun loadMoreCards() {
+        val handler = Handler()
+        handler.postDelayed({
+            val nextLimit = mVacancyList.size + 10
+            val nextOffset = nextLimit - 10
 
-                        val resultList = response.body()
-
-                        val suggestions: List<String> = ArrayList()
-                        (suggestions as ArrayList<String>).clear()
-
-                        if (resultList!!.isEmpty()) {
-                            suggestions.add(getString(R.string.search_view_suggestions_empty))
-                        }
-
-                        for (i in 0 until response.body()!!.size) {
-                            suggestions.add(resultList[i])
-                        }
-                        val adapter = ArrayAdapter<String>(context!!, R.layout.c_search_item, R.id.item, suggestions)
-                        searchReal.setAdapter<ArrayAdapter<String>>(adapter)
-                        adapter.notifyDataSetChanged()
-                    }
-                }
-
-                override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
-                    Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-                }
-            })
+            buildCardsListNext(nextLimit, nextOffset)
+        }, SERVER_RESPONSE_DELAY)
     }
 
-    private fun prepareListData() {
-        val top250 = ArrayList<String>()
-        top250.add("The Shawshank Redemption")
-        top250.add("The Godfather")
-        top250.add("The Godfather: Part II")
-        top250.add("Pulp Fiction")
-        top250.add("The Good, the Bad and the Ugly")
-        top250.add("The Dark Knight")
-        top250.add("12 Angry Men")
+    private fun doSearchCompetence(query: String) {
+        Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
+                ?.enqueue(object : Callback<List<String>> {
+                    override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
+                        if (response.body() != null) {
 
-        headerList.forEach { str ->
-            // java ver. childList.put(str, top250)
-            childList[str] = top250
-        }
+                            val resultList = response.body()
+
+                            suggestionsNamesList.clear()
+
+                            if (response.body()!!.isEmpty()) {
+                                suggestionsNamesList.add(SuggestionEntity(getString(R.string.search_view_suggestions_empty)))
+                                searchListAdapter.notifyDataSetChanged()
+                            }
+
+                            for (i in 0 until response.body()!!.size) {
+                                val suggestionName = SuggestionEntity(resultList!![i])
+                                suggestionsNamesList.add(suggestionName)
+                                searchListAdapter.notifyDataSetChanged()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
+                        Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+                    }
+                })
     }
 
     private fun openRightMenu() {
-        if (headerList.isEmpty()){
+        if (headerList.isEmpty()) {
             Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
                 override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
                     if (response.body() != null) {
                         val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
 
                         val detailList: MutableList<Any> = mutableListOf(
-                            competence,
-                            languages,
-                            work_places,
-                            employment,
-                            format_of_work,
-                            field_of_activity,
-                            age_company,
-                            required_number_of_people,
-                            zarplata,
-                            social_packet,
-                            auto,
-                            raiting
+                                competence,
+                                languages,
+                                work_places,
+                                employment,
+                                format_of_work,
+                                field_of_activity,
+                                age_company,
+                                required_number_of_people,
+                                zarplata,
+                                social_packet,
+                                auto,
+                                raiting
                         )
                         detailList.forEach { str: Any ->
                             if (str is String) headerList.add(str)
@@ -238,6 +330,22 @@ class FragmentMain : Fragment() {
         }
     }
 
+    private fun prepareListData() {
+        val top250 = ArrayList<String>()
+        top250.add("The Shawshank Redemption")
+        top250.add("The Godfather")
+        top250.add("The Godfather: Part II")
+        top250.add("Pulp Fiction")
+        top250.add("The Good, the Bad and the Ugly")
+        top250.add("The Dark Knight")
+        top250.add("12 Angry Men")
+
+        headerList.forEach { str ->
+            // java ver. childList.put(str, top250)
+            childList[str] = top250
+        }
+    }
+
     private fun buildCardsList() {
         Retrofit.api?.loadVacancy()?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
@@ -245,11 +353,6 @@ class FragmentMain : Fragment() {
 
                     val resultList: List<ResultsVacancy> = response.body()!!.results
 
-                    if (resultList.isEmpty()) {
-                        Toast.makeText(context, R.string.search_response_empty, Toast.LENGTH_SHORT).show()
-                    }
-
-                    val position = 0
                     for (i in 0 until resultList.size) {
                         val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
                         resultList[i].employment.forEach { employment ->
@@ -262,7 +365,46 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            position,
+                                VacancyEntity(
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList
+                                )
+                        )
+                    }
+                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun buildCardsListNext(limitNext: Int, offsetNext: Int): ArrayList<VacancyEntity> {
+        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
+
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        mVacancyList.add(
                             VacancyEntity(
                                 resultList[i].name,
                                 resultList[i].company.name,
@@ -274,8 +416,7 @@ class FragmentMain : Fragment() {
                             )
                         )
                     }
-                    mAdapter.notifyItemInserted(position) // Обновить список после добавления элемента
-
+                    mAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -283,6 +424,7 @@ class FragmentMain : Fragment() {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })
+        return mVacancyList
     }
 
     private fun doSearchOnClick(query: String) {
@@ -296,10 +438,6 @@ class FragmentMain : Fragment() {
                     mVacancyList.clear()
                     mAdapter.notifyDataSetChanged()
 
-                    if (resultList.isEmpty()) {
-                        Toast.makeText(context, R.string.search_response_empty, Toast.LENGTH_SHORT).show()
-                    }
-
                     for (i in 0 until resultList.size) {
                         val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
                         resultList[i].employment.forEach { employment ->
@@ -312,18 +450,18 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            VacancyEntity(
-                                resultList[i].name,
-                                resultList[i].company.name,
-                                resultList[i].salary_level_newbie.toString(),
-                                resultList[i].salary_level_experienced.toString(),
-                                resultList[i].format_of_work.name,
-                                tmpEmploymentList,
-                                tmpCompetenceList
-                            )
+                                VacancyEntity(
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList
+                                )
                         )
                     }
-                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элемента
+                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
                 }
             }
 

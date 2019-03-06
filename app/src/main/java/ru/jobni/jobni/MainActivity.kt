@@ -1,26 +1,21 @@
 package ru.jobni.jobni
 
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import android.view.MenuInflater
-import androidx.appcompat.widget.PopupMenu
-import android.widget.Toast
 import ru.jobni.jobni.fragments.*
 
 
 // TODO: Изучить Android Navigation Component
 // https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
 
-class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListener/*, ProfileBottomDialogFragment.Listener*/ {
+class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartListener/*, ProfileBottomDialogFragment.Listener*/ {
 //    override fun onItemClicked(position: Int) {
 //        when (position) {
 //            0 -> setFragment(FragmentRegAuth.newInstance("auth"))
@@ -98,17 +93,15 @@ class MainActivity : AppCompatActivity(),FragmentIntroSlide.OnClickBtnStartListe
     }
 
 
-
     override fun onClickBtnStart() {
         saveLaunchFlag()
-        setFragment(FragmentWelcome())
+        setFragment(FragmentWelcome.newInstance())
     }
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
     }
 
     private fun saveLaunchFlag() {

@@ -23,24 +23,11 @@ data class ResultsVacancy(
     @SerializedName("business_rate") val business_rate: String,
     @SerializedName("monthly_rate") val monthly_rate: Int,
     @SerializedName("rate_per_hour") val rate_per_hour: Int,
-    @SerializedName("salary_details") val salary_details: List<SalaryDetails>,
+    @SerializedName("salary_details") val salary_details: List<String>,
     @SerializedName("format_of_work") val format_of_work: FormatOfWork,
     @SerializedName("employment") val employment: List<Employment>,
-    @SerializedName("competences") val competences: List<Competences>
-)
-
-data class SalaryDetails(
-    @SerializedName("type") val type: Int,
-    @SerializedName("condition") val condition: String,
-    @SerializedName("gain_type") val gain_type: Int,
-    @SerializedName("value_percentage") val value_percentage: Int,
-    @SerializedName("value_currency") val value_currency: Int,
-    @SerializedName("comment") val comment: String
-)
-
-data class Profession(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String
+    @SerializedName("competences") val competences: List<Competences>,
+    @SerializedName("viewed") val viewed: Boolean
 )
 
 data class FormatOfWork(
@@ -56,10 +43,20 @@ data class Employment(
 data class Competences(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
-    @SerializedName("profession") val profession: Profession
+    @SerializedName("level_of_proficiency_custom") val level_of_proficiency_custom: Boolean,
+    @SerializedName("profession") val profession: Int
 )
 
 data class Company(
     @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String
+    @SerializedName("name") val name: String,
+    @SerializedName("number_of") val number_of: String,
+    @SerializedName("internationality") val internationality: Boolean,
+    @SerializedName("logo") val logo: Logo
+)
+
+data class Logo(
+    @SerializedName("image") val image: String,
+    @SerializedName("name") val name: String,
+    @SerializedName("description") val description: String
 )

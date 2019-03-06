@@ -17,5 +17,8 @@ interface RetrofitQuery {
     fun loadVacancy(): Call<CardVacancy>
 
     @GET("api/vacancy/")
+    fun loadVacancyNext(@Query("limit") competenceLimit: Int, @Query("offset") competenceOffset: Int): Call<CardVacancy>
+
+    @GET("api/vacancy/")
     fun loadVacancyByCompetence(@Query("by_competence") competenceName: String): Call<CardVacancy>
 }
