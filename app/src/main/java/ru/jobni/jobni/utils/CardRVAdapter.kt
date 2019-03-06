@@ -63,6 +63,15 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
         var competenceListText: TextView = itemView.findViewById(R.id.required_competencies_text)
 
         init {
+            itemView.setOnClickListener {
+                if (listener != null) {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position)
+                    }
+                }
+            }
+
             eyeImage.setOnClickListener { v ->
                 if (listener != null) {
                     val position = adapterPosition
