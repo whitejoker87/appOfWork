@@ -141,4 +141,6 @@
     <string name = "search_tab_company">Компании</string>
     <string name = "search_tab_resume">Резюме</string>
     <string name = "search_tab_candidate">Кандидаты</string>
+	<string name = "text_newbie">H -</string>
+	<string name = "text_experienced">O -</string>
 </resources>
