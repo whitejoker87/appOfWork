@@ -12,8 +12,11 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.get
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,7 +25,9 @@ import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.utils.Retrofit
+import ru.jobni.jobni.viewmodel.MainViewModel
 import java.util.*
+import ru.jobni.jobni.databinding.ActivityMainBinding
 
 
 // TODO: Изучить Android Navigation Component
@@ -43,9 +48,15 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
     private val childList = HashMap<String, List<String>>()
     private lateinit var btnList: Button
 
+    private lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //setContentView(R.layout.activity_main)
+
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         drawer = findViewById(R.id.drawer_layout)
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
