@@ -1,52 +1,40 @@
 package ru.jobni.jobni
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.ExpandableListView
-import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import ru.jobni.jobni.fragments.*
-import ru.jobni.jobni.model.network.vacancy.*
-import ru.jobni.jobni.utils.ExpandableListAdapter
-import ru.jobni.jobni.utils.Retrofit
-import ru.jobni.jobni.viewmodel.MainViewModel
-import java.util.*
+import kotlinx.android.synthetic.main.menu_right.view.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
+import ru.jobni.jobni.fragments.FragmentRegAuth
+import ru.jobni.jobni.fragments.FragmentSplashScreen
+import ru.jobni.jobni.fragments.FragmentWelcome
+import ru.jobni.jobni.utils.ExpandableListAdapter
+import ru.jobni.jobni.viewmodel.MainViewModel
 
 
 // TODO: Изучить Android Navigation Component
 // https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
 
-class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartListener {
+class MainActivity : AppCompatActivity() {
 
-
-    private val firstLaunchFlag = "firstLaunch"
-    private lateinit var sPref: SharedPreferences
-    private lateinit var bottomNavigationView: BottomNavigationView
+    //    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
     private lateinit var drawer: DrawerLayout
 
-    private lateinit var expandableListAdapter: ExpandableListAdapter
+    private val expandableListAdapter: ExpandableListAdapter by lazy {
+        ExpandableListAdapter(applicationContext, viewModel.getHeaderList().value!!, viewModel.getChildList().value!!)
+    }
     private lateinit var expandableListView: ExpandableListView
-    private val headerList = ArrayList<String>()
-    private val childList = HashMap<String, List<String>>()
-    private lateinit var btnList: Button
 
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
@@ -57,17 +45,14 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewmodel = viewModel
+        drawer = binding.drawerLayout
+        //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
-        drawer = findViewById(R.id.drawer_layout)
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        //bottomNavigationView = findViewById(R.id.menu_bottom)
+        //bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        bottomNavigationView = findViewById(R.id.menu_bottom)
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-        expandableListView = findViewById(R.id.exp_list_view)
-
-        btnList = findViewById(R.id.list)
-        btnList.setOnClickListener { openRightMenu() }
+        expandableListView = binding.expListInclude.exp_list_view
 
         popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_menu_profile))
         val inflater = popup.getMenuInflater()
@@ -82,11 +67,41 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
             }
         })
 
-        sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
-        saveLaunchFlag(true)//отладка первого запуска true
+        //viewModel.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
+        viewModel.saveLaunchFlag(true)//отладка первого запуска true
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
         }
+
+        viewModel.getHeaderList().observe(this, Observer { headerList ->
+            viewModel.loadChildList(headerList)
+        })
+
+        viewModel.getChildList().observe(this, Observer { childList ->
+            if (viewModel.getHeaderList().value != null) {
+                expandableListView.setAdapter(expandableListAdapter)
+            }
+        })
+
+        viewModel.isOpenDrawer().observe(this, Observer { isOpen ->
+            if (isOpen) {
+                drawer.openDrawer(GravityCompat.END)
+                //ниже закрываем клавиатуру если открыта
+                val view = this.currentFocus
+                view?.let { v ->
+                    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                    imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+                }
+            }
+        })
+
+        viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
+            when (fragmentType) {
+                "Welcome" -> setFragment(FragmentWelcome.newInstance())
+                else -> setFragment(FragmentWelcome.newInstance())
+            }
+        })
+
     }
 
     override fun onBackPressed() {
@@ -97,120 +112,86 @@ class MainActivity : AppCompatActivity(), FragmentIntroSlide.OnClickBtnStartList
         }
     }
 
-    private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
-
-        override fun onNavigationItemSelected(item: MenuItem): Boolean {
-            when (item.itemId) {
-                R.id.bottom_menu_search -> {
-                    setFragment(FragmentMain())
-                    return true
-                }
-                R.id.bottom_menu_notification -> {
-                    return true
-                }
-                R.id.bottom_menu_chat -> {
-                    return true
-                }
-                R.id.bottom_menu_profile -> {
-                    popup.show()
-                    return true
-                }
-            }
-            return false
-        }
-    }
-
-
-    override fun onClickBtnStart() {
-        saveLaunchFlag()
-        setFragment(FragmentWelcome.newInstance())
-    }
+//    private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
+//
+//        override fun onNavigationItemSelected(item: MenuItem): Boolean {
+//            when (item.itemId) {
+//                R.id.bottom_menu_search -> {
+//                    setFragment(FragmentMain())
+//                    return true
+//                }
+//                R.id.bottom_menu_notification -> {
+//                    return true
+//                }
+//                R.id.bottom_menu_chat -> {
+//                    return true
+//                }
+//                R.id.bottom_menu_profile -> {
+//                    popup.show()
+//                    return true
+//                }
+//            }
+//            return false
+//        }
+//    }
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
-    private fun saveLaunchFlag() {
-        val editor = sPref.edit()
-        editor?.putBoolean(firstLaunchFlag, false)
-        editor?.apply()
-    }
-
-    private fun saveLaunchFlag(reset: Boolean) {//для отладки первого запуска
-        val editor = sPref.edit()
-        editor.putBoolean(firstLaunchFlag, reset)
-        editor.apply()
-    }
-
-    private fun openRightMenu() {
-        if (headerList.isEmpty()) {
-            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
-                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
-                    if (response.body() != null) {
-                        val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
-
-                        val detailList: MutableList<Any> = mutableListOf(
-                                competence,
-                                languages,
-                                work_places,
-                                employment,
-                                format_of_work,
-                                field_of_activity,
-                                age_company,
-                                required_number_of_people,
-                                zarplata,
-                                social_packet,
-                                auto,
-                                raiting
-                        )
-                        detailList.forEach { str: Any ->
-                            if (str is String) headerList.add(str)
-                            else when (str) {
-                                is Zarplata -> headerList.add("Зарплата")
-                                is Social_packet -> headerList.add("Социальный пакет")
-                                is Auto -> headerList.add("Авто")
-                                is Raiting -> headerList.add("Рейтинг")
-                            }
-                        }
-
-                        prepareListData()
-
-                        expandableListAdapter = ExpandableListAdapter(applicationContext, headerList, childList)
-                        expandableListView.setAdapter(expandableListAdapter)
-                    }
-                }
-
-                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
-                    Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
-                }
-            })
-        }
-
-        drawer.openDrawer(GravityCompat.END)
-        //ниже закрываем клавиатуру если открыта
-        val view = this.currentFocus
-        view?.let { v ->
-            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-        }
-    }
-
-    private fun prepareListData() {
-        val top250 = ArrayList<String>()
-        top250.add("The Shawshank Redemption")
-        top250.add("The Godfather")
-        top250.add("The Godfather: Part II")
-        top250.add("Pulp Fiction")
-        top250.add("The Good, the Bad and the Ugly")
-        top250.add("The Dark Knight")
-        top250.add("12 Angry Men")
-
-        headerList.forEach { str ->
-            // java ver. childList.put(str, top250)
-            childList[str] = top250
-        }
-    }
+//    private fun openRightMenu() {
+//        if (headerList.isEmpty()) {
+//            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+//                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+//                    if (response.body() != null) {
+//                        val (competence, languages, work_places, employment, format_of_work, field_of_activity, age_company, required_number_of_people, zarplata, social_packet, auto, raiting) = response.body()!!
+//
+//                        val detailList: MutableList<Any> = mutableListOf(
+//                                competence,
+//                                languages,
+//                                work_places,
+//                                employment,
+//                                format_of_work,
+//                                field_of_activity,
+//                                age_company,
+//                                required_number_of_people,
+//                                zarplata,
+//                                social_packet,
+//                                auto,
+//                                raiting
+//                        )
+//                        detailList.forEach { str: Any ->
+//                            if (str is String) headerList.add(str)
+//                            else when (str) {
+//                                is Zarplata -> headerList.add("Зарплата")
+//                                is Social_packet -> headerList.add("Социальный пакет")
+//                                is Auto -> headerList.add("Авто")
+//                                is Raiting -> headerList.add("Рейтинг")
+//                            }
+//                        }
+//
+//                        prepareListData()
+//
+//                        expandableListAdapter = ExpandableListAdapter(applicationContext, headerList, childList)
+//                        expandableListView.setAdapter(expandableListAdapter)
+//                    }
+//                }
+//
+//                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+//                    Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
+//                }
+//            })
+//        }
+//
+//        drawer.openDrawer(GravityCompat.END)
+//        //ниже закрываем клавиатуру если открыта
+//        val view = this.currentFocus
+//        view?.let { v ->
+//            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+//            imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+//        }
+//    }
 }
