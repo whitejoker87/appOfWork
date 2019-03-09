@@ -8,50 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
+import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentSplashScreen : Fragment() {
 
-    private val firstLaunchFlag = "firstLaunch"
-    private lateinit var sPref: SharedPreferences
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.e_splash_screen, container, false)
 
         // Bundle - свежий старт активности. А нам нужно загружаться только в 1 раз - поэтому проверка
         // TODO: Изучить Bundle
-        sPref = activity!!.getSharedPreferences("firstLaunchSavedData", AppCompatActivity.MODE_PRIVATE)
+
+        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         if (savedInstanceState == null) {
-            switchToMainActivity()
+            viewModel.switchToMainActivity()
         }
         return view
     }
-
-    private fun switchToMainActivity() {
-        val duration = 2000L
-
-        /*
-        // Вариант с блокировкой экрана (использование одного потока)
-        Thread.sleep(duration)
-        activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragment_container, FragmentMain())
-                ?.commit()
-        */
-        val fragment: Fragment
-        if (sPref.getBoolean(firstLaunchFlag, true))
-            fragment = FragmentIntro()
-        else
-            fragment = FragmentMain()
-
-        Handler().postDelayed({
-            setFragment(fragment)
-        }, duration)
-    }
-
-    private fun setFragment(fragment: Fragment) {
-        activity!!.supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
-    }
-
 }

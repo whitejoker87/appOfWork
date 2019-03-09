@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import ru.jobni.jobni.R
 import ru.jobni.jobni.utils.IntroViewPagerAdapter
+import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentIntro : Fragment() {
 
@@ -18,6 +19,8 @@ class FragmentIntro : Fragment() {
 
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
+
+    private lateinit var viewModel: MainViewModel
 
     private var adapter: IntroViewPagerAdapter? = null
 

@@ -20,6 +20,14 @@ import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
 import java.util.ArrayList
 import java.util.HashMap
+import android.R
+import android.os.Handler
+import android.util.Log
+import android.view.MenuItem
+import androidx.fragment.app.Fragment
+import ru.jobni.jobni.fragments.FragmentIntro
+import ru.jobni.jobni.fragments.FragmentMain
+
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -173,6 +181,59 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         headerList.value = headers
+    }
+
+    private val toolbarTitle = MutableLiveData<String>()
+
+    fun getToolbarTitle(): String? {
+        return toolbarTitle.value
+    }
+
+    fun setToolbarTitle(toolbarTitle: String) {
+        this.toolbarTitle.setValue(toolbarTitle)
+    }
+
+    fun onNavigationClick(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            ru.jobni.jobni.R.id.bottom_menu_search -> {
+                        //setFragment(FragmentMain())
+                        return true
+                    }
+                    ru.jobni.jobni.R.id.bottom_menu_notification -> {
+                        return true
+                    }
+                    ru.jobni.jobni.R.id.bottom_menu_chat -> {
+                        setFragmentLaunch("Welcome")
+                        return true
+                    }
+                    ru.jobni.jobni.R.id.bottom_menu_profile -> {
+                        //popup.show()
+                        return true
+                    }
+        }
+        return false
+    }
+
+    fun switchToMainActivity() {
+        val duration = 2000L
+
+        /*
+        // Вариант с блокировкой экрана (использование одного потока)
+        Thread.sleep(duration)
+        activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container, FragmentMain())
+                ?.commit()
+        */
+        if (sPref.getBoolean(firstLaunchFlag, true))
+            Handler().postDelayed({
+                setFragmentLaunch("Intro")
+            }, duration)
+        else
+            Handler().postDelayed({
+                setFragmentLaunch("Main")
+            }, duration)
+
+
     }
 
 }

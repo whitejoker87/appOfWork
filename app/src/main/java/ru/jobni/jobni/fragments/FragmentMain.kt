@@ -21,6 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.databinding.CIntro05Binding
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
@@ -28,6 +29,8 @@ import ru.jobni.jobni.model.network.vacancy.ResultsVacancy
 import ru.jobni.jobni.utils.CardRVAdapter
 import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.SearchLVAdapter
+import ru.jobni.jobni.viewmodel.MainViewModel
+import ru.jobni.jobni.databinding.FragmentMainBinding
 import java.util.*
 
 class FragmentMain : Fragment() {
@@ -46,6 +49,9 @@ class FragmentMain : Fragment() {
     private var suggestionsNamesList = ArrayList<SuggestionEntity>()
 
     var isLoading = true
+
+    private lateinit var viewModel: MainViewModel
+    private lateinit var binding: FragmentMainBinding
 
     companion object {
         private val ARG_SET: String = "argSet"

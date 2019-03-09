@@ -13,11 +13,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.menu_right.view.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
-import ru.jobni.jobni.fragments.FragmentRegAuth
-import ru.jobni.jobni.fragments.FragmentSplashScreen
-import ru.jobni.jobni.fragments.FragmentWelcome
+import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
@@ -27,7 +26,7 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    //    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
     private lateinit var drawer: DrawerLayout
 
@@ -41,16 +40,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewmodel = viewModel
         drawer = binding.drawerLayout
+
         //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
-        //bottomNavigationView = findViewById(R.id.menu_bottom)
-        //bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        bottomNavigationView = binding.menuBottom
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         expandableListView = binding.expListInclude.exp_list_view
 
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.isOpenDrawer().observe(this, Observer { isOpen ->
             if (isOpen) {
-                drawer.openDrawer(GravityCompat.END)
+                drawer.openDrawer(GravityCompat.END)//todo
                 //ниже закрываем клавиатуру если открыта
                 val view = this.currentFocus
                 view?.let { v ->
@@ -98,6 +97,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
             when (fragmentType) {
                 "Welcome" -> setFragment(FragmentWelcome.newInstance())
+                "Intro" -> setFragment(FragmentIntro())
+                "Main" -> setFragment(FragmentMain())
                 else -> setFragment(FragmentWelcome.newInstance())
             }
         })
@@ -112,28 +113,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
-//
-//        override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//            when (item.itemId) {
-//                R.id.bottom_menu_search -> {
-//                    setFragment(FragmentMain())
-//                    return true
-//                }
-//                R.id.bottom_menu_notification -> {
-//                    return true
-//                }
-//                R.id.bottom_menu_chat -> {
-//                    return true
-//                }
-//                R.id.bottom_menu_profile -> {
-//                    popup.show()
-//                    return true
-//                }
-//            }
-//            return false
-//        }
-//    }
+    private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
+
+        override fun onNavigationItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.bottom_menu_search -> {
+                    setFragment(FragmentMain())
+                    return true
+                }
+                R.id.bottom_menu_notification -> {
+                    return true
+                }
+                R.id.bottom_menu_chat -> {
+                    return true
+                }
+                R.id.bottom_menu_profile -> {
+                    popup.show()
+                    return true
+                }
+            }
+            return false
+        }
+    }
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

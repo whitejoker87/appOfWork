@@ -3,10 +3,20 @@ package ru.jobni.jobni.utils
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputLayout
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.core.view.GravityCompat
+import androidx.databinding.BindingMethod
+import androidx.databinding.BindingMethods
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+@BindingMethods(
+    BindingMethod(
+        type = BindingAdapters::class,
+        attribute = "app:onNavigationItemSelected",
+        method = "setOnNavigationItemSelectedListener"
+    )
+)
 
 object BindingAdapters {
 
@@ -20,6 +30,15 @@ object BindingAdapters {
     fun setDrawerLockMode(drawerLayout: DrawerLayout, mode: Int) {
         drawerLayout.setDrawerLockMode(mode)
     }
+
+    @BindingAdapter("app:onNavigationItemSelected")
+    fun setOnNavigationItemSelectedListener(
+        view: BottomNavigationView, listener: BottomNavigationView.OnNavigationItemSelectedListener
+    ) {
+        view.setOnNavigationItemSelectedListener(listener)
+    }
+
+
 
 //    @BindingAdapter("app:onNavigationItemSelected")
 //    fun setOnNavigationItemSelected(

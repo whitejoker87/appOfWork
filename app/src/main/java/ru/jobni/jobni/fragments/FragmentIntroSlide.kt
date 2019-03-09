@@ -21,8 +21,6 @@ class FragmentIntroSlide : Fragment() {
     private lateinit var binding: CIntro05Binding
 
     private var param1: Int = 0
-    //private var listener: OnClickBtnStartListener? = null
-    //private lateinit var btnStart: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +38,6 @@ class FragmentIntroSlide : Fragment() {
         if (param1 == R.layout.c_intro_05){
             binding = DataBindingUtil.inflate(inflater, param1, container, false)
             return binding.root
-            //btnStart = view.findViewById(R.id.start)
-            //btnStart.setOnClickListener{onButtonStartPressed()}
         }
         else return view
     }
@@ -53,39 +49,6 @@ class FragmentIntroSlide : Fragment() {
             binding.viewmodel = viewModel
         }
     }
-
-    //    private fun onButtonStartPressed() {
-//        listener?.onClickBtnStart()
-//    }
-
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if (context is OnClickBtnStartListener) {
-//            listener = context
-//        } else {
-//            throw RuntimeException("$context must implement OnClickBtnStartListener")
-//        }
-//    }
-
-//    override fun onDetach() {
-//        super.onDetach()
-//        listener = null
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-//    interface OnClickBtnStartListener {
-//        fun onClickBtnStart()
-//    }
 
     companion object {
         @JvmStatic
