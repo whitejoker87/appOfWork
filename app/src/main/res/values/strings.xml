@@ -143,4 +143,5 @@
     <string name = "search_tab_candidate">Кандидаты</string>
 	<string name = "text_newbie">H -</string>
 	<string name = "text_experienced">O -</string>
+    <string name="text_ruble">₽</string>
 </resources>

@@ -21,7 +21,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CIntro05Binding
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
@@ -29,8 +28,6 @@ import ru.jobni.jobni.model.network.vacancy.ResultsVacancy
 import ru.jobni.jobni.utils.CardRVAdapter
 import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.SearchLVAdapter
-import ru.jobni.jobni.viewmodel.MainViewModel
-import ru.jobni.jobni.databinding.FragmentMainBinding
 import java.util.*
 
 class FragmentMain : Fragment() {
@@ -49,9 +46,6 @@ class FragmentMain : Fragment() {
     private var suggestionsNamesList = ArrayList<SuggestionEntity>()
 
     var isLoading = true
-
-    private lateinit var viewModel: MainViewModel
-    private lateinit var binding: FragmentMainBinding
 
     companion object {
         private val ARG_SET: String = "argSet"
@@ -165,12 +159,12 @@ class FragmentMain : Fragment() {
                 timer.cancel()
                 timer = Timer()
                 timer.schedule(
-                    object : TimerTask() {
-                        override fun run() {
-                            doSearchCompetence(query)
-                        }
-                    },
-                    SERVER_RESPONSE_DELAY
+                        object : TimerTask() {
+                            override fun run() {
+                                doSearchCompetence(query)
+                            }
+                        },
+                        SERVER_RESPONSE_DELAY
                 )
             }
             return false
@@ -182,6 +176,7 @@ class FragmentMain : Fragment() {
 
         mRecyclerView.setHasFixedSize(true)
         mAdapter = CardRVAdapter(mVacancyList)
+        mAdapter.setHasStableIds(true)
         mRecyclerView.adapter = mAdapter
 
         mAdapter.setOnItemClickListener(object : CardRVAdapter.OnItemClickListener {
@@ -226,31 +221,31 @@ class FragmentMain : Fragment() {
 
     private fun doSearchCompetence(query: String) {
         Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
-            ?.enqueue(object : Callback<List<String>> {
-                override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
-                    if (response.body() != null) {
+                ?.enqueue(object : Callback<List<String>> {
+                    override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
+                        if (response.body() != null) {
 
-                        val resultList = response.body()
+                            val resultList = response.body()
 
-                        suggestionsNamesList.clear()
+                            suggestionsNamesList.clear()
 
-                        if (response.body()!!.isEmpty()) {
-                            suggestionsNamesList.add(SuggestionEntity(getString(R.string.search_view_suggestions_empty)))
-                            searchListAdapter.notifyDataSetChanged()
-                        }
+                            if (response.body()!!.isEmpty()) {
+                                suggestionsNamesList.add(SuggestionEntity(getString(R.string.search_view_suggestions_empty)))
+                                searchListAdapter.notifyDataSetChanged()
+                            }
 
-                        for (i in 0 until response.body()!!.size) {
-                            val suggestionName = SuggestionEntity(resultList!![i])
-                            suggestionsNamesList.add(suggestionName)
-                            searchListAdapter.notifyDataSetChanged()
+                            for (i in 0 until response.body()!!.size) {
+                                val suggestionName = SuggestionEntity(resultList!![i])
+                                suggestionsNamesList.add(suggestionName)
+                                searchListAdapter.notifyDataSetChanged()
+                            }
                         }
                     }
-                }
 
-                override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
-                    Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-                }
-            })
+                    override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
+                        Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+                    }
+                })
     }
 
     private fun buildCardsList() {
@@ -272,15 +267,20 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            VacancyEntity(
-                                resultList[i].name,
-                                resultList[i].company.name,
-                                resultList[i].salary_level_newbie.toString(),
-                                resultList[i].salary_level_experienced.toString(),
-                                resultList[i].format_of_work.name,
-                                tmpEmploymentList,
-                                tmpCompetenceList
-                            )
+                                VacancyEntity(
+                                        resultList[i].id,
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList,
+                                        "",
+                                        "",
+                                        "",
+                                        ""
+                                )
                         )
                     }
                     mAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
@@ -312,15 +312,20 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            VacancyEntity(
-                                resultList[i].name,
-                                resultList[i].company.name,
-                                resultList[i].salary_level_newbie.toString(),
-                                resultList[i].salary_level_experienced.toString(),
-                                resultList[i].format_of_work.name,
-                                tmpEmploymentList,
-                                tmpCompetenceList
-                            )
+                                VacancyEntity(
+                                        resultList[i].id,
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList,
+                                        "",
+                                        "",
+                                        "",
+                                        ""
+                                )
                         )
                     }
                     mAdapter.notifyDataSetChanged()
@@ -357,15 +362,20 @@ class FragmentMain : Fragment() {
                         }
 
                         mVacancyList.add(
-                            VacancyEntity(
-                                resultList[i].name,
-                                resultList[i].company.name,
-                                resultList[i].salary_level_newbie.toString(),
-                                resultList[i].salary_level_experienced.toString(),
-                                resultList[i].format_of_work.name,
-                                tmpEmploymentList,
-                                tmpCompetenceList
-                            )
+                                VacancyEntity(
+                                        resultList[i].id,
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList,
+                                        "",
+                                        "",
+                                        "",
+                                        ""
+                                )
                         )
                     }
                     mAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
