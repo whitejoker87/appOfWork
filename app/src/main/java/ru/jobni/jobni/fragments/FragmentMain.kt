@@ -15,12 +15,16 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
@@ -28,17 +32,18 @@ import ru.jobni.jobni.model.network.vacancy.ResultsVacancy
 import ru.jobni.jobni.utils.CardRVAdapter
 import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.SearchLVAdapter
+import ru.jobni.jobni.viewmodel.MainFragmentViewState
+import ru.jobni.jobni.viewmodel.MainViewModel
 import java.util.*
+
 
 class FragmentMain : Fragment() {
 
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
-    private lateinit var vacancyList: ArrayList<VacancyEntity>
-
     private lateinit var cardRecyclerView: RecyclerView
-    private lateinit var cardAdapter: CardRVAdapter
+    private var cardAdapter: CardRVAdapter = CardRVAdapter()
     private val cardLayoutManager: LinearLayoutManager = LinearLayoutManager(context)
 
     private lateinit var searchView: SearchView
@@ -47,6 +52,9 @@ class FragmentMain : Fragment() {
     private var suggestionsNamesList = ArrayList<SuggestionEntity>()
 
     var isLoading = true
+
+    private lateinit var viewModel: MainViewModel
+    private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
 
     companion object {
         private val ARG_SET: String = "argSet"
@@ -63,9 +71,16 @@ class FragmentMain : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
         cardRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
 
         buildCardsRecyclerView()
+
+        viewModel.viewState().observe(this, Observer<MainFragmentViewState> { t ->
+            t?.let { cardAdapter.vacancies = it.vacancies }
+        })
+
         initScrollListener()
 
         searchView = activity?.findViewById(R.id.search_main) as SearchView
@@ -173,11 +188,9 @@ class FragmentMain : Fragment() {
     }
 
     private fun buildCardsRecyclerView() {
-        vacancyList = ArrayList()
 
         cardRecyclerView.setHasFixedSize(true)
         cardRecyclerView.layoutManager = cardLayoutManager
-        cardAdapter = CardRVAdapter(vacancyList)
         cardAdapter.setHasStableIds(true)
         cardRecyclerView.adapter = cardAdapter
 
@@ -198,7 +211,7 @@ class FragmentMain : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
 
                 if (isLoading) {
-                    if (cardLayoutManager.findLastCompletelyVisibleItemPosition() == vacancyList.size - 1) {
+                    if (cardLayoutManager.findLastCompletelyVisibleItemPosition() == repository.getSize() - 1) {
                         //Нашли конец списка
                         loadMoreCards()
                         isLoading = false
@@ -211,7 +224,7 @@ class FragmentMain : Fragment() {
     private fun loadMoreCards() {
         val handler = Handler()
         handler.postDelayed({
-            val nextLimit = vacancyList.size + 10
+            val nextLimit = repository.getSize() + 10
             val nextOffset = nextLimit - 10
 
             buildCardsListNext(nextLimit, nextOffset)
@@ -266,7 +279,7 @@ class FragmentMain : Fragment() {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        vacancyList.add(
+                        repository.saveVacancy(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -283,7 +296,6 @@ class FragmentMain : Fragment() {
                                 )
                         )
                     }
-                    cardAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
                 }
             }
 
@@ -293,7 +305,7 @@ class FragmentMain : Fragment() {
         })
     }
 
-    private fun buildCardsListNext(limitNext: Int, offsetNext: Int): ArrayList<VacancyEntity> {
+    private fun buildCardsListNext(limitNext: Int, offsetNext: Int): LiveData<MutableList<VacancyEntity>> {
         Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
                 if (response.body() != null) {
@@ -311,7 +323,7 @@ class FragmentMain : Fragment() {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        vacancyList.add(
+                        repository.saveVacancy(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -328,7 +340,6 @@ class FragmentMain : Fragment() {
                                 )
                         )
                     }
-                    cardAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -336,7 +347,7 @@ class FragmentMain : Fragment() {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })
-        return vacancyList
+        return repository.getVacancy()
     }
 
     private fun doSearchOnClick(query: String) {
@@ -346,9 +357,8 @@ class FragmentMain : Fragment() {
 
                     val resultList: List<ResultsVacancy> = response.body()!!.results
 
-                    //Отчистить список для новых результатов
-                    vacancyList.clear()
-                    cardAdapter.notifyDataSetChanged()
+                    // Отчистить список для новых результатов
+                    repository.clearRepository()
 
                     for (i in 0 until resultList.size) {
                         val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
@@ -361,7 +371,7 @@ class FragmentMain : Fragment() {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        vacancyList.add(
+                        repository.saveVacancy(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -378,7 +388,8 @@ class FragmentMain : Fragment() {
                                 )
                         )
                     }
-                    cardAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
+                    // Вернуть пользователя к началу списка
+                    cardRecyclerView.smoothScrollToPosition(0)
                 }
             }
 

@@ -1,32 +1,20 @@
 package ru.jobni.jobni.viewmodel
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import android.os.Handler
+import android.view.MenuItem
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.jobni.jobni.fragments.FragmentWelcome
+import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
-import java.util.ArrayList
-import java.util.HashMap
-import android.R
-import android.os.Handler
-import android.util.Log
-import android.view.MenuItem
-import androidx.fragment.app.Fragment
-import ru.jobni.jobni.fragments.FragmentIntro
-import ru.jobni.jobni.fragments.FragmentMain
+import java.util.*
 
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -39,6 +27,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val isOpenDrawer = MutableLiveData<Boolean>()
     private val fragmentLaunch = MutableLiveData<String>()
     val context = application
+
+    private val mainFragmentViewStateLiveData : MutableLiveData<MainFragmentViewState> = MutableLiveData()
+    private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
+
+    init {
+        repository.getVacancy().observeForever { vacancies ->
+            mainFragmentViewStateLiveData.value = mainFragmentViewStateLiveData.value?.copy(vacancies = vacancies!!) ?: MainFragmentViewState(vacancies!!)
+        }
+    }
+
+    fun viewState(): LiveData<MainFragmentViewState> = mainFragmentViewStateLiveData
 
     fun getHeaderList(): MutableLiveData<MutableList<String>> {
         return headerList
