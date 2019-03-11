@@ -16,26 +16,31 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.Detail
-import java.util.*
 
 
-class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CardRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_ITEM = 0
 
-    private var clickListener: OnItemClickListener? = null
     private var mExpandedPosition = -1
     private var previousExpandedPosition = -1
+
+    private var clickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        clickListener = listener
+    }
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
         fun onEyeClick(v: View, position: Int)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        clickListener = listener
-    }
+    var vacancies: MutableList<VacancyEntity> = mutableListOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.c_card_vacancy_close, parent, false)
@@ -45,7 +50,7 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         if (viewHolder is ItemViewHolder) {
 
-            val isExpanded = position === mExpandedPosition
+            val isExpanded = position == mExpandedPosition
 
             viewHolder.btnLess.visibility = if (isExpanded) View.VISIBLE else View.GONE
             viewHolder.expandConstraintLayout.visibility = if (isExpanded) View.VISIBLE else View.GONE
@@ -67,7 +72,7 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
     }
 
     override fun getItemCount(): Int {
-        return vacancyList.size
+        return vacancies.size
     }
 
     /**
@@ -81,7 +86,7 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
     }
 
     override fun getItemId(position: Int): Long {
-        return vacancyList[position].id.toLong()
+        return vacancies[position].id.toLong()
     }
 
     private class ItemViewHolder(itemView: View, listener: OnItemClickListener?) : RecyclerView.ViewHolder(itemView) {
@@ -124,7 +129,7 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
     }
 
     private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
-        val item = vacancyList[position]
+        val item = vacancies[position]
 
         viewHolder.vacancyNameText.text = item.vacancyName
         viewHolder.companyNameText.text = item.companyName
@@ -132,9 +137,9 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
         viewHolder.salaryLevelExperiencedText.text = convertWithSpaces(item.salaryLevelExperienced)
         viewHolder.workFormatText.text = item.formatOfWork
         viewHolder.employmentListText.text = item.employmentList.toString()
-            .replace("[", "", true).replace("]", "", true)
+                .replace("[", "", true).replace("]", "", true)
         viewHolder.competenceListText.text = item.competenceList.toString()
-            .replace("[", "", true).replace("]", "", true)
+                .replace("[", "", true).replace("]", "", true)
         viewHolder.companyDescriptionText.text = item.companyDescription
         viewHolder.vacancyDescriptionText.text = item.vacancyDescription
         viewHolder.requirementsDescriptionText.text = item.requirementsDescription
@@ -155,7 +160,7 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
     }
 
     private fun cardExpand(position: Int) {
-        val requestID: Int = vacancyList[position].id
+        val requestID: Int = vacancies[position].id
 
         Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
             override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
@@ -163,14 +168,14 @@ class CardRVAdapter(private val vacancyList: ArrayList<VacancyEntity>) :
 
                     val resultList: Detail = response.body()!!.detail
 
-                    val newObj: VacancyEntity = vacancyList[position].copy(
-                        companyDescription = resultList.company_description,
-                        vacancyDescription = resultList.description,
-                        requirementsDescription = resultList.requirements,
-                        dutiesDescription = resultList.duties
+                    val newObj: VacancyEntity = vacancies[position].copy(
+                            companyDescription = resultList.company_description,
+                            vacancyDescription = resultList.description,
+                            requirementsDescription = resultList.requirements,
+                            dutiesDescription = resultList.duties
                     )
-                    vacancyList.removeAt(position)
-                    vacancyList.add(position, newObj)
+                    vacancies.removeAt(position)
+                    vacancies.add(position, newObj)
                     notifyItemChanged(position)
                 }
             }
