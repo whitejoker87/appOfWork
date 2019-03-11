@@ -35,10 +35,11 @@ class FragmentMain : Fragment() {
     private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
-    private lateinit var mVacancyList: ArrayList<VacancyEntity>
+    private lateinit var vacancyList: ArrayList<VacancyEntity>
 
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: CardRVAdapter
+    private lateinit var cardRecyclerView: RecyclerView
+    private lateinit var cardAdapter: CardRVAdapter
+    private val cardLayoutManager: LinearLayoutManager = LinearLayoutManager(context)
 
     private lateinit var searchView: SearchView
     private lateinit var searchListAdapter: SearchLVAdapter
@@ -62,7 +63,7 @@ class FragmentMain : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        mRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
+        cardRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
 
         buildCardsRecyclerView()
         initScrollListener()
@@ -172,14 +173,15 @@ class FragmentMain : Fragment() {
     }
 
     private fun buildCardsRecyclerView() {
-        mVacancyList = ArrayList()
+        vacancyList = ArrayList()
 
-        mRecyclerView.setHasFixedSize(true)
-        mAdapter = CardRVAdapter(mVacancyList)
-        mAdapter.setHasStableIds(true)
-        mRecyclerView.adapter = mAdapter
+        cardRecyclerView.setHasFixedSize(true)
+        cardRecyclerView.layoutManager = cardLayoutManager
+        cardAdapter = CardRVAdapter(vacancyList)
+        cardAdapter.setHasStableIds(true)
+        cardRecyclerView.adapter = cardAdapter
 
-        mAdapter.setOnItemClickListener(object : CardRVAdapter.OnItemClickListener {
+        cardAdapter.setOnItemClickListener(object : CardRVAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 Toast.makeText(context, "onItemClick!", Toast.LENGTH_SHORT).show()
             }
@@ -191,14 +193,12 @@ class FragmentMain : Fragment() {
     }
 
     private fun initScrollListener() {
-        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        cardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
-
                 if (isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mVacancyList.size - 1) {
+                    if (cardLayoutManager.findLastCompletelyVisibleItemPosition() == vacancyList.size - 1) {
                         //Нашли конец списка
                         loadMoreCards()
                         isLoading = false
@@ -211,7 +211,7 @@ class FragmentMain : Fragment() {
     private fun loadMoreCards() {
         val handler = Handler()
         handler.postDelayed({
-            val nextLimit = mVacancyList.size + 10
+            val nextLimit = vacancyList.size + 10
             val nextOffset = nextLimit - 10
 
             buildCardsListNext(nextLimit, nextOffset)
@@ -266,7 +266,7 @@ class FragmentMain : Fragment() {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        mVacancyList.add(
+                        vacancyList.add(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -283,7 +283,7 @@ class FragmentMain : Fragment() {
                                 )
                         )
                     }
-                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
+                    cardAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
                 }
             }
 
@@ -311,7 +311,7 @@ class FragmentMain : Fragment() {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        mVacancyList.add(
+                        vacancyList.add(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -328,7 +328,7 @@ class FragmentMain : Fragment() {
                                 )
                         )
                     }
-                    mAdapter.notifyDataSetChanged()
+                    cardAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -336,7 +336,7 @@ class FragmentMain : Fragment() {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })
-        return mVacancyList
+        return vacancyList
     }
 
     private fun doSearchOnClick(query: String) {
@@ -347,8 +347,8 @@ class FragmentMain : Fragment() {
                     val resultList: List<ResultsVacancy> = response.body()!!.results
 
                     //Отчистить список для новых результатов
-                    mVacancyList.clear()
-                    mAdapter.notifyDataSetChanged()
+                    vacancyList.clear()
+                    cardAdapter.notifyDataSetChanged()
 
                     for (i in 0 until resultList.size) {
                         val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
@@ -361,7 +361,7 @@ class FragmentMain : Fragment() {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        mVacancyList.add(
+                        vacancyList.add(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -378,7 +378,7 @@ class FragmentMain : Fragment() {
                                 )
                         )
                     }
-                    mAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
+                    cardAdapter.notifyDataSetChanged() // Обновить список после добавления элементов
                 }
             }
 
