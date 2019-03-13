@@ -14,6 +14,7 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.widget.SearchView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -24,6 +25,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.databinding.ActivityMainBinding
+import ru.jobni.jobni.databinding.FragmentMainBinding
 import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
@@ -39,8 +42,8 @@ import java.util.*
 
 class FragmentMain : Fragment() {
 
-    private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
-    private val SERVER_RESPONSE_MAX_COUNT: Int = 10
+//    private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
+//    private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
     private lateinit var cardRecyclerView: RecyclerView
     private var cardAdapter: CardRVAdapter = CardRVAdapter()
@@ -49,11 +52,16 @@ class FragmentMain : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var searchListAdapter: SearchLVAdapter
     private lateinit var searchListView: ListView
-    private var suggestionsNamesList = ArrayList<SuggestionEntity>()
+//    private var suggestionsNamesList = ArrayList<SuggestionEntity>()
+//
+//    var isLoading = true
 
-    var isLoading = true
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+    }
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var binding: FragmentMainBinding
+
     private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
 
     companion object {
@@ -69,26 +77,40 @@ class FragmentMain : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
-        cardRecyclerView = view.findViewById(R.id.rv_cards) as RecyclerView
+//        MartianDataBinding binding = DataBindingUtil.inflate(
+//                inflater, R.layout.martian_data, container, false);
+//        View view = binding.getRoot();
+//        //here data must be an instance of the class MarsDataProvider
+//        binding.setMarsdata(data);
+//        return view;
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
+
+        val view = binding.root
+
+        viewModel.setSearchViewVisible(true)
+
+        binding.viewmodel = viewModel
+
+        cardRecyclerView = binding.rvCards
 
         buildCardsRecyclerView()
 
-        viewModel.viewState().observe(this, Observer<MainFragmentViewState> { t ->
-            t?.let { cardAdapter.vacancies = it.vacancies }
+        viewModel.getModelVacancy().observe(this, Observer { vacancy ->
+            vacancy?.let { cardAdapter.vacancies = vacancy.vacancyList }
         })
 
         initScrollListener()
 
-        searchView = activity?.findViewById(R.id.search_main) as SearchView
-        //В глобальном тулбаре поле поиска отключено - включаем!
-        searchView.visibility = View.VISIBLE
+
+
+        searchView = binding.mainToolbar.searchviewToolbar
+
         buildSearchView(view)
 
-        searchListView = view.findViewById(R.id.lv_suggestions) as ListView
+        searchListView = binding.lvSuggestions
 
         buildSearchListView()
 
@@ -98,7 +120,7 @@ class FragmentMain : Fragment() {
             }
 
             if (arguments!!.getString(ARG_SET) == "SetCards") {
-                buildCardsList()
+                buildCardsList(0,0)
             }
         }
 
@@ -106,15 +128,14 @@ class FragmentMain : Fragment() {
     }
 
     private fun buildSearchView(view: View) {
-        searchView.queryHint = getString(R.string.search_view_hint)
         searchView.setOnQueryTextListener(onQuerySearchView)
 
         //Find EditText view
-        val et = activity?.findViewById(R.id.search_src_text) as EditText
+        val et = view.findViewById(R.id.search_src_text) as EditText
         et.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
 
         // Get the search close button image view
-        val closeButton = activity?.findViewById(R.id.search_close_btn) as ImageView
+        val closeButton = view.findViewById(R.id.search_close_btn) as ImageView
 
         // Set on click listener
         closeButton.setOnClickListener {
@@ -142,7 +163,6 @@ class FragmentMain : Fragment() {
     }
 
     private fun buildSearchListView() {
-        suggestionsNamesList = ArrayList()
 
         searchListAdapter = SearchLVAdapter(context!!, suggestionsNamesList)
         searchListView.adapter = searchListAdapter
@@ -221,181 +241,136 @@ class FragmentMain : Fragment() {
         })
     }
 
-    private fun loadMoreCards() {
-        val handler = Handler()
-        handler.postDelayed({
-            val nextLimit = repository.getSize() + 10
-            val nextOffset = nextLimit - 10
+//    private fun loadMoreCards() {
+//        val handler = Handler()
+//        handler.postDelayed({
+//            val nextLimit = repository.getSize() + 10
+//            val nextOffset = nextLimit - 10
+//
+//            buildCardsList(nextLimit, nextOffset)
+//            isLoading = true
+//        }, SERVER_RESPONSE_DELAY)
+//    }
 
-            buildCardsListNext(nextLimit, nextOffset)
-            isLoading = true
-        }, SERVER_RESPONSE_DELAY)
-    }
+//    private fun doSearchCompetence(query: String) {
+//        Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
+//                ?.enqueue(object : Callback<List<String>> {
+//                    override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
+//                        if (response.body() != null) {
+//
+//                            val resultList = response.body()
+//
+//                            suggestionsNamesList.clear()
+//
+//                            if (response.body()!!.isEmpty()) {
+//                                suggestionsNamesList.add(SuggestionEntity(getString(R.string.search_view_suggestions_empty)))
+//                                searchListAdapter.notifyDataSetChanged()
+//                            }
+//
+//                            for (i in 0 until response.body()!!.size) {
+//                                val suggestionName = SuggestionEntity(resultList!![i])
+//                                suggestionsNamesList.add(suggestionName)
+//                                searchListAdapter.notifyDataSetChanged()
+//                            }
+//                        }
+//                    }
+//
+//                    override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
+//                        Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+//                    }
+//                })
+//    }
 
-    private fun doSearchCompetence(query: String) {
-        Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
-                ?.enqueue(object : Callback<List<String>> {
-                    override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
-                        if (response.body() != null) {
+//    private fun buildCardsList(limitNext: Int, offsetNext: Int){
+//        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
+//            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+//                if (response.body() != null) {
+//
+//                    val resultList: List<ResultsVacancy> = response.body()!!.results
+//
+//                    for (i in 0 until resultList.size) {
+//                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+//                        resultList[i].employment.forEach { employment ->
+//                            tmpEmploymentList.add(employment.name)
+//                        }
+//
+//                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+//                        resultList[i].competences.forEach { competences ->
+//                            tmpCompetenceList.add(competences.name)
+//                        }
+//
+//                        repository.saveVacancy(
+//                                VacancyEntity(
+//                                        resultList[i].id,
+//                                        resultList[i].name,
+//                                        resultList[i].company.name,
+//                                        resultList[i].salary_level_newbie.toString(),
+//                                        resultList[i].salary_level_experienced.toString(),
+//                                        resultList[i].format_of_work.name,
+//                                        tmpEmploymentList,
+//                                        tmpCompetenceList,
+//                                        "",
+//                                        "",
+//                                        "",
+//                                        ""
+//                                )
+//                        )
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+//                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//    }
 
-                            val resultList = response.body()
-
-                            suggestionsNamesList.clear()
-
-                            if (response.body()!!.isEmpty()) {
-                                suggestionsNamesList.add(SuggestionEntity(getString(R.string.search_view_suggestions_empty)))
-                                searchListAdapter.notifyDataSetChanged()
-                            }
-
-                            for (i in 0 until response.body()!!.size) {
-                                val suggestionName = SuggestionEntity(resultList!![i])
-                                suggestionsNamesList.add(suggestionName)
-                                searchListAdapter.notifyDataSetChanged()
-                            }
-                        }
-                    }
-
-                    override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
-                        Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-                    }
-                })
-    }
-
-    private fun buildCardsList() {
-        Retrofit.api?.loadVacancy()?.enqueue(object : Callback<CardVacancy> {
-            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
-                if (response.body() != null) {
-
-                    val resultList: List<ResultsVacancy> = response.body()!!.results
-
-                    for (i in 0 until resultList.size) {
-                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].employment.forEach { employment ->
-                            tmpEmploymentList.add(employment.name)
-                        }
-
-                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].competences.forEach { competences ->
-                            tmpCompetenceList.add(competences.name)
-                        }
-
-                        repository.saveVacancy(
-                                VacancyEntity(
-                                        resultList[i].id,
-                                        resultList[i].name,
-                                        resultList[i].company.name,
-                                        resultList[i].salary_level_newbie.toString(),
-                                        resultList[i].salary_level_experienced.toString(),
-                                        resultList[i].format_of_work.name,
-                                        tmpEmploymentList,
-                                        tmpCompetenceList,
-                                        "",
-                                        "",
-                                        "",
-                                        ""
-                                )
-                        )
-                    }
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun buildCardsListNext(limitNext: Int, offsetNext: Int): LiveData<MutableList<VacancyEntity>> {
-        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
-            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
-                if (response.body() != null) {
-
-                    val resultList: List<ResultsVacancy> = response.body()!!.results
-
-                    for (i in 0 until resultList.size) {
-                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].employment.forEach { employment ->
-                            tmpEmploymentList.add(employment.name)
-                        }
-
-                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].competences.forEach { competences ->
-                            tmpCompetenceList.add(competences.name)
-                        }
-
-                        repository.saveVacancy(
-                                VacancyEntity(
-                                        resultList[i].id,
-                                        resultList[i].name,
-                                        resultList[i].company.name,
-                                        resultList[i].salary_level_newbie.toString(),
-                                        resultList[i].salary_level_experienced.toString(),
-                                        resultList[i].format_of_work.name,
-                                        tmpEmploymentList,
-                                        tmpCompetenceList,
-                                        "",
-                                        "",
-                                        "",
-                                        ""
-                                )
-                        )
-                    }
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-        return repository.getVacancy()
-    }
-
-    private fun doSearchOnClick(query: String) {
-        Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
-            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
-                if (response.body() != null) {
-
-                    val resultList: List<ResultsVacancy> = response.body()!!.results
-
-                    // Отчистить список для новых результатов
-                    repository.clearRepository()
-
-                    for (i in 0 until resultList.size) {
-                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].employment.forEach { employment ->
-                            tmpEmploymentList.add(employment.name)
-                        }
-
-                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].competences.forEach { competences ->
-                            tmpCompetenceList.add(competences.name)
-                        }
-
-                        repository.saveVacancy(
-                                VacancyEntity(
-                                        resultList[i].id,
-                                        resultList[i].name,
-                                        resultList[i].company.name,
-                                        resultList[i].salary_level_newbie.toString(),
-                                        resultList[i].salary_level_experienced.toString(),
-                                        resultList[i].format_of_work.name,
-                                        tmpEmploymentList,
-                                        tmpCompetenceList,
-                                        "",
-                                        "",
-                                        "",
-                                        ""
-                                )
-                        )
-                    }
-                    // Вернуть пользователя к началу списка
-                    cardRecyclerView.smoothScrollToPosition(0)
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
+//    private fun doSearchOnClick(query: String) {
+//        Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
+//            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+//                if (response.body() != null) {
+//
+//                    val resultList: List<ResultsVacancy> = response.body()!!.results
+//
+//                    // Отчистить список для новых результатов
+//                    repository.clearRepository()
+//
+//                    for (i in 0 until resultList.size) {
+//                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+//                        resultList[i].employment.forEach { employment ->
+//                            tmpEmploymentList.add(employment.name)
+//                        }
+//
+//                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+//                        resultList[i].competences.forEach { competences ->
+//                            tmpCompetenceList.add(competences.name)
+//                        }
+//
+//                        repository.saveVacancy(
+//                                VacancyEntity(
+//                                        resultList[i].id,
+//                                        resultList[i].name,
+//                                        resultList[i].company.name,
+//                                        resultList[i].salary_level_newbie.toString(),
+//                                        resultList[i].salary_level_experienced.toString(),
+//                                        resultList[i].format_of_work.name,
+//                                        tmpEmploymentList,
+//                                        tmpCompetenceList,
+//                                        "",
+//                                        "",
+//                                        "",
+//                                        ""
+//                                )
+//                        )
+//                    }
+//                    // Вернуть пользователя к началу списка
+//                    cardRecyclerView.smoothScrollToPosition(0)
+//                }
+//            }
+//
+//            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+//                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//    }
 }
