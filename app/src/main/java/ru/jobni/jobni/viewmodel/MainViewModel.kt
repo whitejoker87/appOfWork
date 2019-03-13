@@ -25,17 +25,18 @@ import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
+    val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
     private val firstLaunchFlag = "firstLaunch"
 
     var sPref = application.getSharedPreferences("firstLaunchSavedData", AppCompatActivity.MODE_PRIVATE)
 
-    private var suggestionsNamesList = ArrayList<SuggestionEntity>()
+    private val suggestionsNamesList = MutableLiveData<ArrayList<SuggestionEntity>>(ArrayList())
 
     var isLoad = true
 
@@ -44,11 +45,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val childList = MutableLiveData<HashMap<String, List<String>>>()
     private val isOpenDrawer = MutableLiveData<Boolean>()
     private val fragmentLaunch = MutableLiveData<String>()
+    private val searchQuery = MutableLiveData<String>()
 
     private val isSearchViewVisible = MutableLiveData<Boolean>(false)
     private val isBottomNavigationViewVisible = MutableLiveData<Boolean>(false)
     private val isDrawerRightLocked = MutableLiveData<Boolean>(true)
     private val isToolbarVisible = MutableLiveData<Boolean>(false)
+    private val isSearchListViewVisible = MutableLiveData<Boolean>(false)
 
     val context = application
 
@@ -79,6 +82,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getFragmentLaunch(): MutableLiveData<String> = fragmentLaunch
 
+    fun setSearchQuery(query: String) {
+        searchQuery.value = query
+    }
+
+    fun getSearchQuery(): MutableLiveData<String> = searchQuery
+
     fun setSearchViewVisible(isVisible: Boolean) {
         isSearchViewVisible.value = isVisible
     }
@@ -102,6 +111,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun isToolbarVisible(): MutableLiveData<Boolean> = isToolbarVisible
+
+    fun setSearchListViewVisible(isVisible: Boolean) {
+        isSearchListViewVisible.value = isVisible
+    }
+
+    fun isSearchListViewVisible(): MutableLiveData<Boolean> = isSearchListViewVisible
+
+    fun setSuggestionsNamesList(suggestionsNames: ArrayList<SuggestionEntity>) {
+        suggestionsNamesList.value = suggestionsNames
+    }
+
+    fun getSuggestionsNamesList(): MutableLiveData<ArrayList<SuggestionEntity>> = suggestionsNamesList
+
+
 
     private val users: MutableLiveData<List<String>> by lazy {
         MutableLiveData<List<String>>().also {
@@ -166,7 +189,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onClickBtnStart(typeFragment:String) {
-        saveLaunchFlag()
+        if (typeFragment.equals("Intro"))saveLaunchFlag()
         setFragmentLaunch(typeFragment)
     }
 
@@ -295,23 +318,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onSuggestionsListItemClick(position: Int) {
-        doSearchOnClick(suggestionsNamesList[position].suggestionName)
-        searchView.setQuery(suggestionsNamesList[position].suggestionName, true)
-        searchListView.visibility = View.GONE
+        doSearchOnClick(suggestionsNamesList.value!![position].suggestionName)
+        setSearchQuery(suggestionsNamesList.value!![position].suggestionName)
+        setSearchListViewVisible(false)
     }
 
-    private fun loadMoreCards() {
+    fun loadMoreCards() {
         val handler = Handler()
         handler.postDelayed({
             val nextLimit = repository.getSize() + 10
             val nextOffset = nextLimit - 10
 
             buildCardsList(nextLimit, nextOffset)
-            isLoading = true
+            isLoad = true
         }, SERVER_RESPONSE_DELAY)
     }
 
-    private fun doSearchOnClick(query: String) {
+    fun doSearchOnClick(query: String) {
         Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
                 if (response.body() != null) {
@@ -349,8 +372,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             )
                         )
                     }
-                    // Вернуть пользователя к началу списка
-                    cardRecyclerView.smoothScrollToPosition(0)
                 }
             }
 
@@ -360,7 +381,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    private fun buildCardsList(limitNext: Int, offsetNext: Int){
+    fun buildCardsList(limitNext: Int, offsetNext: Int){
         Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
                 if (response.body() != null) {
@@ -404,7 +425,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    private fun doSearchCompetence(query: String) {
+    fun doSearchCompetence(query: String) {
         Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
             ?.enqueue(object : Callback<List<String>> {
                 override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
@@ -415,14 +436,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         suggestionsNamesList.clear()
 
                         if (response.body()!!.isEmpty()) {
-                            suggestionsNamesList.add(SuggestionEntity("Нет совпадений")
-                            searchListAdapter.notifyDataSetChanged()
+                            suggestionsNamesList.add(SuggestionEntity("Нет совпадений"))
                         }
 
                         for (i in 0 until response.body()!!.size) {
                             val suggestionName = SuggestionEntity(resultList!![i])
                             suggestionsNamesList.add(suggestionName)
-                            searchListAdapter.notifyDataSetChanged()
                         }
                     }
                 }
@@ -434,3 +453,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 }
+//функция для оповещения наблюдателей после добавления элеента в спискоо(обычно нужно список перезаписать)
+fun <T> MutableLiveData<ArrayList<T>>.add(item: T) {
+    val updatedItems = this.value as ArrayList
+    updatedItems.add(item)
+    this.value = updatedItems
+}
+//аналогичная для очистки
+fun <T> MutableLiveData<ArrayList<T>>.clear() {
+    val updatedItems = this.value as ArrayList
+    updatedItems.clear()
+    this.value = updatedItems
+}
+

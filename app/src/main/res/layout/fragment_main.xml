@@ -4,6 +4,7 @@
 
     <data>
         <variable name="viewmodel" type="ru.jobni.jobni.viewmodel.MainViewModel"/>
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +38,7 @@
                 app:layout_constraintTop_toTopOf="@+id/rv_cards"
                 android:background="@color/white"
                 tools:layout_editor_absoluteX="0dp"
+                android:visibility="@{viewmodel.isSearchListViewVisible()? View.VISIBLE : View.INVISIBLE}"
                 android:onItemSelected="@{(parent, viewClick, position, id) -> viewmodel.onSuggestionsListItemClick(position)}"
         />
     </androidx.constraintlayout.widget.ConstraintLayout>

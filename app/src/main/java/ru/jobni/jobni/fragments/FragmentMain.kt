@@ -37,6 +37,7 @@ import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.SearchLVAdapter
 import ru.jobni.jobni.viewmodel.MainFragmentViewState
 import ru.jobni.jobni.viewmodel.MainViewModel
+import ru.jobni.jobni.viewmodel.clear
 import java.util.*
 
 
@@ -102,10 +103,6 @@ class FragmentMain : Fragment() {
             vacancy?.let { cardAdapter.vacancies = vacancy.vacancyList }
         })
 
-        initScrollListener()
-
-
-
         searchView = binding.mainToolbar.searchviewToolbar
 
         buildSearchView(view)
@@ -120,9 +117,17 @@ class FragmentMain : Fragment() {
             }
 
             if (arguments!!.getString(ARG_SET) == "SetCards") {
-                buildCardsList(0,0)
+                viewModel.buildCardsList(0,0)
             }
         }
+
+        viewModel.getSearchQuery().observe(this, Observer {
+            cardRecyclerView.smoothScrollToPosition(0) // Вернуть пользователя к началу списка
+        })
+
+        viewModel.getSuggestionsNamesList().observe(this, Observer {
+            searchListAdapter.notifyDataSetChanged()
+        })
 
         return view
     }
@@ -164,20 +169,20 @@ class FragmentMain : Fragment() {
 
     private fun buildSearchListView() {
 
-        searchListAdapter = SearchLVAdapter(context!!, suggestionsNamesList)
+        searchListAdapter = SearchLVAdapter(context!!, viewModel.getSuggestionsNamesList().value!!)
         searchListView.adapter = searchListAdapter
 
-        searchListView.setOnItemClickListener { parent, viewClick, position, id ->
-            doSearchOnClick(suggestionsNamesList[position].suggestionName)
-            searchView.setQuery(suggestionsNamesList[position].suggestionName, true)
-            searchListView.visibility = View.GONE
-        }
+//        searchListView.setOnItemClickListener { parent, viewClick, position, id ->
+//            doSearchOnClick(suggestionsNamesList[position].suggestionName)
+//            searchView.setQuery(suggestionsNamesList[position].suggestionName, true)
+//            searchListView.visibility = View.GONE
+//        }
     }
 
     private val onQuerySearchView = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String): Boolean {
-            doSearchOnClick(query)
-            isLoading = false
+            viewModel.doSearchOnClick(query)
+            viewModel.isLoad = false
             searchListView.visibility = View.GONE
 
             return false
@@ -187,7 +192,7 @@ class FragmentMain : Fragment() {
             var timer = Timer()
 
             if (query.isEmpty()) {
-                suggestionsNamesList.clear()
+                viewModel.getSuggestionsNamesList().clear()
                 searchListAdapter.notifyDataSetChanged()
                 searchListView.visibility = View.GONE
             } else {
@@ -197,10 +202,10 @@ class FragmentMain : Fragment() {
                 timer.schedule(
                         object : TimerTask() {
                             override fun run() {
-                                doSearchCompetence(query)
+                                viewModel.doSearchCompetence(query)
                             }
                         },
-                        SERVER_RESPONSE_DELAY
+                        viewModel.SERVER_RESPONSE_DELAY
                 )
             }
             return false
@@ -224,153 +229,4 @@ class FragmentMain : Fragment() {
             }
         })
     }
-
-    private fun initScrollListener() {
-        cardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                if (isLoading) {
-                    if (cardLayoutManager.findLastCompletelyVisibleItemPosition() == repository.getSize() - 1) {
-                        //Нашли конец списка
-                        loadMoreCards()
-                        isLoading = false
-                    }
-                }
-            }
-        })
-    }
-
-//    private fun loadMoreCards() {
-//        val handler = Handler()
-//        handler.postDelayed({
-//            val nextLimit = repository.getSize() + 10
-//            val nextOffset = nextLimit - 10
-//
-//            buildCardsList(nextLimit, nextOffset)
-//            isLoading = true
-//        }, SERVER_RESPONSE_DELAY)
-//    }
-
-//    private fun doSearchCompetence(query: String) {
-//        Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
-//                ?.enqueue(object : Callback<List<String>> {
-//                    override fun onResponse(@NonNull call: Call<List<String>>, @NonNull response: Response<List<String>>) {
-//                        if (response.body() != null) {
-//
-//                            val resultList = response.body()
-//
-//                            suggestionsNamesList.clear()
-//
-//                            if (response.body()!!.isEmpty()) {
-//                                suggestionsNamesList.add(SuggestionEntity(getString(R.string.search_view_suggestions_empty)))
-//                                searchListAdapter.notifyDataSetChanged()
-//                            }
-//
-//                            for (i in 0 until response.body()!!.size) {
-//                                val suggestionName = SuggestionEntity(resultList!![i])
-//                                suggestionsNamesList.add(suggestionName)
-//                                searchListAdapter.notifyDataSetChanged()
-//                            }
-//                        }
-//                    }
-//
-//                    override fun onFailure(@NonNull call: Call<List<String>>, @NonNull t: Throwable) {
-//                        Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-//                    }
-//                })
-//    }
-
-//    private fun buildCardsList(limitNext: Int, offsetNext: Int){
-//        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
-//            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
-//                if (response.body() != null) {
-//
-//                    val resultList: List<ResultsVacancy> = response.body()!!.results
-//
-//                    for (i in 0 until resultList.size) {
-//                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-//                        resultList[i].employment.forEach { employment ->
-//                            tmpEmploymentList.add(employment.name)
-//                        }
-//
-//                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-//                        resultList[i].competences.forEach { competences ->
-//                            tmpCompetenceList.add(competences.name)
-//                        }
-//
-//                        repository.saveVacancy(
-//                                VacancyEntity(
-//                                        resultList[i].id,
-//                                        resultList[i].name,
-//                                        resultList[i].company.name,
-//                                        resultList[i].salary_level_newbie.toString(),
-//                                        resultList[i].salary_level_experienced.toString(),
-//                                        resultList[i].format_of_work.name,
-//                                        tmpEmploymentList,
-//                                        tmpCompetenceList,
-//                                        "",
-//                                        "",
-//                                        "",
-//                                        ""
-//                                )
-//                        )
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
-//                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-
-//    private fun doSearchOnClick(query: String) {
-//        Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
-//            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
-//                if (response.body() != null) {
-//
-//                    val resultList: List<ResultsVacancy> = response.body()!!.results
-//
-//                    // Отчистить список для новых результатов
-//                    repository.clearRepository()
-//
-//                    for (i in 0 until resultList.size) {
-//                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-//                        resultList[i].employment.forEach { employment ->
-//                            tmpEmploymentList.add(employment.name)
-//                        }
-//
-//                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-//                        resultList[i].competences.forEach { competences ->
-//                            tmpCompetenceList.add(competences.name)
-//                        }
-//
-//                        repository.saveVacancy(
-//                                VacancyEntity(
-//                                        resultList[i].id,
-//                                        resultList[i].name,
-//                                        resultList[i].company.name,
-//                                        resultList[i].salary_level_newbie.toString(),
-//                                        resultList[i].salary_level_experienced.toString(),
-//                                        resultList[i].format_of_work.name,
-//                                        tmpEmploymentList,
-//                                        tmpCompetenceList,
-//                                        "",
-//                                        "",
-//                                        "",
-//                                        ""
-//                                )
-//                        )
-//                    }
-//                    // Вернуть пользователя к началу списка
-//                    cardRecyclerView.smoothScrollToPosition(0)
-//                }
-//            }
-//
-//            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
-//                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
 }

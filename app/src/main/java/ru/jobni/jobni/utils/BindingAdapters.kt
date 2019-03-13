@@ -4,10 +4,12 @@ import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputLayout
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,6 +46,11 @@ object BindingAdapters {
     @BindingAdapter("app:onScrollListener")
     @JvmStatic fun setOnScrollListener(view: RecyclerView, listener: RecyclerView.OnScrollListener) {
         view.addOnScrollListener(listener)
+    }
+
+    @BindingAdapter("app:query")
+    @JvmStatic fun setQuery(view: SearchView, query: MutableLiveData<String>) {
+        view.setQuery(query.value, true)
     }
 
 
