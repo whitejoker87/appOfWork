@@ -5,9 +5,11 @@ import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ListView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -294,6 +296,48 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         }
+
+    val onQuerySearchView = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String): Boolean {
+            doSearchOnClick(query)
+            isLoad = false
+            setSearchListViewVisible(false)
+
+            return false
+        }
+
+        override fun onQueryTextChange(query: String): Boolean {
+            var timer = Timer()
+
+            if (query.isEmpty()) {
+                getSuggestionsNamesList().clear()
+//                searchListAdapter.notifyDataSetChanged() // обновляется благордаря колбеку в фрагменте
+                setSearchListViewVisible(false)
+            } else {
+                setSearchListViewVisible(true)
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                    object : TimerTask() {
+                        override fun run() {
+                            doSearchCompetence(query)
+                        }
+                    },
+                    SERVER_RESPONSE_DELAY
+                )
+            }
+            return false
+        }
+    }
+
+//    val onItemClickListener = object : AdapterView.OnItemClickListener {
+//        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//            doSearchOnClick(suggestionsNamesList.value!![position].suggestionName)
+//            setSearchQuery(suggestionsNamesList.value!![position].suggestionName)
+//            setSearchListViewVisible(false)
+//        }
+//
+//    }
 
     fun switchToMainActivity() {
         val duration = 2000L

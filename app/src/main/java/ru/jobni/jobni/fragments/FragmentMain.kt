@@ -2,7 +2,6 @@ package ru.jobni.jobni.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -12,39 +11,21 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.databinding.FragmentMainBinding
-import ru.jobni.jobni.model.RepositoryVacancyEntity
-import ru.jobni.jobni.model.SuggestionEntity
-import ru.jobni.jobni.model.VacancyEntity
-import ru.jobni.jobni.model.network.vacancy.CardVacancy
-import ru.jobni.jobni.model.network.vacancy.ResultsVacancy
 import ru.jobni.jobni.utils.CardRVAdapter
-import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.SearchLVAdapter
-import ru.jobni.jobni.viewmodel.MainFragmentViewState
 import ru.jobni.jobni.viewmodel.MainViewModel
-import ru.jobni.jobni.viewmodel.clear
-import java.util.*
 
 
 class FragmentMain : Fragment() {
-
-//    private val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
-//    private val SERVER_RESPONSE_MAX_COUNT: Int = 10
 
     private lateinit var cardRecyclerView: RecyclerView
     private var cardAdapter: CardRVAdapter = CardRVAdapter()
@@ -53,17 +34,12 @@ class FragmentMain : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var searchListAdapter: SearchLVAdapter
     private lateinit var searchListView: ListView
-//    private var suggestionsNamesList = ArrayList<SuggestionEntity>()
-//
-//    var isLoading = true
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
     private lateinit var binding: FragmentMainBinding
-
-    private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
 
     companion object {
         private val ARG_SET: String = "argSet"
@@ -88,6 +64,8 @@ class FragmentMain : Fragment() {
 //        return view;
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
+
+        binding.lifecycleOwner = this
 
         val view = binding.root
 
@@ -117,12 +95,13 @@ class FragmentMain : Fragment() {
             }
 
             if (arguments!!.getString(ARG_SET) == "SetCards") {
-                viewModel.buildCardsList(0,0)
+                viewModel.buildCardsList(0, 0)
             }
         }
 
         viewModel.getSearchQuery().observe(this, Observer {
             cardRecyclerView.smoothScrollToPosition(0) // Вернуть пользователя к началу списка
+            searchView.setQuery(it, true)
         })
 
         viewModel.getSuggestionsNamesList().observe(this, Observer {
@@ -133,7 +112,6 @@ class FragmentMain : Fragment() {
     }
 
     private fun buildSearchView(view: View) {
-        searchView.setOnQueryTextListener(onQuerySearchView)
 
         //Find EditText view
         val et = view.findViewById(R.id.search_src_text) as EditText
@@ -171,45 +149,6 @@ class FragmentMain : Fragment() {
 
         searchListAdapter = SearchLVAdapter(context!!, viewModel.getSuggestionsNamesList().value!!)
         searchListView.adapter = searchListAdapter
-
-//        searchListView.setOnItemClickListener { parent, viewClick, position, id ->
-//            doSearchOnClick(suggestionsNamesList[position].suggestionName)
-//            searchView.setQuery(suggestionsNamesList[position].suggestionName, true)
-//            searchListView.visibility = View.GONE
-//        }
-    }
-
-    private val onQuerySearchView = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String): Boolean {
-            viewModel.doSearchOnClick(query)
-            viewModel.isLoad = false
-            searchListView.visibility = View.GONE
-
-            return false
-        }
-
-        override fun onQueryTextChange(query: String): Boolean {
-            var timer = Timer()
-
-            if (query.isEmpty()) {
-                viewModel.getSuggestionsNamesList().clear()
-                searchListAdapter.notifyDataSetChanged()
-                searchListView.visibility = View.GONE
-            } else {
-                searchListView.visibility = View.VISIBLE
-                timer.cancel()
-                timer = Timer()
-                timer.schedule(
-                        object : TimerTask() {
-                            override fun run() {
-                                viewModel.doSearchCompetence(query)
-                            }
-                        },
-                        viewModel.SERVER_RESPONSE_DELAY
-                )
-            }
-            return false
-        }
     }
 
     private fun buildCardsRecyclerView() {

@@ -3,7 +3,10 @@ package ru.jobni.jobni.utils
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputLayout
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.databinding.BindingMethod
@@ -48,10 +51,22 @@ object BindingAdapters {
         view.addOnScrollListener(listener)
     }
 
+    @BindingAdapter("app:onQueryTextListener")
+    @JvmStatic fun setQueryTextListener(view: SearchView, listener: SearchView.OnQueryTextListener) {
+        view.setOnQueryTextListener(listener)
+    }
+
     @BindingAdapter("app:query")
     @JvmStatic fun setQuery(view: SearchView, query: MutableLiveData<String>) {
         view.setQuery(query.value, true)
     }
+
+    @BindingAdapter("app:onItemClickListener")
+    @JvmStatic fun setOnItemClickListener(view: ListView, listener: AdapterView.OnItemClickListener) {
+        view.onItemClickListener = listener
+    }
+
+
 
 
 //    @BindingAdapter("app:onNavigationItemSelected")

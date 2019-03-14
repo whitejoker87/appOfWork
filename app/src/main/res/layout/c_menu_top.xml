@@ -39,7 +39,7 @@
                 app:layout_constraintHorizontal_bias="0.494"
                 android:visibility="@{viewmodel.isSearchViewVisible()? View.VISIBLE : View.INVISIBLE}"
                 app:queryHint="@string/search_view_hint"
-
+                app:onQueryTextListener="@{viewmodel.onQuerySearchView}"
         />
 
         <Button
