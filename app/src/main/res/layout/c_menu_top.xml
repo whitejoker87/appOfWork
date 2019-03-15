@@ -40,6 +40,7 @@
                 android:visibility="@{viewmodel.isSearchViewVisible()? View.VISIBLE : View.INVISIBLE}"
                 app:queryHint="@string/search_view_hint"
                 app:onQueryTextListener="@{viewmodel.onQuerySearchView}"
+
         />
 
         <Button
@@ -67,4 +68,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
-<!-- app:query="@{viewmodel.searchQuery}"-->
+<!--app:query="@{viewmodel.searchQuery}"-->

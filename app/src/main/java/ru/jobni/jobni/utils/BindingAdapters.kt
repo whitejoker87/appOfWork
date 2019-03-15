@@ -1,6 +1,6 @@
 package ru.jobni.jobni.utils
 
-import androidx.databinding.BindingAdapter
+
 import com.google.android.material.textfield.TextInputLayout
 import android.view.MenuItem
 import android.view.View
@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.SearchView
 import androidx.core.view.GravityCompat
+import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import androidx.drawerlayout.widget.DrawerLayout
@@ -57,13 +58,18 @@ object BindingAdapters {
     }
 
     @BindingAdapter("app:query")
-    @JvmStatic fun setQuery(view: SearchView, query: MutableLiveData<String>) {
-        view.setQuery(query.value, true)
+    @JvmStatic fun query(view: SearchView, query: String) {
+        view.setQuery(query, true)
     }
 
-    @BindingAdapter("app:onItemClickListener")
+    @BindingAdapter("app:onListViewItemClickListener")
     @JvmStatic fun setOnItemClickListener(view: ListView, listener: AdapterView.OnItemClickListener) {
         view.onItemClickListener = listener
+    }
+
+    @BindingAdapter("app:fixedSize")
+    @JvmStatic fun fixedSize(view: RecyclerView, fixSize: Boolean) {
+        view.setHasFixedSize(fixSize)
     }
 
 

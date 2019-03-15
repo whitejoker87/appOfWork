@@ -29,7 +29,6 @@ class FragmentMain : Fragment() {
 
     private lateinit var cardRecyclerView: RecyclerView
     private var cardAdapter: CardRVAdapter = CardRVAdapter()
-    private val cardLayoutManager: LinearLayoutManager = LinearLayoutManager(context)
 
     private lateinit var searchView: SearchView
     private lateinit var searchListAdapter: SearchLVAdapter
@@ -153,8 +152,6 @@ class FragmentMain : Fragment() {
 
     private fun buildCardsRecyclerView() {
 
-        cardRecyclerView.setHasFixedSize(true)
-        cardRecyclerView.layoutManager = cardLayoutManager
         cardAdapter.setHasStableIds(true)
         cardRecyclerView.adapter = cardAdapter
 

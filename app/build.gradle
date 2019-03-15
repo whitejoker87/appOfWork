@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 androidExtensions {
     experimental = true
 }
@@ -62,7 +64,7 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'com.google.android.material:material:1.1.0-alpha03'
@@ -71,5 +73,5 @@ dependencies {
     // Gradle Groovy DLS
     implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
 
-    annotationProcessor 'com.android.databinding:compiler:3.2.0-alpha10'
+    kapt 'com.android.databinding:compiler:3.1.0-alpha06'
 }
