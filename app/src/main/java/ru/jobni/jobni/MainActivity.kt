@@ -3,6 +3,7 @@ package ru.jobni.jobni
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,9 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 // https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
 
 class MainActivity : AppCompatActivity() {
+
+    private val SET_FOCUS: String = "SetFocus"
+    private val SET_CARDS: String = "SetCards"
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
@@ -98,9 +102,20 @@ class MainActivity : AppCompatActivity() {
             when (fragmentType) {
                 "Welcome" -> setFragment(FragmentWelcome.newInstance())
                 "Intro" -> setFragment(FragmentIntro())
-                "Main" -> setFragment(FragmentMain())
+                "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
+                "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
                 else -> setFragment(FragmentWelcome.newInstance())
             }
+        })
+
+        viewModel.isBottomNavigationViewVisible().observe(this, Observer { isVisible ->
+            if (isVisible)binding.menuBottom.visibility = View.VISIBLE
+            else binding.menuBottom.visibility = View.GONE
+        })
+
+        viewModel.isDrawerRightLocked().observe(this, Observer { isLocked ->
+            if (isLocked)binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
     }
