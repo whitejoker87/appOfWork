@@ -8,33 +8,43 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.databinding.CCardVacancyCloseBinding
+import ru.jobni.jobni.fragments.FragmentMain
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.Detail
+import ru.jobni.jobni.viewmodel.MainViewModel
 
 
-class CardRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CardRVAdapter(context: Fragment) : RecyclerView.Adapter<CardRVAdapter.CardViewHolder>() {
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProviders.of(context).get(MainViewModel::class.java)
+    }
 
     private val VIEW_TYPE_ITEM = 0
 
     private var mExpandedPosition = -1
     private var previousExpandedPosition = -1
 
-    private var clickListener: OnItemClickListener? = null
+    //private var clickListener: OnItemClickListener? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        clickListener = listener
-    }
+//    fun setOnItemClickListener(listener: OnItemClickListener) {
+//        clickListener = listener
+//    }
 
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-        fun onEyeClick(v: View, position: Int)
-    }
+//    interface OnItemClickListener {
+//        fun onItemClick(position: Int)
+//        fun onEyeClick(v: View, position: Int)
+//    }
 
     var vacancies: MutableList<VacancyEntity> = mutableListOf()
         set(value) {
@@ -42,13 +52,13 @@ class CardRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.c_card_vacancy_close, parent, false)
-        return ItemViewHolder(view, clickListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardRVAdapter.CardViewHolder {
+        val view = LayoutInflater.from(parent.context)
+        val binding:CCardVacancyCloseBinding = DataBindingUtil.inflate(view,R.layout.c_card_vacancy_close, parent, false)
+        return CardViewHolder(binding, viewModel)
     }
 
-    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        if (viewHolder is ItemViewHolder) {
+    override fun onBindViewHolder(viewHolder: CardRVAdapter.CardViewHolder, position: Int) {
 
             val isExpanded = position == mExpandedPosition
 
@@ -67,8 +77,8 @@ class CardRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 notifyItemChanged(position)
             }
 
-            populateItemRows(viewHolder, position)
-        }
+            viewHolder.bind(vacancies[position])
+
     }
 
     override fun getItemCount(): Int {
@@ -89,7 +99,8 @@ class CardRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return vacancies[position].id.toLong()
     }
 
-    private class ItemViewHolder(itemView: View, listener: OnItemClickListener?) : RecyclerView.ViewHolder(itemView) {
+    class CardViewHolder(val binding: CCardVacancyCloseBinding, val viewmodel: MainViewModel) : RecyclerView.ViewHolder(binding.root) {
+
         var eyeImage: ImageView = itemView.findViewById(R.id.eye)
         var vacancyNameText: TextView = itemView.findViewById(R.id.name)
         var companyNameText: TextView = itemView.findViewById(R.id.company_name)
@@ -107,44 +118,52 @@ class CardRVAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var requirementsDescriptionText: TextView = itemView.findViewById(R.id.requirements_description_text)
         var dutiesDescriptionText: TextView = itemView.findViewById(R.id.duties_description_text)
 
-        init {
-            itemView.setOnClickListener {
-                if (listener != null) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(position)
-                    }
-                }
-            }
+//        init {
+//            itemView.setOnClickListener {
+//                if (listener != null) {
+//                    val position = adapterPosition
+//                    if (position != RecyclerView.NO_POSITION) {
+//                        listener.onItemClick(position)
+//                    }
+//                }
+//            }
+//
+//            eyeImage.setOnClickListener { v ->
+//                if (listener != null) {
+//                    val position = adapterPosition
+//                    if (position != RecyclerView.NO_POSITION) {
+//                        listener.onEyeClick(v, position)
+//                    }
+//                }
+//            }
+//        }
 
-            eyeImage.setOnClickListener { v ->
-                if (listener != null) {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onEyeClick(v, position)
-                    }
-                }
-            }
+        fun bind(vacancy: VacancyEntity) {
+            binding.vacancy = vacancy
+            binding.position = adapterPosition
+            binding.viewmodel = viewmodel
+            binding.executePendingBindings()
         }
+
     }
 
-    private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
-        val item = vacancies[position]
-
-        viewHolder.vacancyNameText.text = item.vacancyName
-        viewHolder.companyNameText.text = item.companyName
-        viewHolder.salaryLevelNewbieText.text = convertWithSpaces(item.salaryLevelNewbie)
-        viewHolder.salaryLevelExperiencedText.text = convertWithSpaces(item.salaryLevelExperienced)
-        viewHolder.workFormatText.text = item.formatOfWork
-        viewHolder.employmentListText.text = item.employmentList.toString()
-                .replace("[", "", true).replace("]", "", true)
-        viewHolder.competenceListText.text = item.competenceList.toString()
-                .replace("[", "", true).replace("]", "", true)
-        viewHolder.companyDescriptionText.text = item.companyDescription
-        viewHolder.vacancyDescriptionText.text = item.vacancyDescription
-        viewHolder.requirementsDescriptionText.text = item.requirementsDescription
-        viewHolder.dutiesDescriptionText.text = item.dutiesDescription
-    }
+//    private fun populateItemRows(viewHolder: CardViewHolder, position: Int) {
+//        val item = vacancies[position]
+//
+////        viewHolder.vacancyNameText.text = item.vacancyName
+////        viewHolder.companyNameText.text = item.companyName
+////        viewHolder.salaryLevelNewbieText.text = convertWithSpaces(item.salaryLevelNewbie)
+////        viewHolder.salaryLevelExperiencedText.text = convertWithSpaces(item.salaryLevelExperienced)
+////        viewHolder.workFormatText.text = item.formatOfWork
+////        viewHolder.employmentListText.text = item.employmentList.toString()
+////                .replace("[", "", true).replace("]", "", true)
+////        viewHolder.competenceListText.text = item.competenceList.toString()
+////                .replace("[", "", true).replace("]", "", true)
+////        viewHolder.companyDescriptionText.text = item.companyDescription
+////        viewHolder.vacancyDescriptionText.text = item.vacancyDescription
+////        viewHolder.requirementsDescriptionText.text = item.requirementsDescription
+////        viewHolder.dutiesDescriptionText.text = item.dutiesDescription
+//    }
 
     private fun convertWithSpaces(item: String): String {
         val sb = StringBuffer(item)

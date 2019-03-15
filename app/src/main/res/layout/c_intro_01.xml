@@ -11,7 +11,7 @@
 		app:layout_constraintStart_toStartOf = "parent"
 		app:layout_constraintEnd_toEndOf = "parent"
 		android:layout_marginBottom = "64dp"
-		app:srcCompat = "@drawable/ic_logo"/>
+		android:contentDescription="TODO" app:srcCompat = "@drawable/ic_logo"/>
 	<TextView android:id = "@+id/activity_intro_1_1"
 		android:layout_width = "wrap_content"
 		android:layout_height = "wrap_content"
@@ -40,7 +40,7 @@
 		app:layout_constraintBottom_toBottomOf = "@+id/bottom_10"
 		app:layout_constraintEnd_toStartOf = "@+id/bottom_10"
 		android:layout_marginEnd = "16dp"
-		app:srcCompat = "@drawable/ic_site"/>
+		android:contentDescription="TODO" app:srcCompat = "@drawable/ic_site"/>
 	<ImageView android:id = "@+id/bottom_10"
 		android:layout_width = "32dp"
 		android:layout_height = "32dp"
@@ -48,7 +48,7 @@
 		app:layout_constraintStart_toStartOf = "parent"
 		app:layout_constraintEnd_toEndOf = "parent"
 		android:layout_marginTop = "64dp"
-		app:srcCompat = "@drawable/ic_telegram"/>
+		android:contentDescription="TODO" app:srcCompat = "@drawable/ic_telegram"/>
 	<ImageView android:id = "@+id/bottom_03"
 		android:layout_width = "32dp"
 		android:layout_height = "32dp"
@@ -56,5 +56,5 @@
 		app:layout_constraintBottom_toBottomOf = "@+id/bottom_10"
 		app:layout_constraintStart_toEndOf = "@+id/bottom_10"
 		android:layout_marginStart = "16dp"
-		app:srcCompat = "@drawable/ic_vk"/>
+		android:contentDescription="TODO" app:srcCompat = "@drawable/ic_vk"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

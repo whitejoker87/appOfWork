@@ -38,6 +38,6 @@
 		app:layout_constraintBottom_toBottomOf = "parent"
 		app:layout_constraintStart_toStartOf = "parent"
 		app:layout_constraintEnd_toEndOf = "parent"
-		app:srcCompat = "@color/black"
+		android:contentDescription="TODO" app:srcCompat = "@color/black"
 		android:alpha = "0.5"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
