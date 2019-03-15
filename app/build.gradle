@@ -46,19 +46,19 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
 
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta02'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
     //Debug query for Retrofit
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     implementation 'com.google.code.gson:gson:2.8.5'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
+    androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
 
     def lifecycle_version = "2.1.0-alpha01"
 
@@ -67,11 +67,11 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'com.google.android.material:material:1.1.0-alpha03'
+    implementation 'com.google.android.material:material:1.1.0-alpha04'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'//для TabLayout
 
     // Gradle Groovy DLS
     implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
 
-    kapt 'com.android.databinding:compiler:3.1.0-alpha06'
+    kapt 'com.android.databinding:compiler:3.2.0-alpha10'
 }

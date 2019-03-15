@@ -20,5 +20,5 @@
 		android:layout_height = "48dp"
 		app:layout_constraintBottom_toBottomOf = "parent"
 		app:layout_constraintEnd_toEndOf = "parent"
-		app:srcCompat = "@drawable/ic_send"/>
+		android:contentDescription="TODO" app:srcCompat = "@drawable/ic_send"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

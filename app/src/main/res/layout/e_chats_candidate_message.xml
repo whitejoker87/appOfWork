@@ -61,7 +61,7 @@
 		app:layout_constraintBottom_toBottomOf = "@+id/message_outgoing"
 		app:layout_constraintStart_toStartOf = "parent"
 		app:layout_constraintEnd_toEndOf = "parent"
-		app:srcCompat = "@color/theme_1_color_1_50"/>
+		android:contentDescription="TODO" app:srcCompat = "@color/theme_1_color_1_50"/>
 	<include android:id = "@+id/include_02"
 		layout = "@layout/c_menu_bottom"
 		android:layout_width = "match_parent"
