@@ -101,22 +101,10 @@ class CardRVAdapter(context: Fragment) : RecyclerView.Adapter<CardRVAdapter.Card
 
     class CardViewHolder(val binding: CCardVacancyCloseBinding, val viewmodel: MainViewModel) : RecyclerView.ViewHolder(binding.root) {
 
-        var eyeImage: ImageView = itemView.findViewById(R.id.eye)
-        var vacancyNameText: TextView = itemView.findViewById(R.id.name)
-        var companyNameText: TextView = itemView.findViewById(R.id.company_name)
-        var salaryLevelNewbieText: TextView = itemView.findViewById(R.id.newbie)
-        var salaryLevelExperiencedText: TextView = itemView.findViewById(R.id.experienced)
-        var workFormatText: TextView = itemView.findViewById(R.id.work_format_text)
-        var employmentListText: TextView = itemView.findViewById(R.id.employment_format_text)
-        var competenceListText: TextView = itemView.findViewById(R.id.required_competencies_text)
         var btnExpand: Button = itemView.findViewById(R.id.btn_expand)
         var btnLess: Button = itemView.findViewById(R.id.btn_less)
 
         var expandConstraintLayout: ConstraintLayout = itemView.findViewById(R.id.constraint_layout_expand)
-        var companyDescriptionText: TextView = itemView.findViewById(R.id.сompany_description_text)
-        var vacancyDescriptionText: TextView = itemView.findViewById(R.id.vacancy_description_text)
-        var requirementsDescriptionText: TextView = itemView.findViewById(R.id.requirements_description_text)
-        var dutiesDescriptionText: TextView = itemView.findViewById(R.id.duties_description_text)
 
 //        init {
 //            itemView.setOnClickListener {
