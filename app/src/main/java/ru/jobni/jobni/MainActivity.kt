@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
         binding.viewmodel = viewModel
         drawer = binding.drawerLayout
 
@@ -95,6 +96,8 @@ class MainActivity : AppCompatActivity() {
                     val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                     imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
                 }
+            } else {
+                drawer.closeDrawer(GravityCompat.END)
             }
         })
 
