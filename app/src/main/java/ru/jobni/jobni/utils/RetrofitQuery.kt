@@ -1,9 +1,8 @@
 package ru.jobni.jobni.utils
 
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
+import ru.jobni.jobni.model.network.registration.Registration
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.DetailVacancy
@@ -26,4 +25,7 @@ interface RetrofitQuery {
 
     @GET("api/vacancy/{id}/details/")
     fun loadVacancyCard(@Path("id") id: Int, @Query("detail") detail: Int): Call<CardVacancyDetail>
+
+    @POST("api/registration/")
+    fun sendRegistrationData(@Body data: Registration): Call<String>
 }

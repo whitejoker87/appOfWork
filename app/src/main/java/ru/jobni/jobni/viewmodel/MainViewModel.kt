@@ -54,6 +54,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val isDrawerRightLocked = MutableLiveData<Boolean>(true)
     private val isToolbarVisible = MutableLiveData<Boolean>(false)
     private val isSearchListViewVisible = MutableLiveData<Boolean>(false)
+    private val numberOfVisibleItemReg = MutableLiveData<Int>(-1)
 
     val context = application
 
@@ -116,6 +117,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setSearchListViewVisible(isVisible: Boolean) {
         isSearchListViewVisible.value = isVisible
+    }
+
+    fun getNumberOfVisibleItemReg(): MutableLiveData<Int> = numberOfVisibleItemReg
+
+    fun setNumberOfVisibleItemReg(numberItem: Int) {
+        numberOfVisibleItemReg.value = numberItem
     }
 
     fun isSearchListViewVisible(): MutableLiveData<Boolean> = isSearchListViewVisible
