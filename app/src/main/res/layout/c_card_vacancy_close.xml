@@ -72,6 +72,7 @@
                         app:layout_constraintStart_toEndOf="@+id/online"
                         android:layout_marginStart="8dp"
                         android:contentDescription="TODO" app:srcCompat="@drawable/ic_eye"
+                        android:onClick="@{() -> viewmodel.onEyeRVVacancyClick(position)}"
                 />
 
                 <TextView
@@ -86,7 +87,7 @@
                         android:textColor="@color/font_color"
                         android:textSize="14sp"
                         android:textAlignment="textEnd"
-                        android:text="@{vacancy.salaryLevelNewbie}"
+                        app:formattedTextSalary="@{vacancy.salaryLevelNewbie}"
                 />
 
                 <TextView
@@ -130,7 +131,7 @@
                         android:textColor="@color/font_color"
                         android:textSize="14sp"
                         android:textAlignment="textEnd"
-                        android:text="@{vacancy.salaryLevelExperienced}"
+                        app:formattedTextSalary="@{vacancy.salaryLevelExperienced}"
                 />
 
                 <TextView
@@ -189,7 +190,7 @@
                         android:textStyle="normal"
                         android:textColor="@color/font_color"
                         android:textSize="14sp"
-                        android:text="@{String.valueOf(vacancy.competenceList)}"
+                        android:text="@{vacancy.competenceList}"
                 />
 
                 <TextView
@@ -251,7 +252,7 @@
                         android:textStyle="normal"
                         android:textColor="@color/font_color"
                         android:textSize="14sp"
-                        android:text="@{String.valueOf(vacancy.employmentList)}"
+                        android:text="@{vacancy.employmentList}"
                 />
 
                 <androidx.constraintlayout.widget.ConstraintLayout

@@ -4,10 +4,7 @@ package ru.jobni.jobni.utils
 import com.google.android.material.textfield.TextInputLayout
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.SearchView
+import android.widget.*
 import androidx.core.view.GravityCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
@@ -18,6 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.jobni.jobni.model.RepositoryVacancyEntity
+import android.R.attr.name
+import androidx.databinding.BindingConversion
+
+
 
 @BindingMethods(
     BindingMethod(
@@ -29,17 +30,20 @@ import ru.jobni.jobni.model.RepositoryVacancyEntity
 
 object BindingAdapters {
 
+    //открываем дравлер(пока не работает)
     @BindingAdapter("app:openDrawer")
     @JvmStatic fun openDrawer(drawerLayout: DrawerLayout, gravity: Int) {
         //if (gravity == 0) drawerLayout.closeDrawer(GravityCompat.END)
         drawerLayout.openDrawer(gravity)
     }
 
+    //блокировка дравлеров
     @BindingAdapter("app:setDrawerLockMode")
     @JvmStatic fun setDrawerLockMode(drawerLayout: DrawerLayout, mode: Int) {
         drawerLayout.setDrawerLockMode(mode)
     }
 
+    //слушаем нижнее меню(пока не работает)
     @BindingAdapter("app:onNavigationItemSelected")
     @JvmStatic fun setOnNavigationItemSelectedListener(
         view: BottomNavigationView, listener: BottomNavigationView.OnNavigationItemSelectedListener
@@ -47,29 +51,60 @@ object BindingAdapters {
         view.setOnNavigationItemSelectedListener(listener)
     }
 
+    //слушаем ресайклвью карточек
     @BindingAdapter("app:onScrollListener")
     @JvmStatic fun setOnScrollListener(view: RecyclerView, listener: RecyclerView.OnScrollListener) {
         view.addOnScrollListener(listener)
     }
 
+    //слушаем строку поиска
     @BindingAdapter("app:onQueryTextListener")
     @JvmStatic fun setQueryTextListener(view: SearchView, listener: SearchView.OnQueryTextListener) {
         view.setOnQueryTextListener(listener)
     }
 
+    //изменение в строке поиска
     @BindingAdapter("app:query")
     @JvmStatic fun query(view: SearchView, query: String) {
         view.setQuery(query, true)
     }
 
+    //обработка клика списка из поиска
     @BindingAdapter("app:onListViewItemClickListener")
     @JvmStatic fun setOnItemClickListener(view: ListView, listener: AdapterView.OnItemClickListener) {
         view.onItemClickListener = listener
     }
 
+    //для ресайклвью карточек
     @BindingAdapter("app:fixedSize")
     @JvmStatic fun fixedSize(view: RecyclerView, fixSize: Boolean) {
         view.setHasFixedSize(fixSize)
+    }
+
+    //преобразование для отображения з/п в карточках
+    @BindingAdapter("app:formattedTextSalary")
+    @JvmStatic fun setFormattedText(view: TextView, text: String) {
+            val sb = StringBuffer(text)
+            when {
+                text.length < 3 -> {
+                    //do nothing
+                }
+                text.length == 4 -> sb.insert(1, " ")
+                text.length == 6 -> sb.insert(3, " ")
+                else -> sb.insert(2, " ")
+            }
+            view.text = sb.toString()
+    }
+
+    //преобразование для сисков в карточках
+    @BindingConversion
+    @JvmStatic fun convertListToString(list: List<String>): String {
+        val sb = StringBuilder()
+        for (str in list) {
+            if (sb.length > 0) sb.append(", ")
+            sb.append(str)
+        }
+        return sb.toString()
     }
 
 

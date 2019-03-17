@@ -382,6 +382,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
     }
 
+    fun onEyeRVVacancyClick(position: Int) {
+        Toast.makeText(context, "глазик " + position.toString(), Toast.LENGTH_SHORT).show()
+    }
+
     fun doSearchOnClick(query: String) {
         Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
