@@ -3,14 +3,10 @@ package ru.jobni.jobni.viewmodel
 import android.app.Application
 import android.os.Handler
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ListView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -45,7 +41,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var bodyResponse: DetailVacancy
     private val headerList = MutableLiveData<MutableList<String>>()
     private val childList = MutableLiveData<HashMap<String, List<String>>>()
-    private val isOpenDrawer = MutableLiveData<Boolean>()
+    private val isOpenDrawerRight = MutableLiveData<Boolean>()
+    private val isOpenDrawerLeft = MutableLiveData<Boolean>()
     private val fragmentLaunch = MutableLiveData<String>()
     private val searchQuery = MutableLiveData<String>()
 
@@ -72,11 +69,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getChildList(): MutableLiveData<HashMap<String, List<String>>> = childList
 
-    fun setOpenDrawer(isOpen: Boolean) {
-        isOpenDrawer.value = isOpen
+    fun setOpenDrawerLeft(isOpen: Boolean) {
+        isOpenDrawerLeft.value = isOpen
     }
 
-    fun isOpenDrawer(): MutableLiveData<Boolean> = isOpenDrawer
+    fun isOpenDrawerLeft(): MutableLiveData<Boolean> = isOpenDrawerLeft
+
+
+    fun setOpenDrawerRight(isOpen: Boolean) {
+        isOpenDrawerRight.value = isOpen
+    }
+
+    fun isOpenDrawerRight(): MutableLiveData<Boolean> = isOpenDrawerRight
+
 
     fun setFragmentLaunch(fragmentType: String) {
         fragmentLaunch.value = fragmentType
@@ -145,6 +150,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
+    fun openLeftMenu() {
+        setOpenDrawerLeft(true)
+    }
 
     fun openRightMenu() {
         if (headerList.value == null) {
@@ -162,7 +170,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             })
         }
 
-        setOpenDrawer(true)
+        setOpenDrawerRight(true)
 //        drawer.openDrawer(GravityCompat.END)
 //        //ниже закрываем клавиатуру если открыта
 //        val view = this.currentFocus
@@ -488,7 +496,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         suggestionsNamesList.clear()
 
                         if (response.body()!!.isEmpty()) {
-                            suggestionsNamesList.add(SuggestionEntity("Нет совпадений"))
+                            suggestionsNamesList.add(SuggestionEntity(context.getString(R.string.suggestions_empty_list)))
                         }
 
                         for (i in 0 until response.body()!!.size) {

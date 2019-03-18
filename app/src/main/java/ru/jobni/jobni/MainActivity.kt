@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.menu_right.view.*
+import kotlinx.android.synthetic.main.nav_header_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
@@ -87,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.isOpenDrawer().observe(this, Observer { isOpen ->
+        viewModel.isOpenDrawerRight().observe(this, Observer { isOpen ->
             if (isOpen) {
                 drawer.openDrawer(GravityCompat.END)//todo
                 //ниже закрываем клавиатуру если открыта
@@ -101,12 +102,33 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        viewModel.isOpenDrawerLeft().observe(this, Observer { isOpen ->
+            if (isOpen) {
+                drawer.openDrawer(GravityCompat.START)//todo
+                //ниже закрываем клавиатуру если открыта
+                val view = this.currentFocus
+                view?.let { v ->
+                    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                    imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+                }
+            } else {
+                drawer.closeDrawer(GravityCompat.START)
+            }
+        })
+
         viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
             when (fragmentType) {
                 "Welcome" -> setFragment(FragmentWelcome.newInstance())
                 "Intro" -> setFragment(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
+                "Summary" -> setFragment(FragmentSummary())
+                "ReviewsUser" -> setFragment(FragmentReviewsUser())
+                "ReviewsOwner" -> setFragment(FragmentReviewsOwner())
+                "ProfileUser" -> setFragment(FragmentProfileUser())
+                "ProfileOwner" -> setFragment(FragmentProfileOwner())
+                "CompanyAdd" -> setFragment(FragmentCompanyAdd())
+                "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
                 else -> setFragment(FragmentWelcome.newInstance())
             }
         })
@@ -121,10 +143,14 @@ class MainActivity : AppCompatActivity() {
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
+        val fragmentAdapter = NavPALeft(supportFragmentManager, this)
+        view_pager_nav_left.adapter = fragmentAdapter
+        tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
     }
 
     override fun onBackPressed() {
         when {
+            drawer.isDrawerOpen(GravityCompat.START) -> drawer.closeDrawer(GravityCompat.START)
             drawer.isDrawerOpen(GravityCompat.END) -> drawer.closeDrawer(GravityCompat.END)
             supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
             else -> super.onBackPressed()

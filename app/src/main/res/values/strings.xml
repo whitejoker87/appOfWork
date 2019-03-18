@@ -144,4 +144,13 @@
 	<string name = "text_newbie">H -</string>
 	<string name = "text_experienced">O -</string>
     <string name="text_ruble">₽</string>
+    <string name="nav_header_left_user_tab">Соискатель</string>
+    <string name="nav_header_left_owner_tab">Работодатель</string>
+    <string name="suggestions_empty_list">Нет совпадений</string>
+    <string name="summary_tab_active">Активные</string>
+    <string name="summary_tab_archive">Архивные</string>
+    <string name="vacancy_tab_active">Активные</string>
+    <string name="vacancy_tab_archive">Архивные</string>
+    <string name="reviews_tab_about">Активные</string>
+    <string name="reviews_tab_my">Архивные</string>
 </resources>
