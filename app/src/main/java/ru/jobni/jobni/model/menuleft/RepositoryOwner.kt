@@ -1,35 +1,35 @@
 package ru.jobni.jobni.model.menuleft
 
 import ru.jobni.jobni.R
-import java.util.*
 
 object RepositoryOwner {
 
     fun makeNavigationListOwner(): List<NavigationParent> {
-        return Arrays.asList(
-            makeParentOneOwner(),
-            makeParentTwoOwner()
-        )
+        return makeCompanyList()
     }
 
-    private fun makeParentOneOwner(): NavigationParent {
-        return NavigationParent(
-            "Добавить компанию",
-            makeParentOneChildOwner(),
-            R.drawable.ic_company
-        )
+    private fun makeCompanyList(): List<NavigationParent> {
+        val receiveCompanyList = listOf("Компания 1", "Компания 2")
+        val setCompanyList = ArrayList<NavigationParent>()
+
+        setCompanyList.add(NavigationParent(
+                "Добавить компанию",
+                makeParentOneChildOwner(),
+                R.drawable.ic_company
+        ))
+
+        receiveCompanyList.forEach { companyName ->
+            setCompanyList.add(NavigationParent(
+                    companyName,
+                    makeParentTwoChildOwner(),
+                    R.drawable.ic_user
+            ))
+        }
+        return setCompanyList
     }
 
     private fun makeParentOneChildOwner(): List<NavigationChild> {
         return listOf()
-    }
-
-    private fun makeParentTwoOwner(): NavigationParent {
-        return NavigationParent(
-            "Компания 1",
-            makeParentTwoChildOwner(),
-            R.drawable.ic_user
-        )
     }
 
     private fun makeParentTwoChildOwner(): List<NavigationChild> {
@@ -39,7 +39,7 @@ object RepositoryOwner {
         val child4 = NavigationChild("Баланс: 1000 Руб", 0)
         val child5 = NavigationChild("Пополнить баланс", 0)
         val child6 =
-            NavigationChild("История платежей", R.drawable.ic_user)
+                NavigationChild("История платежей", R.drawable.ic_user)
         val child7 = NavigationChild("Оказанные услуги", 0)
 
         return listOf(child1, child2, child3, child4, child5, child6, child7)
