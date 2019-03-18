@@ -18,8 +18,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.menu_right.view.*
 import kotlinx.android.synthetic.main.nav_header_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
-import ru.jobni.jobni.fragments.*
+import ru.jobni.jobni.fragments.FragmentIntro
+import ru.jobni.jobni.fragments.FragmentMain
+import ru.jobni.jobni.fragments.FragmentRegAuth
+import ru.jobni.jobni.fragments.FragmentSplashScreen
+import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
+import ru.jobni.jobni.utils.menuleft.NavPALeft
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 

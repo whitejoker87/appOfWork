@@ -1,20 +1,20 @@
-package ru.jobni.jobni.utils
+package ru.jobni.jobni.utils.menuleft
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.FragmentReviewsOwnerAbout
-import ru.jobni.jobni.fragments.FragmentReviewsOwnerMy
+import ru.jobni.jobni.fragments.menuleft.FragmentNavLeftOwner
+import ru.jobni.jobni.fragments.menuleft.FragmentNavLeftUser
 
-class ReviewsOwnerPAdapter(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
+class NavPALeft(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> FragmentReviewsOwnerAbout()
+            0 -> FragmentNavLeftUser()
             else -> {
-                return FragmentReviewsOwnerMy()
+                return FragmentNavLeftOwner()
             }
         }
     }
@@ -25,9 +25,9 @@ class ReviewsOwnerPAdapter(fragment: FragmentManager, private val _context: Cont
 
     override fun getPageTitle(position: Int): CharSequence {
         return when (position) {
-            0 -> _context.getString(R.string.reviews_tab_about)
+            0 -> _context.getString(R.string.nav_header_left_user_tab)
             else -> {
-                return _context.getString(R.string.reviews_tab_my)
+                return _context.getString(R.string.nav_header_left_owner_tab)
             }
         }
     }

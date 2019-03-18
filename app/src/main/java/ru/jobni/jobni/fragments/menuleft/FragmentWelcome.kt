@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.menuleft
 
 import android.os.Bundle
 import android.view.LayoutInflater

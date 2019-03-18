@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.menuleft
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener
-import ru.jobni.jobni.NavRVAdapter
 import ru.jobni.jobni.R
-import ru.jobni.jobni.RepositoryUser.makeNavigationListUser
 import ru.jobni.jobni.databinding.FragmentNavLeftUserBinding
+import ru.jobni.jobni.model.menuleft.RepositoryUser.makeNavigationListUser
+import ru.jobni.jobni.utils.menuleft.NavRVAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentNavLeftUser : Fragment() {

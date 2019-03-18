@@ -1,4 +1,4 @@
-package ru.jobni.jobni
+package ru.jobni.jobni.utils.menuleft
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +14,8 @@ import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder
+import ru.jobni.jobni.R
+import ru.jobni.jobni.model.menuleft.NavigationParent
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: FragmentActivity) :
@@ -32,10 +34,10 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
     }
 
     override fun onBindChildViewHolder(
-            holderChild: ViewHolderChild,
-            flatPosition: Int,
-            group: ExpandableGroup<*>,
-            childIndex: Int
+        holderChild: ViewHolderChild,
+        flatPosition: Int,
+        group: ExpandableGroup<*>,
+        childIndex: Int
     ) {
         val child = (group as NavigationParent).items[childIndex]
 
@@ -63,8 +65,8 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
     }
 
     override fun onBindGroupViewHolder(
-            holderParent: ViewHolderParent, flatPosition: Int,
-            group: ExpandableGroup<*>
+        holderParent: ViewHolderParent, flatPosition: Int,
+        group: ExpandableGroup<*>
     ) {
         holderParent.setParentTitle(group)
     }

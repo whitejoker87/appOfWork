@@ -1,20 +1,20 @@
-package ru.jobni.jobni.utils
+package ru.jobni.jobni.utils.menuleft
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.FragmentReviewsUserAbout
-import ru.jobni.jobni.fragments.FragmentReviewsUserMy
+import ru.jobni.jobni.fragments.menuleft.FragmentVacancyActive
+import ru.jobni.jobni.fragments.menuleft.FragmentVacancyArchive
 
-class ReviewsUserPAdapter(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
+class VacancyPAdapter(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> FragmentReviewsUserAbout()
+            0 -> FragmentVacancyActive()
             else -> {
-                return FragmentReviewsUserMy()
+                return FragmentVacancyArchive()
             }
         }
     }
@@ -25,9 +25,9 @@ class ReviewsUserPAdapter(fragment: FragmentManager, private val _context: Conte
 
     override fun getPageTitle(position: Int): CharSequence {
         return when (position) {
-            0 -> _context.getString(R.string.reviews_tab_about)
+            0 -> _context.getString(R.string.vacancy_tab_active)
             else -> {
-                return _context.getString(R.string.reviews_tab_my)
+                return _context.getString(R.string.vacancy_tab_archive)
             }
         }
     }

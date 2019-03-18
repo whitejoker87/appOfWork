@@ -1,5 +1,6 @@
-package ru.jobni.jobni
+package ru.jobni.jobni.model.menuleft
 
+import ru.jobni.jobni.R
 import java.util.*
 
 object RepositoryUser {
@@ -14,7 +15,11 @@ object RepositoryUser {
     }
 
     private fun makeParentOne(): NavigationParent {
-        return NavigationParent("Резюме", makeParentOneChild(), R.drawable.ic_user)
+        return NavigationParent(
+            "Резюме",
+            makeParentOneChild(),
+            R.drawable.ic_user
+        )
     }
 
     private fun makeParentOneChild(): List<NavigationChild> {
@@ -22,7 +27,11 @@ object RepositoryUser {
     }
 
     private fun makeParentTwo(): NavigationParent {
-        return NavigationParent("Отзывы", makeParentTwoChild(), R.drawable.ic_user)
+        return NavigationParent(
+            "Отзывы",
+            makeParentTwoChild(),
+            R.drawable.ic_user
+        )
     }
 
     private fun makeParentTwoChild(): List<NavigationChild> {
@@ -30,7 +39,11 @@ object RepositoryUser {
     }
 
     private fun makeParentThree(): NavigationParent {
-        return NavigationParent("Профиль", makeParentThreeChild(), R.drawable.ic_user)
+        return NavigationParent(
+            "Профиль",
+            makeParentThreeChild(),
+            R.drawable.ic_user
+        )
     }
 
     private fun makeParentThreeChild(): List<NavigationChild> {
@@ -38,14 +51,19 @@ object RepositoryUser {
     }
 
     private fun makeParentFour(): NavigationParent {
-        return NavigationParent("Финансы", makeParentFourChild(), R.drawable.ic_user)
+        return NavigationParent(
+            "Финансы",
+            makeParentFourChild(),
+            R.drawable.ic_user
+        )
     }
     
     private fun makeParentFourChild(): List<NavigationChild> {
         val child1 = NavigationChild("Баланс: 1000 Руб", 0)
         val child2 = NavigationChild("Пополнить баланс", 0)
         val child3 = NavigationChild("История платежей", 0)
-        val child4 = NavigationChild("Оказанные услуги", R.drawable.ic_user)
+        val child4 =
+            NavigationChild("Оказанные услуги", R.drawable.ic_user)
         val child5 = NavigationChild("Оказанные услуги (детально)", 0)
         val child6 = NavigationChild("Рефальная программа", 0)
         val child7 = NavigationChild("Cashback", 0)

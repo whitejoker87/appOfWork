@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.menuleft
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,21 +9,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.FragmentReviewsUserBinding
-import ru.jobni.jobni.utils.ReviewsUserPAdapter
+import ru.jobni.jobni.databinding.FragmentSummaryBinding
+import ru.jobni.jobni.utils.menuleft.SummaryPAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentReviewsUser : Fragment() {
+class FragmentSummary : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
-    private lateinit var binding: FragmentReviewsUserBinding
+    private lateinit var binding: FragmentSummaryBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reviews_user, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary, container, false)
 
         binding.lifecycleOwner = this
 
@@ -31,12 +31,13 @@ class FragmentReviewsUser : Fragment() {
 
         binding.viewmodel = viewModel
 
-        val fragmentAdapter = ReviewsUserPAdapter(activity!!.supportFragmentManager, context!!)
-        binding.viewPagerReviewsUser.adapter = fragmentAdapter
-        binding.tabLayoutReviewsUser.setupWithViewPager(binding.viewPagerReviewsUser)
+        val fragmentAdapter =
+            SummaryPAdapter(activity!!.supportFragmentManager, context!!)
+        binding.viewPagerSummary.adapter = fragmentAdapter
+        binding.tabLayoutSummary.setupWithViewPager(binding.viewPagerSummary)
 
-        binding.fabReviewsUser.setOnClickListener { fabView ->
-            Snackbar.make(fabView, "Reviews User FAB", Snackbar.LENGTH_LONG)
+        binding.fabSummary.setOnClickListener { fabView ->
+            Snackbar.make(fabView, "Summary FAB", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 

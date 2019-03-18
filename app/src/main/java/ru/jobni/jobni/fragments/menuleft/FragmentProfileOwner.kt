@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.menuleft
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,20 +8,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.FragmentReviewsUserMyBinding
+import ru.jobni.jobni.databinding.FragmentProfileOwnerBinding
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentReviewsUserMy : Fragment() {
+class FragmentProfileOwner : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
-    private lateinit var binding: FragmentReviewsUserMyBinding
+    private lateinit var binding: FragmentProfileOwnerBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reviews_user_my, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_owner, container, false)
 
         binding.lifecycleOwner = this
 
@@ -30,6 +30,11 @@ class FragmentReviewsUserMy : Fragment() {
         binding.viewmodel = viewModel
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.setBottomNavigationViewVisible(false)
     }
 }
 
