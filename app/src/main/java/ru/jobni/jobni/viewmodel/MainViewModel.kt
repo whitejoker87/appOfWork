@@ -3,6 +3,8 @@ package ru.jobni.jobni.viewmodel
 import android.app.Application
 import android.os.Handler
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
@@ -338,14 +340,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-//    val onItemClickListener = object : AdapterView.OnItemClickListener {
-//        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//            doSearchOnClick(suggestionsNamesList.value!![position].suggestionName)
-//            setSearchQuery(suggestionsNamesList.value!![position].suggestionName)
-//            setSearchListViewVisible(false)
-//        }
-//
-//    }
+    val onItemClickListener = object : AdapterView.OnItemClickListener {
+        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            doSearchOnClick(suggestionsNamesList.value!![position].suggestionName)
+            setSearchQuery(suggestionsNamesList.value!![position].suggestionName)
+            setSearchListViewVisible(false)
+        }
+    }
 
     fun switchToMainActivity() {
         val duration = 2000L

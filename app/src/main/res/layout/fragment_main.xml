@@ -41,6 +41,7 @@
                 android:background="@color/white"
                 tools:layout_editor_absoluteX="0dp"
                 android:visibility="@{viewmodel.isSearchListViewVisible() ? View.VISIBLE : View.GONE}"
+                app:onListViewItemClickListener="@{viewmodel.onItemClickListener}"
 
         />
     </androidx.constraintlayout.widget.ConstraintLayout>
