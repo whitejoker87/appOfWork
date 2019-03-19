@@ -18,10 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.menu_right.view.*
 import kotlinx.android.synthetic.main.nav_header_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
-import ru.jobni.jobni.fragments.FragmentIntro
-import ru.jobni.jobni.fragments.FragmentMain
-import ru.jobni.jobni.fragments.FragmentRegAuth
-import ru.jobni.jobni.fragments.FragmentSplashScreen
+import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.utils.menuleft.NavPALeft
@@ -70,8 +67,8 @@ class MainActivity : AppCompatActivity() {
         popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem): Boolean {
                 when (item.itemId) {
-                    R.id.reg_bottom_not_logged -> setFragment(FragmentRegAuth.newInstance("reg"))
-                    R.id.auth_bottom_not_logged -> setFragment(FragmentRegAuth.newInstance("auth"))
+                    R.id.reg_bottom_not_logged -> setFragment(FragmentReg())
+                    R.id.auth_bottom_not_logged -> setFragment(FragmentAuth())
                 }
                 return true
             }
