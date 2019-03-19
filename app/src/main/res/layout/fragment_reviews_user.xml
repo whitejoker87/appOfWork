@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	xmlns:tools = "http://schemas.android.com/tools"
+	>
+
+	<data>
+
+		<variable
+			name = "viewmodel"
+			type = "ru.jobni.jobni.viewmodel.MainViewModel"
+			/>
+
+		<import type = "android.view.View"/>
+	</data>
+
+	<androidx.coordinatorlayout.widget.CoordinatorLayout
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		>
+
+		<com.google.android.material.tabs.TabLayout
+			android:id = "@+id/tab_layout_reviews_user"
+			android:layout_width = "match_parent"
+			android:layout_height = "60dp"
+			style = "@style/menu_left_tab_layout"
+			>
+
+			<com.google.android.material.tabs.TabItem
+				android:id = "@+id/tab_item_reviews_user_about"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				tools:text = "@string/reviews_tab_about"
+				/>
+
+			<com.google.android.material.tabs.TabItem
+				android:id = "@+id/tab_item_reviews_user_my"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				tools:text = "@string/reviews_tab_my"
+				/>
+		</com.google.android.material.tabs.TabLayout>
+
+		<androidx.viewpager.widget.ViewPager
+			android:id = "@+id/view_pager_reviews_user"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:layout_marginTop = "60dp"
+			/>
+
+		<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:id = "@+id/fab_reviews_user"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_margin = "@dimen/fab_margin"
+			app:srcCompat = "@android:drawable/ic_input_add"
+			android:layout_gravity = "bottom|end"
+			/>
+	</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

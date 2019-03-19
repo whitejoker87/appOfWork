@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:tools = "http://schemas.android.com/tools"
+	>
+
+	<data>
+
+		<variable
+			name = "position"
+			type = "Integer"
+			/>
+
+		<variable
+			name = "viewmodel"
+			type = "ru.jobni.jobni.viewmodel.MainViewModel"
+			/>
+
+		<variable
+			name = "child"
+			type = "ru.jobni.jobni.model.menuleft.NavigationChild"
+			/>
+	</data>
+
+	<FrameLayout
+		android:layout_width = "match_parent"
+		android:layout_height = "@dimen/list_item_height"
+		android:onClick = "@{() -> viewmodel.onCardRVVacancyClick(position)}"
+		>
+
+		<ImageView
+			android:id = "@+id/list_item_child_icon"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_marginStart = "30dp"
+			android:layout_gravity = "center_vertical"
+			android:src = "@{child.iconResId}"
+			tools:src = "@drawable/ic_bell"
+			/>
+
+		<TextView
+			android:id = "@+id/list_item_child_name"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:layout_marginStart = "82dp"
+			android:text = "@{child.name}"
+			android:gravity = "center_vertical"
+			tools:text = "Child Name"
+			/>
+	</FrameLayout>
+</layout>
