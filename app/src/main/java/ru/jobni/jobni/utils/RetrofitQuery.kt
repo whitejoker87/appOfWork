@@ -27,13 +27,11 @@ interface RetrofitQuery {
     @GET("api/vacancy/{id}/details/")
     fun loadVacancyCard(@Path("id") id: Int, @Query("detail") detail: Int): Call<CardVacancyDetail>
 
+    @GET("api/tags/")
+    fun getAuthData(@Header("Authorization") h1:String):Call<UserCredential>
+
 //    @FormUrlEncoded
 //    @Headers("Content-Type: application/x-www-form-urlencoded")
-//    @POST("api/authorization/")
-
-    @GET("api/tags/")
-    fun getNewsFeed(@Header("Authorization") h1:String):Call<UserCredential>
-
     @POST("api/authorization/")
-    fun login(@Header("Authorization") basicAuth: String, @Body userCred: UserCredential): Call<UserCredential>
+    fun postAuthData(@Header("Authorization") basicAuth: String, @Body userCred: UserCredential): Call<UserCredential>
 }
