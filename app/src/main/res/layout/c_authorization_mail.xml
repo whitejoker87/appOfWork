@@ -1,73 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
 	xmlns:android = "http://schemas.android.com/apk/res/android"
 	xmlns:app = "http://schemas.android.com/apk/res-auto"
-	xmlns:tools = "http://schemas.android.com/tools"
-	android:layout_width = "match_parent"
-	android:layout_height = "match_parent"
-	tools:context = ".MainActivity"
 	>
 
-	<ImageView
-		android:id = "@+id/background"
+	<data>
+
+		<variable
+			name = "viewmodel"
+			type = "ru.jobni.jobni.viewmodel.MainViewModel"
+			/>
+
+		<import type = "android.view.View"/>
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width = "match_parent"
-		android:layout_height = "0dp"
-		app:layout_constraintTop_toTopOf = "parent"
-		app:layout_constraintBottom_toBottomOf = "parent"
-		app:layout_constraintStart_toStartOf = "parent"
-		app:layout_constraintEnd_toEndOf = "parent"
-		android:layout_margin = "16dp"
-		android:background = "@drawable/shape_card"
-		android:contentDescription = "TODO"
-		/>
+		android:layout_height = "match_parent"
+		>
 
-	<include
-		android:id = "@+id/include_social_network"
-		layout = "@layout/c_social_network"
-		android:layout_width = "wrap_content"
-		android:layout_height = "wrap_content"
-		app:layout_constraintTop_toTopOf = "@+id/background"
-		app:layout_constraintStart_toStartOf = "@+id/background"
-		app:layout_constraintEnd_toEndOf = "@+id/background"
-		android:layout_marginTop = "16dp"
-		/>
+		<ImageView
+			android:id = "@+id/iv_background"
+			android:layout_width = "match_parent"
+			android:layout_height = "0dp"
+			app:layout_constraintTop_toTopOf = "parent"
+			app:layout_constraintBottom_toBottomOf = "parent"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			android:layout_margin = "16dp"
+			android:background = "@drawable/shape_card"
+			android:contentDescription = "TODO"
+			/>
 
-	<EditText
-		android:id = "@+id/mail"
-		android:layout_width = "0dp"
-		android:layout_height = "wrap_content"
-		app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
-		app:layout_constraintStart_toStartOf = "@+id/background"
-		app:layout_constraintEnd_toEndOf = "@id/background"
-		android:layout_marginTop = "16dp"
-		android:layout_marginHorizontal = "16dp"
-		style = "@style/text_color_and_size"
-		android:inputType = "textEmailAddress"
-		android:hint = "@string/mail_1"
-		/>
+		<include
+			android:id = "@+id/include_social_network"
+			layout = "@layout/c_social_network"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toTopOf = "@+id/iv_background"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "16dp"
+			/>
 
-	<EditText
-		android:id = "@+id/password_1"
-		android:layout_width = "0dp"
-		android:layout_height = "wrap_content"
-		app:layout_constraintTop_toBottomOf = "@+id/mail"
-		app:layout_constraintStart_toStartOf = "@+id/mail"
-		app:layout_constraintEnd_toEndOf = "@+id/mail"
-		android:layout_marginTop = "16dp"
-		style = "@style/text_color_and_size"
-		android:inputType = "textPassword|numberPassword"
-		android:hint = "@string/password_1"
-		/>
+		<EditText
+			android:id = "@+id/et_mail"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@id/iv_background"
+			android:layout_marginTop = "16dp"
+			android:layout_marginHorizontal = "16dp"
+			style = "@style/text_color_and_size"
+			android:inputType = "textEmailAddress"
+			android:hint = "@string/mail_1"
+			/>
 
-	<Button
-		android:id = "@+id/enter"
-		android:layout_width = "wrap_content"
-		android:layout_height = "wrap_content"
-		app:layout_constraintTop_toBottomOf = "@+id/password_1"
-		app:layout_constraintStart_toStartOf = "@+id/background"
-		app:layout_constraintEnd_toEndOf = "@+id/background"
-		android:layout_marginTop = "16dp"
-		android:background = "@drawable/shape_button"
-		android:text = "@string/enter"
-		/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+		<EditText
+			android:id = "@+id/et_password"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/et_mail"
+			app:layout_constraintStart_toStartOf = "@+id/et_mail"
+			app:layout_constraintEnd_toEndOf = "@+id/et_mail"
+			android:layout_marginTop = "16dp"
+			style = "@style/text_color_and_size"
+			android:inputType = "textPassword|numberPassword"
+			android:hint = "@string/password_1"
+			/>
+
+		<Button
+			android:id = "@+id/btn_enter"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/et_password"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "16dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/enter"
+			/>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

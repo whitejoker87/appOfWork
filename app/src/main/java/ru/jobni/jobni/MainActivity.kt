@@ -131,17 +131,18 @@ class MainActivity : AppCompatActivity() {
                 "ProfileOwner" -> setFragment(FragmentProfileOwner())
                 "CompanyAdd" -> setFragment(FragmentCompanyAdd())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
+                "AuthMail" -> setFragment(FragmentAuthMail())
                 else -> setFragment(FragmentWelcome.newInstance())
             }
         })
 
         viewModel.isBottomNavigationViewVisible().observe(this, Observer { isVisible ->
-            if (isVisible)binding.menuBottom.visibility = View.VISIBLE
+            if (isVisible) binding.menuBottom.visibility = View.VISIBLE
             else binding.menuBottom.visibility = View.GONE
         })
 
         viewModel.isDrawerRightLocked().observe(this, Observer { isLocked ->
-            if (isLocked)binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            if (isLocked) binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
@@ -184,9 +185,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
     }
 
 //    private fun openRightMenu() {
