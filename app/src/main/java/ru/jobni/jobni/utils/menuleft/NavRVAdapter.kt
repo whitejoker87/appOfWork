@@ -7,7 +7,7 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
@@ -15,13 +15,17 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder
 import ru.jobni.jobni.R
+import ru.jobni.jobni.databinding.ListItemChildBinding
+import ru.jobni.jobni.model.menuleft.NavigationChild
 import ru.jobni.jobni.model.menuleft.NavigationParent
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: FragmentActivity) :
         ExpandableRecyclerViewAdapter<NavRVAdapter.ViewHolderParent, NavRVAdapter.ViewHolderChild>(groups) {
 
-    private val viewModel: MainViewModel = ViewModelProviders.of(context).get(MainViewModel::class.java)
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProviders.of(context).get(MainViewModel::class.java)
+    }
 
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): ViewHolderParent {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_parent, parent, false)
@@ -29,64 +33,36 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
     }
 
     override fun onCreateChildViewHolder(parent: ViewGroup, viewType: Int): ViewHolderChild {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_child, parent, false)
-        return ViewHolderChild(view)
+        val view = LayoutInflater.from(parent.context)
+        val binding: ListItemChildBinding = DataBindingUtil.inflate(view, R.layout.list_item_child, parent, false)
+        return ViewHolderChild(binding, viewModel)
     }
 
     override fun onBindChildViewHolder(
-        holderChild: ViewHolderChild,
-        flatPosition: Int,
-        group: ExpandableGroup<*>,
-        childIndex: Int
+            holderChild: ViewHolderChild,
+            flatPosition: Int,
+            group: ExpandableGroup<*>,
+            childIndex: Int
     ) {
         val child = (group as NavigationParent).items[childIndex]
 
-        holderChild.setChildName(child.name)
-        holderChild.setChildIcon(child.iconResId)
-
-        holderChild.itemView.setOnClickListener {
-            if (child.name.contains("Вакансии") && childIndex == 0) {
-                viewModel.setFragmentLaunch("CompanyVacancy")
-                viewModel.setOpenDrawerLeft(false)
-            }
-            if (child.name.contains("Отзывы") && childIndex == 1) {
-                viewModel.setFragmentLaunch("ReviewsOwner")
-                viewModel.setOpenDrawerLeft(false)
-            }
-            if (child.name.contains("Профиль") && childIndex == 2) {
-                viewModel.setFragmentLaunch("ProfileOwner")
-                viewModel.setOpenDrawerLeft(false)
-            }
-
-            else {
-                Toast.makeText(context, child.name, Toast.LENGTH_SHORT).show()
-            }
-        }
+        holderChild.bind(child, childIndex)
     }
 
     override fun onBindGroupViewHolder(
-        holderParent: ViewHolderParent, flatPosition: Int,
-        group: ExpandableGroup<*>
+            holderParent: ViewHolderParent, flatPosition: Int,
+            group: ExpandableGroup<*>
     ) {
         holderParent.setParentTitle(group)
     }
 
-    class ViewHolderChild(itemView: View) : ChildViewHolder(itemView) {
+    class ViewHolderChild(val binding: ListItemChildBinding, val viewmodel: MainViewModel) : ChildViewHolder(binding.root) {
 
-        private val childTextView: TextView
-        private val childIcon: ImageView
-
-        init {
-            childTextView = itemView.findViewById<View>(R.id.list_item_child_name) as TextView
-            childIcon = itemView.findViewById<View>(R.id.list_item_child_icon) as ImageView
-        }
-
-        fun setChildName(name: String) {
-            childTextView.text = name
-        }
-
-        fun setChildIcon(icon: Int) {
-            childIcon.setImageResource(icon)
+        fun bind(child: NavigationChild, childIndex: Int) {
+            binding.position = childIndex
+            binding.child = child
+            binding.viewmodel = viewmodel
+            binding.executePendingBindings()
         }
     }
 

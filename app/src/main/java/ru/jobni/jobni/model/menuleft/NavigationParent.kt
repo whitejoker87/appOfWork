@@ -2,7 +2,10 @@ package ru.jobni.jobni.model.menuleft
 
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 
-class NavigationParent(title: String, items: List<NavigationChild>, val iconResId: Int) : ExpandableGroup<NavigationChild>(title, items) {
+class NavigationParent(
+        title: String,
+        items: List<NavigationChild>,
+        val iconResId: Int) : ExpandableGroup<NavigationChild>(title, items) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
