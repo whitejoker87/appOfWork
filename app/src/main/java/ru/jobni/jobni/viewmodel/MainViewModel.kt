@@ -13,10 +13,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import okhttp3.Credentials
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.UserCredential
 import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
@@ -492,6 +494,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 })
     }
 
+    fun onAuthMailEnterClick() {
+        doAuth()
+    }
+
+    fun doAuth() {
+
+        val basic = Credentials.basic("Tim", "1")
+
+        Retrofit.api?.getNewsFeed(basic)?.enqueue(object : Callback<UserCredential> {
+            override fun onResponse(@NonNull call: Call<UserCredential>, @NonNull response: Response<UserCredential>) {
+                if (response.body() != null) {
+
+                    val resultList = response.body()
+
+
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<UserCredential>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }
 
 //функция для оповещения наблюдателей после добавления элеента в спискоо(обычно нужно список перезаписать)
