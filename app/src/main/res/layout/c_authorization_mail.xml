@@ -50,8 +50,8 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@id/iv_background"
 			android:layout_marginTop = "16dp"
-			android:layout_marginStart="16dp"
-			android:layout_marginEnd="16dp"
+			android:layout_marginStart = "16dp"
+			android:layout_marginEnd = "16dp"
 			style = "@style/text_color_and_size"
 			android:inputType = "textEmailAddress"
 			android:hint = "@string/mail_1"
@@ -80,7 +80,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/enter"
-			android:onClick = "@{() -> viewmodel.onAuthMailEnterClick()}"
+			android:onClick = "@{() -> viewmodel.onAuthMailClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -494,8 +494,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 })
     }
 
-    fun onAuthMailEnterClick() {
+    fun onAuthMailClick() {
         doAuthPost()
+    }
+
+    fun onAuthMailLongClick() {
+        Toast.makeText(context, "onAuthMailLongClick!", Toast.LENGTH_SHORT).show()
     }
 
     fun doAuthPost() {
@@ -507,6 +511,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     val resultList = response.body()
+                    val resultListHeadlers = response.headers().get("Set-Cookie")
 
                 }
             }

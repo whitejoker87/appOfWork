@@ -19,10 +19,10 @@ class Retrofit : Application() {
         super.onCreate()
 
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL) //Базовая часть адреса
-            .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
-            .client(getUnsafeOkHttpClient())
-            .build()
+                .baseUrl(BASE_URL) //Базовая часть адреса
+                .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
+                .client(getUnsafeOkHttpClient())
+                .build()
         api = retrofit?.create(RetrofitQuery::class.java) //Создаем объект, при помощи которого будем выполнять запросы
     }
 
@@ -60,9 +60,9 @@ class Retrofit : Application() {
             builder.sslSocketFactory(sslSocketFactory)
             builder.hostnameVerifier { _, _ -> true }
             return builder
-                //Для дебага запросов Retrofit GET/POST
-                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .build()
+                    //Для дебага запросов Retrofit GET/POST
+                    .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    .build()
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
