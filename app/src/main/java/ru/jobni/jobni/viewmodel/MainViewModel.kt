@@ -13,7 +13,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import okhttp3.Credentials
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -500,9 +499,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun doAuth() {
 
-        val basic = Credentials.basic("Tim", "1")
+//        val basic = Credentials.basic("Tim", "1")
+        val uc = UserCredential("Tim", "1")
 
-        Retrofit.api?.getNewsFeed(basic)?.enqueue(object : Callback<UserCredential> {
+        Retrofit.api?.login("SSS", uc)?.enqueue(object : Callback<UserCredential> {
             override fun onResponse(@NonNull call: Call<UserCredential>, @NonNull response: Response<UserCredential>) {
                 if (response.body() != null) {
 

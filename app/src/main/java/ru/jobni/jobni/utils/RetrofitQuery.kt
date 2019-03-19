@@ -1,14 +1,12 @@
 package ru.jobni.jobni.utils
 
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 import ru.jobni.jobni.UserCredential
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.DetailVacancy
+
 
 interface RetrofitQuery {
     @GET("api/filter/detail/vacancy")
@@ -35,4 +33,7 @@ interface RetrofitQuery {
 
     @GET("api/tags/")
     fun getNewsFeed(@Header("Authorization") h1:String):Call<UserCredential>
+
+    @POST("api/authorization/")
+    fun login(@Header("Authorization") basicAuth: String, @Body userCred: UserCredential): Call<UserCredential>
 }
