@@ -494,6 +494,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 })
     }
 
+
+    private val authEmail = MutableLiveData<String>()
+
+    fun getAuthEmail(): String? {
+        return authEmail.value
+    }
+
+    fun setAuthEmail(query: String) {
+        this.authEmail.value = query
+    }
+
+
+    private val authPass = MutableLiveData<String>()
+
+    fun getAuthPass(): String? {
+        return authPass.value
+    }
+
+    fun setAuthPass(query: String) {
+        this.authPass.value = query
+    }
+
+
     fun onAuthMailClick() {
         doAuthPost()
     }
@@ -504,7 +527,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun doAuthPost() {
 
-        val uc = UserCredential("Tim", "1")
+        val uc = UserCredential(getAuthEmail(), getAuthEmail())
 
         Retrofit.api?.postAuthData("SSS", uc)?.enqueue(object : Callback<UserCredential> {
             override fun onResponse(@NonNull call: Call<UserCredential>, @NonNull response: Response<UserCredential>) {

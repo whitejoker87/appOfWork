@@ -55,6 +55,7 @@
 			style = "@style/text_color_and_size"
 			android:inputType = "textEmailAddress"
 			android:hint = "@string/mail_1"
+			android:text="@={viewmodel.authEmail}"
 			/>
 
 		<EditText
@@ -68,6 +69,7 @@
 			style = "@style/text_color_and_size"
 			android:inputType = "textPassword|numberPassword"
 			android:hint = "@string/password_1"
+			android:text="@={viewmodel.authPass}"
 			/>
 
 		<Button
