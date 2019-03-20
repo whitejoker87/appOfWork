@@ -50,6 +50,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    fun onAuthMailLongClick(): Boolean {
+        Toast.makeText(context, "onLongClickOnHeading", Toast.LENGTH_LONG).show()
+        return false
+    }
+
     fun onAuthMailClick() {
         doAuthMailPost()
     }

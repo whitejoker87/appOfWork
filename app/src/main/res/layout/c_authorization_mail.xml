@@ -31,31 +31,21 @@
 			android:background = "@drawable/shape_card"
 			/>
 
-		<include
-			android:id = "@+id/include_social_network"
-			layout = "@layout/c_social_network"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toTopOf = "@+id/iv_background"
-			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "16dp"
-			/>
-
 		<EditText
 			android:id = "@+id/et_mail"
 			android:layout_width = "0dp"
 			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
+			app:layout_constraintTop_toTopOf = "parent"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@id/iv_background"
-			android:layout_marginTop = "16dp"
+			android:layout_marginTop = "60dp"
 			android:layout_marginStart = "16dp"
 			android:layout_marginEnd = "16dp"
 			style = "@style/text_color_and_size"
 			android:inputType = "textEmailAddress"
 			android:hint = "@string/mail_1"
-			android:text="@={viewmodel.authEmail}"
+			android:text = "@={viewmodel.authEmail}"
+			app:layout_constraintHorizontal_bias = "0.0"
 			/>
 
 		<EditText

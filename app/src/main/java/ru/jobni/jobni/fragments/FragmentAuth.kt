@@ -9,12 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationBinding
+import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuth : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+    }
+
+    private val viewModelAuth: AuthViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
     private lateinit var binding: CAuthorizationBinding
@@ -27,6 +32,8 @@ class FragmentAuth : Fragment() {
         val view = binding.root
 
         binding.viewmodel = viewModel
+
+        binding.includeSocialNetwork.viewmodelauth = viewModelAuth
 
         return view
     }

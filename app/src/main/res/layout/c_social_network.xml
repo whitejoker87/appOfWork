@@ -11,6 +11,11 @@
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
 
+		<variable
+			name = "viewmodelauth"
+			type = "ru.jobni.jobni.viewmodel.AuthViewModel"
+			/>
+
 		<import type = "android.view.View"/>
 	</data>
 
@@ -126,6 +131,7 @@
 			android:layout_marginEnd = "16dp"
 			app:srcCompat = "@drawable/ic_mail_ru"
 			android:background = "@drawable/shape_button"
+			android:onLongClick="@{() -> viewmodelauth.onAuthMailLongClick()}"
 			android:onClick = '@{() -> viewmodel.setFragmentLaunch("AuthMail")}'
 			/>
 
