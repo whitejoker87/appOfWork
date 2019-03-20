@@ -523,7 +523,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun doAuthPost() {
 
-        val uc = UserCredential(getAuthEmail(), getAuthEmail())
+        val uc = UserCredential(getAuthEmail(), getAuthPass())
 
         Retrofit.api?.postAuthData("SSS", uc)?.enqueue(object : Callback<UserCredential> {
             override fun onResponse(@NonNull call: Call<UserCredential>, @NonNull response: Response<UserCredential>) {
