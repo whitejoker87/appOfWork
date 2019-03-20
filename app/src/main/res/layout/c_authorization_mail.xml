@@ -8,7 +8,7 @@
 
 		<variable
 			name = "viewmodel"
-			type = "ru.jobni.jobni.viewmodel.MainViewModel"
+			type = "ru.jobni.jobni.viewmodel.AuthViewModel"
 			/>
 
 		<import type = "android.view.View"/>

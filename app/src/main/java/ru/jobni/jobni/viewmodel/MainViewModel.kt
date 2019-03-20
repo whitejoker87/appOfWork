@@ -20,7 +20,6 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
-import ru.jobni.jobni.model.auth.UserAuthMail
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
 import java.util.*
@@ -32,13 +31,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
     private val firstLaunchFlag = "firstLaunch"
-    private val authMailCheck = "mailCheck"
-    private val authMailSessionID = "mailSessionID"
-    private val authMailUser = "mailUser"
-    private val authMailPass = "mailPass"
 
     var sPref = application.getSharedPreferences("firstLaunchSavedData", AppCompatActivity.MODE_PRIVATE)
-    var sPrefAuthMail = application.getSharedPreferences("authMail", AppCompatActivity.MODE_PRIVATE)
 
     private val suggestionsNamesList = MutableLiveData<ArrayList<SuggestionEntity>>(ArrayList())
 
@@ -152,24 +146,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 //    private fun loadUsers(): List<String> {
 //        // Do an asynchronous operation to fetch users.
 //    }
-
-
-    private val authEmail = MutableLiveData<String>()
-
-    fun getAuthEmail(): String? = authEmail.value
-
-    fun setAuthEmail(query: String) {
-        this.authEmail.value = query
-    }
-
-
-    private val authPass = MutableLiveData<String>()
-
-    fun getAuthPass(): String? = authPass.value
-
-    fun setAuthPass(query: String) {
-        this.authPass.value = query
-    }
 
 
     fun openLeftMenu() {
@@ -514,62 +490,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
                     }
                 })
-    }
-
-    fun onAuthMailClick() {
-        doAuthMailPost()
-    }
-
-    fun doAuthMailPost() {
-
-        val userDara = UserAuthMail(getAuthEmail(), getAuthPass())
-
-        Retrofit.api?.postAuthData("AuthMail", userDara)?.enqueue(object : Callback<UserAuthMail> {
-            override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
-                if (response.body() != null) {
-
-                    val resultListHeaders = response.headers().get("Set-Cookie")
-
-                    /* Пример ответа от АПИ
-                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
-                    Нам нужно выделить из этой строки sessionid
-                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
-
-                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
-
-                    val editor = sPrefAuthMail.edit()
-                    editor?.putBoolean(authMailCheck, false)
-                    editor?.putString(authMailSessionID, sessionID)
-                    editor?.putString(authMailUser, getAuthEmail())
-                    editor?.putString(authMailPass, getAuthPass())
-                    editor?.apply()
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<UserAuthMail>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun doAuthMailGet() {
-
-        if (sPref.getBoolean(authMailCheck, true)) {
-            val id = sPrefAuthMail.getString(authMailSessionID, null)
-            val cid = String.format("%s%s", "sessionid=", id)
-
-            Retrofit.api?.getAuthData(cid)?.enqueue(object : Callback<UserAuthMail> {
-                override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
-                    if (response.body() != null) {}
-                }
-
-                override fun onFailure(@NonNull call: Call<UserAuthMail>, @NonNull t: Throwable) {
-                    Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-            Toast.makeText(context, "NO AUTH DATA!", Toast.LENGTH_SHORT).show()
-        }
     }
 }
 
