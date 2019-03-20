@@ -2,7 +2,7 @@ package ru.jobni.jobni.utils
 
 import retrofit2.Call
 import retrofit2.http.*
-import ru.jobni.jobni.UserCredential
+import ru.jobni.jobni.model.auth.UserAuthMail
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.DetailVacancy
@@ -28,10 +28,8 @@ interface RetrofitQuery {
     fun loadVacancyCard(@Path("id") id: Int, @Query("detail") detail: Int): Call<CardVacancyDetail>
 
     @GET("api/tags/")
-    fun getAuthData(@Header("Authorization") h1:String):Call<UserCredential>
+    fun getAuthData(@Header("Cookie") h1:String):Call<UserAuthMail>
 
-//    @FormUrlEncoded
-//    @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("api/authorization/")
-    fun postAuthData(@Header("Authorization") basicAuth: String, @Body userCred: UserCredential): Call<UserCredential>
+    fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuthMail): Call<UserAuthMail>
 }
