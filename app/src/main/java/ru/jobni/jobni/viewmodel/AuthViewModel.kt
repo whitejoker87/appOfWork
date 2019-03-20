@@ -51,13 +51,21 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun onAuthMailLongClick(): Boolean {
-        Toast.makeText(context, "onLongClickOnHeading", Toast.LENGTH_LONG).show()
+        val editor = sPrefAuthMail.edit()
+        editor?.remove(authMailSessionID)
+        editor?.remove(authMailUser)
+        editor?.remove(authMailPass)
+        editor?.apply()
+
+        Toast.makeText(context, "AuthData deleted!", Toast.LENGTH_SHORT).show()
+
         return false
     }
 
     fun onAuthMailClick() {
         doAuthMailPost()
     }
+
 
     fun doAuthMailPost() {
 
