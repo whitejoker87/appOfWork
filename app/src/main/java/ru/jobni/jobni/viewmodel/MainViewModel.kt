@@ -497,9 +497,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authEmail = MutableLiveData<String>()
 
-    fun getAuthEmail(): String? {
-        return authEmail.value
-    }
+    fun getAuthEmail(): String? = authEmail.value
 
     fun setAuthEmail(query: String) {
         this.authEmail.value = query
@@ -508,9 +506,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authPass = MutableLiveData<String>()
 
-    fun getAuthPass(): String? {
-        return authPass.value
-    }
+    fun getAuthPass(): String? = authPass.value
 
     fun setAuthPass(query: String) {
         this.authPass.value = query
