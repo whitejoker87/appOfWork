@@ -28,8 +28,6 @@ class FragmentAuthMail : Fragment() {
 
         binding.viewmodel = viewModel
 
-        viewModel.doAuthMailGet()
-
         return view
     }
 }
