@@ -522,9 +522,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun doAuthMailPost() {
 
-        val uc = UserAuthMail(getAuthEmail(), getAuthPass())
+        val userDara = UserAuthMail(getAuthEmail(), getAuthPass())
 
-        Retrofit.api?.postAuthData("AuthMail", uc)?.enqueue(object : Callback<UserAuthMail> {
+        Retrofit.api?.postAuthData("AuthMail", userDara)?.enqueue(object : Callback<UserAuthMail> {
             override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
                 if (response.body() != null) {
 
