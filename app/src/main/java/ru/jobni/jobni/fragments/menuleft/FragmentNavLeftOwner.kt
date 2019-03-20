@@ -38,12 +38,12 @@ class FragmentNavLeftOwner : Fragment() {
 
         navRecyclerView = binding.rvNavLeftOwner
 
-        buildCardsRecyclerView()
+        buildRecyclerView()
 
         return view
     }
 
-    private fun buildCardsRecyclerView() {
+    private fun buildRecyclerView() {
 
         navAdapter = NavRVAdapter(makeNavigationListOwner(), activity!!)
         navAdapter.setHasStableIds(true)
