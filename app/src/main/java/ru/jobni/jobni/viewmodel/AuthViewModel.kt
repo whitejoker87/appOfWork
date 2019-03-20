@@ -15,7 +15,6 @@ import ru.jobni.jobni.utils.Retrofit
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val authMailCheck = "mailCheck"
     private val authMailSessionID = "mailSessionID"
     private val authMailUser = "mailUser"
     private val authMailPass = "mailPass"
@@ -43,8 +42,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun onAuthMailClick() {
-//        doAuthMailPost()
-        doAuthMailGet()
+        doAuthMailPost()
     }
 
     fun doAuthMailPost() {
@@ -65,7 +63,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
                     val editor = sPrefAuthMail.edit()
-                    editor?.putBoolean(authMailCheck, true)
                     editor?.putString(authMailSessionID, sessionID)
                     editor?.putString(authMailUser, getAuthEmail())
                     editor?.putString(authMailPass, getAuthPass())
@@ -81,24 +78,20 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun doAuthMailGet() {
 
-        if (sPrefAuthMail.getBoolean(authMailCheck, true)) {
-            val id = sPrefAuthMail.getString(authMailSessionID, null)
-            val cid = String.format("%s%s", "sessionid=", id)
+        val id = sPrefAuthMail.getString(authMailSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
 
-            Retrofit.api?.getAuthData(cid)?.enqueue(object : Callback<UserAuthMail> {
-                override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
-                    if (response.body() != null) {
+        Retrofit.api?.getAuthData(cid)?.enqueue(object : Callback<UserAuthMail> {
+            override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
+                if (response.body() != null) {
 
-                    }
                 }
+            }
 
-                override fun onFailure(@NonNull call: Call<UserAuthMail>, @NonNull t: Throwable) {
-                    Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-            Toast.makeText(context, "NO AUTH DATA!", Toast.LENGTH_SHORT).show()
-        }
+            override fun onFailure(@NonNull call: Call<UserAuthMail>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
 
