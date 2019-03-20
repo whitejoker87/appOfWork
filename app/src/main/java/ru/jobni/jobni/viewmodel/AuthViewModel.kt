@@ -15,8 +15,6 @@ import ru.jobni.jobni.utils.Retrofit
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val fragmentLaunch = MutableLiveData<String>()
-
     private val authMailSessionID = "mailSessionID"
     private val authMailUser = "mailUser"
     private val authMailPass = "mailPass"
@@ -25,11 +23,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     val context = application
 
-    fun setFragmentLaunch(fragmentType: String) {
-        fragmentLaunch.value = fragmentType
+    private val isAuthMail = MutableLiveData<Boolean>()
+
+    fun setAuthMail(authKey: Boolean) {
+        isAuthMail.value = authKey
     }
 
-    fun getFragmentLaunch(): MutableLiveData<String> = fragmentLaunch
+    fun isAuthMail(): MutableLiveData<Boolean> = isAuthMail
 
 
     private val authEmail = MutableLiveData<String>()
@@ -78,7 +78,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     editor?.apply()
 
                     if (sessionID != null) {
-                        setFragmentLaunch("Auth")
+                        setAuthMail(true)
                     }
                 }
             }

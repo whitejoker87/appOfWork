@@ -22,6 +22,7 @@ import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.utils.menuleft.NavPALeft
+import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
@@ -42,13 +43,19 @@ class MainActivity : AppCompatActivity() {
     }
     private lateinit var expandableListView: ExpandableListView
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModelAuth: AuthViewModel by lazy {
+        ViewModelProviders.of(this).get(AuthViewModel::class.java)
+    }
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
@@ -149,6 +156,11 @@ class MainActivity : AppCompatActivity() {
         val fragmentAdapter = NavPALeft(supportFragmentManager, this)
         view_pager_nav_left.adapter = fragmentAdapter
         tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
+
+        viewModelAuth.isAuthMail().observe(this, Observer {
+            setFragment(FragmentAuth())
+            closeKeyboard()
+        })
     }
 
     override fun onBackPressed() {
@@ -188,6 +200,15 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
+    }
+
+    private fun closeKeyboard() {
+        //скрываем клавиатуру
+        val viewCloseButton = this.currentFocus
+        viewCloseButton?.let { v ->
+            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(v.windowToken, 0)
+        }
     }
 
 //    private fun openRightMenu() {
