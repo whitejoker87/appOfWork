@@ -15,6 +15,8 @@ import ru.jobni.jobni.utils.Retrofit
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val fragmentLaunch = MutableLiveData<String>()
+
     private val authMailSessionID = "mailSessionID"
     private val authMailUser = "mailUser"
     private val authMailPass = "mailPass"
@@ -22,6 +24,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     var sPrefAuthMail = application.getSharedPreferences("authMail", AppCompatActivity.MODE_PRIVATE)
 
     val context = application
+
+    fun setFragmentLaunch(fragmentType: String) {
+        fragmentLaunch.value = fragmentType
+    }
+
+    fun getFragmentLaunch(): MutableLiveData<String> = fragmentLaunch
+
 
     private val authEmail = MutableLiveData<String>()
 
@@ -47,9 +56,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun doAuthMailPost() {
 
-        val userDara = UserAuthMail(getAuthEmail(), getAuthPass())
+        val userData = UserAuthMail(getAuthEmail(), getAuthPass())
 
-        Retrofit.api?.postAuthData("AuthMail", userDara)?.enqueue(object : Callback<UserAuthMail> {
+        Retrofit.api?.postAuthData("AuthMail", userData)?.enqueue(object : Callback<UserAuthMail> {
             override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
                 if (response.body() != null) {
 
@@ -67,6 +76,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     editor?.putString(authMailUser, getAuthEmail())
                     editor?.putString(authMailPass, getAuthPass())
                     editor?.apply()
+
+                    if (sessionID != null) {
+                        setFragmentLaunch("Auth")
+                    }
                 }
             }
 

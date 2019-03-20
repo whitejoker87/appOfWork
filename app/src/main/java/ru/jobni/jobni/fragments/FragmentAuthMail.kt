@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationMailBinding
@@ -28,6 +29,22 @@ class FragmentAuthMail : Fragment() {
 
         binding.viewmodel = viewModel
 
+        viewModel.doAuthMailGet()
+
+        viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
+            when (fragmentType) {
+                "Auth" -> setFragment(FragmentAuth())
+                else -> setFragment(FragmentAuth())
+            }
+        })
+
         return view
+    }
+
+    private fun setFragment(fragment: Fragment) {
+        activity!!.supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
     }
 }
