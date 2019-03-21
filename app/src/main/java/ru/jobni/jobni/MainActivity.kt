@@ -138,6 +138,7 @@ class MainActivity : AppCompatActivity() {
                 "ProfileOwner" -> setFragment(FragmentProfileOwner())
                 "CompanyAdd" -> setFragment(FragmentCompanyAdd())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
+                "Auth" -> setFragment(FragmentAuth())
                 "AuthUser" -> setFragment(FragmentAuthUser())
                 else -> setFragment(FragmentWelcome.newInstance())
             }
@@ -158,7 +159,7 @@ class MainActivity : AppCompatActivity() {
         tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
 
         viewModelAuth.isAuthUser().observe(this, Observer {
-            setFragment(FragmentAuth())
+            viewModel.setFragmentLaunch("Auth")
             closeKeyboard()
         })
     }

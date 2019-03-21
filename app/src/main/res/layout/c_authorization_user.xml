@@ -7,7 +7,7 @@
 	<data>
 
 		<variable
-			name = "viewmodel"
+			name = "viewmodelauth"
 			type = "ru.jobni.jobni.viewmodel.AuthViewModel"
 			/>
 
@@ -44,7 +44,7 @@
 			style = "@style/text_color_and_size"
 			android:inputType = "textEmailAddress"
 			android:hint = "@string/mail_1"
-			android:text = "@={viewmodel.authUser}"
+			android:text = "@={viewmodelauth.authUser}"
 			app:layout_constraintHorizontal_bias = "0.0"
 			/>
 
@@ -59,7 +59,7 @@
 			style = "@style/text_color_and_size"
 			android:inputType = "textPassword|numberPassword"
 			android:hint = "@string/password_1"
-			android:text="@={viewmodel.authPass}"
+			android:text="@={viewmodelauth.authPass}"
 			/>
 
 		<Button
@@ -72,7 +72,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/enter"
-			android:onClick = "@{() -> viewmodel.onAuthUserClick()}"
+			android:onClick = "@{() -> viewmodelauth.onAuthUserClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -24,22 +24,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
 
-    private val isBtnUserVisible = MutableLiveData<Boolean>(false)
+    private val isBtnUserLoggedVisible = MutableLiveData<Boolean>(false)
 
-    fun setBtnUserVisible(isVisible: Boolean) {
-        isBtnUserVisible.value = isVisible
+    fun setBtnUserLoggedVisible(isVisible: Boolean) {
+        isBtnUserLoggedVisible.value = isVisible
     }
 
-    fun isBtnUserVisible(): MutableLiveData<Boolean> = isBtnUserVisible
-
-
-    private val isBtnUserActiveVisible = MutableLiveData<Boolean>(false)
-
-    fun setBtnUserActiveVisible(isVisible: Boolean) {
-        isBtnUserActiveVisible.value = isVisible
-    }
-
-    fun isBtnUserActiveVisible(): MutableLiveData<Boolean> = isBtnUserActiveVisible
+    fun isBtnUserLoggedVisible(): MutableLiveData<Boolean> = isBtnUserLoggedVisible
 
 
     private val isAuthUser = MutableLiveData<Boolean>()
@@ -76,6 +67,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         editor?.remove(authUserPass)
         editor?.apply()
 
+        setBtnUserLoggedVisible(false)
+
         Toast.makeText(context, "AuthData deleted!", Toast.LENGTH_SHORT).show()
 
         return false
@@ -111,6 +104,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                     if (sessionID != null) {
                         setAuthUser(true)
+                        setBtnUserLoggedVisible(true)
                     }
                 }
             }

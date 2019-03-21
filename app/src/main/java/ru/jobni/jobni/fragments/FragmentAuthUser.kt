@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationMailBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 
 class FragmentAuthUser : Fragment() {
@@ -17,16 +17,16 @@ class FragmentAuthUser : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationMailBinding
+    private lateinit var binding: CAuthorizationUserBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_mail, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user, container, false)
 
         binding.lifecycleOwner = this
 
         val view = binding.root
 
-        binding.viewmodel = viewModel
+        binding.viewmodelauth = viewModel
 
         return view
     }
