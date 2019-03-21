@@ -1,12 +1,9 @@
 package ru.jobni.jobni.fragments
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
