@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                 "ProfileOwner" -> setFragment(FragmentProfileOwner())
                 "CompanyAdd" -> setFragment(FragmentCompanyAdd())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
-                "AuthMail" -> setFragment(FragmentAuthMail())
+                "AuthUser" -> setFragment(FragmentAuthUser())
                 else -> setFragment(FragmentWelcome.newInstance())
             }
         })
@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity() {
         view_pager_nav_left.adapter = fragmentAdapter
         tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
 
-        viewModelAuth.isAuthMail().observe(this, Observer {
+        viewModelAuth.isAuthUser().observe(this, Observer {
             setFragment(FragmentAuth())
             closeKeyboard()
         })

@@ -11,7 +11,7 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationMailBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 
-class FragmentAuthMail : Fragment() {
+class FragmentAuthUser : Fragment() {
 
     private val viewModel: AuthViewModel by lazy {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)

@@ -44,7 +44,7 @@
 			style = "@style/text_color_and_size"
 			android:inputType = "textEmailAddress"
 			android:hint = "@string/mail_1"
-			android:text = "@={viewmodel.authEmail}"
+			android:text = "@={viewmodel.authUser}"
 			app:layout_constraintHorizontal_bias = "0.0"
 			/>
 
@@ -72,7 +72,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/enter"
-			android:onClick = "@{() -> viewmodel.onAuthMailClick()}"
+			android:onClick = "@{() -> viewmodel.onAuthUserClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

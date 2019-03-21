@@ -15,29 +15,29 @@ import ru.jobni.jobni.utils.Retrofit
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val authMailSessionID = "mailSessionID"
-    private val authMailUser = "mailUser"
-    private val authMailPass = "mailPass"
+    private val authUserSessionID = "userSessionID"
+    private val authUserName = "userName"
+    private val authUserPass = "userPass"
 
-    var sPrefAuthMail = application.getSharedPreferences("authMail", AppCompatActivity.MODE_PRIVATE)
+    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
     val context = application
 
-    private val isAuthMail = MutableLiveData<Boolean>()
+    private val isAuthUser = MutableLiveData<Boolean>()
 
-    fun setAuthMail(authKey: Boolean) {
-        isAuthMail.value = authKey
+    fun setAuthUser(authKey: Boolean) {
+        isAuthUser.value = authKey
     }
 
-    fun isAuthMail(): MutableLiveData<Boolean> = isAuthMail
+    fun isAuthUser(): MutableLiveData<Boolean> = isAuthUser
 
 
-    private val authEmail = MutableLiveData<String>()
+    private val authUser = MutableLiveData<String>()
 
-    fun getAuthEmail(): String? = authEmail.value
+    fun getAuthUser(): String? = authUser.value
 
-    fun setAuthEmail(query: String) {
-        this.authEmail.value = query
+    fun setAuthUser(query: String) {
+        this.authUser.value = query
     }
 
 
@@ -50,11 +50,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun onAuthMailLongClick(): Boolean {
-        val editor = sPrefAuthMail.edit()
-        editor?.remove(authMailSessionID)
-        editor?.remove(authMailUser)
-        editor?.remove(authMailPass)
+    fun onAuthUserLongClick(): Boolean {
+        val editor = sPrefAuthUser.edit()
+        editor?.remove(authUserSessionID)
+        editor?.remove(authUserName)
+        editor?.remove(authUserPass)
         editor?.apply()
 
         Toast.makeText(context, "AuthData deleted!", Toast.LENGTH_SHORT).show()
@@ -62,16 +62,16 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun onAuthMailClick() {
-        doAuthMailPost()
+    fun onAuthUserClick() {
+        doAuthUserPost()
     }
 
 
-    fun doAuthMailPost() {
+    fun doAuthUserPost() {
 
-        val userData = UserAuthMail(getAuthEmail(), getAuthPass())
+        val userData = UserAuthMail(getAuthUser(), getAuthPass())
 
-        Retrofit.api?.postAuthData("AuthMail", userData)?.enqueue(object : Callback<UserAuthMail> {
+        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<UserAuthMail> {
             override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
                 if (response.body() != null) {
 
@@ -84,14 +84,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                     val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                    val editor = sPrefAuthMail.edit()
-                    editor?.putString(authMailSessionID, sessionID)
-                    editor?.putString(authMailUser, getAuthEmail())
-                    editor?.putString(authMailPass, getAuthPass())
+                    val editor = sPrefAuthUser.edit()
+                    editor?.putString(authUserSessionID, sessionID)
+                    editor?.putString(authUserName, getAuthUser())
+                    editor?.putString(authUserPass, getAuthPass())
                     editor?.apply()
 
                     if (sessionID != null) {
-                        setAuthMail(true)
+                        setAuthUser(true)
                     }
                 }
             }
@@ -102,9 +102,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    fun doAuthMailGet() {
+    fun doAuthUserGet() {
 
-        val id = sPrefAuthMail.getString(authMailSessionID, null)
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
         Retrofit.api?.getAuthData(cid)?.enqueue(object : Callback<UserAuthMail> {

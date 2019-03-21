@@ -34,8 +34,8 @@
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_user"
 			android:background = "@drawable/shape_button"
-			android:onLongClick = "@{() -> viewmodelauth.onAuthMailLongClick()}"
-			android:onClick = '@{() -> viewmodel.setFragmentLaunch("AuthMail")}'
+			android:onLongClick = "@{() -> viewmodelauth.onAuthUserLongClick()}"
+			android:onClick = '@{() -> viewmodel.setFragmentLaunch("AuthUser")}'
 			/>
 
 		<ImageButton
