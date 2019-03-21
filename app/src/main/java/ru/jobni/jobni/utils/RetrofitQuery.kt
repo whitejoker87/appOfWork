@@ -1,12 +1,17 @@
 package ru.jobni.jobni.utils
 
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.UserAuthMail
+import retrofit2.http.*
+import ru.jobni.jobni.model.network.registration.Registration
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.DetailVacancy
-
+import retrofit2.http.POST
+import retrofit2.http.Multipart
 
 interface RetrofitQuery {
     @GET("api/filter/detail/vacancy")
@@ -32,4 +37,8 @@ interface RetrofitQuery {
 
     @POST("api/authorization/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuthMail): Call<UserAuthMail>
+
+    @Multipart
+    @POST("api/registration/")
+    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 }
