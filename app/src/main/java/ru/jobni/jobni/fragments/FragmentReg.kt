@@ -28,6 +28,10 @@ class FragmentReg : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reg_recycler, container, false)
 
+        binding.lifecycleOwner = this
+
+        val view = binding.root
+
         binding.viewmodel = viewModel
 
         recycler_reg = binding.recyclerReg
