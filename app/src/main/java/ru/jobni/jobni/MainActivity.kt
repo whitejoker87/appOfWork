@@ -127,8 +127,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
             when (fragmentType) {
-                "Welcome" -> setFragment(FragmentWelcome.newInstance())
-                "Intro" -> setFragment(FragmentIntro())
+                "Welcome" -> setFragmentNoBackStack(FragmentWelcome())
+                "Intro" -> setFragmentNoBackStack(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
                 "Summary" -> setFragment(FragmentSummary())
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
                 "Auth" -> setFragment(FragmentAuth())
                 "AuthUser" -> setFragment(FragmentAuthUser())
-                else -> setFragment(FragmentWelcome.newInstance())
+                else -> setFragment(FragmentWelcome())
             }
         })
 
@@ -200,6 +200,12 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
+                .commit()
+    }
+
+    private fun setFragmentNoBackStack(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
                 .commit()
     }
 
