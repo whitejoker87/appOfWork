@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.jobni.jobni.model.auth.UserAuthMail
+import ru.jobni.jobni.model.auth.UserAuth
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -81,10 +81,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun doAuthUserPost() {
 
-        val userData = UserAuthMail(getAuthUser(), getAuthPass())
+        val userData = UserAuth(getAuthUser(), getAuthPass())
 
-        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<UserAuthMail> {
-            override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
+        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<UserAuth> {
+            override fun onResponse(@NonNull call: Call<UserAuth>, @NonNull response: Response<UserAuth>) {
                 if (response.body() != null) {
 
                     val resultListHeaders = response.headers().get("Set-Cookie")
@@ -109,7 +109,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<UserAuthMail>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<UserAuth>, @NonNull t: Throwable) {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })
@@ -120,14 +120,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        Retrofit.api?.getAuthData(cid)?.enqueue(object : Callback<UserAuthMail> {
-            override fun onResponse(@NonNull call: Call<UserAuthMail>, @NonNull response: Response<UserAuthMail>) {
+        Retrofit.api?.getAuthData(cid)?.enqueue(object : Callback<UserAuth> {
+            override fun onResponse(@NonNull call: Call<UserAuth>, @NonNull response: Response<UserAuth>) {
                 if (response.body() != null) {
 
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<UserAuthMail>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<UserAuth>, @NonNull t: Throwable) {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })

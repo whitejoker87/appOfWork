@@ -2,12 +2,10 @@ package ru.jobni.jobni.utils
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.RegContactsRecyclerItemBinding
