@@ -15,13 +15,32 @@ import ru.jobni.jobni.utils.Retrofit
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
+    val context = application
+
     private val authUserSessionID = "userSessionID"
     private val authUserName = "userName"
     private val authUserPass = "userPass"
 
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
-    val context = application
+
+    private val isBtnUserVisible = MutableLiveData<Boolean>(false)
+
+    fun setBtnUserVisible(isVisible: Boolean) {
+        isBtnUserVisible.value = isVisible
+    }
+
+    fun isBtnUserVisible(): MutableLiveData<Boolean> = isBtnUserVisible
+
+
+    private val isBtnUserActiveVisible = MutableLiveData<Boolean>(false)
+
+    fun setBtnUserActiveVisible(isVisible: Boolean) {
+        isBtnUserActiveVisible.value = isVisible
+    }
+
+    fun isBtnUserActiveVisible(): MutableLiveData<Boolean> = isBtnUserActiveVisible
+
 
     private val isAuthUser = MutableLiveData<Boolean>()
 
