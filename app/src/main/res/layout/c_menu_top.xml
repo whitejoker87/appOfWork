@@ -52,6 +52,7 @@
                 app:layout_constraintStart_toStartOf="@+id/toolbar"
                 android:layout_margin="16dp"
                 android:background="@drawable/ic_bars"
+                android:onClick="@{() -> viewmodel.openLeftMenu()}"
         />
 
         <Button

@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.menuleft
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,7 +28,7 @@ class FragmentWelcome : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
-        val view = binding.root;
+        val view = binding.root
         binding.viewmodel = viewModel
         return view
     }
