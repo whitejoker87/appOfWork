@@ -121,6 +121,14 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isPrivilegesForFileDone(): MutableLiveData<Boolean> = isPrivilegesForFileDone
 
+    private val numberOfVisibleItemReg = MutableLiveData<Int>(-1)
+
+    fun getNumberOfVisibleItemReg(): MutableLiveData<Int> = numberOfVisibleItemReg
+
+    fun setNumberOfVisibleItemReg(numberItem: Int) {
+        numberOfVisibleItemReg.value = numberItem
+    }
+
     fun btnRegClick() {
 
         setPrivilegesForFileDone(false)

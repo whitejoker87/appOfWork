@@ -91,10 +91,10 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
     class CardViewHolder(val binding: CCardVacancyCloseBinding, val viewmodel: MainViewModel) :
         RecyclerView.ViewHolder(binding.root) {
 
-        var btnExpand: Button = itemView.findViewById(R.id.btn_expand)
-        var btnLess: Button = itemView.findViewById(R.id.btn_less)
+        var btnExpand: Button = binding.btnExpand
+        var btnLess: Button = binding.btnLess
 
-        var expandConstraintLayout: ConstraintLayout = itemView.findViewById(R.id.constraint_layout_expand)
+        var expandConstraintLayout: ConstraintLayout = binding.constraintLayoutExpand
 
 
         fun bind(vacancy: VacancyEntity) {
