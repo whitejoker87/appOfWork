@@ -27,7 +27,7 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 class FragmentMain : Fragment() {
 
     private lateinit var cardRecyclerView: RecyclerView
-    private var cardAdapter: CardRVAdapter = CardRVAdapter(this)
+    private var cardAdapter: CardRVAdapter = CardRVAdapter(activity!!)
 
     private lateinit var searchView: SearchView
     private lateinit var searchListAdapter: SearchLVAdapter
@@ -153,15 +153,5 @@ class FragmentMain : Fragment() {
 
         cardAdapter.setHasStableIds(true)
         cardRecyclerView.adapter = cardAdapter
-
-//        cardAdapter.setOnItemClickListener(object : CardRVAdapter.OnItemClickListener {
-//            override fun onItemClick(position: Int) {
-//                Toast.makeText(context, "onItemClick!", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onEyeClick(v: View, position: Int) {
-//                Toast.makeText(context, "onEyeClick!", Toast.LENGTH_SHORT).show()
-//            }
-//        })
     }
 }

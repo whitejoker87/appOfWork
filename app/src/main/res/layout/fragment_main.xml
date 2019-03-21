@@ -42,7 +42,6 @@
                 tools:layout_editor_absoluteX="0dp"
                 android:visibility="@{viewmodel.isSearchListViewVisible() ? View.VISIBLE : View.GONE}"
                 app:onListViewItemClickListener="@{(parent, viewClick, position, id) -> viewmodel.onSuggestionsListItemClick(position)}"
-
         />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

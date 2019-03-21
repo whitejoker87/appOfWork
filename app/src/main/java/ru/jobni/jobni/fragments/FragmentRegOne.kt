@@ -5,13 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
+import ru.jobni.jobni.viewmodel.RegViewModel
 
 class FragmentRegOne : Fragment() {
-    // TODO: Rename and change types of parameters
+
+    private val viewModel: RegViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(RegViewModel::class.java)
+    }
+
+    private lateinit var binding: ru.jobni.jobni.databinding.CRegistration01MailBinding
+
     private var param1: String? = null
     private var param2: String? = null
-//    private var listener: OnFragmentInteractionListener? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,44 +34,11 @@ class FragmentRegOne : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.c_registration_01_mail, container, false)
-        return v
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_registration_01_mail, container, false)
+        val view = binding.root;
+        binding.viewmodel = viewModel
+        return view
     }
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    fun onButtonPressed(uri: Uri) {
-//        listener?.onFragmentInteraction(uri)
-//    }
-
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if (context is OnFragmentInteractionListener) {
-//            listener = context
-//        } else {
-//            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-//        }
-//    }
-
-//    override fun onDetach() {
-//        super.onDetach()
-//        listener = null
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-//    interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        fun onFragmentInteraction(uri: Uri)
-//    }
 
     companion object {
         /**
