@@ -71,7 +71,7 @@
 		app:layout_constraintEnd_toEndOf = "@+id/mail"
 		android:layout_marginTop = "16dp"
 		style = "@style/text_color_and_size"
-		android:inputType = "textPassword|numberPassword"
+		android:inputType = "textPassword"
 		android:hint = "@string/password_1"
 			  android:text="@={viewmodel.regPassword}"/>
 	<EditText android:id = "@+id/password_2"
@@ -82,7 +82,7 @@
 		app:layout_constraintEnd_toEndOf = "@+id/mail"
 		android:layout_marginTop = "16dp"
 		style = "@style/text_color_and_size"
-		android:inputType = "textPassword|numberPassword"
+		android:inputType = "textPassword"
 		android:hint = "@string/password_4"
 			  android:text="@={viewmodel.regPassConfirm}"/>
 	<Button android:id = "@+id/bind_account"

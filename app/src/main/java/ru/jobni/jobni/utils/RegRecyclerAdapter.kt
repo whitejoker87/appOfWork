@@ -10,12 +10,9 @@
     import android.widget.TextView
     import androidx.fragment.app.Fragment
     import androidx.fragment.app.FragmentActivity
-    import androidx.lifecycle.LifecycleOwner
-    import androidx.lifecycle.Observer
     import androidx.lifecycle.ViewModelProviders
     import androidx.recyclerview.widget.RecyclerView
     import ru.jobni.jobni.MainActivity
-    import ru.jobni.jobni.R
     import ru.jobni.jobni.fragments.FragmentRegOne
     import ru.jobni.jobni.fragments.FragmentRegThree
     import ru.jobni.jobni.fragments.FragmentRegTwo
@@ -39,7 +36,7 @@
         private val mAnimationDown: Animation = AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_down)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(ru.jobni.jobni.R.layout.reg_recycler_item, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(ru.jobni.jobni.R.layout.reg_phase_recycler_item, parent, false)
             return ViewHolder(view, regViewModel)
         }
 

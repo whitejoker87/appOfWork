@@ -1,5 +1,6 @@
 package ru.jobni.jobni.utils
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -21,10 +23,10 @@ import ru.jobni.jobni.model.network.vacancy.Detail
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
-class CardRVAdapter(context: Fragment) : RecyclerView.Adapter<CardRVAdapter.CardViewHolder>() {
+class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardViewHolder>() {
 
     private val viewModel: MainViewModel by lazy {
-        ViewModelProviders.of(context).get(MainViewModel::class.java)
+        ViewModelProviders.of(context as FragmentActivity).get(MainViewModel::class.java)
     }
 
     private val VIEW_TYPE_ITEM = 0

@@ -52,7 +52,6 @@ class FragmentRegAuth : Fragment() {
 
         recycler_reg = binding.recyclerReg
         adapter = RegRecyclerAdapter(activity as Context)
-        recycler_reg.layoutManager = LinearLayoutManager(activity)
         recycler_reg.adapter = adapter
 
         return view

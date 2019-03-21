@@ -337,14 +337,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-//    val onItemClickListener = object : AdapterView.OnItemClickListener {
-//        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//            doSearchOnClick(suggestionsNamesList.value!![position].suggestionName)
-//            setSearchQuery(suggestionsNamesList.value!![position].suggestionName)
-//            setSearchListViewVisible(false)
-//        }
-//
-//    }
+    val onItemClickListener = object : AdapterView.OnItemClickListener {
+        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            doSearchOnClick(suggestionsNamesList.value!![position].suggestionName)
+            setSearchQuery(suggestionsNamesList.value!![position].suggestionName)
+            setSearchListViewVisible(false)
+        }
+
+    }
 
     fun switchToMainActivity() {
         val duration = 2000L

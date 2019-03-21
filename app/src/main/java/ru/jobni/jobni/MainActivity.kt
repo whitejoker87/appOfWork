@@ -1,6 +1,9 @@
 package ru.jobni.jobni
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -8,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -20,6 +24,7 @@ import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
+import ru.jobni.jobni.viewmodel.RegViewModel
 
 
 // TODO: Изучить Android Navigation Component
@@ -30,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     private val SET_FOCUS: String = "SetFocus"
     private val SET_CARDS: String = "SetCards"
 
+    private val WRITE_REQUEST_CODE = 0
+
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
     private lateinit var drawer: DrawerLayout
@@ -39,13 +46,18 @@ class MainActivity : AppCompatActivity() {
     }
     private lateinit var expandableListView: ExpandableListView
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
+    private val regViewModel: RegViewModel by lazy {
+        ViewModelProviders.of(this).get(RegViewModel::class.java)
+    }
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
@@ -121,6 +133,17 @@ class MainActivity : AppCompatActivity() {
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
+        regViewModel.isPrivilegesForFileDone().observe(this, Observer {
+            if (!it) {
+                val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    ActivityCompat.requestPermissions(this, permissions, WRITE_REQUEST_CODE)
+                }
+            } else {
+                //regViewModel.registration()
+            }
+        })
+
     }
 
     override fun onBackPressed() {
@@ -128,6 +151,14 @@ class MainActivity : AppCompatActivity() {
             drawer.isDrawerOpen(GravityCompat.END) -> drawer.closeDrawer(GravityCompat.END)
             supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
             else -> super.onBackPressed()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            WRITE_REQUEST_CODE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                regViewModel.setPrivilegesForFileDone(true)
+            }
         }
     }
 
