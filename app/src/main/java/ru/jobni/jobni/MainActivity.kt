@@ -30,10 +30,6 @@ import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 
-
-// TODO: Изучить Android Navigation Component
-// https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
-
 class MainActivity : AppCompatActivity() {
 
     private val SET_FOCUS: String = "SetFocus"
@@ -50,17 +46,18 @@ class MainActivity : AppCompatActivity() {
     }
     private lateinit var expandableListView: ExpandableListView
 
-    private val viewModelAuth: AuthViewModel by lazy {
-        ViewModelProviders.of(this).get(AuthViewModel::class.java)
-    }
-
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
+    private val viewModelAuth: AuthViewModel by lazy {
+        ViewModelProviders.of(this).get(AuthViewModel::class.java)
     }
 
     private val regViewModel: RegViewModel by lazy {
         ViewModelProviders.of(this).get(RegViewModel::class.java)
     }
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,8 +81,8 @@ class MainActivity : AppCompatActivity() {
         popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem): Boolean {
                 when (item.itemId) {
-                    R.id.reg_bottom_not_logged -> setFragment(FragmentRegAuth.newInstance("reg"))
-                    R.id.auth_bottom_not_logged -> setFragment(FragmentRegAuth.newInstance("auth"))
+                    R.id.reg_bottom_not_logged -> setFragment(FragmentReg())
+                    R.id.auth_bottom_not_logged -> setFragment(FragmentAuth())
                 }
                 return true
             }
