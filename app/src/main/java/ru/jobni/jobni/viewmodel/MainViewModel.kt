@@ -345,7 +345,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }, duration)
         else
             Handler().postDelayed({
-                setFragmentLaunch("Main")
+                setFragmentLaunch("Welcome")
             }, duration)
     }
 
@@ -491,7 +491,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 })
     }
-
 }
 
 //функция для оповещения наблюдателей после добавления элеента в спискоо(обычно нужно список перезаписать)

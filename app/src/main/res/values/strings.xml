@@ -153,4 +153,5 @@
     <string name="vacancy_tab_archive">Архивные</string>
     <string name="reviews_tab_about">Активные</string>
     <string name="reviews_tab_my">Архивные</string>
+	<string name = "btn_auth_info_text">ВЫБЕРИТЕ СПОСОБ АВТОРИЗАЦИИ</string>
 </resources>
