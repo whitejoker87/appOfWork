@@ -61,7 +61,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun onAuthUserLongClick(): Boolean {
+    fun onAuthUserChangeClick(): Boolean {
         val editor = sPrefAuthUser.edit()
         editor?.remove(authUserSessionID)
         editor?.remove(authUserName)
@@ -71,6 +71,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         setBtnUserLoggedVisible(false)
 
         Toast.makeText(context, context.getString(R.string.user_auth_delete_info_text), Toast.LENGTH_SHORT).show()
+
+        setAuthUser(true)
 
         return false
     }

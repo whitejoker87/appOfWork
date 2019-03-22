@@ -156,4 +156,8 @@
 	<string name="auth_info_text">ВЫБЕРИТЕ СПОСОБ АВТОРИЗАЦИИ</string>
     <string name="user_auth_info_text">УКАЖИТЕ ВАШИ ДАННЫЕ</string>
     <string name="user_auth_delete_info_text">Авторизация сброшена</string>
+    <string name="btn_change_user_pass_text">Сменить пароль</string>
+    <string name="btn_change_user_mail_text">Сменить почту</string>
+    <string name="btn_change_user_auth_text">Отвязать</string>
+    <string name="user_auth_options_text">ВЫБЕРИТЕ ДЕЙСТВИЕ</string>
 </resources>
