@@ -164,4 +164,7 @@
     <string name="user_auth_new_pass">Новый пароль</string>
     <string name="user_auth_new_pass_confirm">Подтвердите пароль</string>
     <string name="btn_change_user_pass_confirm_text">Подтвердить</string>
+    <string name="user_auth_new_mail">Новая почта</string>
+    <string name="user_auth_new_mail_confirm">Подтвердите почту</string>
+    <string name="btn_change_user_mail_confirm_text">Подтвердить</string>
 </resources>

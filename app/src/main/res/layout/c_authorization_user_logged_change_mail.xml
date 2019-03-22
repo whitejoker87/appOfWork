@@ -46,7 +46,7 @@
 			android:textStyle = "bold"
 			android:textColor = "@color/font_color"
 			android:textSize = "14sp"
-			android:text = "@string/user_auth_options_text"
+			android:text = "@string/user_auth_change_pass_text"
 			/>
 
 		<include
@@ -84,7 +84,6 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/btn_change_user_mail_text"
-			android:onClick = '@{() -> viewmodel.setFragmentLaunch("AuthUserLoggedMail")}'
 			/>
 
 		<Button
@@ -97,7 +96,47 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_badge"
 			android:text = "@string/btn_change_user_auth_text"
-			android:clickable="false"
+			android:clickable = "false"
+			/>
+
+		<EditText
+			android:id = "@+id/et_new_pass"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/btn_change_user_auth"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@id/iv_background"
+			android:layout_marginTop = "26dp"
+			android:layout_marginStart = "16dp"
+			android:layout_marginEnd = "16dp"
+			style = "@style/text_color_and_size"
+			android:inputType = "textEmailAddress"
+			android:hint = "@string/user_auth_new_mail"
+			/>
+
+		<EditText
+			android:id = "@+id/et_new_pass_confirm"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/et_new_pass"
+			app:layout_constraintStart_toStartOf = "@+id/et_new_pass"
+			app:layout_constraintEnd_toEndOf = "@+id/et_new_pass"
+			android:layout_marginTop = "16dp"
+			style = "@style/text_color_and_size"
+			android:inputType = "textEmailAddress"
+			android:hint = "@string/user_auth_new_mail_confirm"
+			/>
+
+		<Button
+			android:id = "@+id/btn_change_user_pass_confirm"
+			android:layout_width = "180dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/et_new_pass_confirm"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "16dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/btn_change_user_pass_confirm_text"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
