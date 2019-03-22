@@ -20,36 +20,34 @@
 
 		<TextView
 			android:id = "@+id/activity_intro_5_1"
-			android:layout_width = "345dp"
+			android:layout_width = "300dp"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toTopOf = "parent"
 			app:layout_constraintBottom_toBottomOf = "parent"
 			app:layout_constraintStart_toStartOf = "parent"
-			android:layout_marginTop = "16dp"
-			android:layout_marginBottom = "16dp"
-			android:layout_marginStart = "50dp"
+			app:layout_constraintEnd_toEndOf = "parent"
 			android:textStyle = "bold"
 			android:textColor = "@color/font_color"
 			android:textSize = "18sp"
 			android:text = "@string/activity_intro_5_1"
-			app:layout_constraintVertical_bias = "0.326"
+			app:layout_constraintHorizontal_bias = "0.5"
+			app:layout_constraintVertical_bias = "0.3"
 			/>
 
 		<TextView
 			android:id = "@+id/activity_intro_5_2"
-			android:layout_width = "345dp"
+			android:layout_width = "300dp"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toTopOf = "parent"
 			app:layout_constraintBottom_toBottomOf = "parent"
 			app:layout_constraintStart_toStartOf = "parent"
-			android:layout_marginTop = "16dp"
-			android:layout_marginBottom = "16dp"
-			android:layout_marginStart = "50dp"
+			app:layout_constraintEnd_toEndOf = "parent"
 			android:textStyle = "bold"
 			android:textColor = "@color/font_color"
 			android:textSize = "18sp"
 			android:text = "@string/activity_intro_5_2"
-			app:layout_constraintVertical_bias = "0.68"
+			app:layout_constraintHorizontal_bias = "0.5"
+			app:layout_constraintVertical_bias = "0.7"
 			/>
 
 		<Button
