@@ -1,24 +1,9 @@
 package ru.jobni.jobni.viewmodel
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.graphics.drawable.Drawable
-import android.os.Environment
-import androidx.annotation.NonNull
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import ru.jobni.jobni.R
-import ru.jobni.jobni.model.network.registration.Contact
-import ru.jobni.jobni.model.network.registration.Registration
-import ru.jobni.jobni.utils.Retrofit
-import java.io.*
 
 
 class RegViewModel(application: Application) : AndroidViewModel(application) {

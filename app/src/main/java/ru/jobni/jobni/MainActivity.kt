@@ -21,23 +21,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.menu_right.view.*
 import kotlinx.android.synthetic.main.nav_header_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
-import ru.jobni.jobni.fragments.FragmentIntro
-import ru.jobni.jobni.fragments.FragmentMain
-import ru.jobni.jobni.fragments.FragmentRegAuth
-import ru.jobni.jobni.fragments.FragmentSplashScreen
+import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.utils.menuleft.NavPALeft
+import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
-
-
-// TODO: Изучить Android Navigation Component
-// https://startandroid.ru/ru/courses/dagger-2/27-course/architecture-components/557-urok-24-android-navigation-component-vvedenie.html
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,9 +53,14 @@ class MainActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
+    private val viewModelAuth: AuthViewModel by lazy {
+        ViewModelProviders.of(this).get(AuthViewModel::class.java)
+    }
+
     private val regViewModel: RegViewModel by lazy {
         ViewModelProviders.of(this).get(RegViewModel::class.java)
     }
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,8 +84,8 @@ class MainActivity : AppCompatActivity() {
         popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem): Boolean {
                 when (item.itemId) {
-                    R.id.reg_bottom_not_logged -> setFragment(FragmentRegAuth.newInstance("reg"))
-                    R.id.auth_bottom_not_logged -> setFragment(FragmentRegAuth.newInstance("auth"))
+                    R.id.reg_bottom_not_logged -> setFragment(FragmentReg())
+                    R.id.auth_bottom_not_logged -> setFragment(FragmentAuth())
                 }
                 return true
             }
@@ -103,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.loadChildList(headerList)
         })
 
-        viewModel.getChildList().observe(this, Observer { childList ->
+        viewModel.getChildList().observe(this, Observer {
             if (viewModel.getHeaderList().value != null) {
                 expandableListView.setAdapter(expandableListAdapter)
             }
@@ -139,8 +137,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
             when (fragmentType) {
-                "Welcome" -> setFragment(FragmentWelcome.newInstance())
-                "Intro" -> setFragment(FragmentIntro())
+                "Welcome" -> setFragmentNoBackStack(FragmentWelcome())
+                "Intro" -> setFragmentNoBackStack(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
                 "Summary" -> setFragment(FragmentSummary())
@@ -150,17 +148,19 @@ class MainActivity : AppCompatActivity() {
                 "ProfileOwner" -> setFragment(FragmentProfileOwner())
                 "CompanyAdd" -> setFragment(FragmentCompanyAdd())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
-                else -> setFragment(FragmentWelcome.newInstance())
+                "Auth" -> setFragment(FragmentAuth())
+                "AuthUser" -> setFragment(FragmentAuthUser())
+                else -> setFragment(FragmentWelcome())
             }
         })
 
         viewModel.isBottomNavigationViewVisible().observe(this, Observer { isVisible ->
-            if (isVisible)binding.menuBottom.visibility = View.VISIBLE
+            if (isVisible) binding.menuBottom.visibility = View.VISIBLE
             else binding.menuBottom.visibility = View.GONE
         })
 
         viewModel.isDrawerRightLocked().observe(this, Observer { isLocked ->
-            if (isLocked)binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            if (isLocked) binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
@@ -185,6 +185,10 @@ class MainActivity : AppCompatActivity() {
         view_pager_nav_left.adapter = fragmentAdapter
         tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
 
+        viewModelAuth.isAuthUser().observe(this, Observer {
+            viewModel.setFragmentLaunch("Auth")
+            closeKeyboard()
+        })
     }
 
     override fun onBackPressed() {
@@ -240,9 +244,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+    }
+
+    private fun setFragmentNoBackStack(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
+    }
+
+    private fun closeKeyboard() {
+        //скрываем клавиатуру
+        val viewCloseButton = this.currentFocus
+        viewCloseButton?.let { v ->
+            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(v.windowToken, 0)
+        }
     }
 
 //    private fun openRightMenu() {

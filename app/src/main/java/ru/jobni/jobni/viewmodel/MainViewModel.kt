@@ -382,7 +382,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }, duration)
         else
             Handler().postDelayed({
-                setFragmentLaunch("Main")
+                setFragmentLaunch("Welcome")
             }, duration)
     }
 

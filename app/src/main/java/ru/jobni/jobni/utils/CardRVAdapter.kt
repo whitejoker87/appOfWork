@@ -8,7 +8,6 @@ import android.widget.Button
 import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -43,7 +42,7 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardRVAdapter.CardViewHolder {
         val view = LayoutInflater.from(parent.context)
         val binding: CCardVacancyCloseBinding =
-            DataBindingUtil.inflate(view, R.layout.c_card_vacancy_close, parent, false)
+                DataBindingUtil.inflate(view, R.layout.c_card_vacancy_close, parent, false)
         return CardViewHolder(binding, viewModel)
     }
 
@@ -89,13 +88,12 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
     }
 
     class CardViewHolder(val binding: CCardVacancyCloseBinding, val viewmodel: MainViewModel) :
-        RecyclerView.ViewHolder(binding.root) {
+            RecyclerView.ViewHolder(binding.root) {
 
         var btnExpand: Button = binding.btnExpand
         var btnLess: Button = binding.btnLess
 
         var expandConstraintLayout: ConstraintLayout = binding.constraintLayoutExpand
-
 
         fun bind(vacancy: VacancyEntity) {
             binding.vacancy = vacancy
@@ -117,10 +115,10 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
                     val resultList: Detail = response.body()!!.detail
 
                     val newObj: VacancyEntity = vacancies[position].copy(
-                        companyDescription = resultList.company_description,
-                        vacancyDescription = resultList.description,
-                        requirementsDescription = resultList.requirements,
-                        dutiesDescription = resultList.duties
+                            companyDescription = resultList.company_description,
+                            vacancyDescription = resultList.description,
+                            requirementsDescription = resultList.requirements,
+                            dutiesDescription = resultList.duties
                     )
                     vacancies.removeAt(position)
                     vacancies.add(position, newObj)
