@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity() {
                 "Auth" -> setFragment(FragmentAuth())
                 "AuthUser" -> setFragment(FragmentAuthUser())
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
+                "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
                 else -> setFragment(FragmentWelcome())
             }
         })

@@ -160,4 +160,8 @@
     <string name="btn_change_user_mail_text">Сменить почту</string>
     <string name="btn_change_user_auth_text">Отвязать</string>
     <string name="user_auth_options_text">ВЫБЕРИТЕ ДЕЙСТВИЕ</string>
+    <string name="user_auth_change_pass_text">УКАЖИТЕ НОВЫЙ ПАРОЛЬ</string>
+    <string name="user_auth_new_pass">Новый пароль</string>
+    <string name="user_auth_new_pass_confirm">Подтвердите пароль</string>
+    <string name="btn_change_user_pass_confirm_text">Подтвердить</string>
 </resources>
