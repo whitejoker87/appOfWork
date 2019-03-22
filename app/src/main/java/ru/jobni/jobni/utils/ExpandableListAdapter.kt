@@ -29,21 +29,21 @@ class ExpandableListAdapter(
         groupPosition: Int, childPosition: Int,
         isLastChild: Boolean, convertView: View?, parent: ViewGroup
     ): View {
-        var convertView = convertView
+        var convertViewChild = convertView
 
         val childText = getChild(groupPosition, childPosition) as String
 
-        if (convertView == null) {
+        if (convertViewChild == null) {
             val infalInflater = this._context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            convertView = infalInflater.inflate(R.layout.menu_right_item, null)
+            convertViewChild = infalInflater.inflate(R.layout.menu_right_item, null)
         }
 
-        val txtListChild = convertView!!
+        val txtListChild = convertViewChild!!
             .findViewById(R.id.lblListHeader) as TextView
 
         txtListChild.text = childText
-        return convertView
+        return convertViewChild
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
@@ -67,20 +67,20 @@ class ExpandableListAdapter(
         groupPosition: Int, isExpanded: Boolean,
         convertView: View?, parent: ViewGroup
     ): View {
-        var convertView = convertView
+        var convertViewGroup = convertView
         val headerTitle = getGroup(groupPosition) as String
-        if (convertView == null) {
+        if (convertViewGroup == null) {
             val infalInflater = this._context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            convertView = infalInflater.inflate(R.layout.menu_right_item, null)
+            convertViewGroup = infalInflater.inflate(R.layout.menu_right_item, null)
         }
 
-        val lblListHeader = convertView!!
+        val lblListHeader = convertViewGroup!!
             .findViewById(R.id.lblListHeader) as TextView
         lblListHeader.setTypeface(null, Typeface.BOLD)
         lblListHeader.text = headerTitle
 
-        return convertView
+        return convertViewGroup
     }
 
     override fun hasStableIds(): Boolean {
