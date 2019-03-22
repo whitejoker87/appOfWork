@@ -27,7 +27,7 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 class FragmentMain : Fragment() {
 
     private lateinit var cardRecyclerView: RecyclerView
-    private var cardAdapter: CardRVAdapter = CardRVAdapter(activity!!)
+    private lateinit var cardAdapter: CardRVAdapter
 
     private lateinit var searchView: SearchView
     private lateinit var searchListAdapter: SearchLVAdapter
@@ -72,6 +72,8 @@ class FragmentMain : Fragment() {
         binding.viewmodel = viewModel
 
         cardRecyclerView = binding.rvCards
+
+        cardAdapter = CardRVAdapter(activity as Context)
 
         buildCardsRecyclerView()
 

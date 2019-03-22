@@ -2,7 +2,9 @@ package ru.jobni.jobni
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
@@ -19,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.menu_right.view.*
 import kotlinx.android.synthetic.main.nav_header_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
@@ -42,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private val SET_CARDS: String = "SetCards"
 
     private val WRITE_REQUEST_CODE = 0
+    private val CAMERA_REQUEST = 0
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
@@ -160,9 +164,15 @@ class MainActivity : AppCompatActivity() {
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
+        viewModel.getActivityLaunch().observe(this, Observer {
+            it?.let {
+                startActivityForResult(it, CAMERA_REQUEST)
+            }
+        })
+
         regViewModel.isPrivilegesForFileDone().observe(this, Observer {
             if (!it) {
-                val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     ActivityCompat.requestPermissions(this, permissions, WRITE_REQUEST_CODE)
                 }
@@ -174,6 +184,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentAdapter = NavPALeft(supportFragmentManager, this)
         view_pager_nav_left.adapter = fragmentAdapter
         tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
+
     }
 
     override fun onBackPressed() {
@@ -189,6 +200,17 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             WRITE_REQUEST_CODE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 regViewModel.setPrivilegesForFileDone(true)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            val uri: Uri? = null
+            when (requestCode) {
+                //GALLERY_REQUEST -> uri = data.data
+                CAMERA_REQUEST -> viewModel.setOutputPhotoUri(viewModel.getOutputPhotoUri().value!!)
             }
         }
     }

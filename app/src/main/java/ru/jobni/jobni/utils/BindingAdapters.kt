@@ -16,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.jobni.jobni.model.RepositoryVacancyEntity
 import android.R.attr.name
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import androidx.databinding.BindingConversion
-
+import com.squareup.picasso.Picasso
 
 
 @BindingMethods(
@@ -105,6 +107,16 @@ object BindingAdapters {
             sb.append(str)
         }
         return sb.toString()
+    }
+
+    @BindingAdapter("imageUrl", "errorImage")
+    @JvmStatic fun loadPhotoPartsList(view: ImageView, uri: Uri, errorImage: Drawable) {
+        Picasso.get()
+            .load(uri)
+            //.resize(50, 50)
+            .placeholder(errorImage)
+            .error(errorImage)
+            .into(view)
     }
 
 

@@ -8,12 +8,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
+import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 
 class FragmentRegTwo : Fragment() {
 
-    private val viewModel: RegViewModel by lazy {
+    private val regViewModel: RegViewModel by lazy {
         ViewModelProviders.of(activity!!).get(RegViewModel::class.java)
+    }
+
+    private val mainViewModel: MainViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
     private lateinit var binding: ru.jobni.jobni.databinding.CRegistration02Binding
@@ -23,8 +28,10 @@ class FragmentRegTwo : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_registration_02, container, false)
+        binding.lifecycleOwner = this
         val view = binding.root;
-        binding.viewmodel = viewModel
+        binding.regViewModel = regViewModel
+        binding.mainViewModel = mainViewModel
         return view
     }
 }

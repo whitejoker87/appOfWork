@@ -1,27 +1,43 @@
 package ru.jobni.jobni.viewmodel
 
+import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
+import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -56,6 +72,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
     private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
+    private var outputPhotoUri: MutableLiveData<Uri> = MutableLiveData(Uri.EMPTY)
+    private val activityLaunch:MutableLiveData<Intent> = MutableLiveData()
+    private var mCurrentPhotoPath: String? = ""
 
     init {
         repository.getVacancy().observeForever { vacancies ->
@@ -131,6 +150,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getSuggestionsNamesList(): MutableLiveData<ArrayList<SuggestionEntity>> = suggestionsNamesList
+
+    fun setOutputPhotoUri(setUri: Uri) {
+        outputPhotoUri.value = setUri
+    }
+
+    fun getOutputPhotoUri(): MutableLiveData<Uri> = outputPhotoUri
+
+    fun setActivityLaunch(cameraIntent: Intent) {
+        activityLaunch.value = cameraIntent
+    }
+
+    fun getActivityLaunch(): MutableLiveData<Intent> = activityLaunch
+
+    fun setCurrentPhotoPath(mCurrentPhotoPath: String) {
+        this.mCurrentPhotoPath = mCurrentPhotoPath
+    }
+
+    fun getCurrentPhotoPath(): String? = mCurrentPhotoPath
 
 
     private val users: MutableLiveData<List<String>> by lazy {
@@ -492,6 +529,67 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 })
     }
 
+    fun openCamera() {
+
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Метод resolveActivity() поможет проверить активности, способное сделать фотографию.
+        // Если подходящего приложения не найдётся, то мы можем сделать кнопку для съёмки недоступной.
+        if (cameraIntent.resolveActivity(context.packageManager) != null) {
+            // создать файл для фотографии
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile(context.baseContext)
+            } catch (ex: IOException) {
+                // ошибка, возникшая в процессе создания файла
+            }
+
+            // если файл создан, запускаем приложение камеры
+            if (photoFile != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    setOutputPhotoUri(
+                        FileProvider.getUriForFile(
+                            context.applicationContext,
+                            BuildConfig.APPLICATION_ID + ".provider", //(use your app signature + ".provider" )
+                            photoFile
+                        )
+                    )
+                } else
+                    setOutputPhotoUri(Uri.fromFile(photoFile))
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputPhotoUri.value)
+                //cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                setActivityLaunch(cameraIntent)
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(context: Context): File {
+
+        // создание файла с уникальным именем
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "CAM" + timeStamp + "_"
+        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+
+        //        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        //        StrictMode.setVmPolicy(builder.build());
+
+        val image = File.createTempFile(
+            imageFileName, /* префикс */
+            ".jpg", /* расширение */
+            storageDir      /* директория */
+        )
+
+        //        ContentValues values = new ContentValues();
+        //        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        //        values.put(MediaStore.Images.Media.MIME_TYPE, "image/ipeg");
+        //        values.put(MediaStore.MediaColumns.DATA, image.getAbsolutePath());
+        //
+        //        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        // сохраняем пусть для использования с интентом ACTION_VIEW
+        setCurrentPhotoPath(/*"file:" + */image.absolutePath)
+        return image
+    }
 }
 
 //функция для оповещения наблюдателей после добавления элеента в спискоо(обычно нужно список перезаписать)
