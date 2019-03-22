@@ -11,6 +11,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
+import javax.security.cert.CertificateException
 
 class Retrofit : Application() {
 
@@ -36,16 +37,31 @@ class Retrofit : Application() {
 
     private fun getUnsafeOkHttpClient(): OkHttpClient {
         try {
+            // Эмуляция положительных запросов при отсутствующем сертификате на сервере
+            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+
+                @Throws(CertificateException::class)
+                override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+                }
+
+                @Throws(CertificateException::class)
+                override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+                }
+
+                override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
+                    return arrayOf()
+                }
+            })
+
             val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
             trustManagerFactory.init(null as KeyStore?)
             val trustManagers = trustManagerFactory.trustManagers
             if (trustManagers.size != 1 || trustManagers[0] !is X509TrustManager) {
                 throw IllegalStateException("Unexpected default trust managers:" + Arrays.toString(trustManagers))
             }
-
             val trustManager = trustManagers[0] as X509TrustManager
             val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, arrayOf<TrustManager>(trustManager), null)
+            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
             val sslSocketFactory = sslContext.socketFactory
 
             val builder = OkHttpClient.Builder()
