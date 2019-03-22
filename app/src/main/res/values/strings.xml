@@ -137,12 +137,12 @@
     <string name="company_contact_face_full_name">Колесников Вячеслав Владимирович</string>
     <string name="company_contact_face_position">HR менеджер</string>
     <string name="search_response_empty">Нет рузультатов!</string>
-	<string name = "search_tab_vacancy">Вакансии</string>
-    <string name = "search_tab_company">Компании</string>
-    <string name = "search_tab_resume">Резюме</string>
-    <string name = "search_tab_candidate">Кандидаты</string>
-	<string name = "text_newbie">H -</string>
-	<string name = "text_experienced">O -</string>
+	<string name="search_tab_vacancy">Вакансии</string>
+    <string name="search_tab_company">Компании</string>
+    <string name="search_tab_resume">Резюме</string>
+    <string name="search_tab_candidate">Кандидаты</string>
+	<string name="text_newbie">H -</string>
+	<string name="text_experienced">O -</string>
     <string name="text_ruble">₽</string>
     <string name="nav_header_left_user_tab">Соискатель</string>
     <string name="nav_header_left_owner_tab">Работодатель</string>
@@ -153,5 +153,7 @@
     <string name="vacancy_tab_archive">Архивные</string>
     <string name="reviews_tab_about">Активные</string>
     <string name="reviews_tab_my">Архивные</string>
-	<string name = "btn_auth_info_text">ВЫБЕРИТЕ СПОСОБ АВТОРИЗАЦИИ</string>
+	<string name="auth_info_text">ВЫБЕРИТЕ СПОСОБ АВТОРИЗАЦИИ</string>
+    <string name="user_auth_info_text">УКАЖИТЕ ВАШИ ДАННЫЕ</string>
+    <string name="user_auth_delete_info_text">Авторизация сброшена</string>
 </resources>

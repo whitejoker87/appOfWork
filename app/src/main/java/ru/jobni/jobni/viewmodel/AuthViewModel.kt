@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.jobni.jobni.R
 import ru.jobni.jobni.model.auth.UserAuth
 import ru.jobni.jobni.utils.Retrofit
 
@@ -69,7 +70,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         setBtnUserLoggedVisible(false)
 
-        Toast.makeText(context, "AuthData deleted!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.user_auth_delete_info_text), Toast.LENGTH_SHORT).show()
 
         return false
     }

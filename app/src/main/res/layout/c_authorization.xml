@@ -31,6 +31,19 @@
 			android:background = "@drawable/shape_card"
 			/>
 
+		<TextView
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toTopOf = "@+id/iv_background"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_margin = "8dp"
+			android:textStyle = "bold"
+			android:textColor = "@color/font_color"
+			android:textSize = "14sp"
+			android:text = "@string/auth_info_text"
+			/>
+
 		<include
 			android:id = "@+id/include_social_network"
 			layout = "@layout/c_social_network"
@@ -39,21 +52,8 @@
 			app:layout_constraintTop_toTopOf = "@+id/iv_background"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "16dp"
+			android:layout_marginTop = "36dp"
 			app:viewmodel = "@{viewmodel}"
-			/>
-
-		<Button
-			android:id = "@+id/btn_auth_info"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
-			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "60dp"
-			android:background = "@drawable/shape_button"
-			android:text = "@string/btn_auth_info_text"
-			android:clickable = "false"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
