@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.loadChildList(headerList)
         })
 
-        viewModel.getChildList().observe(this, Observer { childList ->
+        viewModel.getChildList().observe(this, Observer {
             if (viewModel.getHeaderList().value != null) {
                 expandableListView.setAdapter(expandableListAdapter)
             }
