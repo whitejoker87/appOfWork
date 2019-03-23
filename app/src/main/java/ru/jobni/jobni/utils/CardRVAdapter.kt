@@ -3,7 +3,6 @@ package ru.jobni.jobni.utils
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
@@ -28,9 +27,6 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
 
     private val VIEW_TYPE_ITEM = 0
 
-    private var mExpandedPosition = -1
-    private var previousExpandedPosition = -1
-
     var vacancies: MutableList<VacancyEntity> = mutableListOf()
         set(value) {
             field = value
@@ -40,19 +36,12 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardRVAdapter.CardViewHolder {
         val view = LayoutInflater.from(parent.context)
         val binding: CCardVacancyCloseBinding =
-                DataBindingUtil.inflate(view, R.layout.c_card_vacancy_close, parent, false)
+            DataBindingUtil.inflate(view, R.layout.c_card_vacancy_close, parent, false)
         return CardViewHolder(binding, viewModel)
     }
 
     override fun onBindViewHolder(viewHolder: CardRVAdapter.CardViewHolder, position: Int) {
-
-//        viewHolder.btnExpand.setOnClickListener {
-////            viewModel.setFragmentLaunch("Card")
-//            viewModel.onCardRVVacancyClick(position)
-//        }
-
         viewHolder.bind(vacancies[position])
-
     }
 
     override fun getItemCount(): Int {
@@ -74,9 +63,7 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
     }
 
     class CardViewHolder(val binding: CCardVacancyCloseBinding, val viewmodel: MainViewModel) :
-            RecyclerView.ViewHolder(binding.root) {
-
-        var btnExpand: Button = binding.btnExpand
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(vacancy: VacancyEntity) {
             binding.vacancy = vacancy
@@ -84,9 +71,7 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
             binding.viewmodel = viewmodel
             binding.executePendingBindings()
         }
-
     }
-
 
     private fun cardExpand(position: Int) {
         val requestID: Int = vacancies[position].id
@@ -98,10 +83,10 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
                     val resultList: Detail = response.body()!!.detail
 
                     val newObj: VacancyEntity = vacancies[position].copy(
-                            companyDescription = resultList.company_description,
-                            vacancyDescription = resultList.description,
-                            requirementsDescription = resultList.requirements,
-                            dutiesDescription = resultList.duties
+                        companyDescription = resultList.company_description,
+                        vacancyDescription = resultList.description,
+                        requirementsDescription = resultList.requirements,
+                        dutiesDescription = resultList.duties
                     )
                     vacancies.removeAt(position)
                     vacancies.add(position, newObj)

@@ -7,7 +7,11 @@
 
 	<data>
 
-		<variable name="vacancy" type="ru.jobni.jobni.model.VacancyEntity" />
+		<variable
+			name = "vacancy"
+			type = "ru.jobni.jobni.model.VacancyEntity"
+			/>
+
 		<variable
 			name = "viewmodel"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
@@ -56,7 +60,7 @@
 					android:textStyle = "bold"
 					android:textColor = "@color/font_color"
 					android:textSize = "18sp"
-					android:text="@{vacancy.vacancyName}"
+					android:text = "@{vacancy.vacancyName}"
 					tools:text = "@string/card_vacancy_close_vacancy_name"
 					/>
 
@@ -82,7 +86,8 @@
 					android:textStyle = "bold"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_close_newbie"
+					android:text = "@{vacancy.salaryLevelNewbie}"
+					tools:text = "@string/card_vacancy_close_newbie"
 					/>
 
 				<TextView
@@ -96,7 +101,8 @@
 					android:textStyle = "bold"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_close_experienced"
+					android:text = "@{vacancy.salaryLevelExperienced}"
+					tools:text = "@string/card_vacancy_close_experienced"
 					/>
 
 				<TextView
@@ -127,7 +133,8 @@
 					android:textStyle = "normal"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_close_required_competencies_text"
+					android:text = "@{vacancy.competenceList}"
+					tools:text = "@string/card_vacancy_close_required_competencies_text"
 					/>
 
 				<TextView
@@ -158,7 +165,8 @@
 					android:textStyle = "normal"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_close_work_format_text"
+					android:text = "@{vacancy.formatOfWork}"
+					tools:text = "@string/card_vacancy_close_work_format_text"
 					/>
 
 				<TextView
@@ -189,7 +197,8 @@
 					android:textStyle = "normal"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_close_employment_text"
+					android:text = "@{vacancy.employmentList}"
+					tools:text = "@string/card_vacancy_close_employment_text"
 					/>
 
 				<TextView
@@ -220,7 +229,8 @@
 					android:textStyle = "normal"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_open_company_description_text"
+					android:text = "@{vacancy.companyDescription}"
+					tools:text = "@string/card_vacancy_open_company_description_text"
 					/>
 
 				<TextView
@@ -251,7 +261,8 @@
 					android:textStyle = "normal"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_open_vacancy_description_text"
+					android:text = "@{vacancy.vacancyDescription}"
+					tools:text = "@string/card_vacancy_open_vacancy_description_text"
 					/>
 
 				<TextView
@@ -282,7 +293,8 @@
 					android:textStyle = "normal"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_open_requirements_description_text"
+					android:text = "@{vacancy.requirementsDescription}"
+					tools:text = "@string/card_vacancy_open_requirements_description_text"
 					/>
 
 				<TextView
@@ -313,7 +325,8 @@
 					android:textStyle = "normal"
 					android:textColor = "@color/font_color"
 					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_open_duties_description_text"
+					android:text = "@{vacancy.dutiesDescription}"
+					tools:text = "@string/card_vacancy_open_duties_description_text"
 					/>
 
 				<TextView
@@ -370,7 +383,8 @@
 					android:textStyle = "bold"
 					android:textColor = "@color/font_color"
 					android:textSize = "16sp"
-					android:text = "@string/company"
+					tools:text = "@string/company"
+					android:text="@{vacancy.companyName}"
 					/>
 
 				<ImageView

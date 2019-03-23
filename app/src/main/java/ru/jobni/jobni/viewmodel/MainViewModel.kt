@@ -52,6 +52,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val isToolbarVisible = MutableLiveData<Boolean>(false)
     private val isSearchListViewVisible = MutableLiveData<Boolean>(false)
 
+    // Позиция карточки для открытия в отдельном фрагменте
+    var cardPosition = 0
+
     val context = application
 
     private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
@@ -366,11 +369,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }, SERVER_RESPONSE_DELAY)
     }
 
-    var posA = 0
-        get() = field
-
     fun onCardRVVacancyClick(position: Int) {
-        posA = position
+        cardPosition = position
         setFragmentLaunch("Card")
     }
 
