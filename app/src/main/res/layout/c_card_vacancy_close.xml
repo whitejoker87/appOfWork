@@ -2,8 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="vacancy" type="ru.jobni.jobni.model.VacancyEntity" />
-        <variable name="position" type="Integer" />
+        <variable name="vacancy" type="ru.jobni.jobni.model.VacancyEntity"/>
+        <variable name="position" type="Integer"/>
         <variable name="viewmodel" type="ru.jobni.jobni.viewmodel.MainViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +25,6 @@
                 android:layout_marginEnd="8dp"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="10dp"
-                android:onClick="@{() -> viewmodel.onCardRVVacancyClick(position)}"
         >
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,7 +42,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         android:background="@drawable/shape_card"
                         app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintVertical_bias="0.0" android:contentDescription="TODO" 
+                        app:layout_constraintVertical_bias="0.0" android:contentDescription="TODO"
                 />
 
                 <TextView
@@ -561,7 +560,7 @@
                         android:layout_marginTop="50dp"
                         android:background="@color/theme_1_color_1"
                         android:drawableTop="@drawable/ic_expand_more_black_24dp"
-                        android:onClick="@{() -> viewmodel.onCardRVVacancyClick(position)}"
+                        android:onClick="@{() -> viewmodel.onCardExpandVacancyClick(position)}"
                 />
 
                 <Button

@@ -3,19 +3,13 @@ package ru.jobni.jobni.utils
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CCardVacancyCloseBinding
 import ru.jobni.jobni.model.VacancyEntity
-import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
-import ru.jobni.jobni.model.network.vacancy.Detail
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
@@ -71,31 +65,5 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
             binding.viewmodel = viewmodel
             binding.executePendingBindings()
         }
-    }
-
-    private fun cardExpand(position: Int) {
-        val requestID: Int = vacancies[position].id
-
-        Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
-            override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
-                if (response.body() != null) {
-
-                    val resultList: Detail = response.body()!!.detail
-
-                    val newObj: VacancyEntity = vacancies[position].copy(
-                        companyDescription = resultList.company_description,
-                        vacancyDescription = resultList.description,
-                        requirementsDescription = resultList.requirements,
-                        dutiesDescription = resultList.duties
-                    )
-                    vacancies.removeAt(position)
-                    vacancies.add(position, newObj)
-                    notifyItemChanged(position)
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<CardVacancyDetail>, @NonNull t: Throwable) {
-            }
-        })
     }
 }

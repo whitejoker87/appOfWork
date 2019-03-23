@@ -369,13 +369,38 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }, SERVER_RESPONSE_DELAY)
     }
 
-    fun onCardRVVacancyClick(position: Int) {
+    fun onCardExpandVacancyClick(position: Int) {
         cardPosition = position
+        cardExpandInfo(position)
         setFragmentLaunch("Card")
     }
 
     fun onEyeRVVacancyClick(position: Int) {
         Toast.makeText(context, "глазик " + position.toString(), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun cardExpandInfo(position: Int) {
+        val requestID: Int = repository.getVacancy().value!![position].id
+
+        Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
+            override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
+                if (response.body() != null) {
+
+                    val resultList: Detail = response.body()!!.detail
+
+                    val newObj: VacancyEntity = repository.getVacancy().value!![position].copy(
+                            companyDescription = resultList.company_description,
+                            vacancyDescription = resultList.description,
+                            requirementsDescription = resultList.requirements,
+                            dutiesDescription = resultList.duties
+                    )
+                    repository.saveVacancy(newObj)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancyDetail>, @NonNull t: Throwable) {
+            }
+        })
     }
 
     fun doSearchOnClick(query: String) {
