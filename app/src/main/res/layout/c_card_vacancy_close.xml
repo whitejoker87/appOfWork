@@ -561,6 +561,7 @@
                         android:layout_marginTop="50dp"
                         android:background="@color/theme_1_color_1"
                         android:drawableTop="@drawable/ic_expand_more_black_24dp"
+                        android:onClick="@{() -> viewmodel.onCardRVVacancyClick(position)}"
                 />
 
                 <Button

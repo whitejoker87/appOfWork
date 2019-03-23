@@ -366,8 +366,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }, SERVER_RESPONSE_DELAY)
     }
 
+    var posA = 0
+        get() = field
+
     fun onCardRVVacancyClick(position: Int) {
-        Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
+        posA = position
+        setFragmentLaunch("Card")
     }
 
     fun onEyeRVVacancyClick(position: Int) {

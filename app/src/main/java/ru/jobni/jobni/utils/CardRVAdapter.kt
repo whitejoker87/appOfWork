@@ -46,9 +46,10 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
 
     override fun onBindViewHolder(viewHolder: CardRVAdapter.CardViewHolder, position: Int) {
 
-        viewHolder.btnExpand.setOnClickListener {
-            viewModel.setFragmentLaunch("Card")
-        }
+//        viewHolder.btnExpand.setOnClickListener {
+////            viewModel.setFragmentLaunch("Card")
+//            viewModel.onCardRVVacancyClick(position)
+//        }
 
         viewHolder.bind(vacancies[position])
 

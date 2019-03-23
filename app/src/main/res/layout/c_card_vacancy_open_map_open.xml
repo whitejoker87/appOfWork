@@ -8,7 +8,6 @@
 	<data>
 
 		<variable name="vacancy" type="ru.jobni.jobni.model.VacancyEntity" />
-		<variable name="position" type="Integer" />
 		<variable
 			name = "viewmodel"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"

@@ -31,7 +31,7 @@ class FragmentCard : Fragment() {
 
         binding.viewmodel = viewModel
 
-        binding.vacancy = repository.getVacancy().value!![0]
+        binding.vacancy = repository.getVacancy().value!![viewModel.posA]
 
         return view
     }
