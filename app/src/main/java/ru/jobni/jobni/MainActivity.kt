@@ -138,6 +138,7 @@ class MainActivity : AppCompatActivity() {
                 "Intro" -> setFragmentNoBackStack(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
+                "Card" -> setFragment(FragmentCard())
                 "Summary" -> setFragment(FragmentSummary())
                 "ReviewsUser" -> setFragment(FragmentReviewsUser())
                 "ReviewsOwner" -> setFragment(FragmentReviewsOwner())

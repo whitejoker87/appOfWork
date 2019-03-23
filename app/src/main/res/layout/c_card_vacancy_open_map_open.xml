@@ -2,10 +2,13 @@
 <layout
 	xmlns:android = "http://schemas.android.com/apk/res/android"
 	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	xmlns:tools = "http://schemas.android.com/tools"
 	>
 
 	<data>
 
+		<variable name="vacancy" type="ru.jobni.jobni.model.VacancyEntity" />
+		<variable name="position" type="Integer" />
 		<variable
 			name = "viewmodel"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
@@ -54,7 +57,8 @@
 					android:textStyle = "bold"
 					android:textColor = "@color/font_color"
 					android:textSize = "18sp"
-					android:text = "@string/card_vacancy_close_vacancy_name"
+					android:text="@{vacancy.vacancyName}"
+					tools:text = "@string/card_vacancy_close_vacancy_name"
 					/>
 
 				<ImageView

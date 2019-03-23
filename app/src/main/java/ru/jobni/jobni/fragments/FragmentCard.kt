@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CCardVacancyOpenMapOpenBinding
+import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentCard : Fragment() {
@@ -19,6 +20,8 @@ class FragmentCard : Fragment() {
 
     private lateinit var binding: CCardVacancyOpenMapOpenBinding
 
+    private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_card_vacancy_open_map_open, container, false)
 
@@ -27,6 +30,8 @@ class FragmentCard : Fragment() {
         val view = binding.root
 
         binding.viewmodel = viewModel
+
+        binding.vacancy = repository.getVacancy().value!![0]
 
         return view
     }

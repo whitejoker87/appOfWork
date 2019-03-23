@@ -2,11 +2,9 @@ package ru.jobni.jobni.utils
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.NonNull
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -48,21 +46,8 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
 
     override fun onBindViewHolder(viewHolder: CardRVAdapter.CardViewHolder, position: Int) {
 
-        val isExpanded = position == mExpandedPosition
-
-        viewHolder.btnLess.visibility = if (isExpanded) View.VISIBLE else View.GONE
-        viewHolder.expandConstraintLayout.visibility = if (isExpanded) View.VISIBLE else View.GONE
-
-        viewHolder.btnExpand.isActivated = isExpanded
-
-        if (isExpanded)
-            previousExpandedPosition = position
-
         viewHolder.btnExpand.setOnClickListener {
-            mExpandedPosition = if (isExpanded) -1 else position
-            cardExpand(position)
-            notifyItemChanged(previousExpandedPosition)
-            notifyItemChanged(position)
+            viewModel.setFragmentLaunch("Card")
         }
 
         viewHolder.bind(vacancies[position])
@@ -91,9 +76,6 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
             RecyclerView.ViewHolder(binding.root) {
 
         var btnExpand: Button = binding.btnExpand
-        var btnLess: Button = binding.btnLess
-
-        var expandConstraintLayout: ConstraintLayout = binding.constraintLayoutExpand
 
         fun bind(vacancy: VacancyEntity) {
             binding.vacancy = vacancy
