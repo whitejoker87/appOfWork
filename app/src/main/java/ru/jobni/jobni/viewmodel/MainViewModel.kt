@@ -372,11 +372,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun onCardExpandVacancyClick(position: Int) {
         cardPosition = position
         cardExpandInfo(position)
-        setFragmentLaunch("Card")
+
+        // Нужно дождаться ответа от сервера
+        // и заполения обновленных данных
+        val handler = Handler()
+        handler.postDelayed({
+            setFragmentLaunch("Card")
+        }, SERVER_RESPONSE_DELAY)
     }
 
     fun onEyeRVVacancyClick(position: Int) {
-        Toast.makeText(context, "глазик " + position.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "eye $position", Toast.LENGTH_SHORT).show()
     }
 
     private fun cardExpandInfo(position: Int) {
