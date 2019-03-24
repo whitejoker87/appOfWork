@@ -5,6 +5,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,7 +17,7 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentCard : Fragment() {
 
-    val SERVER_LOAD_CARD_DELAY: Long = 10000 // 10 sec. Время ожидания положительного ответа от АПИ
+    val SERVER_LOAD_CARD_DELAY: Long = 5000 // 5 sec. Время ожидания положительного ответа от АПИ
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -39,6 +40,11 @@ class FragmentCard : Fragment() {
 
         binding.viewmodel = viewModel
 
+        val toolbar = binding.cardOpenToolbar.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.title = "Описание вакансии"
+
         viewModel.isCardExpandResponse().observe(this, Observer {
             showProgressBar()
             viewModel.setLoadCardVisible(false)
@@ -51,8 +57,8 @@ class FragmentCard : Fragment() {
                     hideProgressBar()
                     viewModel.setLoadCardFailVisible(true)
                 }, SERVER_LOAD_CARD_DELAY)
-            }
-            else {
+            } else {
+                hideProgressBar()
                 viewModel.setLoadCardVisible(true)
             }
         })

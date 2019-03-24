@@ -25,6 +25,17 @@
 		android:layout_height = "match_parent"
 		>
 
+		<include
+			android:id = "@+id/card_open_toolbar"
+			layout = "@layout/toolbar_main"
+			android:layout_width = "match_parent"
+			android:layout_height = "0dp"
+			app:layout_constraintTop_toTopOf = "parent"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			app:viewmodel = "@{viewmodel}"
+			/>
+
 		<TextView
 			android:id = "@+id/load_card_fail"
 			android:visibility = "@{safeUnbox(viewmodel.isLoadCardFailVisible()) ? View.VISIBLE : View.GONE}"
@@ -59,6 +70,7 @@
 			android:visibility = "@{safeUnbox(viewmodel.isLoadCardVisible()) ? View.VISIBLE : View.GONE}"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent"
+			android:layout_marginTop="?attr/actionBarSize"
 			>
 
 			<ScrollView
