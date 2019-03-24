@@ -54,7 +54,7 @@
 		<include
 			android:id = "@+id/load_icon"
 			app:viewmodel = "@{viewmodel}"
-			layout = "@layout/search_loading_icon"
+			layout = "@layout/progress_loading_icon"
 			android:layout_width = "match_parent"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toTopOf = "parent"
