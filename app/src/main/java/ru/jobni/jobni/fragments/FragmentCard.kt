@@ -5,7 +5,6 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,6 +16,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentCard : Fragment() {
 
+    val SERVER_LOAD_CARD_DELAY: Long = 10000 // 10 sec. Время ожидания положительного ответа от АПИ
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -24,7 +25,6 @@ class FragmentCard : Fragment() {
     private lateinit var binding: CCardVacancyOpenMapOpenBinding
 
     private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
-    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_card_vacancy_open_map_open, container, false)
@@ -39,8 +39,6 @@ class FragmentCard : Fragment() {
 
         binding.viewmodel = viewModel
 
-        progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
-
         viewModel.isCardExpandResponse().observe(this, Observer {
             showProgressBar()
             viewModel.setLoadCardVisible(false)
@@ -49,9 +47,10 @@ class FragmentCard : Fragment() {
             if (!it) {
                 val handler = Handler()
                 handler.postDelayed({
+                    // Если ответа от АПИ нет, скрываем ProgressBar и выводим сообщение об ошибке
                     hideProgressBar()
                     viewModel.setLoadCardFailVisible(true)
-                }, 2000)
+                }, SERVER_LOAD_CARD_DELAY)
             }
             else {
                 viewModel.setLoadCardVisible(true)
@@ -66,10 +65,10 @@ class FragmentCard : Fragment() {
     }
 
     private fun showProgressBar() {
-        progressBar.animate().setDuration(200).alpha(1f).start()
+        binding.loadIcon.searchProgressBar.animate().setDuration(200).alpha(1f).start()
     }
 
     private fun hideProgressBar() {
-        progressBar.animate().setDuration(200).alpha(0f).start()
+        binding.loadIcon.searchProgressBar.animate().setDuration(200).alpha(0f).start()
     }
 }
