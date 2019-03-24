@@ -2,8 +2,17 @@ package ru.jobni.jobni.viewmodel
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import ru.jobni.jobni.model.network.registration.RegUser
+import ru.jobni.jobni.utils.Retrofit
 
 
 class RegViewModel(application: Application) : AndroidViewModel(application) {
@@ -112,6 +121,28 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setNumberOfVisibleItemReg(numberItem: Int) {
         numberOfVisibleItemReg.value = numberItem
+    }
+
+    fun btnRegUserClick() {
+
+        val user = RegUser(
+            regMail.value!!,
+            regPassword.value!!,
+            regPassConfirm.value!!
+        )
+        //val userBody = RequestBody.create(MediaType.parse("application/json"), user)
+        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseBody> {
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    Toast.makeText(context, "Успешно отправдены дынные user", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
+            }
+        } )
     }
 
     fun btnRegClick() {

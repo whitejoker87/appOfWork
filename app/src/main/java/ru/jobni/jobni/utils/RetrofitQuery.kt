@@ -5,6 +5,9 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.UserAuth
+import ru.jobni.jobni.model.network.registration.RegContactFace
+import ru.jobni.jobni.model.network.registration.RegContactFaceContact
+import ru.jobni.jobni.model.network.registration.RegUser
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.DetailVacancy
@@ -34,7 +37,20 @@ interface RetrofitQuery {
     @POST("api/authorization/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<UserAuth>
 
-    @Multipart
-    @POST("api/registration/")
-    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
+    @POST("api/registration_user/")
+    fun sendRegistrationUser(@Body user: RegUser): Call<ResponseBody>
+
+
+    @POST("api/registration_contactface/")
+    fun sendRegistrationContactFace(@Body contactFace: RegContactFace): Call<ResponseBody>
+
+    @POST("api/registration_contactfacecontact/")
+    fun sendRegistrationContactFaceContact(@Body contacts: RegContactFaceContact): Call<ResponseBody>
+
+//    @Multipart
+//    @POST("api/registration/")
+//    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
+
 }
+
+
