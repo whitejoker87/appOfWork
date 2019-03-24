@@ -1,23 +1,17 @@
 package ru.jobni.jobni.utils
 
 
-import com.google.android.material.textfield.TextInputLayout
-import android.view.MenuItem
-import android.view.View
-import android.widget.*
-import androidx.core.view.GravityCompat
+import android.widget.AdapterView
+import android.widget.ListView
+import android.widget.SearchView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.databinding.BindingConversion
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import ru.jobni.jobni.model.RepositoryVacancyEntity
-import android.R.attr.name
-import androidx.databinding.BindingConversion
-
 
 
 @BindingMethods(
@@ -101,7 +95,7 @@ object BindingAdapters {
     @JvmStatic fun convertListToString(list: List<String>): String {
         val sb = StringBuilder()
         for (str in list) {
-            if (sb.length > 0) sb.append(", ")
+            if (sb.isNotEmpty()) sb.append(", ")
             sb.append(str)
         }
         return sb.toString()
