@@ -548,6 +548,7 @@
 					app:itemIconTint = "@color/font_color"
 					app:itemTextColor = "@color/font_color"
 					app:labelVisibilityMode = "labeled"
+					app:elevation="1dp"
 					/>
 			</androidx.constraintlayout.widget.ConstraintLayout>
 		</ScrollView>

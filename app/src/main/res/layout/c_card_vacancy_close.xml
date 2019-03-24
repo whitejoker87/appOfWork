@@ -273,193 +273,14 @@
 					tools:text = "@string/card_vacancy_close_employment_text"
 					/>
 
-				<androidx.constraintlayout.widget.ConstraintLayout
-					android:id = "@+id/constraint_layout_expand"
-					android:visibility = "gone"
-					android:layout_width = "match_parent"
-					android:layout_height = "wrap_content"
-					app:layout_constraintTop_toBottomOf = "@+id/employment_format_text"
-					app:layout_constraintStart_toStartOf = "parent"
-					app:layout_constraintEnd_toEndOf = "parent"
-					android:layout_marginTop = "8dp"
-					app:layout_constraintHorizontal_bias = "0.0"
-					>
-
-					<TextView
-						android:id = "@+id/company_description_headline"
-						android:visibility = "visible"
-						android:layout_width = "0dp"
-						android:layout_height = "wrap_content"
-						app:layout_constraintTop_toTopOf = "parent"
-						app:layout_constraintStart_toStartOf = "parent"
-						app:layout_constraintEnd_toEndOf = "parent"
-						android:layout_marginTop = "8dp"
-						android:layout_marginStart = "16dp"
-						android:layout_marginEnd = "16dp"
-						android:textStyle = "bold"
-						android:textColor = "@color/font_color"
-						android:textSize = "14sp"
-						android:text = "@string/card_vacancy_open_company_description_headline"
-						app:layout_constraintHorizontal_bias = "0.0"
-						/>
-
-					<TextView
-						android:id = "@+id/сompany_description_text"
-						android:visibility = "visible"
-						android:layout_width = "0dp"
-						android:layout_height = "wrap_content"
-						app:layout_constraintTop_toBottomOf = "@+id/company_description_headline"
-						app:layout_constraintStart_toStartOf = "parent"
-						app:layout_constraintEnd_toEndOf = "parent"
-						android:layout_marginStart = "16dp"
-						android:layout_marginEnd = "16dp"
-						android:textStyle = "normal"
-						android:textColor = "@color/font_color"
-						android:textSize = "14sp"
-						android:text = "@{vacancy.companyDescription}"
-						/>
-
-					<TextView
-						android:id = "@+id/vacancy_description_headline"
-						android:visibility = "visible"
-						android:layout_width = "0dp"
-						android:layout_height = "wrap_content"
-						app:layout_constraintTop_toBottomOf = "@+id/сompany_description_text"
-						app:layout_constraintStart_toStartOf = "parent"
-						app:layout_constraintEnd_toEndOf = "parent"
-						android:layout_marginTop = "16dp"
-						android:layout_marginStart = "16dp"
-						android:layout_marginEnd = "16dp"
-						android:textStyle = "bold"
-						android:textColor = "@color/font_color"
-						android:textSize = "14sp"
-						android:text = "@string/card_vacancy_open_vacancy_description_headline"
-						/>
-
-					<TextView
-						android:id = "@+id/vacancy_description_text"
-						android:visibility = "visible"
-						android:layout_width = "0dp"
-						android:layout_height = "wrap_content"
-						app:layout_constraintTop_toBottomOf = "@+id/vacancy_description_headline"
-						app:layout_constraintStart_toStartOf = "parent"
-						app:layout_constraintEnd_toEndOf = "parent"
-						android:layout_marginStart = "16dp"
-						android:layout_marginEnd = "16dp"
-						android:textStyle = "normal"
-						android:textColor = "@color/font_color"
-						android:textSize = "14sp"
-						android:text = "@{vacancy.vacancyDescription}"
-						/>
-
-					<TextView
-						android:id = "@+id/requirements_description_headline"
-						android:visibility = "visible"
-						android:layout_width = "0dp"
-						android:layout_height = "wrap_content"
-						app:layout_constraintTop_toBottomOf = "@+id/vacancy_description_text"
-						app:layout_constraintStart_toStartOf = "parent"
-						app:layout_constraintEnd_toEndOf = "parent"
-						android:layout_marginTop = "16dp"
-						android:layout_marginStart = "16dp"
-						android:layout_marginEnd = "16dp"
-						android:textStyle = "bold"
-						android:textColor = "@color/font_color"
-						android:textSize = "14sp"
-						android:text = "@string/card_vacancy_open_requirements_description_headline"
-						/>
-
-					<TextView
-						android:id = "@+id/requirements_description_text"
-						android:visibility = "visible"
-						android:layout_width = "0dp"
-						android:layout_height = "wrap_content"
-						app:layout_constraintTop_toBottomOf = "@+id/requirements_description_headline"
-						app:layout_constraintStart_toStartOf = "parent"
-						app:layout_constraintEnd_toEndOf = "parent"
-						android:layout_marginStart = "16dp"
-						android:layout_marginEnd = "16dp"
-						android:textStyle = "normal"
-						android:textColor = "@color/font_color"
-						android:textSize = "14sp"
-						android:text = "@{vacancy.requirementsDescription}"
-						/>
-
-					<TextView
-						android:id = "@+id/duties_description_headline"
-						android:visibility = "visible"
-						android:layout_width = "0dp"
-						android:layout_height = "wrap_content"
-						app:layout_constraintTop_toBottomOf = "@+id/requirements_description_text"
-						app:layout_constraintStart_toStartOf = "parent"
-						app:layout_constraintEnd_toEndOf = "parent"
-						android:layout_marginTop = "16dp"
-						android:layout_marginStart = "16dp"
-						android:layout_marginEnd = "16dp"
-						android:textStyle = "bold"
-						android:textColor = "@color/font_color"
-						android:textSize = "14sp"
-						android:text = "@string/card_vacancy_open_duties_description_headline"
-						/>
-
-					<TextView
-						android:id = "@+id/duties_description_text"
-						android:visibility = "visible"
-						android:layout_width = "0dp"
-						android:layout_height = "wrap_content"
-						app:layout_constraintTop_toBottomOf = "@+id/duties_description_headline"
-						app:layout_constraintStart_toStartOf = "parent"
-						app:layout_constraintEnd_toEndOf = "parent"
-						android:layout_marginStart = "16dp"
-						android:layout_marginEnd = "16dp"
-						android:textStyle = "normal"
-						android:textColor = "@color/font_color"
-						android:textSize = "14sp"
-						android:text = "@{vacancy.dutiesDescription}"
-						/>
-				</androidx.constraintlayout.widget.ConstraintLayout>
-
-				<TextView
-					android:id = "@+id/conditions_description_headline"
-					android:visibility = "gone"
-					android:layout_width = "0dp"
-					android:layout_height = "wrap_content"
-					app:layout_constraintTop_toBottomOf = "@+id/constraint_layout_expand"
-					app:layout_constraintStart_toStartOf = "@+id/background"
-					app:layout_constraintEnd_toEndOf = "@+id/background"
-					android:layout_marginTop = "16dp"
-					android:layout_marginStart = "16dp"
-					android:layout_marginEnd = "16dp"
-					android:textStyle = "bold"
-					android:textColor = "@color/font_color"
-					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_open_conditions_description_headline"
-					/>
-
-				<TextView
-					android:id = "@+id/conditions_description_text"
-					android:visibility = "gone"
-					android:layout_width = "0dp"
-					android:layout_height = "wrap_content"
-					app:layout_constraintTop_toBottomOf = "@+id/conditions_description_headline"
-					app:layout_constraintStart_toStartOf = "@+id/background"
-					app:layout_constraintEnd_toEndOf = "@+id/background"
-					android:layout_marginStart = "16dp"
-					android:layout_marginEnd = "16dp"
-					android:textStyle = "normal"
-					android:textColor = "@color/font_color"
-					android:textSize = "14sp"
-					android:text = "@string/card_vacancy_open_conditions_description_text"
-					/>
-
 				<View
 					android:id = "@+id/divider"
 					android:layout_width = "0dp"
 					android:layout_height = "1dp"
-					app:layout_constraintTop_toBottomOf = "@+id/constraint_layout_expand"
+					app:layout_constraintTop_toBottomOf = "@+id/employment_format_text"
 					app:layout_constraintStart_toStartOf = "@+id/background"
 					app:layout_constraintEnd_toEndOf = "@+id/background"
-					android:layout_marginVertical = "16dp"
+					android:layout_marginTop = "16dp"
 					android:background = "@color/theme_1_hover"
 					/>
 
@@ -476,6 +297,7 @@
 					android:textColor = "@color/font_color"
 					android:textSize = "16sp"
 					android:text = "@{vacancy.companyName}"
+					tools:text = "@string/company"
 					/>
 
 				<ImageView
@@ -487,7 +309,6 @@
 					app:layout_constraintStart_toEndOf = "@+id/company_name"
 					android:layout_marginStart = "8dp"
 					app:srcCompat = "@drawable/ic_online"
-					android:contentDescription = "TODO"
 					/>
 
 				<TextView
@@ -514,61 +335,6 @@
 					app:layout_constraintEnd_toEndOf = "@+id/background"
 					android:layout_marginEnd = "16dp"
 					app:srcCompat = "@drawable/ic_map_pin"
-					android:contentDescription = "TODO"
-					/>
-
-				<com.google.android.gms.maps.MapView
-					android:id = "@+id/mapView"
-					android:visibility = "gone"
-					android:layout_width = "0dp"
-					android:layout_height = "250dp"
-					app:layout_constraintTop_toBottomOf = "@+id/map_pin"
-					app:layout_constraintStart_toStartOf = "parent"
-					app:layout_constraintEnd_toEndOf = "parent"
-					android:layout_marginTop = "16dp"
-					android:layout_marginStart = "16dp"
-					android:layout_marginEnd = "16dp"
-					/>
-
-				<Button
-					android:id = "@+id/button_1"
-					android:visibility = "gone"
-					android:layout_width = "0dp"
-					android:layout_height = "wrap_content"
-					app:layout_constraintTop_toTopOf = "@+id/mapView"
-					app:layout_constraintStart_toStartOf = "@+id/mapView"
-					android:layout_marginTop = "8dp"
-					android:layout_marginStart = "8dp"
-					android:background = "@drawable/shape_button"
-					android:text = "@string/card_vacancy_map_job"
-					/>
-
-				<Button
-					android:id = "@+id/button_2"
-					android:visibility = "gone"
-					android:layout_width = "0dp"
-					android:layout_height = "wrap_content"
-					app:layout_constraintTop_toTopOf = "@+id/mapView"
-					app:layout_constraintStart_toEndOf = "@+id/button_1"
-					app:layout_constraintEnd_toStartOf = "@+id/button_3"
-					android:layout_marginTop = "8dp"
-					android:layout_marginStart = "8dp"
-					android:layout_marginEnd = "8dp"
-					android:background = "@drawable/shape_button"
-					android:text = "@string/card_vacancy_map_interviews"
-					/>
-
-				<Button
-					android:id = "@+id/button_3"
-					android:visibility = "gone"
-					android:layout_width = "0dp"
-					android:layout_height = "wrap_content"
-					app:layout_constraintTop_toTopOf = "@+id/mapView"
-					app:layout_constraintEnd_toEndOf = "@+id/mapView"
-					android:layout_marginTop = "8dp"
-					android:layout_marginEnd = "8dp"
-					android:background = "@drawable/shape_button"
-					android:text = "@string/card_vacancy_map_together"
 					/>
 
 				<Button
@@ -582,20 +348,6 @@
 					android:background = "@color/theme_1_color_1"
 					android:drawableTop = "@drawable/ic_expand_more_black_24dp"
 					android:onClick = "@{() -> viewmodel.onCardExpandVacancyClick(position)}"
-					/>
-
-				<Button
-					android:id = "@+id/btn_less"
-					android:visibility = "gone"
-					android:layout_width = "25dp"
-					android:layout_height = "35dp"
-					app:layout_constraintTop_toBottomOf = "@+id/divider"
-					app:layout_constraintStart_toStartOf = "@+id/background"
-					app:layout_constraintEnd_toEndOf = "@+id/background"
-					android:layout_marginTop = "50dp"
-					android:background = "@color/theme_1_color_1"
-					android:clickable = "false"
-					android:drawableTop = "@drawable/ic_expand_less_black_24dp"
 					/>
 			</androidx.constraintlayout.widget.ConstraintLayout>
 		</androidx.cardview.widget.CardView>
