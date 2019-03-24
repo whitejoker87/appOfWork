@@ -5,6 +5,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,6 +24,7 @@ class FragmentCard : Fragment() {
     private lateinit var binding: CCardVacancyOpenMapOpenBinding
 
     private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_card_vacancy_open_map_open, container, false)
@@ -37,12 +39,22 @@ class FragmentCard : Fragment() {
 
         binding.viewmodel = viewModel
 
+        progressBar = view.findViewById(R.id.search_progress_bar) as ProgressBar
+
         viewModel.isCardExpandResponse().observe(this, Observer {
+            showProgressBar()
+            viewModel.setLoadCardVisible(false)
+            viewModel.setLoadCardFailVisible(false)
+
             if (!it) {
                 val handler = Handler()
                 handler.postDelayed({
-                    binding.lay.visibility = View.GONE
-                }, 5000)
+                    hideProgressBar()
+                    viewModel.setLoadCardFailVisible(true)
+                }, 2000)
+            }
+            else {
+                viewModel.setLoadCardVisible(true)
             }
         })
 
@@ -51,5 +63,13 @@ class FragmentCard : Fragment() {
         })
 
         return view
+    }
+
+    private fun showProgressBar() {
+        progressBar.animate().setDuration(200).alpha(1f).start()
+    }
+
+    private fun hideProgressBar() {
+        progressBar.animate().setDuration(200).alpha(0f).start()
     }
 }

@@ -160,6 +160,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun isCardExpandResponse(): MutableLiveData<Boolean> = isCardExpandResponse
 
 
+    private val isLoadCardVisible = MutableLiveData<Boolean>()
+
+    fun setLoadCardVisible(isVisible: Boolean) {
+        isLoadCardVisible.value = isVisible
+    }
+
+    fun isLoadCardVisible(): MutableLiveData<Boolean> = isLoadCardVisible
+
+
+    private val isLoadCardFailVisible = MutableLiveData<Boolean>()
+
+    fun setLoadCardFailVisible(isVisible: Boolean) {
+        isLoadCardFailVisible.value = isVisible
+    }
+
+    fun isLoadCardFailVisible(): MutableLiveData<Boolean> = isLoadCardFailVisible
+
+
     fun openLeftMenu() {
         setOpenDrawerLeft(true)
     }
@@ -381,7 +399,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun onCardExpandVacancyClick(position: Int) {
         cardPosition = position
         cardExpandInfo(position)
-        setFragmentLaunch("Card")
+
+        val handler = Handler()
+        handler.postDelayed({
+            setFragmentLaunch("Card")
+        }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
     }
 
     fun onEyeRVVacancyClick(position: Int) {
