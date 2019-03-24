@@ -151,6 +151,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 
 
+    private val isCardExpandResponse = MutableLiveData<Boolean>(true)
+
+    fun setCardExpandResponse(authKey: Boolean) {
+        isCardExpandResponse.value = authKey
+    }
+
+    fun isCardExpandResponse(): MutableLiveData<Boolean> = isCardExpandResponse
+
+
     fun openLeftMenu() {
         setOpenDrawerLeft(true)
     }
@@ -372,13 +381,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun onCardExpandVacancyClick(position: Int) {
         cardPosition = position
         cardExpandInfo(position)
-
-        // Нужно дождаться ответа от сервера
-        // и заполения обновленных данных
-        val handler = Handler()
-        handler.postDelayed({
-            setFragmentLaunch("Card")
-        }, SERVER_RESPONSE_DELAY)
+        setFragmentLaunch("Card")
     }
 
     fun onEyeRVVacancyClick(position: Int) {
@@ -390,6 +393,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
             override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
+                if (response.code() == 404){
+                    setCardExpandResponse(false)
+                }
+
                 if (response.body() != null) {
 
                     val resultList: Detail = response.body()!!.detail
@@ -401,6 +408,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             dutiesDescription = resultList.duties
                     )
                     repository.saveVacancy(newObj)
+                    setCardExpandResponse(true)
                 }
             }
 

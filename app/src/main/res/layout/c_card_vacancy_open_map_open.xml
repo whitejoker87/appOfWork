@@ -21,6 +21,7 @@
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id = "@+id/lay"
 		android:layout_width = "match_parent"
 		android:layout_height = "match_parent"
 		>
@@ -548,7 +549,7 @@
 					app:itemIconTint = "@color/font_color"
 					app:itemTextColor = "@color/font_color"
 					app:labelVisibilityMode = "labeled"
-					app:elevation="1dp"
+					app:elevation = "1dp"
 					/>
 			</androidx.constraintlayout.widget.ConstraintLayout>
 		</ScrollView>
