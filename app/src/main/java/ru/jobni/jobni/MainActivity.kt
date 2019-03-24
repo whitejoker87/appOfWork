@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity() {
         tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
 
         viewModelAuth.isAuthUser().observe(this, Observer {
-            viewModel.setFragmentLaunch("Auth")
+            setFragmentReturnBackStack()
             closeKeyboard()
         })
     }
@@ -234,6 +234,10 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit()
+    }
+
+    private fun setFragmentReturnBackStack() {
+        supportFragmentManager.popBackStack()
     }
 
     private fun closeKeyboard() {
