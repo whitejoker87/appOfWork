@@ -73,7 +73,7 @@
     <string name="card_vacancy_map_interviews">Собеседования</string>
     <string name="card_vacancy_map_together">Все</string>
     <string name="search_item">Менеджер по продажам</string>
-    <string name="search_button">Поиск</string>
+    <string name="search_button">Найти работу</string>
     <string name="menu_right_item">Java</string>
     <string name="search_view_hint">Введите Компетенцию</string>
     <string name="search_view_suggestions_empty">Нет совпадений</string>
