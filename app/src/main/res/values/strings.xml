@@ -168,4 +168,5 @@
     <string name="user_auth_new_mail">Новая почта</string>
     <string name="user_auth_new_mail_confirm">Подтвердите почту</string>
     <string name="btn_change_user_mail_confirm_text">Подтвердить</string>
+    <string name="error_load_data_text">ERROR LOAD DATA</string>
 </resources>
