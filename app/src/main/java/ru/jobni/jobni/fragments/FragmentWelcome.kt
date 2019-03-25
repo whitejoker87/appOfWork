@@ -19,10 +19,7 @@ class FragmentWelcome : Fragment() {
 
     private lateinit var binding: FragmentWelcomeBinding
 
-    override fun onCreateView(
-
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
         val view = binding.root
         binding.viewmodel = viewModel
