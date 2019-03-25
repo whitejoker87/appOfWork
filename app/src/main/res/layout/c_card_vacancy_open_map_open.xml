@@ -552,6 +552,7 @@
 						app:layout_constraintStart_toStartOf = "@+id/mapView"
 						android:layout_marginTop = "8dp"
 						android:layout_marginStart = "8dp"
+						android:textSize = "12sp"
 						android:background = "@drawable/shape_button"
 						android:text = "@string/card_vacancy_map_job"
 						/>
@@ -566,6 +567,7 @@
 						android:layout_marginTop = "8dp"
 						android:layout_marginStart = "8dp"
 						android:layout_marginEnd = "8dp"
+						android:textSize = "12sp"
 						android:background = "@drawable/shape_button"
 						android:text = "@string/card_vacancy_map_interviews"
 						/>
@@ -578,6 +580,7 @@
 						app:layout_constraintEnd_toEndOf = "@+id/mapView"
 						android:layout_marginTop = "8dp"
 						android:layout_marginEnd = "8dp"
+						android:textSize = "12sp"
 						android:background = "@drawable/shape_button"
 						android:text = "@string/card_vacancy_map_together"
 						/>
