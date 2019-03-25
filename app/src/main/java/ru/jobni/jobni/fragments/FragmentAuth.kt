@@ -33,8 +33,13 @@ class FragmentAuth : Fragment() {
 
         binding.viewmodel = viewModel
 
-        binding.includeSocialNetwork.viewmodelauth = viewModelAuth
+        binding.viewmodelauth = viewModelAuth
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModelAuth.setBtnUserClickable(true)
     }
 }

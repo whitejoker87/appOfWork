@@ -8,6 +8,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -68,7 +69,7 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
                 // regFragmentPhaseContainer object could be checked on inner class ViewHolder
                 if (holder.regFragmentPhaseContainer.isShown) {
                     holder.regFragmentPhaseContainer.visibility = View.GONE
-                    holder.regFragmentPhaseTitle.setTextColor(mContext.resources.getColor(ru.jobni.jobni.R.color.black))
+                    holder.regFragmentPhaseTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black))
                 } else {
                     setFragmentInItem(holder, position)
                     notifyDataSetChanged()

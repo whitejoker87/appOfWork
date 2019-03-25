@@ -26,7 +26,6 @@
 
 		<ImageButton
 			android:id = "@+id/btn_user"
-			android:visibility = "@{safeUnbox(viewmodelauth.isBtnUserLoggedVisible()) ? View.GONE : View.VISIBLE}"
 			android:layout_width = "48dp"
 			android:layout_height = "48dp"
 			app:layout_constraintTop_toTopOf = "@+id/bnt_ok"
@@ -34,22 +33,9 @@
 			app:layout_constraintEnd_toStartOf = "@+id/btn_phone"
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_user"
-			android:background = "@drawable/shape_badge"
-			android:onClick = '@{() -> viewmodel.setFragmentLaunch("AuthUser")}'
-			/>
-
-		<ImageButton
-			android:id = "@+id/btn_user_on"
-			android:visibility = "@{safeUnbox(viewmodelauth.isBtnUserLoggedVisible()) ? View.VISIBLE : View.GONE}"
-			android:layout_width = "48dp"
-			android:layout_height = "48dp"
-			app:layout_constraintTop_toTopOf = "@+id/bnt_ok"
-			app:layout_constraintBottom_toBottomOf = "@+id/bnt_ok"
-			app:layout_constraintEnd_toStartOf = "@+id/btn_phone"
-			android:layout_marginEnd = "12dp"
-			app:srcCompat = "@drawable/ic_user"
-			android:background = "@drawable/shape_button"
-			android:onLongClick = "@{() -> viewmodelauth.onAuthUserLongClick()}"
+			android:background = "@{safeUnbox(viewmodelauth.isBtnUserLoggedVisible()) ? @drawable/shape_button : @drawable/shape_badge}"
+			android:clickable = "@{safeUnbox(viewmodelauth.isBtnUserClickable()) ? true : false}"
+			android:onClick = '@{() -> viewmodel.setFragmentLaunch(viewmodelauth.isBtnUserLoggedVisible() ? "AuthUserLogged" : "AuthUser")}'
 			/>
 
 		<ImageButton

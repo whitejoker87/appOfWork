@@ -52,6 +52,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val isToolbarVisible = MutableLiveData<Boolean>(false)
     private val isSearchListViewVisible = MutableLiveData<Boolean>(false)
 
+    // Позиция карточки для открытия в отдельном фрагменте
+    var cardPosition = 0
+
     val context = application
 
     private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
@@ -146,6 +149,33 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 //    private fun loadUsers(): List<String> {
 //        // Do an asynchronous operation to fetch users.
 //    }
+
+
+    private val isCardExpandResponse = MutableLiveData<Boolean>(true)
+
+    fun setCardExpandResponse(authKey: Boolean) {
+        isCardExpandResponse.value = authKey
+    }
+
+    fun isCardExpandResponse(): MutableLiveData<Boolean> = isCardExpandResponse
+
+
+    private val isLoadCardVisible = MutableLiveData<Boolean>()
+
+    fun setLoadCardVisible(isVisible: Boolean) {
+        isLoadCardVisible.value = isVisible
+    }
+
+    fun isLoadCardVisible(): MutableLiveData<Boolean> = isLoadCardVisible
+
+
+    private val isLoadCardFailVisible = MutableLiveData<Boolean>()
+
+    fun setLoadCardFailVisible(isVisible: Boolean) {
+        isLoadCardFailVisible.value = isVisible
+    }
+
+    fun isLoadCardFailVisible(): MutableLiveData<Boolean> = isLoadCardFailVisible
 
 
     fun openLeftMenu() {
@@ -366,12 +396,47 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }, SERVER_RESPONSE_DELAY)
     }
 
-    fun onCardRVVacancyClick(position: Int) {
-        Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
+    fun onCardExpandVacancyClick(position: Int) {
+        cardPosition = position
+        cardExpandInfo(position)
+
+        val handler = Handler()
+        handler.postDelayed({
+            setFragmentLaunch("Card")
+        }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
     }
 
     fun onEyeRVVacancyClick(position: Int) {
-        Toast.makeText(context, "глазик " + position.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "eye $position", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun cardExpandInfo(position: Int) {
+        val requestID: Int = repository.getVacancy().value!![position].id
+
+        Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
+            override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
+                if (response.code() == 404){
+                    setCardExpandResponse(false)
+                }
+
+                if (response.body() != null) {
+
+                    val resultList: Detail = response.body()!!.detail
+
+                    val newObj: VacancyEntity = repository.getVacancy().value!![position].copy(
+                            companyDescription = resultList.company_description,
+                            vacancyDescription = resultList.description,
+                            requirementsDescription = resultList.requirements,
+                            dutiesDescription = resultList.duties
+                    )
+                    repository.saveVacancy(newObj)
+                    setCardExpandResponse(true)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancyDetail>, @NonNull t: Throwable) {
+            }
+        })
     }
 
     fun doSearchOnClick(query: String) {
