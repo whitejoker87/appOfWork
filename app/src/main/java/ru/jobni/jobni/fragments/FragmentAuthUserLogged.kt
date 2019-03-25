@@ -31,6 +31,8 @@ class FragmentAuthUserLogged : Fragment() {
 
         val view = binding.root
 
+        viewModelAuth.setBtnUserClickable(false)
+
         binding.viewmodelauth = viewModelAuth
 
         binding.viewmodel = viewModel
