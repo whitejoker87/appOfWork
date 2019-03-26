@@ -83,6 +83,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun isNoAuthRegVisible(): MutableLiveData<Boolean> = isNoAuthRegVisible
 
 
+    private val isYesAuthRegVisible = MutableLiveData<Boolean>()
+
+    fun setYesAuthRegVisible(isVisible: Boolean) {
+        isYesAuthRegVisible.value = isVisible
+    }
+
+    fun isYesAuthRegVisible(): MutableLiveData<Boolean> = isYesAuthRegVisible
+
+
     fun setOpenDrawerLeft(isOpen: Boolean) {
         isOpenDrawerLeft.value = isOpen
     }

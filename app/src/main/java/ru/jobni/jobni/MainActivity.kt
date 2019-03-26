@@ -76,13 +76,13 @@ class MainActivity : AppCompatActivity() {
         expandableListView = binding.expListIncludeRight.exp_list_view
 
         popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_menu_profile))
-        val inflater = popup.getMenuInflater()
-        inflater.inflate(R.menu.bottom_profile_not_logged_in, popup.getMenu())
+        val inflater = popup.menuInflater
+        inflater.inflate(R.menu.bottom_profile_not_logged_in, popup.menu)
         popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem): Boolean {
                 when (item.itemId) {
-                    R.id.reg_bottom_not_logged -> setFragment(FragmentReg())
-                    R.id.auth_bottom_not_logged -> setFragment(FragmentAuth())
+                    R.id.reg_bottom_not_logged -> viewModelMain.setFragmentLaunch("Registration")
+                    R.id.auth_bottom_not_logged -> viewModelMain.setFragmentLaunch("Auth")
                 }
                 return true
             }
@@ -121,7 +121,8 @@ class MainActivity : AppCompatActivity() {
         viewModelMain.isOpenDrawerLeft().observe(this, Observer { isOpen ->
             if (isOpen) {
                 if(viewModelAuth.isAuthUser().value == true){
-                    viewModelMain.setNoAuthRegVisible(true)
+                    viewModelMain.setNoAuthRegVisible(false)
+                    viewModelMain.setYesAuthRegVisible(true)
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     val view = this.currentFocus
@@ -131,7 +132,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 else {
-                    viewModelMain.setNoAuthRegVisible(false)
+                    viewModelMain.setNoAuthRegVisible(true)
+                    viewModelMain.setYesAuthRegVisible(false)
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     val view = this.currentFocus
@@ -161,6 +163,7 @@ class MainActivity : AppCompatActivity() {
                 "CompanyAdd" -> setFragment(FragmentCompanyAdd())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
                 "Auth" -> setFragment(FragmentAuth())
+                "Registration" -> setFragment(FragmentReg())
                 "AuthUser" -> setFragment(FragmentAuthUser())
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
                 "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
@@ -228,7 +231,7 @@ class MainActivity : AppCompatActivity() {
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.bottom_menu_search -> {
-                    setFragment(FragmentMain())
+                    viewModelMain.setFragmentLaunch("Main_focus")
                     return true
                 }
                 R.id.bottom_menu_notification -> {

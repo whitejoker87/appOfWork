@@ -20,19 +20,74 @@
 		android:layout_height = "match_parent"
 		>
 
-		<TextView
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toTopOf = "@+id/linearLayout"
-			app:layout_constraintBottom_toBottomOf = "parent"
-			app:layout_constraintStart_toStartOf = "parent"
-			app:layout_constraintEnd_toEndOf = "parent"
-			android:text = "TTTTTTTTTTTTTTTTTTTTT"
-			/>
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id = "@+id/cl_nav_header"
+			android:visibility = "@{safeUnbox(viewmodelmain.isNoAuthRegVisible()) ? View.VISIBLE : View.GONE}"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			>
+
+			<TextView
+				android:id = "@+id/tv_nav_header_text_info"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				app:layout_constraintTop_toTopOf = "parent"
+				app:layout_constraintBottom_toBottomOf = "parent"
+				app:layout_constraintStart_toStartOf = "parent"
+				app:layout_constraintEnd_toEndOf = "parent"
+				android:textSize = "18sp"
+				android:text = "@string/nav_header_text_info"
+				app:layout_constraintHorizontal_bias = "0.5"
+				app:layout_constraintVertical_bias = "0.4"
+				/>
+
+			<Button
+				android:id = "@+id/btn_auth_nav_header"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				app:layout_constraintTop_toBottomOf = "@+id/tv_nav_header_text_info"
+				app:layout_constraintStart_toStartOf = "parent"
+				app:layout_constraintEnd_toEndOf = "parent"
+				android:layout_marginTop = "8dp"
+				android:background = "@drawable/shape_button"
+				android:textSize = "12sp"
+				android:text = "@string/nav_header_btn_auth_text"
+				android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("Auth")}'
+				app:layout_constraintHorizontal_bias = "0.5"
+				/>
+
+			<TextView
+				android:id = "@+id/tv_nav_header_text_or"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				app:layout_constraintTop_toBottomOf = "@+id/btn_auth_nav_header"
+				app:layout_constraintStart_toStartOf = "parent"
+				app:layout_constraintEnd_toEndOf = "parent"
+				android:layout_marginTop = "8dp"
+				android:textSize = "18sp"
+				android:text = "@string/nav_header_text_or"
+				app:layout_constraintHorizontal_bias = "0.5"
+				/>
+
+			<Button
+				android:id = "@+id/btn_reg_nav_header"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				app:layout_constraintTop_toBottomOf = "@+id/tv_nav_header_text_or"
+				app:layout_constraintStart_toStartOf = "parent"
+				app:layout_constraintEnd_toEndOf = "parent"
+				android:layout_marginTop = "8dp"
+				android:background = "@drawable/shape_button"
+				android:textSize = "12sp"
+				android:text = "@string/nav_header_btn_reg_text"
+				android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("Registration")}'
+				app:layout_constraintHorizontal_bias = "0.5"
+				/>
+		</androidx.constraintlayout.widget.ConstraintLayout>
 
 		<LinearLayout
-			android:id = "@+id/linearLayout"
-			android:visibility = "@{safeUnbox(viewmodelmain.isNoAuthRegVisible()) ? View.VISIBLE : View.GONE}"
+			android:id = "@+id/ll_nav_header"
+			android:visibility = "@{safeUnbox(viewmodelmain.isYesAuthRegVisible()) ? View.VISIBLE : View.GONE}"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent"
 			app:layout_constraintTop_toTopOf = "parent"
