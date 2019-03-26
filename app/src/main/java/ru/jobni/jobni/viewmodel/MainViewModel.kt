@@ -73,6 +73,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getChildList(): MutableLiveData<HashMap<String, List<String>>> = childList
 
+
+    private val isNoAuthRegVisible = MutableLiveData<Boolean>()
+
+    fun setNoAuthRegVisible(isVisible: Boolean) {
+        isNoAuthRegVisible.value = isVisible
+    }
+
+    fun isNoAuthRegVisible(): MutableLiveData<Boolean> = isNoAuthRegVisible
+
+
     fun setOpenDrawerLeft(isOpen: Boolean) {
         isOpenDrawerLeft.value = isOpen
     }

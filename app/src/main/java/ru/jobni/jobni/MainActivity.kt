@@ -42,11 +42,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawer: DrawerLayout
 
     private val expandableListAdapter: ExpandableListAdapter by lazy {
-        ExpandableListAdapter(applicationContext, viewModel.getHeaderList().value!!, viewModel.getChildList().value!!)
+        ExpandableListAdapter(applicationContext, viewModelMain.getHeaderList().value!!, viewModelMain.getChildList().value!!)
     }
     private lateinit var expandableListView: ExpandableListView
 
-    private val viewModel: MainViewModel by lazy {
+    private val viewModelMain: MainViewModel by lazy {
         ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
-        binding.viewmodel = viewModel
+        binding.viewmodelmain = viewModelMain
         drawer = binding.drawerLayout
 
         //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView = binding.menuBottom
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        expandableListView = binding.expListInclude.exp_list_view
+        expandableListView = binding.expListIncludeRight.exp_list_view
 
         popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_menu_profile))
         val inflater = popup.getMenuInflater()
@@ -88,25 +88,25 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        //viewModel.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
-        viewModel.saveLaunchFlag(true)//отладка первого запуска true
+        //viewModelMain.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
+        viewModelMain.saveLaunchFlag(true)//отладка первого запуска true
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
         }
 
-        viewModel.getHeaderList().observe(this, Observer { headerList ->
-            viewModel.loadChildList(headerList)
+        viewModelMain.getHeaderList().observe(this, Observer { headerList ->
+            viewModelMain.loadChildList(headerList)
         })
 
-        viewModel.getChildList().observe(this, Observer {
-            if (viewModel.getHeaderList().value != null) {
+        viewModelMain.getChildList().observe(this, Observer {
+            if (viewModelMain.getHeaderList().value != null) {
                 expandableListView.setAdapter(expandableListAdapter)
             }
         })
 
-        viewModel.isOpenDrawerRight().observe(this, Observer { isOpen ->
+        viewModelMain.isOpenDrawerRight().observe(this, Observer { isOpen ->
             if (isOpen) {
-                drawer.openDrawer(GravityCompat.END)//todo
+                drawer.openDrawer(GravityCompat.END)
                 //ниже закрываем клавиатуру если открыта
                 val view = this.currentFocus
                 view?.let { v ->
@@ -118,21 +118,35 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.isOpenDrawerLeft().observe(this, Observer { isOpen ->
+        viewModelMain.isOpenDrawerLeft().observe(this, Observer { isOpen ->
             if (isOpen) {
-                drawer.openDrawer(GravityCompat.START)//todo
-                //ниже закрываем клавиатуру если открыта
-                val view = this.currentFocus
-                view?.let { v ->
-                    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+                if(viewModelAuth.isAuthUser().value == true){
+                    viewModelMain.setNoAuthRegVisible(true)
+                    drawer.openDrawer(GravityCompat.START)
+                    //ниже закрываем клавиатуру если открыта
+                    val view = this.currentFocus
+                    view?.let { v ->
+                        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                        imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+                    }
                 }
-            } else {
+                else {
+                    viewModelMain.setNoAuthRegVisible(false)
+                    drawer.openDrawer(GravityCompat.START)
+                    //ниже закрываем клавиатуру если открыта
+                    val view = this.currentFocus
+                    view?.let { v ->
+                        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                        imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+                    }
+                }
+            }
+            else {
                 drawer.closeDrawer(GravityCompat.START)
             }
         })
 
-        viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
+        viewModelMain.getFragmentLaunch().observe(this, Observer { fragmentType ->
             when (fragmentType) {
                 "Welcome" -> setFragmentNoBackStack(FragmentWelcome())
                 "Intro" -> setFragmentNoBackStack(FragmentIntro())
@@ -155,12 +169,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.isBottomNavigationViewVisible().observe(this, Observer { isVisible ->
+        viewModelMain.isBottomNavigationViewVisible().observe(this, Observer { isVisible ->
             if (isVisible) binding.menuBottom.visibility = View.VISIBLE
             else binding.menuBottom.visibility = View.GONE
         })
 
-        viewModel.isDrawerRightLocked().observe(this, Observer { isLocked ->
+        viewModelMain.isDrawerRightLocked().observe(this, Observer { isLocked ->
             if (isLocked) binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })

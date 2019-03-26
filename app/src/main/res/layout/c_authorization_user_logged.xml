@@ -98,7 +98,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_badge"
 			android:text = "@string/btn_change_user_auth_text"
-			android:clickable = "false"
+			android:onClick="@{() -> viewmodelauth.onAuthUserChangeClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
