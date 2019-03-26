@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,7 +31,7 @@ class FragmentAuth : Fragment() {
 
         val view = binding.root
 
-        binding.viewmodel = viewModel
+        binding.viewmodelmain = viewModel
 
         binding.includeSocialNetwork.viewmodelauth = viewModelAuth
 

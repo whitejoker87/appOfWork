@@ -7,7 +7,7 @@
 	<data>
 
 		<variable
-			name = "viewmodel"
+			name = "viewmodelmain"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
 
@@ -58,7 +58,7 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "36dp"
-			app:viewmodel = "@{viewmodel}"
+			app:viewmodelmain = "@{viewmodelmain}"
 			/>
 
 		<EditText
@@ -87,7 +87,7 @@
 			app:layout_constraintEnd_toEndOf = "@+id/et_mail"
 			android:layout_marginTop = "16dp"
 			style = "@style/text_color_and_size"
-			android:inputType = "textPassword|numberPassword"
+			android:inputType = "textPassword"
 			android:hint = "@string/password_1"
 			android:text = "@={viewmodelauth.authPass}"
 			/>

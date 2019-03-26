@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.reg
 
 import android.content.Context
 import android.os.Bundle

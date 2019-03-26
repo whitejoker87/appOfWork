@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater

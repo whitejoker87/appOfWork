@@ -7,7 +7,7 @@
 	<data>
 
 		<variable
-			name = "viewmodel"
+			name = "viewmodelmain"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
 
@@ -53,7 +53,7 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "36dp"
-			app:viewmodel = "@{viewmodel}"
+			app:viewmodelmain = "@{viewmodelmain}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

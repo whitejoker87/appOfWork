@@ -36,3 +36,8 @@ data class RegContactFaceContact(
         @SerializedName("consent_public_offers")val offers: Boolean,
         @SerializedName("contacts")val contacts: ArrayList<Contact>
 )
+
+data class ResponseReg(
+        @SerializedName("success")val success: Boolean,
+        @SerializedName("error_text")val error_text:List<String>
+)

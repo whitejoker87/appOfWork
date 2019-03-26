@@ -4,7 +4,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="viewmodel" type="ru.jobni.jobni.viewmodel.RegViewModel"/>
+        <variable name="viewmodelreg" type="ru.jobni.jobni.viewmodel.RegViewModel"/>
+        <variable name="viewmodelmain" type="ru.jobni.jobni.viewmodel.MainViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +33,7 @@
                   style="@style/text_color_and_size"
                   android:inputType="text"
                   android:hint="@string/referral_link"
-                  android:text="@={viewmodel.regReferer}"/>
+                  android:text="@={viewmodelreg.regReferer}"/>
         <TextView android:id="@+id/referral_message"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -50,7 +51,9 @@
                  app:layout_constraintTop_toBottomOf="@+id/referral_message"
                  app:layout_constraintStart_toStartOf="@+id/background"
                  app:layout_constraintEnd_toEndOf="@+id/background"
-                 android:layout_marginTop="16dp"/>
+                 android:layout_marginTop="16dp"
+                 app:viewmodelreg="@{viewmodelreg}"
+                 app:viewmodelmain="@{viewmodelmain}"/>
         <EditText android:id="@+id/mail"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
@@ -62,7 +65,7 @@
                   style="@style/text_color_and_size"
                   android:inputType="textEmailAddress"
                   android:hint="@string/mail_1"
-                  android:text="@={viewmodel.regMail}"/>
+                  android:text="@={viewmodelreg.regMail}"/>
         <EditText android:id="@+id/password_1"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
@@ -73,7 +76,7 @@
                   style="@style/text_color_and_size"
                   android:inputType="textPassword"
                   android:hint="@string/password_1"
-                  android:text="@={viewmodel.regPassword}"/>
+                  android:text="@={viewmodelreg.regPassword}"/>
         <EditText android:id="@+id/password_2"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
@@ -84,7 +87,7 @@
                   style="@style/text_color_and_size"
                   android:inputType="textPassword"
                   android:hint="@string/password_4"
-                  android:text="@={viewmodel.regPassConfirm}"/>
+                  android:text="@={viewmodelreg.regPassConfirm}"/>
         <Button android:id="@+id/bind_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,6 +97,6 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/shape_button"
                 android:text="@string/bind_account"
-        android:onClick="@{() -> viewmodel.btnRegUserClick()}"/>
+        android:onClick="@{() -> viewmodelreg.btnRegUserClick()}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

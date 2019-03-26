@@ -16,14 +16,28 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.MainActivity
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.RegPhaseRecyclerItemBinding
-import ru.jobni.jobni.fragments.FragmentRegOne
-import ru.jobni.jobni.fragments.FragmentRegThree
-import ru.jobni.jobni.fragments.FragmentRegTwo
+import ru.jobni.jobni.fragments.reg.*
 import ru.jobni.jobni.viewmodel.RegViewModel
+import android.media.VolumeShaper
+import android.os.Handler
 
 
 class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mContext: Context) :
     RecyclerView.Adapter<RegRecyclerAdapter.ViewHolder>() {
+
+    init {
+        val mAnimationUp= AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_up)
+        val mAnimationDown = AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_down)
+    }
+
+    private val FINAL_OPACITY = 0.3f
+    private val START_OPACITY = 1f
+
+    private val ANIMATION_TIME = 500
+    private val TYPE_ITEM = 0
+    private val TYPE_DATE = 1
+    private val TYPE_TRANSACTION = 2
+    private val TYPE_PENDING = 3
 
     private val viewModel: RegViewModel by lazy {
         ViewModelProviders.of(mContext as FragmentActivity).get(RegViewModel::class.java)
@@ -32,45 +46,47 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
     // Get fragment manager inside our fragment
     val fragmentManager = (mContext as MainActivity).supportFragmentManager
 
+    var typeReg = "mail"
+        set(value) {
+            field = value
+            notifyItemChanged(viewModel.getNumberOfVisibleItemReg().value!!)
+        }
+
     private val mAnimationUp: Animation = AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_up)
     private val mAnimationDown: Animation = AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_down)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ru.jobni.jobni.databinding.RegPhaseRecyclerItemBinding =
-            DataBindingUtil.inflate(inflater, R.layout.reg_phase_recycler_item, parent, false)
+            DataBindingUtil.inflate(inflater, ru.jobni.jobni.R.layout.reg_phase_recycler_item, parent, false)
         return ViewHolder(binding, viewModel)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-//            when (position) {
-//                0 -> {
-//                    holder.regFragmentPhaseTitle.text = "1.Регистрационные данные"
-//                    //holder.regFragmentPhaseTitle.setTextColor(mContext.resources.getColor(ru.jobni.jobni.R.color.white))
-//                    //holder.regFragmentPhaseContainer.visibility = View.VISIBLE
-//                    //fragmentManager.beginTransaction().replace(ru.jobni.jobni.R.id.container_reg_rv_item, FragmentRegOne()).commit()
-//                    //if (fragmentManager.backStackEntryCount == 0) setFragmentInItem(holder, position)
-//                }
-//                1 -> holder.regFragmentPhaseTitle.text = "2.Основная информация"
-//                2 -> holder.regFragmentPhaseTitle.text = "3.Контактные данные"
-//            }
-
+            if (position == 0 && (viewModel.getNumberOfVisibleItemReg().value == -1 || viewModel.getNumberOfVisibleItemReg().value!! == 0)) {
+                setFragmentInItem(holder, position)
+            }
 
         // Remember that RecyclerView does not have onClickListener, you should implement it
         holder.itemView.setOnClickListener(object : View.OnClickListener {
 
             // Method that could us an unique id
-            val uniqueId = View.generateViewId()
+            //val uniqueId = View.generateViewId()
 
             override fun onClick(view: View) {
                 // Hide details
                 // regFragmentPhaseContainer object could be checked on inner class ViewHolder
                 if (holder.regFragmentPhaseContainer.isShown) {
-                    holder.regFragmentPhaseContainer.visibility = View.GONE
+//                    holder.regFragmentPhaseContainer.startAnimation(mAnimationDown)
+//                    Handler().postDelayed({
+                        holder.regFragmentPhaseContainer.visibility = View.GONE
+//                    }, 1000)
                     holder.regFragmentPhaseTitle.setTextColor(mContext.resources.getColor(ru.jobni.jobni.R.color.black))
                 } else {
+//                    holder.regFragmentPhaseContainer.startAnimation(mAnimationUp)
                     setFragmentInItem(holder, position)
+//                    holder.regFragmentPhaseContainer.visibility = View.VISIBLE
                     notifyDataSetChanged()
                 }
             }
@@ -105,10 +121,17 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
         // a different one is used
         val f: Fragment
         when (position) {
-            0 -> f = FragmentRegOne()
+            0 -> {
+                when(typeReg) {
+                    "mail" -> f = FragmentRegOneMail()
+                    "phone" -> f = FragmentRegOnePhone()
+                    "other" -> f = FragmentRegOneOther()
+                    else -> f = FragmentRegOneMail()
+                }
+            }
             1 -> f = FragmentRegTwo()
             2 -> f = FragmentRegThree()
-            else -> f = FragmentRegOne()
+            else -> f = FragmentRegOneMail()
         }
 
         // Then just replace the recycler view fragment as usually

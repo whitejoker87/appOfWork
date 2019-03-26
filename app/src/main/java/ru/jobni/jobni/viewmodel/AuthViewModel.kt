@@ -6,6 +6,7 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -70,7 +71,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         setBtnUserLoggedVisible(false)
 
-        Toast.makeText(context, context.getString(R.string.user_auth_delete_info_text), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, context.getString(R.string.user_auth_delete_info_text), Toast.LENGTH_SHORT).show()
 
         setAuthUser(true)
 
@@ -86,8 +87,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         val userData = UserAuth(getAuthUser(), getAuthPass())
 
-        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<UserAuth> {
-            override fun onResponse(@NonNull call: Call<UserAuth>, @NonNull response: Response<UserAuth>) {
+        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
                 if (response.body() != null) {
 
                     val resultListHeaders = response.headers().get("Set-Cookie")
@@ -112,7 +113,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<UserAuth>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })

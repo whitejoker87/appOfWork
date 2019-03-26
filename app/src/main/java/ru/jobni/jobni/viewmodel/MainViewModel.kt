@@ -76,6 +76,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val activityLaunch:MutableLiveData<Intent> = MutableLiveData()
     private var mCurrentPhotoPath: String? = ""
 
+    private val isIncludeSocialNetworkReg: MutableLiveData<Boolean> = MutableLiveData(false)
+
     init {
         repository.getVacancy().observeForever { vacancies ->
             modelVacancy.value = modelVacancy.value?.copy(vacancyList = vacancies!!)
@@ -169,6 +171,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getCurrentPhotoPath(): String? = mCurrentPhotoPath
 
+
+    fun setIncludeSocialNetworkReg(isReg: Boolean) {
+        isIncludeSocialNetworkReg.value = isReg
+    }
+
+    fun isIncludeSocialNetworkReg(): MutableLiveData<Boolean> = isIncludeSocialNetworkReg
 
     private val users: MutableLiveData<List<String>> by lazy {
         MutableLiveData<List<String>>().also {

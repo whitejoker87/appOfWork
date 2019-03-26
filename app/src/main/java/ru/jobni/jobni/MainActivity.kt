@@ -25,7 +25,9 @@ import kotlinx.android.synthetic.main.menu_right.view.*
 import kotlinx.android.synthetic.main.nav_header_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
+import ru.jobni.jobni.fragments.auth.*
 import ru.jobni.jobni.fragments.menuleft.*
+import ru.jobni.jobni.fragments.reg.FragmentReg
 import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.utils.menuleft.NavPALeft
 import ru.jobni.jobni.viewmodel.AuthViewModel
@@ -153,6 +155,9 @@ class MainActivity : AppCompatActivity() {
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
                 "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
                 "AuthUserLoggedMail" -> setFragment(FragmentAuthUserLoggedChangeMail())
+                "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
+                "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
+                "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")
                 else -> setFragment(FragmentWelcome())
             }
         })
