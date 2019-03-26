@@ -506,7 +506,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun buildCardsList(limitNext: Int, offsetNext: Int) {
-        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
+        Retrofit.api?.loadVacancy(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
                 if (response.body() != null) {
 
