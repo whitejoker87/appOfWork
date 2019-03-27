@@ -8,9 +8,11 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.model.network.company.CompanyVacancy
 import ru.jobni.jobni.model.network.company.ResultsCompany
 import ru.jobni.jobni.utils.Retrofit
+import java.util.*
 
 object RepositoryOwner {
 
+    /* Блок функций если пользователь авторизован в приложении */
     fun makeNavigationListOwnerAuthOn(): List<NavigationParent> {
         return makeCompanyListAuthOn()
     }
@@ -72,63 +74,53 @@ object RepositoryOwner {
 
 
 
-
+    /* Блок функций если пользователь не авторизован в приложении */
     fun makeNavigationListOwnerAuthOff(): List<NavigationParent> {
-        return makeCompanyListAuthOff()
+        return Arrays.asList(
+            makeParentOneOwnerAuthOff(),
+            makeParentTwoOwnerAuthOff(),
+            makeParentThreeOwnerAuthOff()
+        )
     }
 
-    private fun makeCompanyListAuthOff(): List<NavigationParent> {
-
-//        val receiveCompanyList = listOf("Компания 1", "Компания 2")
-        val setCompanyList = ArrayList<NavigationParent>()
-        val receiveCompanyList: MutableList<String> = mutableListOf()
-
-        Retrofit.api?.ownerOrWorker()?.enqueue(object : Callback<CompanyVacancy> {
-            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
-                if (response.body() != null) {
-
-                    val resultList: List<ResultsCompany> = response.body()!!.results
-
-                    for (i in 0 until resultList.size) {
-                        receiveCompanyList.add(resultList[i].name)
-                    }
-//                    println("1 $receiveCompanyList")
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {}
-        })
-
-        setCompanyList.add(NavigationParent(
-                "Добавить компанию",
-                makeParentOneChildOwnerAuthOff(),
-                R.drawable.ic_company
-        ))
-
-        receiveCompanyList.forEach { companyName ->
-            setCompanyList.add(NavigationParent(
-                    companyName,
-                    makeParentTwoChildOwnerAuthOff(),
-                    R.drawable.ic_user
-            ))
-        }
-        return setCompanyList
+    private fun makeParentOneOwnerAuthOff(): NavigationParent {
+        return NavigationParent(
+            "Поиск",
+            makeParentOneChildOwnerAuthOff(),
+            R.drawable.ic_search
+        )
     }
 
     private fun makeParentOneChildOwnerAuthOff(): List<NavigationChild> {
-        return listOf()
+        val child1 = NavigationChild("Резюме", R.drawable.ic_search)
+        val child2 = NavigationChild("Кандидаты", R.drawable.ic_search)
+        val child3 = NavigationChild("Вакансии", R.drawable.ic_search)
+        val child4 = NavigationChild("Компании", R.drawable.ic_search)
+
+        return listOf(child1, child2, child3, child4)
+    }
+
+    private fun makeParentTwoOwnerAuthOff(): NavigationParent {
+        return NavigationParent(
+            "Добавить компанию",
+            makeParentTwoChildOwnerAuthOff(),
+            R.drawable.ic_user
+        )
     }
 
     private fun makeParentTwoChildOwnerAuthOff(): List<NavigationChild> {
-        val child1 = NavigationChild("Вакансии", 0)
-        val child2 = NavigationChild("Отзывы", 0)
-        val child3 = NavigationChild("Профиль", 0)
-        val child4 = NavigationChild("Баланс: 1000 Руб", 0)
-        val child5 = NavigationChild("Пополнить баланс", 0)
-        val child6 =
-                NavigationChild("История платежей", R.drawable.ic_user)
-        val child7 = NavigationChild("Оказанные услуги", 0)
+        return listOf()
+    }
 
-        return listOf(child1, child2, child3, child4, child5, child6, child7)
+    private fun makeParentThreeOwnerAuthOff(): NavigationParent {
+        return NavigationParent(
+            "Регистрация",
+            makeParentThreeChildOwnerAuthOff(),
+            R.drawable.ic_user
+        )
+    }
+
+    private fun makeParentThreeChildOwnerAuthOff(): List<NavigationChild> {
+        return listOf()
     }
 }

@@ -5,6 +5,7 @@ import java.util.*
 
 object RepositoryUser {
 
+    /* Блок функций если пользователь авторизован в приложении */
     fun makeNavigationListUserAuthOn(): List<NavigationParent> {
         return Arrays.asList(
             makeParentOneAuthOn(),
@@ -72,30 +73,34 @@ object RepositoryUser {
     }
 
 
+    /* Блок функций если пользователь не авторизован в приложении */
     fun makeNavigationListUserAuthOff(): List<NavigationParent> {
         return Arrays.asList(
                 makeParentOneAuthOff(),
-                makeParentTwoAuthOff(),
-                makeParentThreeAuthOff(),
-                makeParentFourAuthOff()
+                makeParentTwoAuthOff()
         )
     }
 
     private fun makeParentOneAuthOff(): NavigationParent {
         return NavigationParent(
-                "Резюме",
+                "Поиск",
                 makeParentOneChildAuthOff(),
                 R.drawable.ic_user
         )
     }
 
     private fun makeParentOneChildAuthOff(): List<NavigationChild> {
-        return listOf()
+        val child1 = NavigationChild("Вакансии", 0)
+        val child2 = NavigationChild("Компании", 0)
+        val child3 = NavigationChild("Резюме", 0)
+        val child4 = NavigationChild("Кандидаты", 0)
+
+        return listOf(child1, child2, child3, child4)
     }
 
     private fun makeParentTwoAuthOff(): NavigationParent {
         return NavigationParent(
-                "Отзывы",
+                "Регистрация",
                 makeParentTwoChildAuthOff(),
                 R.drawable.ic_user
         )
@@ -103,39 +108,6 @@ object RepositoryUser {
 
     private fun makeParentTwoChildAuthOff(): List<NavigationChild> {
         return listOf()
-    }
-
-    private fun makeParentThreeAuthOff(): NavigationParent {
-        return NavigationParent(
-                "Профиль",
-                makeParentThreeChildAuthOff(),
-                R.drawable.ic_user
-        )
-    }
-
-    private fun makeParentThreeChildAuthOff(): List<NavigationChild> {
-        return listOf()
-    }
-
-    private fun makeParentFourAuthOff(): NavigationParent {
-        return NavigationParent(
-                "Финансы",
-                makeParentFourChildAuthOff(),
-                R.drawable.ic_user
-        )
-    }
-
-    private fun makeParentFourChildAuthOff(): List<NavigationChild> {
-        val child1 = NavigationChild("Баланс: 1000 Руб", 0)
-        val child2 = NavigationChild("Пополнить баланс", 0)
-        val child3 = NavigationChild("История платежей", 0)
-        val child4 =
-                NavigationChild("Оказанные услуги", R.drawable.ic_user)
-        val child5 = NavigationChild("Оказанные услуги (детально)", 0)
-        val child6 = NavigationChild("Рефальная программа", 0)
-        val child7 = NavigationChild("Cashback", 0)
-
-        return listOf(child1, child2, child3, child4, child5, child6, child7)
     }
 }
 
