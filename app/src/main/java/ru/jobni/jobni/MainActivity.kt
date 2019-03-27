@@ -134,8 +134,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 else {
-                    viewModelMain.setNoAuthRegVisible(false) //true
-                    viewModelMain.setYesAuthRegVisible(true) //false
+                    viewModelMain.setNoAuthRegVisible(true) //true
+                    viewModelMain.setYesAuthRegVisible(false) //false
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     val view = this.currentFocus
@@ -195,11 +195,11 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val fragmentAdapter = NavPALeft(supportFragmentManager, this)
-        view_pager_nav_left.adapter = fragmentAdapter
-        tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
+        val fragmentAdapterAuthOn = NavPALeft(supportFragmentManager, this)
+        view_pager_nav_left_auth_on.adapter = fragmentAdapterAuthOn
+        tab_layout_nav_left_auth_on.setupWithViewPager(view_pager_nav_left_auth_on)
 
-        tab_layout_nav_left.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        tab_layout_nav_left_auth_on.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) { }
             override fun onTabUnselected(tab: TabLayout.Tab?) { }
 
@@ -207,6 +207,22 @@ class MainActivity : AppCompatActivity() {
                 when (tab.position) {
                     0 -> Toast.makeText(applicationContext, "1", Toast.LENGTH_LONG).show()
                     1 -> Toast.makeText(applicationContext, "2", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+
+        val fragmentAdapterAuthOff = NavPALeft(supportFragmentManager, this)
+        view_pager_nav_left_auth_off.adapter = fragmentAdapterAuthOff
+        tab_layout_nav_left_auth_off.setupWithViewPager(view_pager_nav_left_auth_off)
+
+        tab_layout_nav_left_auth_off.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) { }
+            override fun onTabUnselected(tab: TabLayout.Tab?) { }
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                when (tab.position) {
+                    0 -> Toast.makeText(applicationContext, "3", Toast.LENGTH_LONG).show()
+                    1 -> Toast.makeText(applicationContext, "4", Toast.LENGTH_LONG).show()
                 }
             }
         })

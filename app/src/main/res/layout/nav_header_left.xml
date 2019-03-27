@@ -20,74 +20,49 @@
 		android:layout_height = "match_parent"
 		>
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:id = "@+id/cl_nav_header"
+		<LinearLayout
+			android:id = "@+id/ll_nav_header_auth_off"
 			android:visibility = "@{safeUnbox(viewmodelmain.isNoAuthRegVisible()) ? View.VISIBLE : View.GONE}"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent"
+			app:layout_constraintTop_toTopOf = "parent"
+			app:layout_constraintBottom_toBottomOf = "parent"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			android:orientation = "vertical"
 			>
 
-			<TextView
-				android:id = "@+id/tv_nav_header_text_info"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				app:layout_constraintTop_toTopOf = "parent"
-				app:layout_constraintBottom_toBottomOf = "parent"
-				app:layout_constraintStart_toStartOf = "parent"
-				app:layout_constraintEnd_toEndOf = "parent"
-				android:textSize = "18sp"
-				android:text = "@string/nav_header_text_info"
-				app:layout_constraintHorizontal_bias = "0.5"
-				app:layout_constraintVertical_bias = "0.4"
-				/>
+			<com.google.android.material.tabs.TabLayout
+				android:id = "@+id/tab_layout_nav_left_auth_off"
+				android:layout_width = "match_parent"
+				android:layout_height = "60dp"
+				style = "@style/menu_left_tab_layout"
+				>
 
-			<Button
-				android:id = "@+id/btn_auth_nav_header"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				app:layout_constraintTop_toBottomOf = "@+id/tv_nav_header_text_info"
-				app:layout_constraintStart_toStartOf = "parent"
-				app:layout_constraintEnd_toEndOf = "parent"
-				android:layout_marginTop = "8dp"
-				android:background = "@drawable/shape_button"
-				android:textSize = "12sp"
-				android:text = "@string/nav_header_btn_auth_text"
-				app:layout_constraintHorizontal_bias = "0.5"
-				app:clickNavMenuBtnAuth = '@{viewmodelmain}'
-				app:authBtn = "@{@string/nav_header_btn_auth_click}"
-				/>
+				<com.google.android.material.tabs.TabItem
+					android:id = "@+id/tab_item_user_auth_off"
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					tools:text = "@string/nav_header_left_user_tab"
+					/>
 
-			<TextView
-				android:id = "@+id/tv_nav_header_text_or"
-				android:layout_width = "wrap_content"
-				android:layout_height = "wrap_content"
-				app:layout_constraintTop_toBottomOf = "@+id/btn_auth_nav_header"
-				app:layout_constraintStart_toStartOf = "parent"
-				app:layout_constraintEnd_toEndOf = "parent"
-				android:layout_marginTop = "8dp"
-				android:textSize = "18sp"
-				android:text = "@string/nav_header_text_or"
-				app:layout_constraintHorizontal_bias = "0.5"
-				/>
+				<com.google.android.material.tabs.TabItem
+					android:id = "@+id/tab_item_owner_auth_off"
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					tools:text = "@string/nav_header_left_owner_tab"
+					/>
+			</com.google.android.material.tabs.TabLayout>
 
-			<Button
-				android:id = "@+id/btn_reg_nav_header"
-				android:layout_width = "wrap_content"
+			<androidx.viewpager.widget.ViewPager
+				android:id = "@+id/view_pager_nav_left_auth_off"
+				android:layout_width = "match_parent"
 				android:layout_height = "wrap_content"
-				app:layout_constraintTop_toBottomOf = "@+id/tv_nav_header_text_or"
-				app:layout_constraintStart_toStartOf = "parent"
-				app:layout_constraintEnd_toEndOf = "parent"
-				android:layout_marginTop = "8dp"
-				android:background = "@drawable/shape_button"
-				android:textSize = "12sp"
-				android:text = "@string/nav_header_btn_reg_text"
-				app:clickNavMenuBtnReg = '@{viewmodelmain}'
-				app:layout_constraintHorizontal_bias = "0.5"
 				/>
-		</androidx.constraintlayout.widget.ConstraintLayout>
+		</LinearLayout>
 
 		<LinearLayout
-			android:id = "@+id/ll_nav_header"
+			android:id = "@+id/ll_nav_header_auth_on"
 			android:visibility = "@{safeUnbox(viewmodelmain.isYesAuthRegVisible()) ? View.VISIBLE : View.GONE}"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent"
@@ -99,21 +74,21 @@
 			>
 
 			<com.google.android.material.tabs.TabLayout
-				android:id = "@+id/tab_layout_nav_left"
+				android:id = "@+id/tab_layout_nav_left_auth_on"
 				android:layout_width = "match_parent"
 				android:layout_height = "60dp"
 				style = "@style/menu_left_tab_layout"
 				>
 
 				<com.google.android.material.tabs.TabItem
-					android:id = "@+id/tab_item_user"
+					android:id = "@+id/tab_item_user_auth_on"
 					android:layout_width = "wrap_content"
 					android:layout_height = "wrap_content"
 					tools:text = "@string/nav_header_left_user_tab"
 					/>
 
 				<com.google.android.material.tabs.TabItem
-					android:id = "@+id/tab_item_owner"
+					android:id = "@+id/tab_item_owner_auth_on"
 					android:layout_width = "wrap_content"
 					android:layout_height = "wrap_content"
 					tools:text = "@string/nav_header_left_owner_tab"
@@ -121,7 +96,7 @@
 			</com.google.android.material.tabs.TabLayout>
 
 			<androidx.viewpager.widget.ViewPager
-				android:id = "@+id/view_pager_nav_left"
+				android:id = "@+id/view_pager_nav_left_auth_on"
 				android:layout_width = "match_parent"
 				android:layout_height = "wrap_content"
 				/>

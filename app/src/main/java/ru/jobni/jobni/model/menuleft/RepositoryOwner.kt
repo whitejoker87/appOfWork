@@ -11,11 +11,11 @@ import ru.jobni.jobni.utils.Retrofit
 
 object RepositoryOwner {
 
-    fun makeNavigationListOwner(): List<NavigationParent> {
-        return makeCompanyList()
+    fun makeNavigationListOwnerAuthOn(): List<NavigationParent> {
+        return makeCompanyListAuthOn()
     }
 
-    private fun makeCompanyList(): List<NavigationParent> {
+    private fun makeCompanyListAuthOn(): List<NavigationParent> {
 
 //        val receiveCompanyList = listOf("Компания 1", "Компания 2")
         val setCompanyList = ArrayList<NavigationParent>()
@@ -39,25 +39,25 @@ object RepositoryOwner {
 
         setCompanyList.add(NavigationParent(
                 "Добавить компанию",
-                makeParentOneChildOwner(),
+                makeParentOneChildOwnerAuthOn(),
                 R.drawable.ic_company
         ))
 
         receiveCompanyList.forEach { companyName ->
             setCompanyList.add(NavigationParent(
                     companyName,
-                    makeParentTwoChildOwner(),
+                    makeParentTwoChildOwnerAuthOn(),
                     R.drawable.ic_user
             ))
         }
         return setCompanyList
     }
 
-    private fun makeParentOneChildOwner(): List<NavigationChild> {
+    private fun makeParentOneChildOwnerAuthOn(): List<NavigationChild> {
         return listOf()
     }
 
-    private fun makeParentTwoChildOwner(): List<NavigationChild> {
+    private fun makeParentTwoChildOwnerAuthOn(): List<NavigationChild> {
         val child1 = NavigationChild("Вакансии", 0)
         val child2 = NavigationChild("Отзывы", 0)
         val child3 = NavigationChild("Профиль", 0)

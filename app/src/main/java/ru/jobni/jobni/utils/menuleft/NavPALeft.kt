@@ -5,16 +5,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.menuleft.FragmentNavLeftOwner
-import ru.jobni.jobni.fragments.menuleft.FragmentNavLeftUser
+import ru.jobni.jobni.fragments.menuleft.FragmentNavLeftOwnerAuthOn
+import ru.jobni.jobni.fragments.menuleft.FragmentNavLeftUserAuthOn
 
 class NavPALeft(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> FragmentNavLeftUser()
+            0 -> FragmentNavLeftUserAuthOn()
             else -> {
-                return FragmentNavLeftOwner()
+                return FragmentNavLeftOwnerAuthOn()
             }
         }
     }

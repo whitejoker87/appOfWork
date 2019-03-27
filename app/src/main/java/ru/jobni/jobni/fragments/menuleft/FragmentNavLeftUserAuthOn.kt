@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentNavLeftUserBinding
-import ru.jobni.jobni.model.menuleft.RepositoryUser.makeNavigationListUser
+import ru.jobni.jobni.model.menuleft.RepositoryUser.makeNavigationListUserAuthOn
 import ru.jobni.jobni.utils.menuleft.NavRVAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentNavLeftUser : Fragment() {
+class FragmentNavLeftUserAuthOn : Fragment() {
 
     private lateinit var navRecyclerView: RecyclerView
     private lateinit var navAdapter: NavRVAdapter
@@ -45,7 +45,7 @@ class FragmentNavLeftUser : Fragment() {
 
     private fun buildRecyclerView() {
 
-        navAdapter = NavRVAdapter(makeNavigationListUser(), activity!!)
+        navAdapter = NavRVAdapter(makeNavigationListUserAuthOn(), activity!!)
         navAdapter.setHasStableIds(true)
         navRecyclerView.adapter = navAdapter
 
