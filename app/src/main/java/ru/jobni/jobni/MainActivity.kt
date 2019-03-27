@@ -46,10 +46,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var popup: PopupMenu
     private lateinit var drawer: DrawerLayout
 
-    private val expandableListAdapter: ExpandableListAdapter by lazy {
-        ExpandableListAdapter(applicationContext, viewModel.getHeaderList().value!!, viewModel.getChildList().value!!)
-    }
-    private lateinit var expandableListView: ExpandableListView
+//    private val expandableListAdapter: ExpandableListAdapter by lazy {
+//        ExpandableListAdapter(applicationContext, viewModel.getHeaderList().value!!, viewModel.getChildList().value!!)
+//    }
+    //private lateinit var expandableListView: ExpandableListView
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(this).get(MainViewModel::class.java)
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView = binding.menuBottom
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        expandableListView = binding.expListInclude.exp_list_view
+        //expandableListView = binding.expListInclude.exp_list_view
 
         popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_menu_profile))
         val inflater = popup.getMenuInflater()
@@ -99,25 +99,21 @@ class MainActivity : AppCompatActivity() {
             setFragment(FragmentSplashScreen())
         }
 
-        viewModel.getHeaderList().observe(this, Observer { headerList ->
-            viewModel.loadChildList(headerList)
-        })
+//        viewModel.getHeaderList().observe(this, Observer { headerList ->
+//            viewModel.loadChildList(headerList)
+//        })
 
-        viewModel.getChildList().observe(this, Observer {
-            if (viewModel.getHeaderList().value != null) {
-                expandableListView.setAdapter(expandableListAdapter)
-            }
-        })
+//        viewModel.getChildList().observe(this, Observer {
+//            if (viewModel.getHeaderList().value != null) {
+//                expandableListView.setAdapter(expandableListAdapter)
+//            }
+//        })
 
         viewModel.isOpenDrawerRight().observe(this, Observer { isOpen ->
             if (isOpen) {
                 drawer.openDrawer(GravityCompat.END)//todo
                 //ниже закрываем клавиатуру если открыта
-                val view = this.currentFocus
-                view?.let { v ->
-                    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-                }
+                closeKeyboard()
             } else {
                 drawer.closeDrawer(GravityCompat.END)
             }
@@ -127,18 +123,14 @@ class MainActivity : AppCompatActivity() {
             if (isOpen) {
                 drawer.openDrawer(GravityCompat.START)//todo
                 //ниже закрываем клавиатуру если открыта
-                val view = this.currentFocus
-                view?.let { v ->
-                    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-                }
+                closeKeyboard()
             } else {
                 drawer.closeDrawer(GravityCompat.START)
             }
         })
 
-        viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
-            when (fragmentType) {
+        viewModel.getFragmentLaunch().observe(this, Observer {
+            when (it) {
                 "Welcome" -> setFragmentNoBackStack(FragmentWelcome())
                 "Intro" -> setFragmentNoBackStack(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))

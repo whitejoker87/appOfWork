@@ -16,8 +16,8 @@ import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.ListItemChildBinding
-import ru.jobni.jobni.model.menuleft.NavigationChild
-import ru.jobni.jobni.model.menuleft.NavigationParent
+import ru.jobni.jobni.model.menu.NavigationChild
+import ru.jobni.jobni.model.menu.NavigationParent
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: FragmentActivity) :

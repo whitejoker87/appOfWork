@@ -26,11 +26,6 @@ import android.os.Handler
 class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mContext: Context) :
     RecyclerView.Adapter<RegRecyclerAdapter.ViewHolder>() {
 
-    init {
-        val mAnimationUp= AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_up)
-        val mAnimationDown = AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_down)
-    }
-
     private val FINAL_OPACITY = 0.3f
     private val START_OPACITY = 1f
 
@@ -53,8 +48,8 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
             notifyItemChanged(viewModel.getNumberOfVisibleItemReg().value!!)
         }
 
-    private val mAnimationUp: Animation = AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_up)
-    private val mAnimationDown: Animation = AnimationUtils.loadAnimation(mContext, ru.jobni.jobni.R.anim.slide_down)
+    private val mAnimationUp: Animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_up)
+    private val mAnimationDown: Animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_down)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -65,7 +60,7 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-            if (position == 0 && (viewModel.getNumberOfVisibleItemReg().value == -1 || viewModel.getNumberOfVisibleItemReg().value!! == 0)) {
+            if (position == 0 && (viewModel.getNumberOfVisibleItemReg().value in arrayOf(0,-1))) {
                 setFragmentInItem(holder, position)
             }
 

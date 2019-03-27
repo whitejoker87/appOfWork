@@ -10,7 +10,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.jobni.jobni.R
 import ru.jobni.jobni.model.auth.UserAuth
 import ru.jobni.jobni.utils.Retrofit
 
@@ -25,8 +24,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
-
+    /*цвет кнопки при логине пользователя*/
     private val isBtnUserLoggedVisible = MutableLiveData<Boolean>(false)
+    /*кликабельность кнопки при навигации(изменяется внутри меню)*/
+    private val isBtnUserNotClickable = MutableLiveData<Boolean>()
+    private val isAuthUser = MutableLiveData<Boolean>()
+    private val authUser = MutableLiveData<String>()
+    private val authPass = MutableLiveData<String>()
 
     fun setBtnUserLoggedVisible(isVisible: Boolean) {
         isBtnUserLoggedVisible.value = isVisible
@@ -35,16 +39,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun isBtnUserLoggedVisible(): MutableLiveData<Boolean> = isBtnUserLoggedVisible
 
 
-    private val isBtnUserClickable = MutableLiveData<Boolean>(true)
-
-    fun setBtnUserClickable(isVisible: Boolean) {
-        isBtnUserClickable.value = isVisible
+    fun setBtnUserNotClickable(isVisible: Boolean) {
+        isBtnUserNotClickable.value = isVisible
     }
 
-    fun isBtnUserClickable(): MutableLiveData<Boolean> = isBtnUserClickable
+    fun isBtnUserNotClickable(): MutableLiveData<Boolean> = isBtnUserNotClickable
 
-
-    private val isAuthUser = MutableLiveData<Boolean>()
 
     fun setAuthUser(authKey: Boolean) {
         isAuthUser.value = authKey
@@ -53,16 +53,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun isAuthUser(): MutableLiveData<Boolean> = isAuthUser
 
 
-    private val authUser = MutableLiveData<String>()
-
     fun getAuthUser(): String? = authUser.value
 
     fun setAuthUser(query: String) {
         this.authUser.value = query
     }
 
-
-    private val authPass = MutableLiveData<String>()
 
     fun getAuthPass(): String? = authPass.value
 

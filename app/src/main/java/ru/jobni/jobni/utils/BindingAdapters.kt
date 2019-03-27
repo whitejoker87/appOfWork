@@ -1,10 +1,6 @@
 package ru.jobni.jobni.utils
 
 
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.SearchView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingConversion
 import androidx.databinding.BindingMethod
@@ -16,6 +12,7 @@ import ru.jobni.jobni.model.RepositoryVacancyEntity
 import android.R.attr.name
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.widget.*
 import com.squareup.picasso.Picasso
 
 

@@ -60,23 +60,35 @@
             />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.navigation.NavigationView
-                android:id = "@+id/navigation_view_right"
-                android:layout_width = "320dp"
-                android:layout_height = "match_parent"
-                app:layout_constraintTop_toTopOf = "parent"
-                app:layout_constraintBottom_toBottomOf = "parent"
-                app:layout_constraintStart_toStartOf = "parent"
-                android:layout_marginStart = "64dp"
-                android:layout_gravity = "end"
-        >
+        <!--<com.google.android.material.navigation.NavigationView-->
+        <!--android:id = "@+id/navigation_view_right"-->
+        <!--android:layout_width = "320dp"-->
+        <!--android:layout_height = "match_parent"-->
+        <!--app:layout_constraintTop_toTopOf = "parent"-->
+        <!--app:layout_constraintBottom_toBottomOf = "parent"-->
+        <!--app:layout_constraintStart_toStartOf = "parent"-->
+        <!--android:layout_marginStart = "64dp"-->
+        <!--android:layout_gravity = "end"-->
+        <!--&gt;-->
 
-            <include
-                    android:id = "@+id/exp_list_include"
-                    layout = "@layout/menu_right"
-                    android:layout_width = "match_parent"
-                    android:layout_height = "match_parent"
-            />
+        <!--<include-->
+            <!--android:id = "@+id/exp_list_include"-->
+            <!--layout = "@layout/menu_right"-->
+            <!--android:layout_width = "match_parent"-->
+            <!--android:layout_height = "match_parent"-->
+            <!--/>-->
+    <!--</com.google.android.material.navigation.NavigationView>-->
+
+        <com.google.android.material.navigation.NavigationView
+            android:id = "@+id/navigation_view_right"
+            android:layout_width = "wrap_content"
+            android:layout_height = "match_parent"
+            android:layout_gravity = "end"
+			android:fitsSystemWindows = "true"
+            >
+
+            <include layout = "@layout/nav_right"/>
+
         </com.google.android.material.navigation.NavigationView>
 
         <com.google.android.material.navigation.NavigationView

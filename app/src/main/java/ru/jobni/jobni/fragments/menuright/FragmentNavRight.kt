@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.menuleft
+package ru.jobni.jobni.fragments.menuright
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.FragmentNavLeftOwnerBinding
-import ru.jobni.jobni.model.menu.left.RepositoryOwner.makeNavigationListOwner
+import ru.jobni.jobni.databinding.FragmentNavRightBinding
+import ru.jobni.jobni.model.menu.right.RepositoryFilters.makeNavigationListFilters
 import ru.jobni.jobni.utils.menuleft.NavRVAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentNavLeftOwner : Fragment() {
+class FragmentNavRight : Fragment() {
 
     private lateinit var navRecyclerView: RecyclerView
     private lateinit var navAdapter: NavRVAdapter
@@ -24,11 +24,11 @@ class FragmentNavLeftOwner : Fragment() {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
-    private lateinit var binding: FragmentNavLeftOwnerBinding
+    private lateinit var binding: FragmentNavRightBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_nav_left_owner, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_nav_right, container, false)
 
         binding.lifecycleOwner = this
 
@@ -36,7 +36,7 @@ class FragmentNavLeftOwner : Fragment() {
 
         binding.viewmodel = viewModel
 
-        navRecyclerView = binding.rvNavLeftOwner
+        navRecyclerView = binding.rvNavRight
 
         buildRecyclerView()
 
@@ -45,18 +45,19 @@ class FragmentNavLeftOwner : Fragment() {
 
     private fun buildRecyclerView() {
 
-        navAdapter = NavRVAdapter(makeNavigationListOwner(), activity!!)
+        navAdapter = NavRVAdapter(makeNavigationListFilters(viewModel.getHeaderList().value!!), activity!!)
         navAdapter.setHasStableIds(true)
         navRecyclerView.adapter = navAdapter
 
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {
             override fun onGroupClick(flatPos: Int): Boolean {
-                if (flatPos == 0) {
-                    viewModel.setFragmentLaunch("CompanyAdd")
-                    viewModel.setOpenDrawerLeft(false)
-                    return false
+                when(flatPos) {
+                    0 -> viewModel.setFragmentLaunch("Summary")
+                    1 -> viewModel.setFragmentLaunch("ReviewsUser")
+                    2 -> viewModel.setFragmentLaunch("ProfileUser")
+                    else -> viewModel.setFragmentLaunch("Summary")
                 }
-
+                viewModel.setOpenDrawerLeft(false)
                 return false
             }
         })

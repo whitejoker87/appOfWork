@@ -1,4 +1,4 @@
-package ru.jobni.jobni.model.menuleft
+package ru.jobni.jobni.model.menu
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

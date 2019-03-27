@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	>
+
+	<data>
+
+		<variable
+			name = "viewmodel"
+			type = "ru.jobni.jobni.viewmodel.MainViewModel"
+			/>
+
+		<import type = "android.view.View"/>
+	</data>
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:baselineAligned = "false"
+		>
+
+		<fragment android:name="ru.jobni.jobni.fragments.menuright.FragmentNavRight"
+			android:id="@+id/nav_right_fragment"
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="match_parent" />
+
+	</LinearLayout>
+</layout>

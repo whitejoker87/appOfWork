@@ -1,24 +1,26 @@
-package ru.jobni.jobni.model.menuleft
+package ru.jobni.jobni.model.menu.left
 
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.menu.NavigationChild
+import ru.jobni.jobni.model.menu.NavigationParent
 import java.util.*
 
 object RepositoryUser {
 
     fun makeNavigationListUser(): List<NavigationParent> {
         return Arrays.asList(
-            makeParentOne(),
-            makeParentTwo(),
-            makeParentThree(),
-            makeParentFour()
+                makeParentOne(),
+                makeParentTwo(),
+                makeParentThree(),
+                makeParentFour()
         )
     }
 
     private fun makeParentOne(): NavigationParent {
         return NavigationParent(
-            "Резюме",
-            makeParentOneChild(),
-            R.drawable.ic_user
+                "Резюме",
+                makeParentOneChild(),
+                R.drawable.ic_user
         )
     }
 
@@ -28,9 +30,9 @@ object RepositoryUser {
 
     private fun makeParentTwo(): NavigationParent {
         return NavigationParent(
-            "Отзывы",
-            makeParentTwoChild(),
-            R.drawable.ic_user
+                "Отзывы",
+                makeParentTwoChild(),
+                R.drawable.ic_user
         )
     }
 
@@ -40,9 +42,9 @@ object RepositoryUser {
 
     private fun makeParentThree(): NavigationParent {
         return NavigationParent(
-            "Профиль",
-            makeParentThreeChild(),
-            R.drawable.ic_user
+                "Профиль",
+                makeParentThreeChild(),
+                R.drawable.ic_user
         )
     }
 
@@ -52,9 +54,9 @@ object RepositoryUser {
 
     private fun makeParentFour(): NavigationParent {
         return NavigationParent(
-            "Финансы",
-            makeParentFourChild(),
-            R.drawable.ic_user
+                "Финансы",
+                makeParentFourChild(),
+                R.drawable.ic_user
         )
     }
     
@@ -63,7 +65,7 @@ object RepositoryUser {
         val child2 = NavigationChild("Пополнить баланс", 0)
         val child3 = NavigationChild("История платежей", 0)
         val child4 =
-            NavigationChild("Оказанные услуги", R.drawable.ic_user)
+                NavigationChild("Оказанные услуги", R.drawable.ic_user)
         val child5 = NavigationChild("Оказанные услуги (детально)", 0)
         val child6 = NavigationChild("Рефальная программа", 0)
         val child7 = NavigationChild("Cashback", 0)

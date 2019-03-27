@@ -1,22 +1,18 @@
 package ru.jobni.jobni.viewmodel
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -24,7 +20,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,18 +49,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     var isLoad = true
 
+    /*Ответ от API для правого меню*/
     private lateinit var bodyResponse: DetailVacancy
-    private val headerList = MutableLiveData<MutableList<String>>()
+    /*список в первом уровне правог меню*/
+    private val headerList = MutableLiveData<MutableList<Any>>()
+    /*список второго уровня правого меню*/
     private val childList = MutableLiveData<HashMap<String, List<String>>>()
+    /*флаг открытого правого меню*/
     private val isOpenDrawerRight = MutableLiveData<Boolean>()
+    /*флаг открытого левого меню*/
     private val isOpenDrawerLeft = MutableLiveData<Boolean>()
+    /*параметр запуска фрагмента(для навигации)*/
     private val fragmentLaunch = MutableLiveData<String>()
+    /*параметр строки поиска(для наблюдения)*/
     private val searchQuery = MutableLiveData<String>()
-
+    /*параментр видимости поля поиска*/
     private val isSearchViewVisible = MutableLiveData<Boolean>(false)
+    /*параментр видимости нижнего меню*/
     private val isBottomNavigationViewVisible = MutableLiveData<Boolean>(false)
+    /*параметр блокировки правого меню*/
     private val isDrawerRightLocked = MutableLiveData<Boolean>(true)
+    /*парамент видимрости тулбара*/
     private val isToolbarVisible = MutableLiveData<Boolean>(false)
+    /*параметр видимости спика подсказок в строке поиска*/
     private val isSearchListViewVisible = MutableLiveData<Boolean>(false)
 
     // Позиция карточки для открытия в отдельном фрагменте
@@ -74,15 +80,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val context = application
 
     private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
-    private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
+    private val repositoryVacancy: RepositoryVacancyEntity = RepositoryVacancyEntity
+    /*параметр uri для загружаемого фото*/
     private var outputPhotoUri: MutableLiveData<Uri> = MutableLiveData(Uri.EMPTY)
+    /*параментр для запука активити(для фото)*/
     private val activityLaunch:MutableLiveData<Intent> = MutableLiveData()
+    /*путь до файла с фото*/
     private var mCurrentPhotoPath: String? = ""
-
+    /*флаг для определения откуда используется инклюд с кнопками соцсетей(из авторизации или регистрации)*/
     private val isIncludeSocialNetworkReg: MutableLiveData<Boolean> = MutableLiveData(false)
 
     init {
-        repository.getVacancy().observeForever { vacancies ->
+        repositoryVacancy.getVacancy().observeForever { vacancies ->
             modelVacancy.value = modelVacancy.value?.copy(vacancyList = vacancies!!)
                     ?: MainFragmentViewState(vacancies!!)
         }
@@ -90,7 +99,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getModelVacancy(): LiveData<MainFragmentViewState> = modelVacancy
 
-    fun getHeaderList(): MutableLiveData<MutableList<String>> = headerList
+    fun getHeaderList(): MutableLiveData<MutableList<Any>> = headerList
 
     fun getChildList(): MutableLiveData<HashMap<String, List<String>>> = childList
 
@@ -223,25 +232,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun isLoadCardFailVisible(): MutableLiveData<Boolean> = isLoadCardFailVisible
 
 
+    /*открытие левого меню*/
     fun openLeftMenu() {
         setOpenDrawerLeft(true)
     }
 
+    /*открытие правого меню*/
     fun openRightMenu() {
-        if (headerList.value == null) {
-            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
-                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
-                    if (response.body() != null) {
-                        bodyResponse = response.body()!!
-                        loadHeaderList()
-                    }
-                }
-
-                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
-                    //Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
-                }
-            })
-        }
+//        if (headerList.value == null) {
+//            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+//                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+//                    if (response.body() != null) {
+//                        bodyResponse = response.body()!!
+//                        loadHeaderList()
+//                    }
+//                }
+//
+//                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+//                    //Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
+//                }
+//            })
+//        }
 
         setOpenDrawerRight(true)
 //        drawer.openDrawer(GravityCompat.END)
@@ -253,6 +264,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 //        }
     }
 
+    /*заглушка для второго уровня правого меню*/
     fun loadChildList(headers: MutableList<String>) {
         val top250 = ArrayList<String>()
         val childs = HashMap<String, List<String>>()
@@ -271,11 +283,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         childList.value = childs
     }
 
+    /*нажатие на кнопку в вьюпаджере первого запуска*/
     fun onClickBtnStart(typeFragment: String) {
         if (typeFragment.equals("Intro")) saveLaunchFlag()
         setFragmentLaunch(typeFragment)
     }
 
+    /*флаг первого запуска*/
     fun saveLaunchFlag() {
         val editor = sPref.edit()
         editor?.putBoolean(firstLaunchFlag, false)
@@ -288,8 +302,49 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         editor.apply()
     }
 
+    /*список первого уровня правого меню*/
+
+
+//            // Отчистить список для новых результатов
+//            repositoryVacancy.clearRepository()
+//
+//            for (i in 0 until resultList.size) {
+//                val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+//                resultList[i].employment.forEach { employment ->
+//                    tmpEmploymentList.add(employment.name)
+//                }
+//
+//                val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+//                resultList[i].competences.forEach { competences ->
+//                    tmpCompetenceList.add(competences.name)
+//                }
+//
+//                repositoryVacancy.saveVacancy(
+//                        VacancyEntity(
+//                                resultList[i].id,
+//                                resultList[i].name,
+//                                resultList[i].company.name,
+//                                resultList[i].salary_level_newbie.toString(),
+//                                resultList[i].salary_level_experienced.toString(),
+//                                resultList[i].format_of_work.name,
+//                                tmpEmploymentList,
+//                                tmpCompetenceList,
+//                                "",
+//                                "",
+//                                "",
+//                                ""
+//                        )
+//                )
+//            }
+//        }
+//    }
+
+
     private fun loadHeaderList() {
-        val headers = ArrayList<String>()
+
+//        val resultList: List<ResultsVacancy> = response.body()!!.results
+
+//        val headers = ArrayList<String>()
         val (competence,
                 languages,
                 work_places,
@@ -316,17 +371,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 auto,
                 raiting
         )
-        detailList.forEach { str: Any ->
-            if (str is String) headers.add(str)
-            else when (str) {
-                is Zarplata -> headers.add("Зарплата")
-                is Social_packet -> headers.add("Социальный пакет")
-                is Auto -> headers.add("Авто")
-                is Raiting -> headers.add("Рейтинг")
-            }
-        }
-        headerList.value = headers
+//        detailList.forEach { str: Any ->
+//            if (str is String) headers.add(str)
+//            else when (str) {
+//                is Zarplata -> headers.add("Зарплата")
+//                is Social_packet -> headers.add("Социальный пакет")
+//                is Auto -> headers.add("Авто")
+//                is Raiting -> headers.add("Рейтинг")
+//            }
+//        }
+        headerList.value = detailList
     }
+
 
     private val toolbarTitle = MutableLiveData<String>()
 
@@ -363,12 +419,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /*слушатель скролла списка поиска*/
     val onScrollViewRecycler = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val cardLayoutManager = recyclerView.layoutManager as LinearLayoutManager
             if (isLoad) {
-                if (cardLayoutManager.findLastCompletelyVisibleItemPosition() == repository.getSize() - 1) {
+                if (cardLayoutManager.findLastCompletelyVisibleItemPosition() == repositoryVacancy.getSize() - 1) {
                     //Нашли конец списка
                     loadMoreCards()
                     isLoad = false
@@ -377,6 +434,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /*слушатель строки поиска*/
     val onQuerySearchView = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String): Boolean {
             doSearchOnClick(query)
@@ -411,6 +469,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /*загрузка главного фрагмента после проверкаи на первый запуск*/
     fun switchToMainActivity() {
         val duration = 2000L
 
@@ -424,16 +483,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }, duration)
     }
 
+    /*нажатие на список подсказок в поиске*/
     fun onSuggestionsListItemClick(position: Int) {
         doSearchOnClick(suggestionsNamesList.value!![position].suggestionName)
         setSearchQuery(suggestionsNamesList.value!![position].suggestionName)
         setSearchListViewVisible(false)
     }
 
+    /*загружаем больше в список поиска*/
     fun loadMoreCards() {
         val handler = Handler()
         handler.postDelayed({
-            val nextLimit = repository.getSize() + 10
+            val nextLimit = repositoryVacancy.getSize() + 10
             val nextOffset = nextLimit - 10
 
             buildCardsList(nextLimit, nextOffset)
@@ -441,6 +502,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }, SERVER_RESPONSE_DELAY)
     }
 
+    /*клик по кнопке развернуть на карточке в поиске*/
     fun onCardExpandVacancyClick(position: Int) {
         cardPosition = position
         cardExpandInfo(position)
@@ -451,12 +513,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
     }
 
+    /*клик по глазу в карточке в поиске*/
     fun onEyeRVVacancyClick(position: Int) {
         Toast.makeText(context, "eye $position", Toast.LENGTH_SHORT).show()
     }
 
+    /*информация для развернутой карточки*/
     private fun cardExpandInfo(position: Int) {
-        val requestID: Int = repository.getVacancy().value!![position].id
+        val requestID: Int = repositoryVacancy.getVacancy().value!![position].id
 
         Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
             override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
@@ -468,13 +532,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     val resultList: Detail = response.body()!!.detail
 
-                    val newObj: VacancyEntity = repository.getVacancy().value!![position].copy(
+                    val newObj: VacancyEntity = repositoryVacancy.getVacancy().value!![position].copy(
                             companyDescription = resultList.company_description,
                             vacancyDescription = resultList.description,
                             requirementsDescription = resultList.requirements,
                             dutiesDescription = resultList.duties
                     )
-                    repository.saveVacancy(newObj)
+                    repositoryVacancy.saveVacancy(newObj)
                     setCardExpandResponse(true)
                 }
             }
@@ -484,6 +548,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*посик по клику в строке поиска*/
     fun doSearchOnClick(query: String) {
         Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
@@ -492,7 +557,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val resultList: List<ResultsVacancy> = response.body()!!.results
 
                     // Отчистить список для новых результатов
-                    repository.clearRepository()
+                    repositoryVacancy.clearRepository()
 
                     for (i in 0 until resultList.size) {
                         val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
@@ -505,7 +570,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        repository.saveVacancy(
+                        repositoryVacancy.saveVacancy(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -531,6 +596,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*заполнение списка карточек*/
     fun buildCardsList(limitNext: Int, offsetNext: Int) {
         Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
@@ -549,7 +615,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        repository.saveVacancy(
+                        repositoryVacancy.saveVacancy(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -575,6 +641,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*загрузка списка подсказок к строке поиска*/
     fun doSearchCompetence(query: String) {
         Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
                 ?.enqueue(object : Callback<List<String>> {
@@ -602,6 +669,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 })
     }
 
+    /*открываем камеру для фото*/
     fun openCamera() {
 
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -635,6 +703,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /*создание файла для фото*/
     @Throws(IOException::class)
     private fun createImageFile(context: Context): File {
 

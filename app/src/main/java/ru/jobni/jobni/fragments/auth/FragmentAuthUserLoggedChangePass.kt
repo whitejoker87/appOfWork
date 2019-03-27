@@ -33,7 +33,7 @@ class FragmentAuthUserLoggedChangePass : Fragment() {
 
         binding.viewmodelauth = viewModelAuth
 
-        binding.viewmodel = viewModel
+        binding.viewmodelmain = viewModel
 
         return view
     }

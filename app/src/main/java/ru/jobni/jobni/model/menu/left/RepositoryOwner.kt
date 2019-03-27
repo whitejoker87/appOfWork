@@ -1,6 +1,8 @@
-package ru.jobni.jobni.model.menuleft
+package ru.jobni.jobni.model.menu.left
 
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.menu.NavigationChild
+import ru.jobni.jobni.model.menu.NavigationParent
 
 object RepositoryOwner {
 
