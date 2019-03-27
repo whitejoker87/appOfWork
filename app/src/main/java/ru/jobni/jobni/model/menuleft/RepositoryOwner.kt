@@ -95,7 +95,7 @@ object RepositoryOwner {
         val child1 = NavigationChild("Резюме", R.drawable.ic_search)
         val child2 = NavigationChild("Кандидаты", R.drawable.ic_search)
         val child3 = NavigationChild("Вакансии", R.drawable.ic_search)
-        val child4 = NavigationChild("Компании", R.drawable.ic_search)
+        val child4 = NavigationChild("Компании", R.drawable.ic_company)
 
         return listOf(child1, child2, child3, child4)
     }

@@ -51,11 +51,17 @@ class FragmentNavLeftOwnerAuthOff : Fragment() {
 
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {
             override fun onGroupClick(flatPos: Int): Boolean {
-//                if (flatPos == 0) {
-//                    viewModel.setFragmentLaunch("CompanyAdd")
-//                    viewModel.setOpenDrawerLeft(false)
-//                    return false
-//                }
+                if (flatPos == 1) {
+                    viewModel.setFragmentLaunch("CompanyAdd")
+                    viewModel.setOpenDrawerLeft(false)
+                    return false
+                }
+
+                if (flatPos == 2) {
+                    viewModel.setFragmentLaunch("Registration")
+                    viewModel.setOpenDrawerLeft(false)
+                    return false
+                }
 
                 return false
             }
