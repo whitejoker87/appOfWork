@@ -52,8 +52,9 @@
 				android:background = "@drawable/shape_button"
 				android:textSize = "12sp"
 				android:text = "@string/nav_header_btn_auth_text"
-				android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("Auth")}'
 				app:layout_constraintHorizontal_bias = "0.5"
+				app:clickNavMenuBtn = '@{viewmodelmain}'
+				app:authBtn = "@{@string/nav_header_btn_auth_click}"
 				/>
 
 			<TextView
@@ -80,7 +81,8 @@
 				android:background = "@drawable/shape_button"
 				android:textSize = "12sp"
 				android:text = "@string/nav_header_btn_reg_text"
-				android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("Registration")}'
+				app:clickNavMenuBtn = '@{viewmodelmain}'
+				app:authBtn = "@{@string/nav_header_btn_reg_click}"
 				app:layout_constraintHorizontal_bias = "0.5"
 				/>
 		</androidx.constraintlayout.widget.ConstraintLayout>

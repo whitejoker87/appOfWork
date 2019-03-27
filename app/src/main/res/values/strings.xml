@@ -173,4 +173,6 @@
     <string name = "nav_header_btn_auth_text">Пройти авторизацию</string>
     <string name = "nav_header_text_or">Или</string>
     <string name = "nav_header_btn_reg_text">Зарегистрироваться</string>
+    <string name = "nav_header_btn_auth_click">Auth</string>
+    <string name = "nav_header_btn_reg_click">Registration</string>
 </resources>
