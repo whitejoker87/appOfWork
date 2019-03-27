@@ -15,11 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-
 @BindingMethods(
         BindingMethod(
                 type = BindingAdapters::class,
-                attribute = "app:onNavigationItemSelected",
+                attribute = "onNavigationItemSelected",
                 method = "setOnNavigationItemSelectedListener"
         )
 )
@@ -27,22 +26,22 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 object BindingAdapters {
 
     //открываем дравлер(пока не работает)
-    @BindingAdapter("app:openDrawer")
+    @BindingAdapter("openDrawer")
     @JvmStatic
-    fun openDrawer(drawerLayout: DrawerLayout, gravity: Int) {
+    fun onOpenDrawer(drawerLayout: DrawerLayout, gravity: Int) {
         //if (gravity == 0) drawerLayout.closeDrawer(GravityCompat.END)
         drawerLayout.openDrawer(gravity)
     }
 
     //блокировка дравлеров
-    @BindingAdapter("app:setDrawerLockMode")
+    @BindingAdapter("setDrawerLockMode")
     @JvmStatic
     fun setDrawerLockMode(drawerLayout: DrawerLayout, mode: Int) {
         drawerLayout.setDrawerLockMode(mode)
     }
 
     //слушаем нижнее меню(пока не работает)
-    @BindingAdapter("app:onNavigationItemSelected")
+    @BindingAdapter("onNavigationItemSelected")
     @JvmStatic
     fun setOnNavigationItemSelectedListener(
             view: BottomNavigationView, listener: BottomNavigationView.OnNavigationItemSelectedListener
@@ -51,42 +50,42 @@ object BindingAdapters {
     }
 
     //слушаем ресайклвью карточек
-    @BindingAdapter("app:onScrollListener")
+    @BindingAdapter("onScrollListener")
     @JvmStatic
     fun setOnScrollListener(view: RecyclerView, listener: RecyclerView.OnScrollListener) {
         view.addOnScrollListener(listener)
     }
 
     //слушаем строку поиска
-    @BindingAdapter("app:onQueryTextListener")
+    @BindingAdapter("onQueryTextListener")
     @JvmStatic
     fun setQueryTextListener(view: SearchView, listener: SearchView.OnQueryTextListener) {
         view.setOnQueryTextListener(listener)
     }
 
     //изменение в строке поиска
-    @BindingAdapter("app:query")
+    @BindingAdapter("query")
     @JvmStatic
     fun query(view: SearchView, query: String) {
         view.setQuery(query, true)
     }
 
     //обработка клика списка из поиска
-    @BindingAdapter("app:onListViewItemClickListener")
+    @BindingAdapter("onListViewItemClickListener")
     @JvmStatic
     fun setOnItemClickListener(view: ListView, listener: AdapterView.OnItemClickListener) {
         view.onItemClickListener = listener
     }
 
     //для ресайклвью карточек
-    @BindingAdapter("app:fixedSize")
+    @BindingAdapter("fixedSize")
     @JvmStatic
     fun fixedSize(view: RecyclerView, fixSize: Boolean) {
         view.setHasFixedSize(fixSize)
     }
 
     //преобразование для отображения з/п в карточках
-    @BindingAdapter("app:formattedTextSalary")
+    @BindingAdapter("formattedTextSalary")
     @JvmStatic
     fun setFormattedText(view: TextView, text: String) {
         val sb = StringBuffer(text)
@@ -105,9 +104,9 @@ object BindingAdapters {
     // в хмл объявляются 2 переменных и передаются в адаптер
     // Текстовое значение для setFragmentLaunch берется из файла @strings
     // Нажатие кнопки с закрытием в левом меню (авторизация)
-    @BindingAdapter("app:clickNavMenuBtnAuth", "app:authBtn")
+    @BindingAdapter("clickNavMenuBtnAuth", "authBtn")
     @JvmStatic
-    fun onClickNavMenuBtn(view: View, clickNavMenuBtnAuth: MainViewModel, authBtn: String) {
+    fun onClickNavMenuBtnAuth(view: View, clickNavMenuBtnAuth: MainViewModel, authBtn: String) {
         view.setOnClickListener {
             clickNavMenuBtnAuth.setFragmentLaunch(authBtn)
             clickNavMenuBtnAuth.setOpenDrawerLeft(false)
@@ -117,9 +116,9 @@ object BindingAdapters {
     // Пример 2
     // Из хмл передаются в адаптер только вьюмодель, вся обработка выполняется в адаптере
     // Нажатие кнопки с закрытием в левом меню (регистрация)
-    @BindingAdapter("app:clickNavMenuBtnReg")
+    @BindingAdapter("clickNavMenuBtnReg")
     @JvmStatic
-    fun onclickNavMenuBtnReg(view: View, clickNavMenuBtnReg: MainViewModel) {
+    fun onClickNavMenuBtnReg(view: View, clickNavMenuBtnReg: MainViewModel) {
         view.setOnClickListener {
             clickNavMenuBtnReg.setFragmentLaunch("Registration")
             clickNavMenuBtnReg.setOpenDrawerLeft(false)
