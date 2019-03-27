@@ -8,7 +8,7 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.fragments.menuleft.FragmentNavLeftOwnerAuthOn
 import ru.jobni.jobni.fragments.menuleft.FragmentNavLeftUserAuthOn
 
-class NavPALeft(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
+class NavPALeftAuthOn(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {

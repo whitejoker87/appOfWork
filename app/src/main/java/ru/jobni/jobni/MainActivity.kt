@@ -27,7 +27,8 @@ import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.ExpandableListAdapter
-import ru.jobni.jobni.utils.menuleft.NavPALeft
+import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
+import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
@@ -195,7 +196,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val fragmentAdapterAuthOn = NavPALeft(supportFragmentManager, this)
+        val fragmentAdapterAuthOn = NavPALeftAuthOn(supportFragmentManager, this)
         view_pager_nav_left_auth_on.adapter = fragmentAdapterAuthOn
         tab_layout_nav_left_auth_on.setupWithViewPager(view_pager_nav_left_auth_on)
 
@@ -211,7 +212,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val fragmentAdapterAuthOff = NavPALeft(supportFragmentManager, this)
+        val fragmentAdapterAuthOff = NavPALeftAuthOff(supportFragmentManager, this)
         view_pager_nav_left_auth_off.adapter = fragmentAdapterAuthOff
         tab_layout_nav_left_auth_off.setupWithViewPager(view_pager_nav_left_auth_off)
 
