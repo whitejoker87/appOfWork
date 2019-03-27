@@ -8,6 +8,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -58,7 +59,7 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ru.jobni.jobni.databinding.RegPhaseRecyclerItemBinding =
-            DataBindingUtil.inflate(inflater, ru.jobni.jobni.R.layout.reg_phase_recycler_item, parent, false)
+            DataBindingUtil.inflate(inflater, R.layout.reg_phase_recycler_item, parent, false)
         return ViewHolder(binding, viewModel)
     }
 
@@ -82,7 +83,7 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
 //                    Handler().postDelayed({
                         holder.regFragmentPhaseContainer.visibility = View.GONE
 //                    }, 1000)
-                    holder.regFragmentPhaseTitle.setTextColor(mContext.resources.getColor(ru.jobni.jobni.R.color.black))
+                    holder.regFragmentPhaseTitle.setTextColor(ContextCompat.getColor(mContext, R.color.black))
                 } else {
 //                    holder.regFragmentPhaseContainer.startAnimation(mAnimationUp)
                     setFragmentInItem(holder, position)

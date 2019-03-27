@@ -11,6 +11,11 @@
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
 
+		<variable
+			name = "viewmodelauth"
+			type = "ru.jobni.jobni.viewmodel.AuthViewModel"
+			/>
+
 		<import type = "android.view.View"/>
 	</data>
 
@@ -53,6 +58,7 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "36dp"
+			app:viewmodelauth = "@{viewmodelauth}"
 			app:viewmodelmain = "@{viewmodelmain}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>

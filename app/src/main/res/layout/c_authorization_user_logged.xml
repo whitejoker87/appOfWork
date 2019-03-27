@@ -59,6 +59,7 @@
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "36dp"
 			app:viewmodelmain = "@{viewmodelmain}"
+			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
 		<Button
@@ -97,7 +98,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_badge"
 			android:text = "@string/btn_change_user_auth_text"
-			android:clickable="false"
+			android:clickable = "false"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

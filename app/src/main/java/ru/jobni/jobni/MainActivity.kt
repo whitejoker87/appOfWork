@@ -143,6 +143,7 @@ class MainActivity : AppCompatActivity() {
                 "Intro" -> setFragmentNoBackStack(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
+                "Card" -> setFragment(FragmentCard())
                 "Summary" -> setFragment(FragmentSummary())
                 "ReviewsUser" -> setFragment(FragmentReviewsUser())
                 "ReviewsOwner" -> setFragment(FragmentReviewsOwner())
@@ -194,7 +195,7 @@ class MainActivity : AppCompatActivity() {
         tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
 
         viewModelAuth.isAuthUser().observe(this, Observer {
-            viewModel.setFragmentLaunch("Auth")
+            setFragmentReturnBackStack()
             closeKeyboard()
         })
     }
@@ -206,6 +207,12 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
             else -> super.onBackPressed()
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        super.onSupportNavigateUp()
+        onBackPressed()
+        return true
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -261,6 +268,10 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit()
+    }
+
+    private fun setFragmentReturnBackStack() {
+        supportFragmentManager.popBackStack()
     }
 
     private fun closeKeyboard() {

@@ -59,6 +59,7 @@
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "36dp"
 			app:viewmodelmain = "@{viewmodelmain}"
+			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
 		<EditText

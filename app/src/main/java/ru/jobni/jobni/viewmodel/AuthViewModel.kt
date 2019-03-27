@@ -35,6 +35,15 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun isBtnUserLoggedVisible(): MutableLiveData<Boolean> = isBtnUserLoggedVisible
 
 
+    private val isBtnUserClickable = MutableLiveData<Boolean>(true)
+
+    fun setBtnUserClickable(isVisible: Boolean) {
+        isBtnUserClickable.value = isVisible
+    }
+
+    fun isBtnUserClickable(): MutableLiveData<Boolean> = isBtnUserClickable
+
+
     private val isAuthUser = MutableLiveData<Boolean>()
 
     fun setAuthUser(authKey: Boolean) {
