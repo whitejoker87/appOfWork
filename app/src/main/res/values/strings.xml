@@ -170,6 +170,7 @@
     <string name="btn_change_user_mail_confirm_text">Подтвердить</string>
     <string name="error_load_data_text">ERROR LOAD DATA</string>
     <string name = "nav_header_text_info">Вы не авторизованы!</string>
+    <string name = "company_add_auth_off_text_info">Для того чтобы добавить компанию вам нужно:</string>
     <string name = "nav_header_btn_auth_text">Пройти авторизацию</string>
     <string name = "nav_header_text_or">Или</string>
     <string name = "nav_header_btn_reg_text">Зарегистрироваться</string>

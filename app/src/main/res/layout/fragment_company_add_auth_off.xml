@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	>
+
+	<data>
+
+		<variable
+			name = "viewmodel"
+			type = "ru.jobni.jobni.viewmodel.MainViewModel"
+			/>
+
+		<import type = "android.view.View"/>
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		>
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id = "@+id/cl_nav_header"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			>
+
+			<TextView
+				android:id = "@+id/tv_nav_header_text_info"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				app:layout_constraintTop_toTopOf = "parent"
+				app:layout_constraintBottom_toBottomOf = "parent"
+				app:layout_constraintStart_toStartOf = "parent"
+				app:layout_constraintEnd_toEndOf = "parent"
+				android:textSize = "18sp"
+				android:text = "@string/company_add_auth_off_text_info"
+				android:maxWidth = "230dp"
+				android:gravity = "center"
+				app:layout_constraintHorizontal_bias = "0.5"
+				app:layout_constraintVertical_bias = "0.4"
+				/>
+
+			<Button
+				android:id = "@+id/btn_auth_nav_header"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				app:layout_constraintTop_toBottomOf = "@+id/tv_nav_header_text_info"
+				app:layout_constraintStart_toStartOf = "parent"
+				app:layout_constraintEnd_toEndOf = "parent"
+				android:layout_marginTop = "8dp"
+				android:background = "@drawable/shape_button"
+				android:textSize = "12sp"
+				android:text = "@string/nav_header_btn_auth_text"
+				app:layout_constraintHorizontal_bias = "0.5"
+				app:clickNavMenuBtnAuth = '@{viewmodel}'
+				app:authBtn = "@{@string/nav_header_btn_auth_click}"
+				/>
+
+			<TextView
+				android:id = "@+id/tv_nav_header_text_or"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				app:layout_constraintTop_toBottomOf = "@+id/btn_auth_nav_header"
+				app:layout_constraintStart_toStartOf = "parent"
+				app:layout_constraintEnd_toEndOf = "parent"
+				android:layout_marginTop = "8dp"
+				android:textSize = "18sp"
+				android:text = "@string/nav_header_text_or"
+				app:layout_constraintHorizontal_bias = "0.5"
+				/>
+
+			<Button
+				android:id = "@+id/btn_reg_nav_header"
+				android:layout_width = "wrap_content"
+				android:layout_height = "wrap_content"
+				app:layout_constraintTop_toBottomOf = "@+id/tv_nav_header_text_or"
+				app:layout_constraintStart_toStartOf = "parent"
+				app:layout_constraintEnd_toEndOf = "parent"
+				android:layout_marginTop = "8dp"
+				android:background = "@drawable/shape_button"
+				android:textSize = "12sp"
+				android:text = "@string/nav_header_btn_reg_text"
+				app:clickNavMenuBtnReg = '@{viewmodel}'
+				app:layout_constraintHorizontal_bias = "0.5"
+				/>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

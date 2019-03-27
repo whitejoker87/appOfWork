@@ -8,20 +8,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.FragmentCompanyAddBinding
+import ru.jobni.jobni.databinding.FragmentCompanyAddAuthOnBinding
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentCompanyAdd : Fragment() {
+class FragmentCompanyAddAuthOn : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
-    private lateinit var binding: FragmentCompanyAddBinding
+    private lateinit var binding: FragmentCompanyAddAuthOnBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_company_add, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_company_add_auth_on, container, false)
 
         binding.lifecycleOwner = this
 
