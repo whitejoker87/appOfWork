@@ -5,6 +5,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.UserAuth
+import ru.jobni.jobni.model.network.company.CompanyVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.DetailVacancy
@@ -26,7 +27,7 @@ interface RetrofitQuery {
     fun loadVacancyCard(@Path("id") id: Int, @Query("detail") detail: Int): Call<CardVacancyDetail>
 
     @GET("api/tags/")
-    fun getAuthData(@Header("Cookie") h1:String):Call<UserAuth>
+    fun getAuthData(@Header("Cookie") h1: String): Call<UserAuth>
 
     @POST("api/authorization/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<UserAuth>
@@ -34,4 +35,10 @@ interface RetrofitQuery {
     @Multipart
     @POST("api/registration/")
     fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
+
+    @GET("api/vacancy/")
+    fun loadCompanyVacancy(@Query("company") companyID: Int): Call<CardVacancy>
+
+    @GET("api/company/?owner_or_worker=1")
+    fun ownerOrWorker(): Call<CompanyVacancy>
 }

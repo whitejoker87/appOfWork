@@ -1,6 +1,13 @@
 package ru.jobni.jobni.model.menuleft
 
+import androidx.annotation.NonNull
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.network.company.CompanyVacancy
+import ru.jobni.jobni.model.network.company.ResultsCompany
+import ru.jobni.jobni.utils.Retrofit
 
 object RepositoryOwner {
 
@@ -9,8 +16,26 @@ object RepositoryOwner {
     }
 
     private fun makeCompanyList(): List<NavigationParent> {
-        val receiveCompanyList = listOf("Компания 1", "Компания 2")
+
+//        val receiveCompanyList = listOf("Компания 1", "Компания 2")
         val setCompanyList = ArrayList<NavigationParent>()
+        val receiveCompanyList: MutableList<String> = mutableListOf()
+
+        Retrofit.api?.ownerOrWorker()?.enqueue(object : Callback<CompanyVacancy> {
+            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsCompany> = response.body()!!.results
+
+                    for (i in 0 until resultList.size) {
+                        receiveCompanyList.add(resultList[i].name)
+                    }
+//                    println("1 $receiveCompanyList")
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {}
+        })
 
         setCompanyList.add(NavigationParent(
                 "Добавить компанию",

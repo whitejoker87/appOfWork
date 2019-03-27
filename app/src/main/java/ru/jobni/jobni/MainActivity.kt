@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.menu_right.view.*
 import kotlinx.android.synthetic.main.nav_header_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
@@ -132,8 +134,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 else {
-                    viewModelMain.setNoAuthRegVisible(true)
-                    viewModelMain.setYesAuthRegVisible(false)
+                    viewModelMain.setNoAuthRegVisible(false) //true
+                    viewModelMain.setYesAuthRegVisible(true) //false
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     val view = this.currentFocus
@@ -196,6 +198,18 @@ class MainActivity : AppCompatActivity() {
         val fragmentAdapter = NavPALeft(supportFragmentManager, this)
         view_pager_nav_left.adapter = fragmentAdapter
         tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
+
+        tab_layout_nav_left.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) { }
+            override fun onTabUnselected(tab: TabLayout.Tab?) { }
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                when (tab.position) {
+                    0 -> Toast.makeText(applicationContext, "1", Toast.LENGTH_LONG).show()
+                    1 -> Toast.makeText(applicationContext, "2", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
 
         viewModelAuth.isAuthUser().observe(this, Observer {
             setFragmentReturnBackStack()
