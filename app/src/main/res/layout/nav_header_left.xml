@@ -53,7 +53,7 @@
 				android:textSize = "12sp"
 				android:text = "@string/nav_header_btn_auth_text"
 				app:layout_constraintHorizontal_bias = "0.5"
-				app:clickNavMenuBtn = '@{viewmodelmain}'
+				app:clickNavMenuBtnAuth = '@{viewmodelmain}'
 				app:authBtn = "@{@string/nav_header_btn_auth_click}"
 				/>
 
@@ -81,8 +81,7 @@
 				android:background = "@drawable/shape_button"
 				android:textSize = "12sp"
 				android:text = "@string/nav_header_btn_reg_text"
-				app:clickNavMenuBtn = '@{viewmodelmain}'
-				app:authBtn = "@{@string/nav_header_btn_reg_click}"
+				app:clickNavMenuBtnReg = '@{viewmodelmain}'
 				app:layout_constraintHorizontal_bias = "0.5"
 				/>
 		</androidx.constraintlayout.widget.ConstraintLayout>

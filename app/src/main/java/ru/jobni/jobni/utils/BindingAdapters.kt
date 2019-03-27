@@ -101,13 +101,28 @@ object BindingAdapters {
         view.text = sb.toString()
     }
 
-    // Нажатие кнопки с закрытием в левом меню (авторизация/регистрация)
-    @BindingAdapter("app:clickNavMenuBtn", "app:authBtn")
+    // Пример 1
+    // в хмл объявляются 2 переменных и передаются в адаптер
+    // Текстовое значение для setFragmentLaunch берется из файла @strings
+    // Нажатие кнопки с закрытием в левом меню (авторизация)
+    @BindingAdapter("app:clickNavMenuBtnAuth", "app:authBtn")
     @JvmStatic
-    fun onClickNavMenuBtn(view: View, clickNavMenuBtn: MainViewModel, authBtn: String) {
+    fun onClickNavMenuBtn(view: View, clickNavMenuBtnAuth: MainViewModel, authBtn: String) {
         view.setOnClickListener {
-            clickNavMenuBtn.setFragmentLaunch(authBtn)
-            clickNavMenuBtn.setOpenDrawerLeft(false)
+            clickNavMenuBtnAuth.setFragmentLaunch(authBtn)
+            clickNavMenuBtnAuth.setOpenDrawerLeft(false)
+        }
+    }
+
+    // Пример 2
+    // Из хмл передаются в адаптер только вьюмодель, вся обработка выполняется в адаптере
+    // Нажатие кнопки с закрытием в левом меню (регистрация)
+    @BindingAdapter("app:clickNavMenuBtnReg")
+    @JvmStatic
+    fun onclickNavMenuBtnReg(view: View, clickNavMenuBtnReg: MainViewModel) {
+        view.setOnClickListener {
+            clickNavMenuBtnReg.setFragmentLaunch("Registration")
+            clickNavMenuBtnReg.setOpenDrawerLeft(false)
         }
     }
 
