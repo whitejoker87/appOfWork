@@ -48,9 +48,6 @@ interface RetrofitQuery {
 //    @POST("api/registration/")
 //    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
-    @GET("api/vacancy/")
-    fun loadCompanyVacancy(@Query("company") companyID: Int): Call<CardVacancy>
-
     @GET("api/company/?owner_or_worker=1")
     fun ownerOrWorker(@Header("Cookie") h1: String): Call<CompanyVacancy>
 }

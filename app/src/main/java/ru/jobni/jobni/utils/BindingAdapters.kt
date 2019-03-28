@@ -1,6 +1,5 @@
 package ru.jobni.jobni.utils
 
-
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
 import ru.jobni.jobni.viewmodel.MainViewModel
-
 
 @BindingMethods(
         BindingMethod(
@@ -126,7 +124,7 @@ object BindingAdapters {
         }
     }
 
-    //преобразование для сисков в карточках
+    //преобразование для списков в карточках
     @BindingConversion
     @JvmStatic
     fun convertListToString(list: List<String>): String {
@@ -139,16 +137,15 @@ object BindingAdapters {
     }
 
     @BindingAdapter("imageUrl", "errorImage")
-    @JvmStatic fun loadPhotoPartsList(view: ImageView, uri: Uri, errorImage: Drawable) {
+    @JvmStatic
+    fun loadPhotoPartsList(view: ImageView, uri: Uri, errorImage: Drawable) {
         Picasso.get()
-            .load(uri)
-            //.resize(50, 50)
-            .placeholder(errorImage)
-            .error(errorImage)
-            .into(view)
+                .load(uri)
+                //.resize(50, 50)
+                .placeholder(errorImage)
+                .error(errorImage)
+                .into(view)
     }
-
-
 
 
 //    @BindingAdapter("app:onNavigationItemSelected")

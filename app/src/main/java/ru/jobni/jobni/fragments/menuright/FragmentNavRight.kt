@@ -21,7 +21,7 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 class FragmentNavRight : Fragment() {
 
     private lateinit var navRecyclerView: RecyclerView
-    //private lateinit var navAdapter: NavRVAdapter
+    private lateinit var navAdapter: NavRVAdapter
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -53,10 +53,9 @@ class FragmentNavRight : Fragment() {
 
     private fun buildRecyclerView() {
 
-        val navAdapter = NavRVAdapter(makeNavigationListFilters(viewModel.getHeaderList().value!!), activity!!)
+        navAdapter = NavRVAdapter(makeNavigationListFilters(viewModel.getHeaderList().value!!), activity!!)
         val layoutManager = LinearLayoutManager(activity)
         navRecyclerView.layoutManager = layoutManager
-        //navAdapter.setHasStableIds(true)
         navRecyclerView.adapter = navAdapter
 
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {
@@ -68,21 +67,11 @@ class FragmentNavRight : Fragment() {
 ////                    else -> viewModel.setFragmentLaunch("Summary")
 ////                }
                 navAdapter.notifyDataSetChanged()
-                layoutManager.scrollToPositionWithOffset(flatPos, 20);
+                layoutManager.scrollToPositionWithOffset(flatPos, 20)
                 //navRecyclerView.scrollToPosition(flatPos + 10)
                 //viewModel.setOpenDrawerLeft(false)
                 return false
             }
         })
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        navAdapter.onSaveInstanceState(outState)
-//    }
-//
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        navAdapter.onRestoreInstanceState(savedInstanceState)
-//    }
 }

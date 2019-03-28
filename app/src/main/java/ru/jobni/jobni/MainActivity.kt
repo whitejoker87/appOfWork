@@ -129,22 +129,14 @@ class MainActivity : AppCompatActivity() {
                     viewModelMain.setYesAuthRegVisible(true)
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
-                    val view = this.currentFocus
-                    view?.let { v ->
-                        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                        imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-                    }
+                    closeKeyboard()
                 }
                 else {
                     viewModelMain.setNoAuthRegVisible(true) //true
                     viewModelMain.setYesAuthRegVisible(false) //false
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
-                    val view = this.currentFocus
-                    view?.let { v ->
-                        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                        imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-                    }
+                    closeKeyboard()
                 }
             }
             else {
@@ -191,8 +183,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModelMain.getActivityLaunch().observe(this, Observer {
-            it?.let {
-                startActivityForResult(it, CAMERA_REQUEST)
+            it?.let { intent ->
+                startActivityForResult(intent, CAMERA_REQUEST)
             }
         })
 
