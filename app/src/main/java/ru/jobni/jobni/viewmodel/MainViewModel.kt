@@ -216,7 +216,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         setOpenDrawerLeft(true)
     }
 
-    fun loadLeftMenuData() {
+    fun loadLeftMenuOwnerData() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)

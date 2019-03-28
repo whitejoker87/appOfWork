@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
                     //0 -> Toast.makeText(applicationContext, "1", Toast.LENGTH_LONG).show()
-                    1 -> viewModelMain.loadLeftMenuData()
+                    1 -> viewModelMain.loadLeftMenuOwnerData()
                 }
             }
         })
