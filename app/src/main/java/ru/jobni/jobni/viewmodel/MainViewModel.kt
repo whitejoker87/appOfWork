@@ -49,8 +49,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     var isLoad = true
 
-    /*Ответ от API для правого меню*/
-    private lateinit var bodyResponse: DetailVacancy
     /*список в первом уровне правог меню*/
     private val headerList = MutableLiveData<MutableList<Any>>()
     /*список второго уровня правого меню*/
@@ -104,8 +102,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getHeaderList(): MutableLiveData<MutableList<Any>> = headerList
-
-    fun getChildList(): MutableLiveData<HashMap<String, List<String>>> = childList
 
     fun setOpenDrawerLeft(isOpen: Boolean) {
         isOpenDrawerLeft.value = isOpen
@@ -194,21 +190,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isIncludeSocialNetworkReg(): MutableLiveData<Boolean> = isIncludeSocialNetworkReg
 
-    private val users: MutableLiveData<List<String>> by lazy {
-        MutableLiveData<List<String>>().also {
-            //loadUsers()
-        }
-    }
-
-    fun getUsers(): LiveData<List<String>> {
-        return users
-    }
-
-//    private fun loadUsers(): List<String> {
-//        // Do an asynchronous operation to fetch users.
-//    }
-
-
     private val isCardExpandResponse = MutableLiveData<Boolean>(true)
 
     fun setCardExpandResponse(authKey: Boolean) {
@@ -245,33 +226,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun openRightMenu() {
         if (getHeaderList().value == null) loadRightMenuData()
         setOpenDrawerRight(true)
-//        drawer.openDrawer(GravityCompat.END)
-//        //ниже закрываем клавиатуру если открыта
-//        val view = this.currentFocus
-//        view?.let { v ->
-//            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-//            imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-//        }
     }
 
-    /*заглушка для второго уровня правого меню*/
-//    fun loadChildList(headers: MutableList<String>) {
-//        val top250 = ArrayList<String>()
-//        val childs = HashMap<String, List<String>>()
-//        top250.add("The Shawshank Redemption")
-//        top250.add("The Godfather")
-//        top250.add("The Godfather: Part II")
-//        top250.add("Pulp Fiction")
-//        top250.add("The Good, the Bad and the Ugly")
-//        top250.add("The Dark Knight")
-//        top250.add("12 Angry Men")
-//
-//        headers.forEach { str ->
-//            // java ver. childList.put(str, top250)
-//            childs[str] = top250
-//        }
-//        childList.value = childs
-//    }
 
     /*нажатие на кнопку в вьюпаджере первого запуска*/
     fun onClickBtnStart(typeFragment: String) {
@@ -292,44 +248,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         editor.apply()
     }
 
-    /*список первого уровня правого меню*/
-
-
-//            // Отчистить список для новых результатов
-//            repositoryVacancy.clearRepository()
-//
-//            for (i in 0 until resultList.size) {
-//                val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-//                resultList[i].employment.forEach { employment ->
-//                    tmpEmploymentList.add(employment.name)
-//                }
-//
-//                val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-//                resultList[i].competences.forEach { competences ->
-//                    tmpCompetenceList.add(competences.name)
-//                }
-//
-//                repositoryVacancy.saveVacancy(
-//                        VacancyEntity(
-//                                resultList[i].id,
-//                                resultList[i].name,
-//                                resultList[i].company.name,
-//                                resultList[i].salary_level_newbie.toString(),
-//                                resultList[i].salary_level_experienced.toString(),
-//                                resultList[i].format_of_work.name,
-//                                tmpEmploymentList,
-//                                tmpCompetenceList,
-//                                "",
-//                                "",
-//                                "",
-//                                ""
-//                        )
-//                )
-//            }
-//        }
-//    }
-
-
+    /*Загрузка правого меню*/
     fun loadRightMenuData() {
         if (getHeaderList().value == null) {
             Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
@@ -746,4 +665,19 @@ fun <T> MutableLiveData<ArrayList<T>>.clear() {
     updatedItems.clear()
     this.value = updatedItems
 }
+
+/*Для справки*/
+//    private val users: MutableLiveData<List<String>> by lazy {
+//        MutableLiveData<List<String>>().also {
+//            //loadUsers()
+//        }
+//    }
+//
+//    fun getUsers(): LiveData<List<String>> {
+//        return users
+//    }
+
+//    private fun loadUsers(): List<String> {
+//        // Do an asynchronous operation to fetch users.
+//    }
 
