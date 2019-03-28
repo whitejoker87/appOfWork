@@ -67,14 +67,4 @@ class FragmentNavLeftOwnerAuthOff : Fragment() {
             }
         })
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        navAdapter.onSaveInstanceState(outState)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        navAdapter.onRestoreInstanceState(savedInstanceState)
-    }
 }
