@@ -11,18 +11,20 @@
 
 		<import type = "android.view.View"/>
 	</data>
+
 	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
+		android:layout_width = "fill_parent"
+		android:layout_height = "fill_parent"
+		android:orientation = "horizontal"
 		android:baselineAligned = "false"
 		>
 
-		<fragment android:name="ru.jobni.jobni.fragments.menuright.FragmentNavRight"
-			android:id="@+id/nav_right_fragment"
-			android:layout_weight="1"
-			android:layout_width="0dp"
-			android:layout_height="match_parent" />
-
+		<fragment
+			android:id = "@+id/nav_right_fragment"
+			android:name = "ru.jobni.jobni.fragments.menuright.FragmentNavRight"
+			android:layout_width = "0dp"
+			android:layout_height = "match_parent"
+			android:layout_weight = "1"
+			/>
 	</LinearLayout>
 </layout>

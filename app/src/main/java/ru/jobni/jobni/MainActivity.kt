@@ -20,7 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.nav_header_left.*
+import kotlinx.android.synthetic.main.nav_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.auth.*

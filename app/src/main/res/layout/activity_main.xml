@@ -101,7 +101,7 @@
 
 			<include
 				android:id = "@+id/exp_list_include_left"
-				layout = "@layout/nav_header_left"
+				layout = "@layout/nav_left"
 				app:viewmodelmain = "@{viewmodelmain}"
 				/>
 		</com.google.android.material.navigation.NavigationView>
