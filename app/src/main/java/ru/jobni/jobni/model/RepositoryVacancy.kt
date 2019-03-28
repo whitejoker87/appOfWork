@@ -3,7 +3,7 @@ package ru.jobni.jobni.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-object RepositoryVacancyEntity {
+object RepositoryVacancy {
 
     private val vacancyLiveData = MutableLiveData<MutableList<VacancyEntity>>()
 

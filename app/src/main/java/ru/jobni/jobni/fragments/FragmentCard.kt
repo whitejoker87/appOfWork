@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CCardVacancyOpenMapOpenBinding
-import ru.jobni.jobni.model.RepositoryVacancyEntity
+import ru.jobni.jobni.model.RepositoryVacancy
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentCard : Fragment() {
@@ -25,7 +25,7 @@ class FragmentCard : Fragment() {
 
     private lateinit var binding: CCardVacancyOpenMapOpenBinding
 
-    private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
+    private val repository: RepositoryVacancy = RepositoryVacancy
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_card_vacancy_open_map_open, container, false)

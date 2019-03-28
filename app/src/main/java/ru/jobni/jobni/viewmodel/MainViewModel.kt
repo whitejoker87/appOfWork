@@ -25,7 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.R
-import ru.jobni.jobni.model.RepositoryVacancyEntity
+import ru.jobni.jobni.model.RepositoryVacancy
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.menu.left.RepositoryOwner
@@ -83,7 +83,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val context = application
 
     private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
-    private val repositoryVacancy: RepositoryVacancyEntity = RepositoryVacancyEntity
+    private val repositoryVacancy: RepositoryVacancy = RepositoryVacancy
     /*параметр uri для загружаемого фото*/
     private var outputPhotoUri: MutableLiveData<Uri> = MutableLiveData(Uri.EMPTY)
     /*параментр для запука активити(для фото)*/
