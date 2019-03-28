@@ -70,7 +70,7 @@
 			android:text = "@string/search_view_hint"
 			android:layout_weight = "1"
 			android:drawableStart = "@android:drawable/ic_menu_search"
-			android:onClick = '@{() -> viewmodel.onClickBtnStart("Main_focus")}'
+			android:onClick = '@{() -> viewmodel.setFragmentLaunch("Main_focus")}'
 			/>
 
 		<Button
@@ -84,7 +84,7 @@
 			android:background = "@drawable/shape_button"
 			android:textColor = "@color/font_color"
 			android:text = "@string/search_button"
-			android:onClick = '@{() -> viewmodel.onClickBtnStart("Main_cards")}'
+			android:onClick = '@{() -> viewmodel.setFragmentLaunch("Main_cards")}'
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

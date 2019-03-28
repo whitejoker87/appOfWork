@@ -21,7 +21,7 @@ class FragmentSplashScreen : Fragment() {
 
         viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         if (savedInstanceState == null) {
-            viewModel.switchToMainActivity()
+            viewModel.checkFirstLauch()
         }
         return view
     }

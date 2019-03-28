@@ -231,7 +231,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /*нажатие на кнопку в вьюпаджере первого запуска*/
     fun onClickBtnStart(typeFragment: String) {
-        if (typeFragment.equals("Intro")) saveLaunchFlag()
+        saveLaunchFlag()
         setFragmentLaunch(typeFragment)
     }
 
@@ -388,7 +388,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /*загрузка главного фрагмента после проверкаи на первый запуск*/
-    fun switchToMainActivity() {
+    fun checkFirstLauch() {
         val duration = 2000L
 
         if (sPref.getBoolean(firstLaunchFlag, true))
