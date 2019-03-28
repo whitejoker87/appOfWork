@@ -99,6 +99,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getModelVacancy(): LiveData<MainFragmentViewState> = modelVacancy
 
+    fun setHeaderList(list: MutableList<Any>) {
+        headerList.value = list
+    }
+
     fun getHeaderList(): MutableLiveData<MutableList<Any>> = headerList
 
     fun getChildList(): MutableLiveData<HashMap<String, List<String>>> = childList
@@ -239,21 +243,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /*открытие правого меню*/
     fun openRightMenu() {
-//        if (headerList.value == null) {
-//            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
-//                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
-//                    if (response.body() != null) {
-//                        bodyResponse = response.body()!!
-//                        loadHeaderList()
-//                    }
-//                }
-//
-//                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
-//                    //Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
-//                }
-//            })
-//        }
-
+        if (getHeaderList().value == null) loadRightMenuData()
         setOpenDrawerRight(true)
 //        drawer.openDrawer(GravityCompat.END)
 //        //ниже закрываем клавиатуру если открыта
@@ -265,23 +255,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /*заглушка для второго уровня правого меню*/
-    fun loadChildList(headers: MutableList<String>) {
-        val top250 = ArrayList<String>()
-        val childs = HashMap<String, List<String>>()
-        top250.add("The Shawshank Redemption")
-        top250.add("The Godfather")
-        top250.add("The Godfather: Part II")
-        top250.add("Pulp Fiction")
-        top250.add("The Good, the Bad and the Ugly")
-        top250.add("The Dark Knight")
-        top250.add("12 Angry Men")
-
-        headers.forEach { str ->
-            // java ver. childList.put(str, top250)
-            childs[str] = top250
-        }
-        childList.value = childs
-    }
+//    fun loadChildList(headers: MutableList<String>) {
+//        val top250 = ArrayList<String>()
+//        val childs = HashMap<String, List<String>>()
+//        top250.add("The Shawshank Redemption")
+//        top250.add("The Godfather")
+//        top250.add("The Godfather: Part II")
+//        top250.add("Pulp Fiction")
+//        top250.add("The Good, the Bad and the Ugly")
+//        top250.add("The Dark Knight")
+//        top250.add("12 Angry Men")
+//
+//        headers.forEach { str ->
+//            // java ver. childList.put(str, top250)
+//            childs[str] = top250
+//        }
+//        childList.value = childs
+//    }
 
     /*нажатие на кнопку в вьюпаджере первого запуска*/
     fun onClickBtnStart(typeFragment: String) {
@@ -340,47 +330,56 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 
 
-    private fun loadHeaderList() {
+    fun loadRightMenuData() {
+        if (getHeaderList().value == null) {
+            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+                    if (response.body() != null) {
+                        val (language_and_level_of_proficiency,
+                                work_places,
+                                employment,
+                                format_of_work,
+                                field_of_activity,
+                                age,
+                                required_number_of_people,
+                                update_time,
+                                presence_geography,
+                                profession_and_competence,
+                                desired_salary_level,
+                                social_packet,
+                                more,
+                                auto,
+                                raiting,
+                                views_responses_invitations_int) = response.body()!!
 
-//        val resultList: List<ResultsVacancy> = response.body()!!.results
+                        val detailList: MutableList<Any> = mutableListOf(
+                                language_and_level_of_proficiency,
+                                work_places,
+                                employment,
+                                format_of_work,
+                                field_of_activity,
+                                age,
+                                required_number_of_people,
+                                update_time,
+                                presence_geography,
+                                profession_and_competence,
+                                desired_salary_level,
+                                social_packet,
+                                more,
+                                auto,
+                                raiting,
+                                views_responses_invitations_int
+                        )
+                        setHeaderList(detailList)
+                    }
+                }
 
-//        val headers = ArrayList<String>()
-        val (competence,
-                languages,
-                work_places,
-                employment,
-                format_of_work,
-                field_of_activity,
-                age_company,
-                required_number_of_people,
-                zarplata, social_packet,
-                auto,
-                raiting) = bodyResponse
+                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+                    //Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
 
-        val detailList: MutableList<Any> = mutableListOf(
-                competence,
-                languages,
-                work_places,
-                employment,
-                format_of_work,
-                field_of_activity,
-                age_company,
-                required_number_of_people,
-                zarplata,
-                social_packet,
-                auto,
-                raiting
-        )
-//        detailList.forEach { str: Any ->
-//            if (str is String) headers.add(str)
-//            else when (str) {
-//                is Zarplata -> headers.add("Зарплата")
-//                is Social_packet -> headers.add("Социальный пакет")
-//                is Auto -> headers.add("Авто")
-//                is Raiting -> headers.add("Рейтинг")
-//            }
-//        }
-        headerList.value = detailList
     }
 
 

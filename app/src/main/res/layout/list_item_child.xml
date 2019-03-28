@@ -7,16 +7,6 @@
 	<data>
 
 		<variable
-			name = "position"
-			type = "Integer"
-			/>
-
-		<variable
-			name = "viewmodel"
-			type = "ru.jobni.jobni.viewmodel.MainViewModel"
-			/>
-
-		<variable
 			name = "child"
 			type = "ru.jobni.jobni.model.menu.NavigationChild"
 			/>
@@ -33,7 +23,6 @@
 			android:layout_height = "wrap_content"
 			android:layout_marginStart = "30dp"
 			android:layout_gravity = "center_vertical"
-			android:src = "@{child.iconResId}"
 			tools:src = "@drawable/ic_bell"
 			/>
 

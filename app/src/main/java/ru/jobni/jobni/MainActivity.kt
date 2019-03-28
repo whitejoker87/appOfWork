@@ -93,6 +93,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        viewModel.loadRightMenuData()
+
         //viewModel.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
         viewModel.saveLaunchFlag(true)//отладка первого запуска true
         if (savedInstanceState == null) {
@@ -300,7 +302,7 @@ class MainActivity : AppCompatActivity() {
 //                            if (str is String) headerList.add(str)
 //                            else when (str) {
 //                                is Zarplata -> headerList.add("Зарплата")
-//                                is Social_packet -> headerList.add("Социальный пакет")
+//                                is SocialPacket -> headerList.add("Социальный пакет")
 //                                is Auto -> headerList.add("Авто")
 //                                is Raiting -> headerList.add("Рейтинг")
 //                            }
