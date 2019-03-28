@@ -46,6 +46,8 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
     ) {
         val child = (group as NavigationParent).items[childIndex]
 
+        holderChild.setChildIcon(child.iconResId)
+
         holderChild.bind(child, childIndex)
     }
 
@@ -57,6 +59,12 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
     }
 
     class ViewHolderChild(val binding: ListItemChildBinding, val viewmodel: MainViewModel) : ChildViewHolder(binding.root) {
+
+        private val childIcon = binding.listItemChildIcon
+
+        fun setChildIcon(icon: Int) {
+            childIcon.setImageResource(icon)
+        }
 
         fun bind(child: NavigationChild, childIndex: Int) {
             binding.position = childIndex

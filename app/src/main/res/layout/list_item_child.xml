@@ -33,7 +33,6 @@
 			android:layout_height = "wrap_content"
 			android:layout_marginStart = "30dp"
 			android:layout_gravity = "center_vertical"
-			android:src = "@{child.iconResId}"
 			tools:src = "@drawable/ic_bell"
 			/>
 
