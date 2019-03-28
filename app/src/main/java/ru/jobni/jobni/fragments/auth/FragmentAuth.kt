@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserLoggedChangeMailBinding
+import ru.jobni.jobni.databinding.CAuthorizationBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentAuthUserLoggedChangeMail : Fragment() {
+class FragmentAuth : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -22,19 +22,25 @@ class FragmentAuthUserLoggedChangeMail : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationUserLoggedChangeMailBinding
+    private lateinit var binding: CAuthorizationBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_logged_change_mail, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization, container, false)
 
         binding.lifecycleOwner = this
 
         val view = binding.root
 
+        binding.viewmodelmain = viewModel
+
         binding.viewmodelauth = viewModelAuth
 
-        binding.viewmodel = viewModel
-
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.setIncludeSocialNetworkReg(false)
+        viewModelAuth.setBtnUserNotClickable(false)
     }
 }

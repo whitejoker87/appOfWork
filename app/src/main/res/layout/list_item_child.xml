@@ -7,18 +7,8 @@
 	<data>
 
 		<variable
-			name = "position"
-			type = "Integer"
-			/>
-
-		<variable
-			name = "viewmodel"
-			type = "ru.jobni.jobni.viewmodel.MainViewModel"
-			/>
-
-		<variable
 			name = "child"
-			type = "ru.jobni.jobni.model.menuleft.NavigationChild"
+			type = "ru.jobni.jobni.model.menu.NavigationChild"
 			/>
 	</data>
 

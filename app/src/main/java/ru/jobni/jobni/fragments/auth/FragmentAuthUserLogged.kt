@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserLoggedBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentAuth : Fragment() {
+class FragmentAuthUserLogged : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -22,24 +22,21 @@ class FragmentAuth : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationBinding
+    private lateinit var binding: CAuthorizationUserLoggedBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_logged, container, false)
 
         binding.lifecycleOwner = this
 
         val view = binding.root
 
-        binding.viewmodel = viewModel
+        viewModelAuth.setBtnUserNotClickable(true)
 
         binding.viewmodelauth = viewModelAuth
 
-        return view
-    }
+        binding.viewmodelmain = viewModel
 
-    override fun onResume() {
-        super.onResume()
-        viewModelAuth.setBtnUserClickable(true)
+        return view
     }
 }

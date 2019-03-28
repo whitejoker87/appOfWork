@@ -1,10 +1,12 @@
-package ru.jobni.jobni.model.menuleft
+package ru.jobni.jobni.model.menu.left
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.jobni.jobni.R
 import java.util.*
 import kotlin.collections.ArrayList
+import ru.jobni.jobni.model.menu.NavigationChild
+import ru.jobni.jobni.model.menu.NavigationParent
 
 object RepositoryOwner {
 

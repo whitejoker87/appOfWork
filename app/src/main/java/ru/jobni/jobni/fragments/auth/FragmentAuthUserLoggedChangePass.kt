@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments
+package ru.jobni.jobni.fragments.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,7 +33,7 @@ class FragmentAuthUserLoggedChangePass : Fragment() {
 
         binding.viewmodelauth = viewModelAuth
 
-        binding.viewmodel = viewModel
+        binding.viewmodelmain = viewModel
 
         return view
     }

@@ -7,7 +7,7 @@
 	<data>
 
 		<variable
-			name = "viewmodel"
+			name = "viewmodelmain"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
 
@@ -58,7 +58,7 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "36dp"
-			app:viewmodel = "@{viewmodel}"
+			app:viewmodelmain = "@{viewmodelmain}"
 			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
@@ -72,7 +72,7 @@
 			android:layout_marginTop = "26dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/btn_change_user_pass_text"
-			android:onClick = '@{() -> viewmodel.setFragmentLaunch("AuthUserLoggedPass")}'
+			android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthUserLoggedPass")}'
 			/>
 
 		<Button
@@ -85,7 +85,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/btn_change_user_mail_text"
-			android:onClick = '@{() -> viewmodel.setFragmentLaunch("AuthUserLoggedMail")}'
+			android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthUserLoggedMail")}'
 			/>
 
 		<Button

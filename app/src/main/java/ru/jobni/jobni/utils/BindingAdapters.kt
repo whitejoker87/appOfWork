@@ -14,6 +14,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.jobni.jobni.viewmodel.MainViewModel
+import ru.jobni.jobni.model.RepositoryVacancyEntity
+import android.R.attr.name
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.widget.*
+import com.squareup.picasso.Picasso
+
 
 @BindingMethods(
         BindingMethod(
@@ -136,6 +143,18 @@ object BindingAdapters {
         }
         return sb.toString()
     }
+
+    @BindingAdapter("imageUrl", "errorImage")
+    @JvmStatic fun loadPhotoPartsList(view: ImageView, uri: Uri, errorImage: Drawable) {
+        Picasso.get()
+            .load(uri)
+            //.resize(50, 50)
+            .placeholder(errorImage)
+            .error(errorImage)
+            .into(view)
+    }
+
+
 
 
 //    @BindingAdapter("app:onNavigationItemSelected")

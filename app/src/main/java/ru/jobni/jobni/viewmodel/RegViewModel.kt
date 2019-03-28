@@ -2,15 +2,58 @@ package ru.jobni.jobni.viewmodel
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.widget.Toast
+import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import ru.jobni.jobni.model.auth.UserAuth
+import ru.jobni.jobni.model.network.registration.RegContactFace
+import ru.jobni.jobni.model.network.registration.RegUser
+import ru.jobni.jobni.model.network.registration.ResponseReg
+import ru.jobni.jobni.utils.Retrofit
 
 
 class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     val context = application
 
+    private val authUserSessionID = "userSessionID"
+    private val authUserName = "userName"
+    private val authUserPass = "userPass"
+
+    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
+
     private val regMail = MutableLiveData<String>("mail@ya.ru")
+    private val regPassword = MutableLiveData<String>("11111111")
+    private val regPassConfirm = MutableLiveData<String>("11111111")
+    private val regSurname = MutableLiveData<String>("Иванов")
+    private val regName = MutableLiveData<String>("Иван")
+    private val regMiddlename = MutableLiveData<String>("Иванович")
+    private val regReferer = MutableLiveData<String>("")
+    private val regPhoto = MutableLiveData<Drawable>()
+    private val regContacts = MutableLiveData<List<String>>(arrayListOf(""))
+    private val regPhone = MutableLiveData<String>("")
+    private val regPhoneCode = MutableLiveData<String>("")
+
+    private val startNextRegPhase = MutableLiveData<Int>()
+
+    private val isPrivilegesForFileDone = MutableLiveData<Boolean>()
+
+    private val numberOfVisibleItemReg = MutableLiveData<Int>(-1)
+
+    private val resultReg1Success = MutableLiveData<Boolean>(false)
+    private val resultReg2Success = MutableLiveData<Boolean>(false)
+    private val resultReg3Success = MutableLiveData<Boolean>(false)
+
+    private val resultAuthSuccess = MutableLiveData<Boolean>(false)
+    private val typeAddRegFragment = MutableLiveData<String>("mail")
 
     fun setRegMail(mail: String) {
         regMail.value = mail
@@ -18,15 +61,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getRegMail(): MutableLiveData<String> = regMail
 
-    private val regPassword = MutableLiveData<String>("namenamename")
-
     fun setRegPassword(pass: String) {
         regPassword.value = pass
     }
 
     fun getRegPassword(): MutableLiveData<String> = regPassword
-
-    private val regPassConfirm = MutableLiveData<String>("namenamename")
 
     fun setRegPassConfirm(passConfirm: String) {
         regPassConfirm.value = passConfirm
@@ -34,15 +73,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getRegPassConfirm(): MutableLiveData<String> = regPassConfirm
 
-    private val regSurname = MutableLiveData<String>("Иванов")
-
     fun setRegSurname(surname: String) {
         regSurname.value = surname
     }
 
     fun getRegSurname(): MutableLiveData<String> = regSurname
-
-    private val regName = MutableLiveData<String>("Иван")
 
     fun setRegName(name: String) {
         regName.value = name
@@ -50,15 +85,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getRegName(): MutableLiveData<String> = regName
 
-    private val regMiddlename = MutableLiveData<String>("Иванович")
-
     fun setRegMiddlename(middlename: String) {
         regMiddlename.value = middlename
     }
 
     fun getRegMiddlename(): MutableLiveData<String> = regMiddlename
-
-    private val regReferer = MutableLiveData<String>("")
 
     fun setRegReferer(referer: String) {
         regReferer.value = referer
@@ -66,23 +97,23 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getRegReferer(): MutableLiveData<String> = regReferer
 
-    private val regPhoto = MutableLiveData<Drawable>()
-
     fun setRegPhoto(photo: Drawable) {
         regPhoto.value = photo
     }
 
     fun getRegPhoto(): MutableLiveData<Drawable> = regPhoto
 
-//    private val regContact = MutableLiveData<String>("+79999999999")
-//
-//    fun setRegContact(contact: String) {
-//        regContact.value = contact
-//    }
-//
-//    fun getRegContact(): MutableLiveData<String> = regContact
+    fun setRegPhone(phone: String) {
+        regPhone.value = phone
+    }
 
-    private val regContacts = MutableLiveData<List<String>>(arrayListOf(""))
+    fun getRegPhone(): MutableLiveData<String> = regPhone
+
+    fun setRegPhoneCode(phoneCode: String) {
+        regPhoneCode.value = phoneCode
+    }
+
+    fun getRegPhoneCode(): MutableLiveData<String> = regPhoneCode
 
     fun setRegContacts(contacts: List<String>) {
         regContacts.value = contacts
@@ -90,7 +121,8 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getRegContacts(): MutableLiveData<List<String>> = regContacts
 
-    private val startNextRegPhase = MutableLiveData<Int>()
+
+
 
     fun setStartNextRegPhase(nextPhase: Int) {
         startNextRegPhase.value = nextPhase
@@ -98,15 +130,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getStartNextRegPhase(): MutableLiveData<Int> = startNextRegPhase
 
-    private val isPrivilegesForFileDone = MutableLiveData<Boolean>()
-
     fun setPrivilegesForFileDone(isDone: Boolean) {
         isPrivilegesForFileDone.value = isDone
     }
 
     fun isPrivilegesForFileDone(): MutableLiveData<Boolean> = isPrivilegesForFileDone
-
-    private val numberOfVisibleItemReg = MutableLiveData<Int>(-1)
 
     fun getNumberOfVisibleItemReg(): MutableLiveData<Int> = numberOfVisibleItemReg
 
@@ -114,10 +142,144 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         numberOfVisibleItemReg.value = numberItem
     }
 
+    fun getResultReg1Success(): MutableLiveData<Boolean> = resultReg1Success
+
+    fun setResultReg1Success(success: Boolean) {
+        resultReg1Success.value = success
+    }
+
+    fun getResultReg2Success(): MutableLiveData<Boolean> = resultReg2Success
+
+    fun setResultReg2Success(success: Boolean) {
+        resultReg2Success.value = success
+    }
+
+    fun getResultReg3Success(): MutableLiveData<Boolean> = resultReg3Success
+
+    fun setResultReg3Success(success: Boolean) {
+        resultReg3Success.value = success
+    }
+
+    fun getResultAuthSuccess(): MutableLiveData<Boolean> = resultAuthSuccess
+
+    fun setResultAuthSuccess(success: Boolean) {
+        resultAuthSuccess.value = success
+    }
+
+    fun getTypeAddRegFragment(): MutableLiveData<String> = typeAddRegFragment
+
+    fun setTypeAddRegFragment(type: String) {
+        typeAddRegFragment.value = type
+    }
+
+    fun btnRegUserClick() {
+
+        val user = RegUser(
+            regMail.value!!,
+            regPassword.value!!,
+            regPassConfirm.value!!
+        )
+        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseReg> {
+
+            override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
+                if (response.body() != null) {
+
+                    /*D/OkHttp: <-- 200 https://test.jobni.ru/api/registration_user/ (1833ms)
+                        server: nginx/1.14.2
+                        date: Sun, 24 Mar 2019 13:27:40 GMT
+                        content-type: application/json
+                        content-length: 108
+                        vary: Accept, Origin, Cookie
+                        allow: OPTIONS, POST
+                        x-frame-options: DENY
+                        strict-transport-security: max-age=3600
+                        x-content-type-options: nosniff
+                        x-xss-protection: 1; mode=block
+                    D/OkHttp: access-control-allow-headers: *
+                        {"success":true,"error_text":["Перейдите на почту для её подтверждения."]}
+                        <-- END HTTP (108-byte body)*/
+                    response.body()?.let {
+                        setResultReg1Success(it.success)
+                    }
+                    Toast.makeText(context, "Успешно отправдены дынные user ${resultReg1Success.value}", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
+
+            }
+        })
+    }
+
     fun btnRegClick() {
 
         setPrivilegesForFileDone(false)
 
+    }
+
+    fun tempAuthForRegOne() {
+
+        val userData = UserAuth(regMail.value, regPassword.value)
+
+        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
+                if (response.body() != null) {
+
+                    val resultListHeaders = response.headers().get("Set-Cookie")
+
+                    /* Пример ответа от АПИ
+                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
+                    Нам нужно выделить из этой строки sessionid
+                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
+
+                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
+
+                    val editor = sPrefAuthUser.edit()
+                    editor?.putString(authUserSessionID, sessionID)
+                    editor?.putString(authUserName, regMail.value)
+                    editor?.putString(authUserPass, regPassword.value)
+                    editor?.apply()
+
+                    if (sessionID != null) {
+                        setResultAuthSuccess(true)
+                    }
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error! in zq rega 1", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun btnRegContactFaceClick() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val contactFace = RegContactFace(
+            regSurname.value!!,
+            regName.value!!,
+            regMiddlename.value!!
+        )
+        Retrofit.api?.sendRegistrationContactFace(cid, contactFace)?.enqueue(object : Callback<ResponseReg> {
+
+            override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
+                if (response.body() != null) {
+
+                    response.body()?.let {
+                        setResultReg2Success(it.success)
+                    }
+                    Toast.makeText(context, "Успешно отправдены дынные user ${resultReg2Success}", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
+                Toast.makeText(context, "Error! in zq rega 222", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 //
 //

@@ -1,6 +1,8 @@
-package ru.jobni.jobni.model.menuleft
+package ru.jobni.jobni.model.menu.left
 
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.menu.NavigationChild
+import ru.jobni.jobni.model.menu.NavigationParent
 import java.util.*
 
 object RepositoryUser {
@@ -8,18 +10,18 @@ object RepositoryUser {
     /* Блок функций если пользователь авторизован в приложении */
     fun makeNavigationListUserAuthOn(): List<NavigationParent> {
         return Arrays.asList(
-            makeParentOneAuthOn(),
-            makeParentTwoAuthOn(),
-            makeParentThreeAuthOn(),
-            makeParentFourAuthOn()
+                makeParentOneAuthOn(),
+                makeParentTwoAuthOn(),
+                makeParentThreeAuthOn(),
+                makeParentFourAuthOn()
         )
     }
 
     private fun makeParentOneAuthOn(): NavigationParent {
         return NavigationParent(
-            "Резюме",
-            makeParentOneChildAuthOn(),
-            R.drawable.ic_user
+                "Резюме",
+                makeParentOneChildAuthOn(),
+                R.drawable.ic_user
         )
     }
 
@@ -29,9 +31,9 @@ object RepositoryUser {
 
     private fun makeParentTwoAuthOn(): NavigationParent {
         return NavigationParent(
-            "Отзывы",
-            makeParentTwoChildAuthOn(),
-            R.drawable.ic_user
+                "Отзывы",
+                makeParentTwoChildAuthOn(),
+                R.drawable.ic_user
         )
     }
 
@@ -41,9 +43,9 @@ object RepositoryUser {
 
     private fun makeParentThreeAuthOn(): NavigationParent {
         return NavigationParent(
-            "Профиль",
-            makeParentThreeChildAuthOn(),
-            R.drawable.ic_user
+                "Профиль",
+                makeParentThreeChildAuthOn(),
+                R.drawable.ic_user
         )
     }
 
@@ -53,9 +55,9 @@ object RepositoryUser {
 
     private fun makeParentFourAuthOn(): NavigationParent {
         return NavigationParent(
-            "Финансы",
-            makeParentFourChildAuthOn(),
-            R.drawable.ic_user
+                "Финансы",
+                makeParentFourChildAuthOn(),
+                R.drawable.ic_user
         )
     }
     

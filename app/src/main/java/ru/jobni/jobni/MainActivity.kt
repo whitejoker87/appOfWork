@@ -2,7 +2,9 @@ package ru.jobni.jobni
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
@@ -24,7 +26,9 @@ import kotlinx.android.synthetic.main.menu_right.view.*
 import kotlinx.android.synthetic.main.nav_header_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
+import ru.jobni.jobni.fragments.auth.*
 import ru.jobni.jobni.fragments.menuleft.*
+import ru.jobni.jobni.fragments.reg.FragmentReg
 import ru.jobni.jobni.utils.ExpandableListAdapter
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
@@ -38,15 +42,16 @@ class MainActivity : AppCompatActivity() {
     private val SET_CARDS: String = "SetCards"
 
     private val WRITE_REQUEST_CODE = 0
+    private val CAMERA_REQUEST = 0
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
     private lateinit var drawer: DrawerLayout
 
-    private val expandableListAdapter: ExpandableListAdapter by lazy {
-        ExpandableListAdapter(applicationContext, viewModelMain.getHeaderList().value!!, viewModelMain.getChildList().value!!)
-    }
-    private lateinit var expandableListView: ExpandableListView
+//    private val expandableListAdapter: ExpandableListAdapter by lazy {
+//        ExpandableListAdapter(applicationContext, viewModel.getHeaderList().value!!, viewModel.getChildList().value!!)
+//    }
+    //private lateinit var expandableListView: ExpandableListView
 
     private val viewModelMain: MainViewModel by lazy {
         ViewModelProviders.of(this).get(MainViewModel::class.java)
@@ -75,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView = binding.menuBottom
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        expandableListView = binding.expListIncludeRight.exp_list_view
+        //expandableListView = binding.expListInclude.exp_list_view
 
         popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_menu_profile))
         val inflater = popup.menuInflater
@@ -90,21 +95,23 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        viewModelMain.loadRightMenuData()
+
         //viewModelMain.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
         viewModelMain.saveLaunchFlag(true)//отладка первого запуска true
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
         }
 
-        viewModelMain.getHeaderList().observe(this, Observer { headerList ->
-            viewModelMain.loadChildList(headerList)
-        })
+//        viewModel.getHeaderList().observe(this, Observer { headerList ->
+//            viewModel.loadChildList(headerList)
+//        })
 
-        viewModelMain.getChildList().observe(this, Observer {
-            if (viewModelMain.getHeaderList().value != null) {
-                expandableListView.setAdapter(expandableListAdapter)
-            }
-        })
+//        viewModel.getChildList().observe(this, Observer {
+//            if (viewModel.getHeaderList().value != null) {
+//                expandableListView.setAdapter(expandableListAdapter)
+//            }
+//        })
 
         checkDrawerOpenClose()
         leftMenuPAdapters()
@@ -113,11 +120,7 @@ class MainActivity : AppCompatActivity() {
             if (isOpen) {
                 drawer.openDrawer(GravityCompat.END)
                 //ниже закрываем клавиатуру если открыта
-                val view = this.currentFocus
-                view?.let { v ->
-                    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-                }
+                closeKeyboard()
             } else {
                 drawer.closeDrawer(GravityCompat.END)
             }
@@ -153,8 +156,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModelMain.getFragmentLaunch().observe(this, Observer { fragmentType ->
-            when (fragmentType) {
+        viewModelMain.getFragmentLaunch().observe(this, Observer {
+            when (it) {
                 "Welcome" -> setFragmentNoBackStack(FragmentWelcome())
                 "Intro" -> setFragmentNoBackStack(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
@@ -174,6 +177,9 @@ class MainActivity : AppCompatActivity() {
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
                 "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
                 "AuthUserLoggedMail" -> setFragment(FragmentAuthUserLoggedChangeMail())
+                "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
+                "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
+                "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")
                 else -> setFragment(FragmentWelcome())
             }
         })
@@ -188,9 +194,15 @@ class MainActivity : AppCompatActivity() {
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
+        viewModelMain.getActivityLaunch().observe(this, Observer {
+            it?.let {
+                startActivityForResult(it, CAMERA_REQUEST)
+            }
+        })
+
         regViewModel.isPrivilegesForFileDone().observe(this, Observer {
             if (!it) {
-                val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     ActivityCompat.requestPermissions(this, permissions, WRITE_REQUEST_CODE)
                 }
@@ -276,6 +288,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            val uri: Uri? = null
+            when (requestCode) {
+                //GALLERY_REQUEST -> uri = data.data
+                CAMERA_REQUEST -> viewModelMain.setOutputPhotoUri(viewModelMain.getOutputPhotoUri().value!!)
+            }
+        }
+    }
+
     private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
 
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -350,7 +373,7 @@ class MainActivity : AppCompatActivity() {
 //                            if (str is String) headerList.add(str)
 //                            else when (str) {
 //                                is Zarplata -> headerList.add("Зарплата")
-//                                is Social_packet -> headerList.add("Социальный пакет")
+//                                is SocialPacket -> headerList.add("Социальный пакет")
 //                                is Auto -> headerList.add("Авто")
 //                                is Raiting -> headerList.add("Рейтинг")
 //                            }

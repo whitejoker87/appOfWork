@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentNavLeftUserBinding
-import ru.jobni.jobni.model.menuleft.RepositoryUser.makeNavigationListUserAuthOn
+import ru.jobni.jobni.model.menu.left.RepositoryUser.makeNavigationListUserAuthOn
 import ru.jobni.jobni.utils.menuleft.NavRVAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 

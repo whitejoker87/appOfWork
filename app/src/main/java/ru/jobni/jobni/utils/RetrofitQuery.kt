@@ -5,6 +5,10 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.UserAuth
+import ru.jobni.jobni.model.network.registration.RegContactFace
+import ru.jobni.jobni.model.network.registration.RegContactFaceContact
+import ru.jobni.jobni.model.network.registration.RegUser
+import ru.jobni.jobni.model.network.registration.ResponseReg
 import ru.jobni.jobni.model.network.company.CompanyVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
@@ -32,9 +36,18 @@ interface RetrofitQuery {
     @POST("api/authorization/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<UserAuth>
 
-    @Multipart
-    @POST("api/registration/")
-    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
+    @POST("api/registration_user/")
+    fun sendRegistrationUser(@Body user: RegUser): Call<ResponseReg>
+
+    @POST("api/registration_contactface/")
+    fun sendRegistrationContactFace(@Header("Cookie") sid:String, @Body contactFace: RegContactFace): Call<ResponseReg>
+
+    @POST("api/registration_contactfacecontact/")
+    fun sendRegistrationContactFaceContact(@Body contacts: RegContactFaceContact): Call<ResponseReg>
+
+//    @Multipart
+//    @POST("api/registration/")
+//    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
     @GET("api/vacancy/")
     fun loadCompanyVacancy(@Query("company") companyID: Int): Call<CardVacancy>
@@ -42,3 +55,5 @@ interface RetrofitQuery {
     @GET("api/company/?owner_or_worker=1")
     fun ownerOrWorker(@Header("Cookie") h1: String): Call<CompanyVacancy>
 }
+
+
