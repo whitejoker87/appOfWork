@@ -1,13 +1,11 @@
-package ru.jobni.jobni.utils.menuleft
+package ru.jobni.jobni.utils
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
@@ -17,14 +15,9 @@ import ru.jobni.jobni.databinding.ListItemChildBinding
 import ru.jobni.jobni.databinding.ListItemParentBinding
 import ru.jobni.jobni.model.menu.NavigationChild
 import ru.jobni.jobni.model.menu.NavigationParent
-import ru.jobni.jobni.viewmodel.MainViewModel
 
 class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: FragmentActivity) :
         ExpandableRecyclerViewAdapter<NavRVAdapter.ViewHolderParent, NavRVAdapter.ViewHolderChild>(groups) {
-
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProviders.of(context).get(MainViewModel::class.java)
-    }
 
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): ViewHolderParent {
         val view = LayoutInflater.from(parent.context)
@@ -46,9 +39,8 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
     ) {
         val child = (group as NavigationParent).items[childIndex]
 
-        holderChild.setChildIcon(child.iconResId)
-
         holderChild.bind(child)
+        holderChild.setChildIcon(child)
     }
 
     override fun onBindGroupViewHolder(
@@ -57,41 +49,36 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
             group: ExpandableGroup<*>
     ) {
         holderParent.bind(group)
-        holderParent.setParentTitle(group)
+        holderParent.setParentIcon(group)
     }
 
     class ViewHolderChild(val binding: ListItemChildBinding) : ChildViewHolder(binding.root) {
 
         private val childIcon = binding.listItemChildIcon
 
-        fun setChildIcon(icon: Int) {
-            childIcon.setImageResource(icon)
-        }
-
         fun bind(child: NavigationChild) {
             binding.child = child
             binding.executePendingBindings()
+        }
+
+        fun setChildIcon(child: NavigationChild) {
+            childIcon.setBackgroundResource(child.iconResId)
         }
     }
 
     inner class ViewHolderParent(val binding: ListItemParentBinding) : GroupViewHolder(binding.root) {
 
         private val arrow = binding.listItemParentArrow
-        private val icon = binding.listItemParentIcon
+        private val parentIcon = binding.listItemParentIcon
 
         fun bind(parent: ExpandableGroup<*>) {
             binding.parent = parent as NavigationParent
             binding.executePendingBindings()
         }
 
-        fun setParentTitle(parent: ExpandableGroup<*>) {
+        fun setParentIcon(parent: ExpandableGroup<*>) {
             if (parent is NavigationParent) {
-                //parentName.text = parent.getTitle()
-                icon.setBackgroundResource(parent.iconResId)
-            }
-
-            if (parent.items.isEmpty()) {
-                arrow.visibility = View.GONE
+                parentIcon.setBackgroundResource(parent.iconResId)
             }
         }
 

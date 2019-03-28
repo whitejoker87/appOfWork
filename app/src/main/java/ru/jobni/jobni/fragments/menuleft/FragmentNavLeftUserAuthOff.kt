@@ -12,7 +12,7 @@ import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentNavLeftUserBinding
 import ru.jobni.jobni.model.menu.left.RepositoryUser.makeNavigationListUserAuthOff
-import ru.jobni.jobni.utils.menuleft.NavRVAdapter
+import ru.jobni.jobni.utils.NavRVAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentNavLeftUserAuthOff : Fragment() {

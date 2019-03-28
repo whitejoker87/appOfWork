@@ -15,7 +15,7 @@ import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentNavRightBinding
 import ru.jobni.jobni.model.menu.right.RepositoryFilters.makeNavigationListFilters
-import ru.jobni.jobni.utils.menuleft.NavRVAdapter
+import ru.jobni.jobni.utils.NavRVAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentNavRight : Fragment() {
