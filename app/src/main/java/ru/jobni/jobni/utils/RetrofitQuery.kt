@@ -1,5 +1,6 @@
 package ru.jobni.jobni.utils
 
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.UserAuth
@@ -32,7 +33,7 @@ interface RetrofitQuery {
     fun getAuthData(@Header("Cookie") h1: String): Call<UserAuth>
 
     @POST("api/authorization/")
-    fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<UserAuth>
+    fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<ResponseBody>
 
     @POST("api/registration_user/")
     fun sendRegistrationUser(@Body user: RegUser): Call<ResponseReg>
