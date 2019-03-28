@@ -232,7 +232,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     for (i in 0 until resultList.size) {
                         tmp.add(resultList[i].name)
                     }
-                    repositoryOwner.saveList(tmp)
+                    repositoryOwner.saveCompanyList(tmp)
                 }
             }
 

@@ -20,8 +20,8 @@ object RepositoryOwner {
         return companyLiveData
     }
 
-    fun saveList(companyList: ArrayList<String>) {
-        // Отсчистить список при формировании
+    fun saveCompanyList(companyList: ArrayList<String>) {
+        // Отсчистить список при заполнении
         receiveCompanyList.clear()
         receiveCompanyList.addAll(companyList)
         // Обновить лайфдату
