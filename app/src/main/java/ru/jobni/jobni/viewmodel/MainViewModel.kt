@@ -34,7 +34,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
     private val firstLaunchFlag = "firstLaunch"
-
     private val authUserSessionID = "userSessionID"
 
     var sPref = application.getSharedPreferences("firstLaunchSavedData", AppCompatActivity.MODE_PRIVATE)
@@ -80,8 +79,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     ?: OwnerViewState(receiveCompanyList!!)
         }
     }
-
-
 
     fun getModelVacancy(): LiveData<MainFragmentViewState> = modelVacancy
 
@@ -216,7 +213,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun openLeftMenu() {
-        loadLeftMenuData()
         setOpenDrawerLeft(true)
     }
 
@@ -234,11 +230,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val tmp: ArrayList<String> = arrayListOf()
 
                     for (i in 0 until resultList.size) {
-//                        repositoryOwner.receiveCompanyList.add(resultList[i].name)
                         tmp.add(resultList[i].name)
                     }
-//                    repositoryOwner.saveCompany(resultList[i].name)
-                    println("tmp " + tmp)
                     repositoryOwner.saveList(tmp)
                 }
             }
@@ -480,7 +473,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
             override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
-                if (response.code() == 404){
+                if (response.code() == 404) {
                     setCardExpandResponse(false)
                 }
 

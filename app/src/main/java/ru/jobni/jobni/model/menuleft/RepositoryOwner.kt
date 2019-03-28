@@ -10,44 +10,24 @@ object RepositoryOwner {
 
     val companyLiveData = MutableLiveData<MutableList<String>>()
     val receiveCompanyList: MutableList<String> = mutableListOf()
+    val setCompanyList = ArrayList<NavigationParent>()
 
-//    init {
-//        companyLiveData.value = receiveCompanyList
-//    }
+    init {
+        companyLiveData.value = receiveCompanyList
+    }
 
     fun getCompany(): LiveData<MutableList<String>> {
         return companyLiveData
     }
 
-    fun getSize(): Int {
-        return companyLiveData.value!!.size
-    }
-
-    fun saveCompany(vacancy: String) {
-        addOrReplace(vacancy)
-        companyLiveData.value = receiveCompanyList
-    }
-
     fun saveList(companyList: ArrayList<String>) {
+        // Отсчистить список при формировании
         receiveCompanyList.clear()
         receiveCompanyList.addAll(companyList)
-
-//        companyLiveData.value!!.clear()
+        // Обновить лайфдату
         companyLiveData.value = receiveCompanyList
     }
 
-    private fun addOrReplace(vacancy: String) {
-        for (i in 0 until receiveCompanyList.size) {
-            if (receiveCompanyList[i] == vacancy) {
-                receiveCompanyList[i] = vacancy
-                return
-            }
-        }
-        receiveCompanyList.add(vacancy)
-    }
-
-    val setCompanyList = ArrayList<NavigationParent>()
-//    val receiveCompanyList: MutableList<String> = mutableListOf()
 
     /* Блок функций если пользователь авторизован в приложении */
     fun makeNavigationListOwnerAuthOn(): List<NavigationParent> {
@@ -55,35 +35,7 @@ object RepositoryOwner {
     }
 
     private fun makeCompanyListAuthOn(): List<NavigationParent> {
-
-//        val receiveCompanyList = listOf("Компания 1", "Компания 2")
-//        val setCompanyList = ArrayList<NavigationParent>()
-//        val receiveCompanyList: MutableList<String> = mutableListOf()
-
-//        Retrofit.api?.ownerOrWorker()?.enqueue(object : Callback<CompanyVacancy> {
-//            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
-//                if (response.body() != null) {
-//
-//                    val resultList: List<ResultsCompany> = response.body()!!.results
-//
-//                    for (i in 0 until resultList.size) {
-//                        receiveCompanyList.add(resultList[i].name)
-//                    }
-////                    println("1 $receiveCompanyList")
-//                }
-//            }
-//
-//            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {}
-//        })
-
-//        setCompanyList.add(NavigationParent(
-//                "Добавить компанию",
-//                makeParentOneChildOwnerAuthOn(),
-//                R.drawable.ic_company
-//        ))
-
-//        println(" " + receiveCompanyList)
-
+        // Отсчистить список при формировании
         setCompanyList.clear()
 
         setCompanyList.add(NavigationParent(
@@ -112,8 +64,7 @@ object RepositoryOwner {
         val child3 = NavigationChild("Профиль", 0)
         val child4 = NavigationChild("Баланс: 1000 Руб", 0)
         val child5 = NavigationChild("Пополнить баланс", 0)
-        val child6 =
-                NavigationChild("История платежей", R.drawable.ic_user)
+        val child6 = NavigationChild("История платежей", R.drawable.ic_user)
         val child7 = NavigationChild("Оказанные услуги", 0)
 
         return listOf(child1, child2, child3, child4, child5, child6, child7)

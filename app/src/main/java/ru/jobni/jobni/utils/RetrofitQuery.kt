@@ -39,9 +39,6 @@ interface RetrofitQuery {
     @GET("api/vacancy/")
     fun loadCompanyVacancy(@Query("company") companyID: Int): Call<CardVacancy>
 
-//    @GET("api/company/?owner_or_worker=1")
-//    fun ownerOrWorker(): Call<CompanyVacancy>
-
     @GET("api/company/?owner_or_worker=1")
     fun ownerOrWorker(@Header("Cookie") h1: String): Call<CompanyVacancy>
 }

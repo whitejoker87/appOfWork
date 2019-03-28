@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
@@ -108,6 +107,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         checkDrawerOpenClose()
+        leftMenuPAdapters()
 
         viewModelMain.isOpenDrawerRight().observe(this, Observer { isOpen ->
             if (isOpen) {
@@ -199,18 +199,25 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        viewModelAuth.isAuthUser().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+    }
+
+    private fun leftMenuPAdapters() {
         val fragmentAdapterAuthOn = NavPALeftAuthOn(supportFragmentManager, this)
         view_pager_nav_left_auth_on.adapter = fragmentAdapterAuthOn
         tab_layout_nav_left_auth_on.setupWithViewPager(view_pager_nav_left_auth_on)
 
         tab_layout_nav_left_auth_on.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) { }
-            override fun onTabUnselected(tab: TabLayout.Tab?) { }
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
-                    0 -> Toast.makeText(applicationContext, "1", Toast.LENGTH_LONG).show()
-                    1 -> Toast.makeText(applicationContext, "2", Toast.LENGTH_LONG).show()
+                    //0 -> Toast.makeText(applicationContext, "1", Toast.LENGTH_LONG).show()
+                    1 -> viewModelMain.loadLeftMenuData()
                 }
             }
         })
@@ -220,20 +227,15 @@ class MainActivity : AppCompatActivity() {
         tab_layout_nav_left_auth_off.setupWithViewPager(view_pager_nav_left_auth_off)
 
         tab_layout_nav_left_auth_off.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) { }
-            override fun onTabUnselected(tab: TabLayout.Tab?) { }
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
-                    0 -> Toast.makeText(applicationContext, "3", Toast.LENGTH_LONG).show()
-                    1 -> Toast.makeText(applicationContext, "4", Toast.LENGTH_LONG).show()
+                    //0 -> Toast.makeText(applicationContext, "3", Toast.LENGTH_LONG).show()
+                    //1 -> Toast.makeText(applicationContext, "4", Toast.LENGTH_LONG).show()
                 }
             }
-        })
-
-        viewModelAuth.isAuthUser().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
         })
     }
 

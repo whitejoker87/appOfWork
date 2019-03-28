@@ -39,15 +39,8 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
 
         navRecyclerView = binding.rvNavLeftOwner
 
-//        buildRecyclerView()
-
         viewModel.getModelCompany().observe(this, Observer { company ->
             company?.let {
-//                navAdapter.companes = company.companyList
-//                Handler().postDelayed({
-//                    buildRecyclerView()
-//                }, 5000)
-//                navAdapter.notifyDataSetChanged()
                 buildRecyclerView()
             }
         })
@@ -58,7 +51,6 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
     private fun buildRecyclerView() {
 
         navAdapter = NavRVAdapter(makeNavigationListOwnerAuthOn(), activity!!)
-//        val navAdapter = NavRVAdapter(makeNavigationListOwnerAuthOn(), activity!!)
         navRecyclerView.adapter = navAdapter
 
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {
@@ -72,16 +64,5 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
                 return false
             }
         })
-
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        navAdapter.onSaveInstanceState(outState)
-//    }
-//
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        navAdapter.onRestoreInstanceState(savedInstanceState)
-//    }
 }

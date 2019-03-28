@@ -27,12 +27,6 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
         ViewModelProviders.of(context).get(MainViewModel::class.java)
     }
 
-//    var companes: MutableList<String> = mutableListOf()
-//        set(value) {
-//            field = value
-//            notifyDataSetChanged()
-//        }
-
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): ViewHolderParent {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_parent, parent, false)
         return ViewHolderParent(view)
@@ -63,9 +57,6 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
             group: ExpandableGroup<*>
     ) {
         holderParent.setParentTitle(group)
-//        if(companes.size > 0){
-//            holderParent.bind(companes[flatPosition])
-//        }
     }
 
     class ViewHolderChild(val binding: ListItemChildBinding, val viewmodel: MainViewModel) : ChildViewHolder(binding.root) {
@@ -95,10 +86,6 @@ class NavRVAdapter(groups: List<ExpandableGroup<*>>, private val context: Fragme
             arrow = itemView.findViewById<View>(R.id.list_item_parent_arrow) as ImageView
             icon = itemView.findViewById<View>(R.id.list_item_parent_icon) as ImageView
         }
-
-//        fun bind(vacancy: String) {
-//            parentName.text = vacancy
-//        }
 
         fun setParentTitle(parent: ExpandableGroup<*>) {
             if (parent is NavigationParent) {
