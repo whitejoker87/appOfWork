@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener
@@ -38,7 +39,18 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
 
         navRecyclerView = binding.rvNavLeftOwner
 
-        buildRecyclerView()
+//        buildRecyclerView()
+
+        viewModel.getModelCompany().observe(this, Observer { company ->
+            company?.let {
+//                navAdapter.companes = company.companyList
+//                Handler().postDelayed({
+//                    buildRecyclerView()
+//                }, 5000)
+//                navAdapter.notifyDataSetChanged()
+                buildRecyclerView()
+            }
+        })
 
         return view
     }
@@ -46,7 +58,7 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
     private fun buildRecyclerView() {
 
         navAdapter = NavRVAdapter(makeNavigationListOwnerAuthOn(), activity!!)
-        navAdapter.setHasStableIds(true)
+//        val navAdapter = NavRVAdapter(makeNavigationListOwnerAuthOn(), activity!!)
         navRecyclerView.adapter = navAdapter
 
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {
@@ -60,15 +72,16 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
                 return false
             }
         })
+
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        navAdapter.onSaveInstanceState(outState)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        navAdapter.onRestoreInstanceState(savedInstanceState)
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        navAdapter.onSaveInstanceState(outState)
+//    }
+//
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//        navAdapter.onRestoreInstanceState(savedInstanceState)
+//    }
 }

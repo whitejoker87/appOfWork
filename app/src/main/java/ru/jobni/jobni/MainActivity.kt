@@ -107,6 +107,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        checkDrawerOpenClose()
+
         viewModelMain.isOpenDrawerRight().observe(this, Observer { isOpen ->
             if (isOpen) {
                 drawer.openDrawer(GravityCompat.END)
@@ -232,6 +234,20 @@ class MainActivity : AppCompatActivity() {
         viewModelAuth.isAuthUser().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
+        })
+    }
+
+    private fun checkDrawerOpenClose() {
+        drawer.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {}
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerClosed(drawerView: View) {}
+
+            override fun onDrawerOpened(drawerView: View) {
+                viewModelMain.setOpenDrawerLeft(true)
+            }
         })
     }
 

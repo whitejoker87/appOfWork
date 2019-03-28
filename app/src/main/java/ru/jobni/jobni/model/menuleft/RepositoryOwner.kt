@@ -1,16 +1,53 @@
 package ru.jobni.jobni.model.menuleft
 
-import androidx.annotation.NonNull
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import ru.jobni.jobni.R
-import ru.jobni.jobni.model.network.company.CompanyVacancy
-import ru.jobni.jobni.model.network.company.ResultsCompany
-import ru.jobni.jobni.utils.Retrofit
 import java.util.*
+import kotlin.collections.ArrayList
 
 object RepositoryOwner {
+
+    val companyLiveData = MutableLiveData<MutableList<String>>()
+    val receiveCompanyList: MutableList<String> = mutableListOf()
+
+//    init {
+//        companyLiveData.value = receiveCompanyList
+//    }
+
+    fun getCompany(): LiveData<MutableList<String>> {
+        return companyLiveData
+    }
+
+    fun getSize(): Int {
+        return companyLiveData.value!!.size
+    }
+
+    fun saveCompany(vacancy: String) {
+        addOrReplace(vacancy)
+        companyLiveData.value = receiveCompanyList
+    }
+
+    fun saveList(companyList: ArrayList<String>) {
+        receiveCompanyList.clear()
+        receiveCompanyList.addAll(companyList)
+
+//        companyLiveData.value!!.clear()
+        companyLiveData.value = receiveCompanyList
+    }
+
+    private fun addOrReplace(vacancy: String) {
+        for (i in 0 until receiveCompanyList.size) {
+            if (receiveCompanyList[i] == vacancy) {
+                receiveCompanyList[i] = vacancy
+                return
+            }
+        }
+        receiveCompanyList.add(vacancy)
+    }
+
+    val setCompanyList = ArrayList<NavigationParent>()
+//    val receiveCompanyList: MutableList<String> = mutableListOf()
 
     /* Блок функций если пользователь авторизован в приложении */
     fun makeNavigationListOwnerAuthOn(): List<NavigationParent> {
@@ -20,24 +57,34 @@ object RepositoryOwner {
     private fun makeCompanyListAuthOn(): List<NavigationParent> {
 
 //        val receiveCompanyList = listOf("Компания 1", "Компания 2")
-        val setCompanyList = ArrayList<NavigationParent>()
-        val receiveCompanyList: MutableList<String> = mutableListOf()
+//        val setCompanyList = ArrayList<NavigationParent>()
+//        val receiveCompanyList: MutableList<String> = mutableListOf()
 
-        Retrofit.api?.ownerOrWorker()?.enqueue(object : Callback<CompanyVacancy> {
-            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
-                if (response.body() != null) {
+//        Retrofit.api?.ownerOrWorker()?.enqueue(object : Callback<CompanyVacancy> {
+//            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
+//                if (response.body() != null) {
+//
+//                    val resultList: List<ResultsCompany> = response.body()!!.results
+//
+//                    for (i in 0 until resultList.size) {
+//                        receiveCompanyList.add(resultList[i].name)
+//                    }
+////                    println("1 $receiveCompanyList")
+//                }
+//            }
+//
+//            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {}
+//        })
 
-                    val resultList: List<ResultsCompany> = response.body()!!.results
+//        setCompanyList.add(NavigationParent(
+//                "Добавить компанию",
+//                makeParentOneChildOwnerAuthOn(),
+//                R.drawable.ic_company
+//        ))
 
-                    for (i in 0 until resultList.size) {
-                        receiveCompanyList.add(resultList[i].name)
-                    }
-//                    println("1 $receiveCompanyList")
-                }
-            }
+//        println(" " + receiveCompanyList)
 
-            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {}
-        })
+        setCompanyList.clear()
 
         setCompanyList.add(NavigationParent(
                 "Добавить компанию",
@@ -73,21 +120,20 @@ object RepositoryOwner {
     }
 
 
-
     /* Блок функций если пользователь не авторизован в приложении */
     fun makeNavigationListOwnerAuthOff(): List<NavigationParent> {
         return Arrays.asList(
-            makeParentOneOwnerAuthOff(),
-            makeParentTwoOwnerAuthOff(),
-            makeParentThreeOwnerAuthOff()
+                makeParentOneOwnerAuthOff(),
+                makeParentTwoOwnerAuthOff(),
+                makeParentThreeOwnerAuthOff()
         )
     }
 
     private fun makeParentOneOwnerAuthOff(): NavigationParent {
         return NavigationParent(
-            "Поиск",
-            makeParentOneChildOwnerAuthOff(),
-            R.drawable.ic_search
+                "Поиск",
+                makeParentOneChildOwnerAuthOff(),
+                R.drawable.ic_search
         )
     }
 
@@ -102,9 +148,9 @@ object RepositoryOwner {
 
     private fun makeParentTwoOwnerAuthOff(): NavigationParent {
         return NavigationParent(
-            "Добавить компанию",
-            makeParentTwoChildOwnerAuthOff(),
-            R.drawable.ic_user
+                "Добавить компанию",
+                makeParentTwoChildOwnerAuthOff(),
+                R.drawable.ic_user
         )
     }
 
@@ -114,9 +160,9 @@ object RepositoryOwner {
 
     private fun makeParentThreeOwnerAuthOff(): NavigationParent {
         return NavigationParent(
-            "Регистрация",
-            makeParentThreeChildOwnerAuthOff(),
-            R.drawable.ic_user
+                "Регистрация",
+                makeParentThreeChildOwnerAuthOff(),
+                R.drawable.ic_user
         )
     }
 

@@ -46,7 +46,6 @@ class FragmentNavLeftUserAuthOn : Fragment() {
     private fun buildRecyclerView() {
 
         navAdapter = NavRVAdapter(makeNavigationListUserAuthOn(), activity!!)
-        navAdapter.setHasStableIds(true)
         navRecyclerView.adapter = navAdapter
 
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {

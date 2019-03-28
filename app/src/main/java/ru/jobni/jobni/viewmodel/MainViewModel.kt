@@ -20,6 +20,9 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
+import ru.jobni.jobni.model.menuleft.RepositoryOwner
+import ru.jobni.jobni.model.network.company.CompanyVacancy
+import ru.jobni.jobni.model.network.company.ResultsCompany
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
 import java.util.*
@@ -32,7 +35,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
     private val firstLaunchFlag = "firstLaunch"
 
+    private val authUserSessionID = "userSessionID"
+
     var sPref = application.getSharedPreferences("firstLaunchSavedData", AppCompatActivity.MODE_PRIVATE)
+    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
     private val suggestionsNamesList = MutableLiveData<ArrayList<SuggestionEntity>>(ArrayList())
 
@@ -60,14 +66,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
     private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
 
+    private val modelOwner: MutableLiveData<OwnerViewState> = MutableLiveData()
+    private val repositoryOwner: RepositoryOwner = RepositoryOwner
+
     init {
         repository.getVacancy().observeForever { vacancies ->
             modelVacancy.value = modelVacancy.value?.copy(vacancyList = vacancies!!)
                     ?: MainFragmentViewState(vacancies!!)
         }
+
+        repositoryOwner.getCompany().observeForever { receiveCompanyList ->
+            modelOwner.value = modelOwner.value?.copy(companyList = receiveCompanyList!!)
+                    ?: OwnerViewState(receiveCompanyList!!)
+        }
     }
 
+
+
     fun getModelVacancy(): LiveData<MainFragmentViewState> = modelVacancy
+
+    fun getModelCompany(): LiveData<OwnerViewState> = modelOwner
 
     fun getHeaderList(): MutableLiveData<MutableList<String>> = headerList
 
@@ -198,7 +216,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun openLeftMenu() {
+        loadLeftMenuData()
         setOpenDrawerLeft(true)
+    }
+
+    fun loadLeftMenuData() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.ownerOrWorker(cid)?.enqueue(object : Callback<CompanyVacancy> {
+            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsCompany> = response.body()!!.results
+
+                    val tmp: ArrayList<String> = arrayListOf()
+
+                    for (i in 0 until resultList.size) {
+//                        repositoryOwner.receiveCompanyList.add(resultList[i].name)
+                        tmp.add(resultList[i].name)
+                    }
+//                    repositoryOwner.saveCompany(resultList[i].name)
+                    println("tmp " + tmp)
+                    repositoryOwner.saveList(tmp)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {}
+        })
     }
 
     fun openRightMenu() {
@@ -246,7 +292,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onClickBtnStart(typeFragment: String) {
-        if (typeFragment.equals("Intro")) saveLaunchFlag()
+        if (typeFragment.equals("Welcome")) saveLaunchFlag()
         setFragmentLaunch(typeFragment)
     }
 
