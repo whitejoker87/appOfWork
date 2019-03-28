@@ -19,8 +19,6 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.RegPhaseRecyclerItemBinding
 import ru.jobni.jobni.fragments.reg.*
 import ru.jobni.jobni.viewmodel.RegViewModel
-import android.media.VolumeShaper
-import android.os.Handler
 
 
 class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mContext: Context) :

@@ -28,7 +28,6 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.model.RepositoryVacancyEntity
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
-import ru.jobni.jobni.model.menuleft.RepositoryOwner
 import ru.jobni.jobni.model.network.company.CompanyVacancy
 import ru.jobni.jobni.model.network.company.ResultsCompany
 import ru.jobni.jobni.model.network.vacancy.*

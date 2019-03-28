@@ -1,11 +1,10 @@
 package ru.jobni.jobni.utils
 
 
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.SearchView
-import android.widget.TextView
+import android.widget.*
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingConversion
 import androidx.databinding.BindingMethod
@@ -13,13 +12,8 @@ import androidx.databinding.BindingMethods
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import ru.jobni.jobni.viewmodel.MainViewModel
-import ru.jobni.jobni.model.RepositoryVacancyEntity
-import android.R.attr.name
-import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.widget.*
 import com.squareup.picasso.Picasso
+import ru.jobni.jobni.viewmodel.MainViewModel
 
 
 @BindingMethods(

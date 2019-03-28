@@ -1,15 +1,13 @@
 package ru.jobni.jobni.utils
 
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.UserAuth
+import ru.jobni.jobni.model.network.company.CompanyVacancy
 import ru.jobni.jobni.model.network.registration.RegContactFace
 import ru.jobni.jobni.model.network.registration.RegContactFaceContact
 import ru.jobni.jobni.model.network.registration.RegUser
 import ru.jobni.jobni.model.network.registration.ResponseReg
-import ru.jobni.jobni.model.network.company.CompanyVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.DetailVacancy
