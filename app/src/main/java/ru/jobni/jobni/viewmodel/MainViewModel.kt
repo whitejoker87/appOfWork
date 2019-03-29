@@ -265,20 +265,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
                 if (response.body() != null) {
 
-                    val resultList: List<ResultsCompany> = response.body()!!.results
-
-                    val tmpID: ArrayList<Int> = arrayListOf()
-
-                    for (i in 0 until resultList.size) {
-                        tmpID.add(resultList[i].id)
-                    }
-
-                    val tmp: ArrayList<String> = arrayListOf()
-
-                    for (i in 0 until resultList.size) {
-                        tmp.add(resultList[i].name)
-                    }
-                    repositoryOwner.saveCompanyList(tmp)
+                    val resultList: ArrayList<ResultsCompany> = response.body()!!.results
+                    repositoryOwner.saveCompanyList(resultList)
                 }
             }
 

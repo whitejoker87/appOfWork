@@ -5,24 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.menu.NavigationChild
 import ru.jobni.jobni.model.menu.NavigationParent
+import ru.jobni.jobni.model.network.company.ResultsCompany
 import java.util.*
 import kotlin.collections.ArrayList
 
 object RepositoryOwner {
 
-    val companyLiveData = MutableLiveData<MutableList<String>>()
-    val receiveCompanyList: MutableList<String> = mutableListOf()
+    val companyLiveData = MutableLiveData<MutableList<ResultsCompany>>()
+    val receiveCompanyList: MutableList<ResultsCompany> = mutableListOf()
     val setCompanyList = ArrayList<NavigationParent>()
 
     init {
         companyLiveData.value = receiveCompanyList
     }
 
-    fun getCompany(): LiveData<MutableList<String>> {
+    fun getCompany(): LiveData<MutableList<ResultsCompany>> {
         return companyLiveData
     }
 
-    fun saveCompanyList(companyList: ArrayList<String>) {
+    fun saveCompanyList(companyList: ArrayList<ResultsCompany>) {
         // Отсчистить список при заполнении
         receiveCompanyList.clear()
         receiveCompanyList.addAll(companyList)
@@ -48,7 +49,7 @@ object RepositoryOwner {
 
         companyLiveData.value?.forEach { companyName ->
             setCompanyList.add(NavigationParent(
-                    companyName,
+                    companyName.name,
                     makeParentTwoChildOwnerAuthOn(),
                     R.drawable.ic_user
             ))

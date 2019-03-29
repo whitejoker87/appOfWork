@@ -6,7 +6,7 @@ data class CompanyVacancy(
         @SerializedName("count") val count: Int,
         @SerializedName("next") val next: String,
         @SerializedName("previous") val previous: String,
-        @SerializedName("results") val results: List<ResultsCompany>
+        @SerializedName("results") val results: ArrayList<ResultsCompany>
 )
 
 data class ResultsCompany(
