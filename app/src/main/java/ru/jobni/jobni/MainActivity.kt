@@ -218,6 +218,7 @@ class MainActivity : AppCompatActivity() {
                 when (tab.position) {
                     //0 -> Toast.makeText(applicationContext, "1", Toast.LENGTH_LONG).show()
                     1 -> viewModelMain.loadLeftMenuOwnerData()
+                    //1 -> viewModelMain.loadLeftMenuOwnerDataBalance()
                 }
             }
         })

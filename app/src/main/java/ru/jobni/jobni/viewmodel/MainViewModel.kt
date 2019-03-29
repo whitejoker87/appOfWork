@@ -280,6 +280,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*Баланс для левого меню*/
+    fun loadLeftMenuOwnerDataBalance() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val requestID: Int = 59
+
+        Retrofit.api?.ownerOrWorkerBalance(cid, requestID)?.enqueue(object : Callback<CompanyVacancy> {
+            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
+                if (response.code() == 401 || response.code() == 200) {
+
+                }
+
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsCompany> = response.body()!!.results
+
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {
+            }
+        })
+    }
+
     fun openRightMenu() {
         if (getHeaderList().value == null) loadRightMenuData()
         setOpenDrawerRight(true)
