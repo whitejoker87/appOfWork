@@ -302,6 +302,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    fun loadLeftMenuOwnerCompanyVacancy(position: Int) {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val companyID: Int = repositoryOwner.companyLiveData.value!![position].id
+
+        Retrofit.api?.ownerOrWorkerCompany(cid, 59)?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.code() == 401 || response.code() == 200) {
+
+                }
+
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
+
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+            }
+        })
+    }
+
     fun openRightMenu() {
         if (getHeaderList().value == null) loadRightMenuData()
         setOpenDrawerRight(true)

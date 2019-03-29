@@ -1,0 +1,99 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 79,
+      "name": "тест паджинации",
+      "company": {
+        "id": 59,
+        "name": "Test",
+        "number_of": "0 -  15",
+        "internationality": false,
+        "logo": {
+          "image": null,
+          "name": "",
+          "description": ""
+        }
+      },
+      "update_date_time": "2019-03-20T10:31:46+05:00",
+      "salary_level_newbie": 0,
+      "labor_rate": null,
+      "salary_level_experienced": 0,
+      "views": 0,
+      "invitations": 0,
+      "responses": 0,
+      "interviews": 0,
+      "business_rate": null,
+      "monthly_rate": null,
+      "rate_per_hour": null,
+      "salary_details": [],
+      "status": null,
+      "format_of_work": {
+        "id": 1,
+        "name": "В офисе"
+      },
+      "employment": [
+        {
+          "id": 10,
+          "name": "Контракт"
+        }
+      ],
+      "competences": [],
+      "viewed": false,
+      "tags": [],
+      "category": null,
+      "body_type": null,
+      "fuel_type": null,
+      "required_number_of_people": 0,
+      "online": 1
+    },
+    {
+      "id": 80,
+      "name": "тест паджинации 2",
+      "company": {
+        "id": 59,
+        "name": "Test",
+        "number_of": "0 -  15",
+        "internationality": false,
+        "logo": {
+          "image": null,
+          "name": "",
+          "description": ""
+        }
+      },
+      "update_date_time": "2019-03-20T10:32:28+05:00",
+      "salary_level_newbie": 0,
+      "labor_rate": null,
+      "salary_level_experienced": 0,
+      "views": 0,
+      "invitations": 0,
+      "responses": 0,
+      "interviews": 0,
+      "business_rate": null,
+      "monthly_rate": null,
+      "rate_per_hour": null,
+      "salary_details": [],
+      "status": null,
+      "format_of_work": {
+        "id": 1,
+        "name": "В офисе"
+      },
+      "employment": [
+        {
+          "id": 3,
+          "name": "Посменно"
+        }
+      ],
+      "competences": [],
+      "viewed": false,
+      "tags": [],
+      "category": null,
+      "body_type": null,
+      "fuel_type": null,
+      "required_number_of_people": 0,
+      "online": 1
+    }
+  ]
+}

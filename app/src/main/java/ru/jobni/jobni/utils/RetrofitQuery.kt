@@ -36,7 +36,7 @@ interface RetrofitQuery {
     fun sendRegistrationUser(@Body user: RegUser): Call<ResponseReg>
 
     @POST("api/registration_contactface/")
-    fun sendRegistrationContactFace(@Header("Cookie") sid:String, @Body contactFace: RegContactFace): Call<ResponseReg>
+    fun sendRegistrationContactFace(@Header("Cookie") sessionID: String, @Body contactFace: RegContactFace): Call<ResponseReg>
 
     @POST("api/registration_contactfacecontact/")
     fun sendRegistrationContactFaceContact(@Body contacts: RegContactFaceContact): Call<ResponseReg>
@@ -46,10 +46,13 @@ interface RetrofitQuery {
 //    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
     @GET("api/company/?owner_or_worker=1")
-    fun ownerOrWorker(@Header("Cookie") h1: String): Call<CompanyVacancy>
+    fun ownerOrWorker(@Header("Cookie") sessionID: String): Call<CompanyVacancy>
 
     @GET("api/company/{id}/balance/")
-    fun ownerOrWorkerBalance(@Header("Cookie") h1: String, @Path("id") id: Int): Call<Int>
+    fun ownerOrWorkerBalance(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<Int>
+
+    @GET("api/vacancy/")
+    fun ownerOrWorkerCompany(@Header("Cookie") sessionID: String, @Query("company") detail: Int): Call<CardVacancy>
 }
 
 
