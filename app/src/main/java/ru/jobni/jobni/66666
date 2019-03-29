@@ -1,0 +1,26 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 59,
+      "name": "Test",
+      "updated_at": "2019-03-27T17:31:35.744170+05:00",
+      "logo": null,
+      "labor_rate": null,
+      "business_rate": null,
+      "tags": [],
+      "status": null,
+      "about_company_short": "test",
+      "number_of": "1",
+      "internationality": false,
+      "age": 0,
+      "views": 0,
+      "interviews": 2,
+      "responses": 0,
+      "online": 1,
+      "viewed": false
+    }
+  ]
+}

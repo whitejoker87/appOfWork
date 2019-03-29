@@ -267,6 +267,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     val resultList: List<ResultsCompany> = response.body()!!.results
 
+                    val tmpID: ArrayList<Int> = arrayListOf()
+
+                    for (i in 0 until resultList.size) {
+                        tmpID.add(resultList[i].id)
+                    }
+
                     val tmp: ArrayList<String> = arrayListOf()
 
                     for (i in 0 until resultList.size) {

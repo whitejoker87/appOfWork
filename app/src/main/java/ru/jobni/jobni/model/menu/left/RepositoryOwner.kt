@@ -46,7 +46,7 @@ object RepositoryOwner {
                 R.drawable.ic_company
         ))
 
-        receiveCompanyList.forEach { companyName ->
+        companyLiveData.value?.forEach { companyName ->
             setCompanyList.add(NavigationParent(
                     companyName,
                     makeParentTwoChildOwnerAuthOn(),
