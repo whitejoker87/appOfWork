@@ -13,14 +13,24 @@ object RepositoryOwner {
 
     val companyLiveData = MutableLiveData<MutableList<ResultsCompany>>()
     val receiveCompanyList: MutableList<ResultsCompany> = mutableListOf()
+
+    val companyLiveDataBalance = MutableLiveData<Int>()
+    var receiveCompanyBalance: Int = 0
+
     val setCompanyList = ArrayList<NavigationParent>()
+
 
     init {
         companyLiveData.value = receiveCompanyList
+        companyLiveDataBalance.value = receiveCompanyBalance
     }
 
     fun getCompany(): LiveData<MutableList<ResultsCompany>> {
         return companyLiveData
+    }
+
+    fun getCompanyBalance(): LiveData<Int> {
+        return companyLiveDataBalance
     }
 
     fun saveCompanyList(companyList: ArrayList<ResultsCompany>) {
@@ -29,6 +39,16 @@ object RepositoryOwner {
         receiveCompanyList.addAll(companyList)
         // Обновить лайфдату
         companyLiveData.value = receiveCompanyList
+    }
+
+    fun saveCompanyBalance(companyBalance: Int) {
+        println("1 " + companyBalance)
+
+        receiveCompanyBalance = companyBalance
+        println("2 " + receiveCompanyBalance)
+
+        companyLiveDataBalance.value = receiveCompanyBalance
+        println("3 " + companyLiveDataBalance.value)
     }
 
 
@@ -65,7 +85,7 @@ object RepositoryOwner {
         val child1 = NavigationChild("Вакансии", 0)
         val child2 = NavigationChild("Отзывы", 0)
         val child3 = NavigationChild("Профиль", 0)
-        val child4 = NavigationChild("Баланс: 1000 Руб", 0)
+        val child4 = NavigationChild("Баланс: " + companyLiveDataBalance.value, 0)
         val child5 = NavigationChild("Пополнить баланс", 0)
         val child6 = NavigationChild("История платежей", R.drawable.ic_user)
         val child7 = NavigationChild("Оказанные услуги", 0)

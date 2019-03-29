@@ -87,7 +87,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /*параметр uri для загружаемого фото*/
     private var outputPhotoUri: MutableLiveData<Uri> = MutableLiveData(Uri.EMPTY)
     /*параментр для запука активити(для фото)*/
-    private val activityLaunch:MutableLiveData<Intent> = MutableLiveData()
+    private val activityLaunch: MutableLiveData<Intent> = MutableLiveData()
     /*путь до файла с фото*/
     private var mCurrentPhotoPath: String? = ""
     /*флаг для определения откуда используется инклюд с кнопками соцсетей(из авторизации или регистрации)*/
@@ -110,10 +110,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getModelVacancy(): LiveData<MainFragmentViewState> = modelVacancy
 
+    fun getModelCompany(): LiveData<OwnerViewState> = modelOwner
+
+
     fun setHeaderList(list: MutableList<Any>) {
         headerList.value = list
     }
-    fun getModelCompany(): LiveData<OwnerViewState> = modelOwner
 
     fun getHeaderList(): MutableLiveData<MutableList<Any>> = headerList
 
@@ -282,20 +284,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         val companyID: Int = repositoryOwner.companyLiveData.value!![position].id
 
-        Retrofit.api?.ownerOrWorkerBalance(cid, companyID)?.enqueue(object : Callback<CompanyVacancy> {
-            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
+        Retrofit.api?.ownerOrWorkerBalance(cid, companyID)?.enqueue(object : Callback<Int> {
+            override fun onResponse(@NonNull call: Call<Int>, @NonNull response: Response<Int>) {
                 if (response.code() == 401 || response.code() == 200) {
 
                 }
 
                 if (response.body() != null) {
 
-                    val resultList: List<ResultsCompany> = response.body()!!.results
-
+                    val resultList: Int = response.body()!!
+                    repositoryOwner.saveCompanyBalance(resultList)
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<Int>, @NonNull t: Throwable) {
             }
         })
     }
@@ -683,11 +685,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (photoFile != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     setOutputPhotoUri(
-                        FileProvider.getUriForFile(
-                            context.applicationContext,
-                            BuildConfig.APPLICATION_ID + ".provider", //(use your app signature + ".provider" )
-                            photoFile
-                        )
+                            FileProvider.getUriForFile(
+                                    context.applicationContext,
+                                    BuildConfig.APPLICATION_ID + ".provider", //(use your app signature + ".provider" )
+                                    photoFile
+                            )
                     )
                 } else
                     setOutputPhotoUri(Uri.fromFile(photoFile))
@@ -711,9 +713,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         //        StrictMode.setVmPolicy(builder.build());
 
         val image = File.createTempFile(
-            imageFileName, /* префикс */
-            ".jpg", /* расширение */
-            storageDir      /* директория */
+                imageFileName, /* префикс */
+                ".jpg", /* расширение */
+                storageDir      /* директория */
         )
 
         //        ContentValues values = new ContentValues();

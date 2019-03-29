@@ -52,7 +52,7 @@ interface RetrofitQuery {
     fun ownerOrWorker(@Header("Cookie") h1: String): Call<CompanyVacancy>
 
     @GET("api/company/{id}/balance/")
-    fun ownerOrWorkerBalance(@Header("Cookie") h1: String, @Path("id") id: Int): Call<CompanyVacancy>
+    fun ownerOrWorkerBalance(@Header("Cookie") h1: String, @Path("id") id: Int): Call<Int>
 }
 
 
