@@ -15,7 +15,7 @@ object RepositoryOwner {
     val receiveCompanyList: MutableList<ResultsCompany> = mutableListOf()
 
     val companyLiveDataBalance = MutableLiveData<Int>()
-    var receiveCompanyBalance: Int = 0
+    var receiveCompanyBalance: Int = 10
 
     val setCompanyList = ArrayList<NavigationParent>()
 

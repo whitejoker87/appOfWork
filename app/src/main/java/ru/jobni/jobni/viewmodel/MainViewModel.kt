@@ -82,8 +82,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val context = application
 
-    private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
-    private val repositoryVacancy: RepositoryVacancy = RepositoryVacancy
     /*параметр uri для загружаемого фото*/
     private var outputPhotoUri: MutableLiveData<Uri> = MutableLiveData(Uri.EMPTY)
     /*параментр для запука активити(для фото)*/
@@ -92,6 +90,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var mCurrentPhotoPath: String? = ""
     /*флаг для определения откуда используется инклюд с кнопками соцсетей(из авторизации или регистрации)*/
     private val isIncludeSocialNetworkReg: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
+    private val repositoryVacancy: RepositoryVacancy = RepositoryVacancy
 
     private val modelOwner: MutableLiveData<OwnerViewState> = MutableLiveData()
     private val repositoryOwner: RepositoryOwner = RepositoryOwner

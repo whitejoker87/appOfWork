@@ -31,8 +31,7 @@ class FragmentCompanyVacancy : Fragment() {
 
         binding.viewmodel = viewModel
 
-        val fragmentAdapter =
-            VacancyPAdapter(activity!!.supportFragmentManager, context!!)
+        val fragmentAdapter = VacancyPAdapter(activity!!.supportFragmentManager, context!!)
         binding.viewPagerVacancy.adapter = fragmentAdapter
         binding.tabLayoutVacancy.setupWithViewPager(binding.viewPagerVacancy)
 
