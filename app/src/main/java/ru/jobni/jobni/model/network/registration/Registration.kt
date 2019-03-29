@@ -1,6 +1,7 @@
 package ru.jobni.jobni.model.network.registration
 
 import com.google.gson.annotations.SerializedName
+import retrofit2.http.Header
 
 //data class Registration (
 //        @SerializedName("email")val email: String,
@@ -20,9 +21,16 @@ data class Contact (
 )
 
 data class RegUser(
-        @SerializedName("email")val email: String,
         @SerializedName("password")val password: String,
         @SerializedName("password_confirm")val password_confirm: String
+)
+
+data class BindEmail(
+        @SerializedName("email")val email: String
+)
+
+data class MailCode(
+        @SerializedName("code")val code: String
 )
 
 data class RegContactFace(
@@ -40,4 +48,15 @@ data class RegContactFaceContact(
 data class ResponseReg(
         @SerializedName("success")val success: Boolean,
         @SerializedName("error_text")val error_text:List<String>
+)
+
+data class ResponseRegPass(
+        @SerializedName("success")val success: Boolean,
+        @SerializedName("error_text")val error_text: ListErrors
+
+)
+
+data class ListErrors(
+        @SerializedName("password")val password: List<String>,
+        @SerializedName("password_general")val password_general:List<String>
 )
