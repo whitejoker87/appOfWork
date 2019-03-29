@@ -62,7 +62,8 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
                 }
 
                 if (flatPos == 1) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos)
+                    // Первый элемент в списке занят, поэтому это нужно учитывать flatPos -1
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos -1)
                     return false
                 }
 
