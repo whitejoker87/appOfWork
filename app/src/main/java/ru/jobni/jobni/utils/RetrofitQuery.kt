@@ -29,9 +29,6 @@ interface RetrofitQuery {
     @GET("api/vacancy/{id}/details/")
     fun loadVacancyCard(@Path("id") id: Int, @Query("detail") detail: Int): Call<CardVacancyDetail>
 
-    @GET("api/tags/")
-    fun getAuthData(@Header("Cookie") h1: String): Call<UserAuth>
-
     @POST("api/authorization/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<ResponseBody>
 

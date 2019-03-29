@@ -120,23 +120,5 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
     }
-
-    fun doAuthUserGet() {
-
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
-
-        Retrofit.api?.getAuthData(cid)?.enqueue(object : Callback<UserAuth> {
-            override fun onResponse(@NonNull call: Call<UserAuth>, @NonNull response: Response<UserAuth>) {
-                if (response.body() != null) {
-
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<UserAuth>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
 }
 
