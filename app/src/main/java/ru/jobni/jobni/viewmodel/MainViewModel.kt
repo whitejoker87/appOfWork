@@ -275,14 +275,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /*Баланс для левого меню*/
-    fun loadLeftMenuOwnerDataBalance() {
+    fun loadLeftMenuOwnerDataBalance(position: Int) {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val requestID: Int = 59
+        val companyID: Int = repositoryOwner.companyLiveData.value!![position].id
 
-        Retrofit.api?.ownerOrWorkerBalance(cid, requestID)?.enqueue(object : Callback<CompanyVacancy> {
+        Retrofit.api?.ownerOrWorkerBalance(cid, companyID)?.enqueue(object : Callback<CompanyVacancy> {
             override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
                 if (response.code() == 401 || response.code() == 200) {
 

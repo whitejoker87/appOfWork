@@ -61,6 +61,11 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
                     return false
                 }
 
+                if (flatPos == 1) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos)
+                    return false
+                }
+
                 return false
             }
         })
