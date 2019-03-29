@@ -64,7 +64,7 @@ class FragmentCard : Fragment() {
         })
 
         viewModel.getModelVacancy().observe(this, Observer { vacancy ->
-            vacancy?.let { binding.vacancy = it.vacancyList[viewModel.cardPosition] }
+            vacancy?.let { binding.vacancy = vacancy.vacancyList[viewModel.cardPosition] }
         })
 
         return view

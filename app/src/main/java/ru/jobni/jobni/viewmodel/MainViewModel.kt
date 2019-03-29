@@ -25,6 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.RepositoryCompanyVacancy
 import ru.jobni.jobni.model.RepositoryVacancy
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
@@ -97,6 +98,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val modelOwner: MutableLiveData<OwnerViewState> = MutableLiveData()
     private val repositoryOwner: RepositoryOwner = RepositoryOwner
 
+    private val modelCompanyVacancy: MutableLiveData<CompanyVacancyViewState> = MutableLiveData()
+    private val repositoryCompanyVacancy: RepositoryCompanyVacancy = RepositoryCompanyVacancy
+
     init {
         repositoryVacancy.getVacancy().observeForever { vacancies ->
             modelVacancy.value = modelVacancy.value?.copy(vacancyList = vacancies!!)
@@ -107,11 +111,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             modelOwner.value = modelOwner.value?.copy(companyList = receiveCompanyList!!)
                     ?: OwnerViewState(receiveCompanyList!!)
         }
+
+        repositoryCompanyVacancy.getCompanyVacancy().observeForever { receiveCompanyVacancyList ->
+            modelCompanyVacancy.value =
+                    modelCompanyVacancy.value?.copy(companyVacancyList = receiveCompanyVacancyList!!)
+                            ?: CompanyVacancyViewState(receiveCompanyVacancyList!!)
+        }
     }
 
     fun getModelVacancy(): LiveData<MainFragmentViewState> = modelVacancy
 
-    fun getModelCompany(): LiveData<OwnerViewState> = modelOwner
+    fun getModelOwner(): LiveData<OwnerViewState> = modelOwner
+
+    fun getModelCompanyVacancy(): LiveData<CompanyVacancyViewState> = modelCompanyVacancy
 
 
     fun setHeaderList(list: MutableList<Any>) {
@@ -320,6 +332,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     val resultList: List<ResultsVacancy> = response.body()!!.results
 
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        repositoryCompanyVacancy.saveCompanyVacancy(
+                                VacancyEntity(
+                                        resultList[i].id,
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList,
+                                        "",
+                                        "",
+                                        "",
+                                        ""
+                                )
+                        )
+                    }
                 }
             }
 

@@ -36,7 +36,7 @@ class FragmentCompanyVacancy : Fragment() {
         binding.tabLayoutVacancy.setupWithViewPager(binding.viewPagerVacancy)
 
         binding.fabVacancy.setOnClickListener { fabView ->
-            Snackbar.make(fabView, "Summary FAB", Snackbar.LENGTH_LONG)
+            Snackbar.make(fabView, "CompanyVacancy FAB", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
@@ -47,6 +47,16 @@ class FragmentCompanyVacancy : Fragment() {
         super.onResume()
         viewModel.setBottomNavigationViewVisible(false)
     }
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        navAdapter.onSaveInstanceState(outState)
+//    }
+//
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//        navAdapter.onRestoreInstanceState(savedInstanceState)
+//    }
 }
 
 
