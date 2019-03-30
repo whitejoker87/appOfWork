@@ -52,6 +52,16 @@ class FragmentCompanyVacancy : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // При уходе с этого фрагмента в котором есть PageAdapter
+        // Отсчищаем список фрагментов, чтобы при возврате адаптер их пересоздал
+        fragmentAdapter.clear()
+        fragmentAdapter.notifyDataSetChanged()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // При уходе с этого фрагмента в котором есть PageAdapter
+        // Отсчищаем список фрагментов, чтобы при возврате адаптер их пересоздал
         fragmentAdapter.clear()
         fragmentAdapter.notifyDataSetChanged()
     }
