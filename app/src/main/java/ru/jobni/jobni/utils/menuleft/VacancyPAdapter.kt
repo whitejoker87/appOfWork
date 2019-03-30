@@ -20,7 +20,7 @@ class VacancyPAdapter(
     }
 
     override fun getCount(): Int {
-        return 2
+        return mFragmentList.size
     }
 
     override fun getPageTitle(position: Int): CharSequence {
