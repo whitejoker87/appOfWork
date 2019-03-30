@@ -8,15 +8,15 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.fragments.menuleft.FragmentVacancyActive
 import ru.jobni.jobni.fragments.menuleft.FragmentVacancyArchive
 
-class VacancyPAdapter(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
+class VacancyPAdapter(
+        private val fragment: FragmentManager,
+        private val _context: Context
+) : FragmentPagerAdapter(fragment) {
+
+    private val mFragmentList: ArrayList<Fragment> = arrayListOf(FragmentVacancyActive(), FragmentVacancyArchive())
 
     override fun getItem(position: Int): Fragment {
-        return when (position) {
-            0 -> FragmentVacancyActive()
-            else -> {
-                return FragmentVacancyArchive()
-            }
-        }
+        return mFragmentList[position]
     }
 
     override fun getCount(): Int {
@@ -30,5 +30,14 @@ class VacancyPAdapter(fragment: FragmentManager, private val _context: Context) 
                 return _context.getString(R.string.vacancy_tab_archive)
             }
         }
+    }
+
+    fun clear() {
+        val transaction = fragment.beginTransaction()
+        for (fragment in mFragmentList) {
+            transaction.remove(fragment)
+        }
+        mFragmentList.clear()
+        transaction.commitAllowingStateLoss()
     }
 }
