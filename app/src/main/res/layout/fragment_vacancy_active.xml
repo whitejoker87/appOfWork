@@ -21,10 +21,10 @@
 		>
 
 		<androidx.recyclerview.widget.RecyclerView
-			android:id = "@+id/rv_vacancy_cards"
+			android:id = "@+id/rv_company_vacancy"
 			android:layout_width = "match_parent"
 			android:layout_height = "match_parent"
-			tools:listitem = "@layout/c_card_vacancy_close"
+			tools:listitem = "@layout/c_card_vacancy_company_close"
 			android:scrollbars = "vertical"
 			app:onScrollListener = "@{viewmodel.onScrollViewRecycler}"
 			app:fixedSize = "@{true}"

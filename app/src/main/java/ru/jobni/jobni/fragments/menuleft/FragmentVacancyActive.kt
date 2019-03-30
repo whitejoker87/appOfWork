@@ -12,13 +12,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentVacancyActiveBinding
-import ru.jobni.jobni.utils.CardRVAdapter
+import ru.jobni.jobni.utils.VacancyCompanyRVAdapter
+
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentVacancyActive : Fragment() {
 
-    private lateinit var cardRecyclerView: RecyclerView
-    private lateinit var cardAdapter: CardRVAdapter
+    private lateinit var vacancyRecyclerView: RecyclerView
+    private lateinit var vacancyCompanyAdapter: VacancyCompanyRVAdapter
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -36,15 +37,15 @@ class FragmentVacancyActive : Fragment() {
 
         binding.viewmodel = viewModel
 
-        cardRecyclerView = binding.rvVacancyCards
+        vacancyRecyclerView = binding.rvCompanyVacancy
 
-        cardAdapter = CardRVAdapter(activity as Context)
+        vacancyCompanyAdapter = VacancyCompanyRVAdapter(activity as Context)
 
         buildCardsRecyclerView()
 
         viewModel.getModelCompanyVacancy().observe(this, Observer { vacancy ->
             vacancy?.let {
-                cardAdapter.vacancies = vacancy.companyVacancyList
+                vacancyCompanyAdapter.vacancies = vacancy.companyVacancyList
             }
         })
 
@@ -53,8 +54,8 @@ class FragmentVacancyActive : Fragment() {
 
     private fun buildCardsRecyclerView() {
 
-        cardAdapter.setHasStableIds(true)
-        cardRecyclerView.adapter = cardAdapter
+        vacancyCompanyAdapter.setHasStableIds(true)
+        vacancyRecyclerView.adapter = vacancyCompanyAdapter
     }
 }
 

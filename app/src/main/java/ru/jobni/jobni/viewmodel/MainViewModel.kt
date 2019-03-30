@@ -79,7 +79,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val isSearchListViewVisible = MutableLiveData<Boolean>(false)
 
     // Позиция карточки для открытия в отдельном фрагменте
-    var cardPosition = 0
+    var vacancyPosition = 0
 
     val context = application
 
@@ -237,6 +237,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun isIncludeSocialNetworkReg(): MutableLiveData<Boolean> = isIncludeSocialNetworkReg
+
 
     private val isCardExpandResponse = MutableLiveData<Boolean>(true)
 
@@ -566,13 +567,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /*клик по кнопке развернуть на карточке в поиске*/
-    fun onCardExpandVacancyClick(position: Int) {
-        cardPosition = position
-        cardExpandInfo(position)
+    fun onExpandVacancyClick(position: Int) {
+        vacancyPosition = position
+        vacancyExpandInfo(position)
 
         val handler = Handler()
         handler.postDelayed({
-            setFragmentLaunch("Card")
+            setFragmentLaunch("Vacancy")
+        }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
+    }
+
+    /*клик по кнопке развернуть на карточке в списке вакансий компании*/
+    fun onExpandVacancyCompanyClick(position: Int) {
+        vacancyPosition = position
+        vacancyCompanyExpandInfo(position)
+
+        val handler = Handler()
+        handler.postDelayed({
+            setFragmentLaunch("VacancyCompany")
         }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
     }
 
@@ -582,7 +594,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /*информация для развернутой карточки*/
-    private fun cardExpandInfo(position: Int) {
+    private fun vacancyExpandInfo(position: Int) {
         val requestID: Int = repositoryVacancy.getVacancy().value!![position].id
 
         Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
@@ -602,6 +614,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             dutiesDescription = resultList.duties
                     )
                     repositoryVacancy.saveVacancy(newObj)
+                    setCardExpandResponse(true)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancyDetail>, @NonNull t: Throwable) {
+            }
+        })
+    }
+
+    /*информация для развернутой карточки компании*/
+    private fun vacancyCompanyExpandInfo(position: Int) {
+        val requestID: Int = repositoryCompanyVacancy.getCompanyVacancy().value!![position].id
+
+        Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
+            override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
+                if (response.code() == 404) {
+                    setCardExpandResponse(false)
+                }
+
+                if (response.body() != null) {
+
+                    val resultList: Detail = response.body()!!.detail
+
+                    val newObj: VacancyEntity = repositoryCompanyVacancy.getCompanyVacancy().value!![position].copy(
+                            companyDescription = resultList.company_description,
+                            vacancyDescription = resultList.description,
+                            requirementsDescription = resultList.requirements,
+                            dutiesDescription = resultList.duties
+                    )
+                    repositoryCompanyVacancy.saveCompanyVacancy(newObj)
                     setCardExpandResponse(true)
                 }
             }

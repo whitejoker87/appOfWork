@@ -13,7 +13,7 @@ import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
-class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardViewHolder>() {
+class VacancyRVAdapter(context: Context) : RecyclerView.Adapter<VacancyRVAdapter.CardViewHolder>() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(context as FragmentActivity).get(MainViewModel::class.java)
@@ -27,13 +27,13 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardRVAdapter.CardViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyRVAdapter.CardViewHolder {
         val view = LayoutInflater.from(parent.context)
         val binding: CCardVacancyCloseBinding = DataBindingUtil.inflate(view, R.layout.c_card_vacancy_close, parent, false)
         return CardViewHolder(binding, viewModel)
     }
 
-    override fun onBindViewHolder(viewHolder: CardRVAdapter.CardViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: VacancyRVAdapter.CardViewHolder, position: Int) {
         viewHolder.bind(vacancies[position])
     }
 
