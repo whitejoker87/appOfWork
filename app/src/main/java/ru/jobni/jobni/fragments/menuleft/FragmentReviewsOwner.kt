@@ -15,6 +15,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentReviewsOwner : Fragment() {
 
+    private lateinit var fragmentAdapter: ReviewsOwnerPAdapter
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -31,8 +33,7 @@ class FragmentReviewsOwner : Fragment() {
 
         binding.viewmodel = viewModel
 
-        val fragmentAdapter =
-            ReviewsOwnerPAdapter(activity!!.supportFragmentManager, context!!)
+        fragmentAdapter = ReviewsOwnerPAdapter(activity!!.supportFragmentManager, context!!)
         binding.viewPagerReviewsOwner.adapter = fragmentAdapter
         binding.tabLayoutReviewsOwner.setupWithViewPager(binding.viewPagerReviewsOwner)
 
@@ -47,6 +48,14 @@ class FragmentReviewsOwner : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.setBottomNavigationViewVisible(false)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // При уходе с этого фрагмента в котором есть PageAdapter
+        // Отсчищаем список фрагментов, чтобы при возврате адаптер их пересоздал
+        fragmentAdapter.clear()
+        fragmentAdapter.notifyDataSetChanged()
     }
 }
 
