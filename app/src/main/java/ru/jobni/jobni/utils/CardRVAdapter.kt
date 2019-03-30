@@ -29,8 +29,7 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardRVAdapter.CardViewHolder {
         val view = LayoutInflater.from(parent.context)
-        val binding: CCardVacancyCloseBinding =
-            DataBindingUtil.inflate(view, R.layout.c_card_vacancy_close, parent, false)
+        val binding: CCardVacancyCloseBinding = DataBindingUtil.inflate(view, R.layout.c_card_vacancy_close, parent, false)
         return CardViewHolder(binding, viewModel)
     }
 
@@ -57,7 +56,7 @@ class CardRVAdapter(context: Context) : RecyclerView.Adapter<CardRVAdapter.CardV
     }
 
     class CardViewHolder(val binding: CCardVacancyCloseBinding, val viewmodel: MainViewModel) :
-        RecyclerView.ViewHolder(binding.root) {
+            RecyclerView.ViewHolder(binding.root) {
 
         fun bind(vacancy: VacancyEntity) {
             binding.vacancy = vacancy
