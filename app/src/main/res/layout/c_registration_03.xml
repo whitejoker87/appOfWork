@@ -43,6 +43,33 @@
                 app:srcCompat="@drawable/ic_plus"
                 android:clickable="true"
                 android:onClick="@{() -> viewmodel.btnAddContactClick()}"/>
+
+        <CheckBox
+            android:id = "@+id/chb_consent_to_data_storage_and_protection"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            app:layout_constraintTop_toBottomOf = "@+id/floatingActionButton"
+            app:layout_constraintStart_toStartOf = "@+id/background"
+            app:layout_constraintEnd_toEndOf = "@+id/background"
+            android:layout_marginTop = "16dp"
+            android:layout_marginStart = "16dp"
+            android:layout_marginEnd = "16dp"
+            android:text = "Согласие на хранение и защиту персональных данных"
+            />
+
+        <CheckBox
+            android:id = "@+id/chb_consent_public_offers"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            app:layout_constraintTop_toBottomOf = "@+id/chb_consent_to_data_storage_and_protection"
+            app:layout_constraintStart_toStartOf = "@+id/background"
+            app:layout_constraintEnd_toEndOf = "@+id/background"
+            android:layout_marginTop = "16dp"
+            android:layout_marginStart = "16dp"
+            android:layout_marginEnd = "16dp"
+            android:text = "Согласие публичной оферты"
+            />
+
         <Button android:id="@+id/registration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -45,6 +45,7 @@ data class RegContactFaceContact(
         @SerializedName("contacts")val contacts: ArrayList<Contact>
 )
 
+
 data class ResponseReg(
         @SerializedName("success")val success: Boolean,
         @SerializedName("error_text")val error_text:List<String>
@@ -59,4 +60,25 @@ data class ResponseRegPass(
 data class ListErrors(
         @SerializedName("password")val password: List<String>,
         @SerializedName("password_general")val password_general:List<String>
+)
+
+/*{"contacts":
+[
+{"id":87,
+"contact_type":"Почта",
+"contact":"anonimalesha@mail.ru"}
+],
+"result":
+{"success":true,
+"error_text":[]}}*/
+
+data class ResponseRegContacts(
+        @SerializedName("contacts")val contacts: List<ResponseContact>,
+        @SerializedName("result")val result: ResponseReg
+)
+
+data class ResponseContact(
+        @SerializedName("id")val id: Int,
+        @SerializedName("contact_type")val contact_type: String,
+        @SerializedName("contact")val contact:String
 )

@@ -33,7 +33,7 @@ interface RetrofitQuery {
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<ResponseBody>
 
     @POST("api/registration_user/")
-    fun sendRegistrationUser(@Body user: RegUser): Call<ResponseRegPass>
+    fun sendRegistrationUser(@Body user: RegUser): Call<ResponseReg>
 
     @POST("api/bind_email/")
     fun sendBindEmail(@Header("Cookie") sid: String, @Body bindEmail: BindEmail): Call<ResponseReg>
@@ -42,10 +42,10 @@ interface RetrofitQuery {
     fun validateMailCode(@Header("Cookie") sid: String, @Body mailCode: MailCode): Call<ResponseReg>
 
     @POST("api/registration_contactface/")
-    fun sendRegistrationContactFace(@Header("Cookie") sid:String, @Body contactFace: RegContactFace): Call<ResponseReg>
+    fun sendRegistrationContactFace(@Header("Cookie") sid:String, @Body contactFace: RegContactFace): Call<ResponseRegContacts>
 
     @POST("api/registration_contactfacecontact/")
-    fun sendRegistrationContactFaceContact(@Body contacts: RegContactFaceContact): Call<ResponseReg>
+    fun sendRegistrationContactFaceContact(@Header("Cookie") sid:String, @Body contacts: RegContactFaceContact): Call<ResponseReg>
 
 //    @Multipart
 //    @POST("api/registration/")

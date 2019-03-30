@@ -7,6 +7,7 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -185,25 +186,23 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             regPassword.value!!,
             regPassConfirm.value!!
         )
-        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseRegPass> {
+        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseReg> {
 
-            override fun onResponse(call: Call<ResponseRegPass>, response: Response<ResponseRegPass>) {
+            override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
                 if (response.body() != null) {
-
                     /**/
-                        if (response.body()!!.success){
+                        if (response.body()!!.success) {
                             //setResultReg1Success(response.body()!!.success)
                             getSIDFromRegOne(response.headers())
-
-                        } else Toast.makeText(context, "Пароль не принят! ${response.body()!!}", Toast.LENGTH_LONG).show()
-
-                    Toast.makeText(context, "Успешно отправдены дынные user", Toast.LENGTH_LONG)
-                        .show()
+                            Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
+                        } else if (!(response.body()!!.success)) {
+                            Toast.makeText(context, "Пароль не принят! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                        }
                 }
             }
 
-            override fun onFailure(call: Call<ResponseRegPass>, t: Throwable) {
-
+            override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
+                Toast.makeText(context, "Пароль не принят!", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -326,7 +325,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
-
+                Toast.makeText(context, "Код не работает!", Toast.LENGTH_LONG).show()
             }
 
         })
@@ -343,16 +342,65 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             regName.value!!,
             regMiddlename.value!!
         )
-        Retrofit.api?.sendRegistrationContactFace(cid, contactFace)?.enqueue(object : Callback<ResponseReg> {
+        Retrofit.api?.sendRegistrationContactFace(cid, contactFace)?.enqueue(object : Callback<ResponseRegContacts> {
+
+            /*{"contacts":
+            [
+            {"id":87,
+            "contact_type":"Почта",
+            "contact":"anonimalesha@mail.ru"}
+            ],
+            "result":
+            {"success":true,
+            "error_text":[]}}*/
+
+            override fun onResponse(call: Call<ResponseRegContacts>, response: Response<ResponseRegContacts>) {
+                if (response.body() != null) {
+
+                    response.body()?.let {
+                        if (it.result.success) setResultReg2Success(it.result.success)
+                    }
+                    Toast.makeText(context, "Успешно добавлено контактное лицо ${resultReg2Success}", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseRegContacts>, t: Throwable) {
+                Toast.makeText(context, "Error! in zq rega 222", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun btnRegContactFaceContactClick() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val contactFaceContacts = RegContactFaceContact(
+                regSurname.value!!,
+                regName.value!!,
+                regMiddlename.value!!
+        )
+        Retrofit.api?.sendRegistrationContactFaceContact(cid, contactFaceContacts)?.enqueue(object : Callback<ResponseReg> {
+
+            /*{"contacts":
+            [
+            {"id":87,
+            "contact_type":"Почта",
+            "contact":"anonimalesha@mail.ru"}
+            ],
+            "result":
+            {"success":true,
+            "error_text":[]}}*/
 
             override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
                 if (response.body() != null) {
 
                     response.body()?.let {
-                        setResultReg2Success(it.success)
+                        if (it.result.success) setResultReg2Success(it.result.success)
                     }
-                    Toast.makeText(context, "Успешно отправдены дынные user ${resultReg2Success}", Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(context, "Успешно добавлено контактное лицо ${resultReg2Success}", Toast.LENGTH_LONG)
+                            .show()
                 }
             }
 
@@ -361,6 +409,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
     }
+
 //
 //
 //    @SuppressLint("ResourceType")
