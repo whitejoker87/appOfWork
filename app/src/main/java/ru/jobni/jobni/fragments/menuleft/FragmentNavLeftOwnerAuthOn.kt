@@ -88,11 +88,11 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
             val child = group.items[childIndex] as NavigationChild
 
             if (childIndex == 0) {
-                println(" " + child.id)
+                println(" " + child.id + " " + child.name)
             }
 
             if (childIndex == 1) {
-                println(" " + child.id)
+                println(" " + child.id + " " + child.name)
             }
         }
     }
