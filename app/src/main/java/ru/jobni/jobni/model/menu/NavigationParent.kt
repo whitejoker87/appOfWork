@@ -1,23 +1,9 @@
 package ru.jobni.jobni.model.menu
 
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
+import com.thoughtbot.expandablecheckrecyclerview.models.MultiCheckExpandableGroup
 
 class NavigationParent(
         title: String,
         items: List<NavigationChild>,
-        val iconResId: Int) : ExpandableGroup<NavigationChild>(title, items) {
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is NavigationParent) return false
-
-        val parent = other as NavigationParent?
-
-        return iconResId == parent!!.iconResId
-    }
-
-    override fun hashCode(): Int {
-        return iconResId
-    }
-}
-
+        val iconResId: Int
+) : MultiCheckExpandableGroup(title, items)

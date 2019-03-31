@@ -65,7 +65,7 @@ object RepositoryOwner {
         companyLiveData.value?.forEach { companyName ->
             setCompanyList.add(NavigationParent(
                     companyName.name,
-                    makeParentTwoChildOwnerAuthOn(),
+                    makeParentTwoChildOwnerAuthOn(companyName.id),
                     R.drawable.ic_user
             ))
         }
@@ -76,14 +76,14 @@ object RepositoryOwner {
         return listOf()
     }
 
-    private fun makeParentTwoChildOwnerAuthOn(): List<NavigationChild> {
-        val child1 = NavigationChild("Вакансии", 0)
-        val child2 = NavigationChild("Отзывы", 0)
-        val child3 = NavigationChild("Профиль", 0)
-        val child4 = NavigationChild("Баланс: " + companyLiveDataBalance.value, 0)
-        val child5 = NavigationChild("Пополнить баланс", 0)
-        val child6 = NavigationChild("История платежей", R.drawable.ic_user)
-        val child7 = NavigationChild("Оказанные услуги", 0)
+    private fun makeParentTwoChildOwnerAuthOn(parentID: Int): List<NavigationChild> {
+        val child1 = NavigationChild(parentID,"Вакансии", 0)
+        val child2 = NavigationChild(parentID,"Отзывы", 0)
+        val child3 = NavigationChild(parentID,"Профиль", 0)
+        val child4 = NavigationChild(parentID,"Баланс: " + companyLiveDataBalance.value, 0)
+        val child5 = NavigationChild(parentID,"Пополнить баланс", 0)
+        val child6 = NavigationChild(parentID,"История платежей", R.drawable.ic_user)
+        val child7 = NavigationChild(parentID,"Оказанные услуги", 0)
 
         return listOf(child1, child2, child3, child4, child5, child6, child7)
     }
@@ -107,10 +107,10 @@ object RepositoryOwner {
     }
 
     private fun makeParentOneChildOwnerAuthOff(): List<NavigationChild> {
-        val child1 = NavigationChild("Резюме", R.drawable.ic_search)
-        val child2 = NavigationChild("Кандидаты", R.drawable.ic_search)
-        val child3 = NavigationChild("Вакансии", R.drawable.ic_search)
-        val child4 = NavigationChild("Компании", R.drawable.ic_company)
+        val child1 = NavigationChild(1,"Резюме", R.drawable.ic_search)
+        val child2 = NavigationChild(2,"Кандидаты", R.drawable.ic_search)
+        val child3 = NavigationChild(3,"Вакансии", R.drawable.ic_search)
+        val child4 = NavigationChild(4,"Компании", R.drawable.ic_company)
 
         return listOf(child1, child2, child3, child4)
     }
