@@ -128,16 +128,11 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
 
         navAdapter.setChildClickListener { v, checked, group, childIndex ->
             val child = group.items[childIndex] as NavigationChild
-            repositoryOwner.saveCompanyBalance(77)
 
             if (childIndex == 0) {
                 viewModel.loadLeftMenuOwnerCompanyVacancy(child.id)
                 viewModel.setFragmentLaunch("CompanyVacancy")
                 viewModel.setOpenDrawerLeft(false)
-            }
-
-            if (childIndex == 3) {
-                child.balance = repositoryOwner.receiveCompanyBalance.toString()
             }
         }
     }
