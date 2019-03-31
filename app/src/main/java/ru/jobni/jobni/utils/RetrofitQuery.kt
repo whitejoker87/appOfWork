@@ -39,7 +39,7 @@ interface RetrofitQuery {
     fun sendBindEmail(@Header("Cookie") sid: String, @Body bindEmail: BindEmail): Call<ResponseReg>
 
     @POST("api/validate_email_code/")
-    fun validateMailCode(@Header("Cookie") sid: String, @Body mailCode: MailCode): Call<ResponseReg>
+    fun validateMailCode(@Header("Cookie") sid: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
 
     @POST("api/registration_contactface/")
     fun sendRegistrationContactFace(@Header("Cookie") sid:String, @Body contactFace: RegContactFace): Call<ResponseRegContacts>

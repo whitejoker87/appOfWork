@@ -54,7 +54,8 @@
             android:layout_marginTop = "16dp"
             android:layout_marginStart = "16dp"
             android:layout_marginEnd = "16dp"
-            android:text = "Согласие на хранение и защиту персональных данных"
+            android:text = "@string/data_protection"
+            android:checked="@={viewmodel.regDataProtection}"
             />
 
         <CheckBox
@@ -67,7 +68,8 @@
             android:layout_marginTop = "16dp"
             android:layout_marginStart = "16dp"
             android:layout_marginEnd = "16dp"
-            android:text = "Согласие публичной оферты"
+            android:text = "@string/public_offers"
+            android:checked="@={viewmodel.regPublicOffers}"
             />
 
         <Button android:id="@+id/registration"

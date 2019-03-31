@@ -16,6 +16,7 @@ import retrofit2.http.Header
 //    ):Serializable
 
 data class Contact (
+        @SerializedName("id")val id: Int,
         @SerializedName("contact_type")val contact_type: String,
         @SerializedName("contact")val contact: String
 )
@@ -60,6 +61,12 @@ data class ResponseRegPass(
 data class ListErrors(
         @SerializedName("password")val password: List<String>,
         @SerializedName("password_general")val password_general:List<String>
+)
+
+data class ResponseRegConfirmMail(
+        @SerializedName("success")val success: Boolean,
+        @SerializedName("error_text")val error_text: List<String>,
+        @SerializedName("id")val id: Int
 )
 
 /*{"contacts":
