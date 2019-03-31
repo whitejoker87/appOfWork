@@ -38,9 +38,16 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     private val regMiddlename = MutableLiveData<String>("Иванович")
     private val regReferer = MutableLiveData<String>("")
     private val regPhoto = MutableLiveData<Drawable>()
-    private val regContacts = MutableLiveData<List<String>>(arrayListOf(""))
-    private val regContactsId = MutableLiveData<List<Int>>(arrayListOf(0))
-    private val regContactsType = MutableLiveData<List<String>>(arrayListOf( "mail"))
+    /*Ниже 3 типа листов контактов.
+    Соззданы для того что бы корректно работал биндинг при заполнении
+    (двухсторонний биндинг в отношении списка из Contact отказался работать
+    и было сделано 3 списка)*/
+    /*Список контактов*/
+    private val regContacts = MutableLiveData<ArrayList<String>>(arrayListOf())
+    /*Список id контактов*/
+    private val regContactsId = MutableLiveData<ArrayList<Int>>(arrayListOf())
+    /*Список типов контактов*/
+    private val regContactsType = MutableLiveData<ArrayList<String>>(arrayListOf())
     private val regPhone = MutableLiveData<String>("")
     private val regPhoneCode = MutableLiveData<String>("")
     private val regMailCode = MutableLiveData<String>("")
@@ -58,7 +65,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     private val resultReg3Success = MutableLiveData<Boolean>(false)
 
     private val resultAuthSuccess = MutableLiveData<Boolean>(false)
-    private val typeAddRegFragment = MutableLiveData<String>("mail")
+    private val typeAddRegFragment = MutableLiveData<String>("")
 
     fun setRegMail(mail: String) {
         regMail.value = mail
@@ -128,25 +135,25 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     fun getRegMailCode(): MutableLiveData<String> = regMailCode
 
 
-    fun setRegContacts(contacts: List<String>) {
+    fun setRegContacts(contacts: ArrayList<String>) {
         regContacts.value = contacts
     }
 
-    fun getRegContacts(): MutableLiveData<List<String>> = regContacts
+    fun getRegContacts(): MutableLiveData<ArrayList<String>> = regContacts
 
 
-    fun setRegContactsId(ids: List<Int>) {
+    fun setRegContactsId(ids: ArrayList<Int>) {
         regContactsId.value = ids
     }
 
-    fun getRegContactsId(): MutableLiveData<List<Int>> = regContactsId
+    fun getRegContactsId(): MutableLiveData<ArrayList<Int>> = regContactsId
 
 
-    fun setRegContactsType(contactsType: List<String>) {
+    fun setRegContactsType(contactsType: ArrayList<String>) {
         regContactsType.value = contactsType
     }
 
-    fun getRegContactsType(): MutableLiveData<List<String>> = regContactsType
+    fun getRegContactsType(): MutableLiveData<ArrayList<String>> = regContactsType
 
 
     fun setRegDataProtection(isDataProtection: Boolean) {
@@ -217,15 +224,15 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             regPassword.value!!,
             regPassConfirm.value!!
         )
-        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseReg> {
+        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseRegPass> {
             /*{"password":"namenamename","password_confirm":"namenamename"}*/
-            override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
+            override fun onResponse(call: Call<ResponseRegPass>, response: Response<ResponseRegPass>) {
                 /*strict-transport-security: max-age=3600
                     x-content-type-options: nosniff
                     x-xss-protection: 1; mode=block
                     set-cookie: sessionid=kqh7bd5llhi6ry76fp543ft6biw475fd; expires=Sat, 13 Apr 2019 22:12:06 GMT; Max-Age=1209600; Path=/
                     access-control-allow-headers: *
-                    {"success":true,"error_text":[]}*/
+                    {"success":true,"error_text":{}}*/
                 if (response.body() != null) {
                         if (response.body()!!.success) {
                             //setResultReg1Success(response.body()!!.success)
@@ -249,7 +256,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }*/
 
-            override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRegPass>, t: Throwable) {
                 Toast.makeText(context, "Пароль не принят!", Toast.LENGTH_LONG).show()
             }
         })
@@ -354,9 +361,9 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun confirmEmail() {
 
-        val listContacts = regContacts.value as MutableList
-        val listContactsId = regContactsId.value as MutableList
-        val listContactsType = regContactsType.value as MutableList
+        val listContacts = regContacts.value
+        val listContactsId = regContactsId.value
+        val listContactsType = regContactsType.value
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
@@ -371,15 +378,15 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 /*после неправильной отправки кода
                 * {"detail":"Учетные данные не были предоставлены."}*/
                 /*После правильной отправки
-                * {"success":true,"error_text":[],"id":52}*/
+                * {"success":true,"error_text":{},"id":55}*/
                 if (response.body() != null) {
 
                     if (response.body()!!.success){
                         Toast.makeText(context, "Код подтвержден! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
 
-                        listContacts.add(regMail.value!!)
-                        listContactsId.add(response.body()!!.id)
-                        listContactsType.add("main")//пока апи работает так
+                        listContacts!!.add(regMail.value!!)
+                        listContactsId!!.add(response.body()!!.id)
+                        listContactsType!!.add("main")//пока апи работает так
                         setRegContacts(listContacts)
                         setRegContactsId(listContactsId)
                         setRegContactsType(listContactsType)
@@ -423,11 +430,10 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<ResponseRegContacts>, response: Response<ResponseRegContacts>) {
                 if (response.body() != null) {
                     /*{"success":false,"error_text":"Заполните необходимые поля."}*/
-                        if(response.body()?.result?.success != null) {
-                            setResultReg2Success(response.body()!!.result.success)
-                            Toast.makeText(context, "Успешно добавлено контактное лицо!", Toast.LENGTH_LONG).show()
-                        }
-                    Toast.makeText(context, "Безуспешно не добавлено контактное лицо", Toast.LENGTH_LONG).show()
+                    if (response.body()!!.result != null && response.body()!!.result.success) {
+                        setResultReg2Success(response.body()!!.result.success)
+                        Toast.makeText(context, "Успешно добавлено контактное лицо!", Toast.LENGTH_LONG).show()
+                    } else Toast.makeText(context, "Безуспешно не добавлено контактное лицо", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -442,36 +448,40 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
+        val contacts = ArrayList<Contact>()
+        val contactsString = regContacts.value!!
+
+        /*Формируем из 3 листов Livedata один для отправки на сервер*/
+        for (i in contactsString.indices) {
+            contacts.add(Contact(regContactsId.value!![i]/*, regContactsType.value!![i], contactsString[i]*/))
+        }
+
         val contactFaceContacts = RegContactFaceContact(
                 regDataProtection.value!!,
                 regPublicOffers.value!!,
-                regContacts.value!! as ArrayList<Contact>
+                contacts
         )
         Retrofit.api?.sendRegistrationContactFaceContact(cid, contactFaceContacts)?.enqueue(object : Callback<ResponseReg> {
-
-            /*{"contacts":
-            [
-            {"id":87,
-            "contact_type":"Почта",
-            "contact":"anonimalesha@mail.ru"}
-            ],
-            "result":
-            {"success":true,
-            "error_text":[]}}*/
 
             override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
                 if (response.body() != null) {
 
                     response.body()?.let {
-                        if (it.success) setResultReg2Success(it.success)
+                        if (it.success) {
+                            setResultReg3Success(it.success)
+                            Toast.makeText(context, "Успешно добавлено контактное лицо ${resultReg3Success}", Toast.LENGTH_LONG)
+                                    .show()
+                            /*{"contact":{"success":false,"error_text":["Это поле не может быть пустым."]}}*/
+                        } else Toast.makeText(context, "Ahtung!!! контакты не отправлены", Toast.LENGTH_SHORT).show()
+
                     }
-                    Toast.makeText(context, "Успешно добавлено контактное лицо ${resultReg2Success}", Toast.LENGTH_LONG)
-                            .show()
+
                 }
             }
-
+            /*
+            * {"success":false,"error_text":"Невозможно сохранить не приняв согласия на обработку персональных данных"}*/
             override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
-                Toast.makeText(context, "Error! in zq rega 222", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Ahtung!!! нет согласия на обработку", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -593,11 +603,51 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 
     fun btnAddContactClick() {
-        val listContacts = regContacts.value as MutableList
-        val listContactsType = regContactsType.value as MutableList
-        listContacts.add("")
-        listContactsType.add("")
+        val listContacts = regContacts.value
+        val listContactsType = regContactsType.value
+        listContacts!!.add("")
+        listContactsType!!.add("")
         setRegContacts(listContacts)
+    }
+
+    fun getContactsForReg3() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val contactFace = RegContactFace(
+                regSurname.value!!,
+                regName.value!!,
+                regMiddlename.value!!
+        )
+        Retrofit.api?.sendRegistrationContactFace(cid, contactFace)?.enqueue(object : Callback<ResponseRegContacts> {
+
+            /*{"contacts":
+            [
+            {"id":87,
+            "contact_type":"Почта",
+            "contact":"anonimalesha@mail.ru"}
+            ],
+            "result":
+            {"success":true,
+            "error_text":[]}}*/
+
+            override fun onResponse(call: Call<ResponseRegContacts>, response: Response<ResponseRegContacts>) {
+                if (response.body() != null) {
+                    /*{"success":false,"error_text":"Заполните необходимые поля."}*/
+                    if (response.body()!!.result != null && response.body()!!.contacts.isNotEmpty() && response.body()!!.result.success) {
+                        regContactsId.add(response.body()!!.contacts[0].id)
+                        if (response.body()!!.contacts[0].contact_type.equals("Почта")) regContactsType.add("main")
+                        regContacts.add(response.body()!!.contacts[0].contact)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseRegContacts>, t: Throwable) {
+
+            }
+        })
+
     }
 
 }

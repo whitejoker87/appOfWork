@@ -33,6 +33,7 @@ class FragmentRegThree : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_registration_03, container, false)
         val view = binding.root;
         binding.viewmodel = viewModel
+        viewModel.getContactsForReg3()
         recycler_reg_contacts = binding.rvRegContact
         adapter = RegContactsRecyclerAdapter(activity as Context)
         recycler_reg_contacts.adapter = adapter
