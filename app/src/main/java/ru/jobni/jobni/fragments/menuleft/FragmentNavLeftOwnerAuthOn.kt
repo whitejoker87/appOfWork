@@ -65,18 +65,82 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
 
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {
             override fun onGroupClick(flatPos: Int): Boolean {
+
+                // Подготовка клика по 15 родителям т.е. у чел. 15 компаний в списке!
                 if (flatPos == 0) {
                     viewModel.setFragmentLaunch("CompanyAddAuthOn")
                     viewModel.setOpenDrawerLeft(false)
                     return false
                 }
 
+                // Первый элемент в списке занят, поэтому это нужно учитывать flatPos - 1
                 if (flatPos == 1) {
-                    // Первый элемент в списке занят, поэтому это нужно учитывать flatPos -1
-//                    viewModel.loadLeftMenuOwnerDataBalance(flatPos -1)
-//                    viewModel.setFragmentLaunch("CompanyVacancy")
-//                    viewModel.loadLeftMenuOwnerCompanyVacancy(flatPos -1)
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
 
+                if (flatPos == 2) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 3) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 4) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 5) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 6) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 7) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 8) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 9) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 10) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 11) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 12) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 13) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
+                    return false
+                }
+
+                if (flatPos == 14) {
+                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
@@ -88,11 +152,9 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
             val child = group.items[childIndex] as NavigationChild
 
             if (childIndex == 0) {
-                println(" " + child.id + " " + child.name)
-            }
-
-            if (childIndex == 1) {
-                println(" " + child.id + " " + child.name)
+                viewModel.loadLeftMenuOwnerCompanyVacancy(child.id)
+                viewModel.setFragmentLaunch("CompanyVacancy")
+                viewModel.setOpenDrawerLeft(false)
             }
         }
     }
