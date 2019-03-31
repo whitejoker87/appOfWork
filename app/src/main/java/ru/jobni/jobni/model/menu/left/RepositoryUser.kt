@@ -60,15 +60,15 @@ object RepositoryUser {
                 R.drawable.ic_user
         )
     }
-    
+
     private fun makeParentFourChildAuthOn(): List<NavigationChild> {
-        val child1 = NavigationChild(1,"Баланс: 1000 Руб", 0)
-        val child2 = NavigationChild(2,"Пополнить баланс", 0)
-        val child3 = NavigationChild(3,"История платежей", 0)
-        val child4 = NavigationChild(4,"Оказанные услуги", R.drawable.ic_user)
-        val child5 = NavigationChild(5,"Оказанные услуги (детально)", 0)
-        val child6 = NavigationChild(6,"Рефальная программа", 0)
-        val child7 = NavigationChild(7,"CashBack", 0)
+        val child1 = NavigationChild(1, "Баланс: 1000 Руб", "", 0)
+        val child2 = NavigationChild(2, "Пополнить баланс", "", 0)
+        val child3 = NavigationChild(3, "История платежей", "", 0)
+        val child4 = NavigationChild(4, "Оказанные услуги", "", R.drawable.ic_user)
+        val child5 = NavigationChild(5, "Оказанные услуги (детально)", "", 0)
+        val child6 = NavigationChild(6, "Рефальная программа", "", 0)
+        val child7 = NavigationChild(7, "CashBack", "", 0)
 
         return listOf(child1, child2, child3, child4, child5, child6, child7)
     }
@@ -91,10 +91,10 @@ object RepositoryUser {
     }
 
     private fun makeParentOneChildAuthOff(): List<NavigationChild> {
-        val child1 = NavigationChild(1,"Вакансии", R.drawable.ic_search)
-        val child2 = NavigationChild(2,"Компании", R.drawable.ic_company)
-        val child3 = NavigationChild(3,"Резюме", R.drawable.ic_search)
-        val child4 = NavigationChild(4,"Кандидаты", R.drawable.ic_search)
+        val child1 = NavigationChild(1, "Вакансии", "", R.drawable.ic_search)
+        val child2 = NavigationChild(2, "Компании", "", R.drawable.ic_company)
+        val child3 = NavigationChild(3, "Резюме", "", R.drawable.ic_search)
+        val child4 = NavigationChild(4, "Кандидаты", "", R.drawable.ic_search)
 
         return listOf(child1, child2, child3, child4)
     }

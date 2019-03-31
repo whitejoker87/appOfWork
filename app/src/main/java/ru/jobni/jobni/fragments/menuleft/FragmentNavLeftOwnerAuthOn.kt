@@ -14,6 +14,7 @@ import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentNavLeftOwnerBinding
 import ru.jobni.jobni.model.menu.NavigationChild
+import ru.jobni.jobni.model.menu.left.RepositoryOwner
 import ru.jobni.jobni.model.menu.left.RepositoryOwner.makeNavigationListOwnerAuthOn
 import ru.jobni.jobni.utils.NavRVAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
@@ -28,6 +29,8 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
     }
 
     private lateinit var binding: FragmentNavLeftOwnerBinding
+
+    private val repositoryOwner: RepositoryOwner = RepositoryOwner
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -66,7 +69,7 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {
             override fun onGroupClick(flatPos: Int): Boolean {
 
-                // Подготовка клика по 15 родителям т.е. у чел. 15 компаний в списке!
+                // Подготовка клика по 10 родителям т.е. у чел. 10 компаний в списке!
                 if (flatPos == 0) {
                     viewModel.setFragmentLaunch("CompanyAddAuthOn")
                     viewModel.setOpenDrawerLeft(false)
@@ -119,42 +122,22 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
                     return false
                 }
 
-                if (flatPos == 10) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
-                    return false
-                }
-
-                if (flatPos == 11) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
-                    return false
-                }
-
-                if (flatPos == 12) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
-                    return false
-                }
-
-                if (flatPos == 13) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
-                    return false
-                }
-
-                if (flatPos == 14) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
-                    return false
-                }
-
                 return false
             }
         })
 
         navAdapter.setChildClickListener { v, checked, group, childIndex ->
             val child = group.items[childIndex] as NavigationChild
+            repositoryOwner.saveCompanyBalance(77)
 
             if (childIndex == 0) {
                 viewModel.loadLeftMenuOwnerCompanyVacancy(child.id)
                 viewModel.setFragmentLaunch("CompanyVacancy")
                 viewModel.setOpenDrawerLeft(false)
+            }
+
+            if (childIndex == 3) {
+                child.balance = repositoryOwner.receiveCompanyBalance.toString()
             }
         }
     }
