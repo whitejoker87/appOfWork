@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
+import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 
@@ -22,6 +23,11 @@ class FragmentRegOnePhone : Fragment() {
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
+
+    private val authViewModel: AuthViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
+    }
+
 
     private lateinit var binding: ru.jobni.jobni.databinding.CRegistration01PhoneBinding
 
@@ -48,6 +54,7 @@ class FragmentRegOnePhone : Fragment() {
         mainViewModel.setIncludeSocialNetworkReg(true)
         binding.viewmodelreg = regViewModel
         binding.viewmodelmain = mainViewModel
+        binding.viewmodelauth = authViewModel
 
 //        binding.includeSocialNetwork.btnUser.setOnClickListener {
 //            viewModel

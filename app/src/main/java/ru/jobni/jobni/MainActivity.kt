@@ -165,14 +165,31 @@ class MainActivity : AppCompatActivity() {
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
                 "Auth" -> setFragment(FragmentAuth())
                 "Registration" -> setFragment(FragmentReg())
-                "AuthUser" -> setFragment(FragmentAuthUser())
-                "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
                 "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
                 "AuthUserLoggedMail" -> setFragment(FragmentAuthUserLoggedChangeMail())
-                "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
-                "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
-                "RegUserOther" -> regViewModel.setVkRegStart(true)//regViewModel.setTypeAddRegFragment("other")
                 else -> setFragment(FragmentWelcome())
+            }
+        })
+
+        /*наблюдение за нажатием на кнопки регистрации/авторизации*/
+        viewModelMain.getSocialLaunch().observe(this, Observer {
+            when (it) {
+                "AuthUser" -> setFragment(FragmentAuthUser())
+                "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
+                "RegUserMail" -> viewModelAuth.setBtnUserLogged("mail")
+                "RegUserPhone" -> viewModelAuth.setBtnUserLogged("phone")
+                "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
+                "RegVK" -> viewModelAuth.setBtnUserLogged("vk")
+                //"AuthVK" -> viewModelAuth.setBtnUserLogged("vk")
+            }
+        })
+
+        /*наблюдение за изменением статуса кнопок регистрации/авторизации*/
+        viewModelAuth.getBtnUserLogged().observe(this, Observer {
+            when (it) {
+                "mail" -> regViewModel.setTypeAddRegFragment("mail")
+                "phone" -> regViewModel.setTypeAddRegFragment("phone")
+                "vk" -> regViewModel.setTypeAddRegFragment("vk")
             }
         })
 
@@ -210,7 +227,7 @@ class MainActivity : AppCompatActivity() {
 
         regViewModel.isVkRegStart().observe(this, Observer {
             if (it){
-                VK.login(this, arrayListOf(VKScope.WALL, VKScope.PHOTOS))
+                VK.login(this, arrayListOf())
             }
         })
     }

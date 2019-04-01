@@ -663,7 +663,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
 
     }
-
+    /*запуск активити вк апи из макета FragmentRegOneOther*/
     fun getVKReg(){
         setVkRegStart(true)
     }

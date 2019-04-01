@@ -42,5 +42,6 @@ class FragmentAuth : Fragment() {
         super.onResume()
         viewModel.setIncludeSocialNetworkReg(false)
         viewModelAuth.setBtnUserNotClickable(false)
+        viewModelAuth.setBtnUserLogged("")
     }
 }

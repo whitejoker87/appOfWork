@@ -6,6 +6,7 @@
     <data>
         <variable name="viewmodelreg" type="ru.jobni.jobni.viewmodel.RegViewModel"/>
         <variable name="viewmodelmain" type="ru.jobni.jobni.viewmodel.MainViewModel"/>
+        <variable name="viewmodelauth" type="ru.jobni.jobni.viewmodel.AuthViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             xmlns:tools="http://schemas.android.com/tools"
@@ -53,7 +54,9 @@
                  app:layout_constraintEnd_toEndOf="@+id/background"
                  android:layout_marginTop="16dp"
                  app:viewmodelreg="@{viewmodelreg}"
-                 app:viewmodelmain="@{viewmodelmain}"/>
+                 app:viewmodelmain="@{viewmodelmain}"
+                 app:viewmodelauth="@{viewmodelauth}"
+        />
         <EditText android:id="@+id/phone"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"

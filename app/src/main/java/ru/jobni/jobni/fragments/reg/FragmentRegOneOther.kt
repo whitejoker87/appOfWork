@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
+import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 
@@ -23,17 +24,18 @@ class FragmentRegOneOther : Fragment() {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
+    private val authViewModel: AuthViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
+    }
+
     private lateinit var binding: ru.jobni.jobni.databinding.CRegistration01OtherBinding
 
     private var param1: String? = null
-    private var param2: String? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -46,44 +48,33 @@ class FragmentRegOneOther : Fragment() {
 
         /* для обработки нажатия в инклюде соцчетей*/
         mainViewModel.setIncludeSocialNetworkReg(true)
+//        when(param1) {
+//            "vk" ->
+//        }
         binding.viewmodelreg = regViewModel
         binding.viewmodelmain = mainViewModel
-
-//        binding.includeSocialNetwork.btnUser.setOnClickListener {
-//            viewModel
-//        }
+        binding.viewmodelauth = authViewModel
 
         /*временный костыль для авторизации после первого этапа регистрации*/
 //        regViewModel.getResultReg1Success().observe(this, Observer {
 //            regViewModel.tempAuthForRegOne()
 //        })
 
-        regViewModel.getResultAuthSuccess().observe(this, Observer {
-            Toast.makeText(context, "Регистрация успешно проехала? ${it}", Toast.LENGTH_LONG).show()
-        })
+//        regViewModel.getResultAuthSuccess().observe(this, Observer {
+//            Toast.makeText(context, "Регистрация успешно проехала? ${it}", Toast.LENGTH_LONG).show()
+//        })
 
         return view
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentRegOneMail.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: String) =
             FragmentRegOneOther().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
         private const val ARG_PARAM1 = "param1"
-        private const val ARG_PARAM2 = "param2"
     }
 }

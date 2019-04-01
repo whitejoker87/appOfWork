@@ -25,18 +25,18 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
     /*цвет кнопки при логине пользователя*/
-    private val isBtnUserLoggedVisible = MutableLiveData<Boolean>(false)
+    private val btnUserLogged = MutableLiveData<String>("")
     /*кликабельность кнопки при навигации(изменяется внутри меню)*/
     private val isBtnUserNotClickable = MutableLiveData<Boolean>()
     private val isAuthUser = MutableLiveData<Boolean>()
     private val authUser = MutableLiveData<String>()
     private val authPass = MutableLiveData<String>()
 
-    fun setBtnUserLoggedVisible(isVisible: Boolean) {
-        isBtnUserLoggedVisible.value = isVisible
+    fun setBtnUserLogged(typeLogged: String) {
+        btnUserLogged.value = typeLogged
     }
 
-    fun isBtnUserLoggedVisible(): MutableLiveData<Boolean> = isBtnUserLoggedVisible
+    fun getBtnUserLogged(): MutableLiveData<String> = btnUserLogged
 
 
     fun setBtnUserNotClickable(isVisible: Boolean) {
@@ -74,7 +74,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         editor?.remove(authUserPass)
         editor?.apply()
 
-        setBtnUserLoggedVisible(false)
+        setBtnUserLogged("")
         setAuthUser(false)
 
         return false
@@ -110,7 +110,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                     if (sessionID != null) {
                         setAuthUser(true)
-                        setBtnUserLoggedVisible(true)
+                        setBtnUserLogged("mail")
                     }
                 }
             }
