@@ -1,7 +1,6 @@
 package ru.jobni.jobni.model.network.registration
 
 import com.google.gson.annotations.SerializedName
-import retrofit2.http.Header
 
 //data class Registration (
 //        @SerializedName("email")val email: String,

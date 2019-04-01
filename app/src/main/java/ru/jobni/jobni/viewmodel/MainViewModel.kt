@@ -275,9 +275,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun loadLeftMenuOwnerData() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
+        val sessionID = String.format("%s%s", "sessionid=", id)
 
-        Retrofit.api?.ownerOrWorker(cid)?.enqueue(object : Callback<CompanyVacancy> {
+        Retrofit.api?.ownerOrWorker(sessionID)?.enqueue(object : Callback<CompanyVacancy> {
             override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
                 if (response.body() != null) {
 
@@ -294,11 +294,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun loadLeftMenuOwnerDataBalance(position: Int) {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
+        val sessionID = String.format("%s%s", "sessionid=", id)
 
         val companyID: Int = repositoryOwner.companyLiveData.value!![position].id
 
-        Retrofit.api?.ownerOrWorkerBalance(cid, companyID)?.enqueue(object : Callback<Int> {
+        Retrofit.api?.ownerOrWorkerBalance(sessionID, companyID)?.enqueue(object : Callback<Int> {
             override fun onResponse(@NonNull call: Call<Int>, @NonNull response: Response<Int>) {
                 if (response.code() == 401 || response.code() == 200) {
 
@@ -319,9 +319,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun loadLeftMenuOwnerCompanyVacancy(companyID: Int) {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
+        val sessionID = String.format("%s%s", "sessionid=", id)
 
-        Retrofit.api?.ownerOrWorkerCompany(cid, companyID)?.enqueue(object : Callback<CardVacancy> {
+        Retrofit.api?.ownerOrWorkerCompany(sessionID, companyID)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
                 if (response.code() == 401 || response.code() == 200) {
 

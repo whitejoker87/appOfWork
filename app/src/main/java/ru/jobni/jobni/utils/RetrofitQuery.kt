@@ -33,19 +33,19 @@ interface RetrofitQuery {
     fun sendRegistrationUser(@Body user: RegUser): Call<ResponseRegPass>
 
     @POST("api/bind_email/")
-    fun sendBindEmail(@Header("Cookie") sid: String, @Body bindEmail: BindEmail): Call<ResponseReg>
+    fun sendBindEmail(@Header("Cookie") sessionID: String, @Body bindEmail: BindEmail): Call<ResponseReg>
 
     @POST("api/validate_email_code/")
-    fun validateMailCode(@Header("Cookie") sid: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
+    fun validateMailCode(@Header("Cookie") sessionID: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
 
     @POST("api/registration_contactface/")
     fun sendRegistrationContactFace(@Header("Cookie") sessionID: String, @Body contactFace: RegContactFace): Call<ResponseRegContacts>
 
     @POST("api/registration_contactfacecontact/")
-    fun sendRegistrationContactFaceContact(@Header("Cookie") sid:String, @Body contacts: RegContactFaceContact): Call<ResponseReg>
+    fun sendRegistrationContactFaceContact(@Header("Cookie") sessionID: String, @Body contacts: RegContactFaceContact): Call<ResponseReg>
 
     @GET("api/type_authorization/?format=json/")
-    fun getContactsForReg(@Header("Cookie") sid:String): Call<ResponseReg>
+    fun getContactsForReg(@Header("Cookie") sessionID: String): Call<ResponseReg>
 
 //    @Multipart
 //    @POST("api/registration/")

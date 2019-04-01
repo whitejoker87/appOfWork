@@ -1,21 +1,14 @@
 package ru.jobni.jobni.viewmodel
 
 import android.app.Application
-import android.app.ProgressDialog.show
 import android.graphics.drawable.Drawable
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import ru.jobni.jobni.model.auth.UserAuth
 import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.utils.Retrofit
 
