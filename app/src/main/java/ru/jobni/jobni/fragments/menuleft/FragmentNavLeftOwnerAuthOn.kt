@@ -78,47 +78,38 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
 
                 // Первый элемент в списке занят, поэтому это нужно учитывать flatPos - 1
                 if (flatPos == 1) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
                 if (flatPos == 2) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
                 if (flatPos == 3) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
                 if (flatPos == 4) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
                 if (flatPos == 5) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
                 if (flatPos == 6) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
                 if (flatPos == 7) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
                 if (flatPos == 8) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 
                 if (flatPos == 9) {
-                    viewModel.loadLeftMenuOwnerDataBalance(flatPos - 1)
                     return false
                 }
 

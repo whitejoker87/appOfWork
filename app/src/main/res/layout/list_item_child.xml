@@ -36,17 +36,6 @@
 			tools:text = "Child Name"
 			/>
 
-		<TextView
-			android:id = "@+id/list_item_child_balance"
-			android:layout_width = "60dp"
-			android:layout_height = "match_parent"
-			android:layout_marginStart = "40dp"
-			android:text = "@{child.balance}"
-			android:gravity = "center_vertical"
-			android:layout_gravity = "center"
-			tools:text = "Child Balance"
-			/>
-
 		<CheckedTextView
 			android:id = "@+id/list_item_child_check"
 			android:visibility = "gone"

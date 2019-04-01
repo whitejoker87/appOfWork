@@ -77,13 +77,13 @@ object RepositoryOwner {
     }
 
     private fun makeParentTwoChildOwnerAuthOn(parentID: Int): List<NavigationChild> {
-        val child1 = NavigationChild(parentID, "Вакансии", "", 0)
-        val child2 = NavigationChild(parentID, "Отзывы", "", 0)
-        val child3 = NavigationChild(parentID, "Профиль", "", 0)
-        val child4 = NavigationChild(parentID, "Баланс: ", companyLiveDataBalance.value.toString(), 0)
-        val child5 = NavigationChild(parentID, "Пополнить баланс", "", 0)
-        val child6 = NavigationChild(parentID, "История платежей", "", R.drawable.ic_user)
-        val child7 = NavigationChild(parentID, "Оказанные услуги", "", 0)
+        val child1 = NavigationChild(parentID, "Вакансии", 0)
+        val child2 = NavigationChild(parentID, "Отзывы", 0)
+        val child3 = NavigationChild(parentID, "Профиль", 0)
+        val child4 = NavigationChild(parentID, "Баланс: ", 0)
+        val child5 = NavigationChild(parentID, "Пополнить баланс", 0)
+        val child6 = NavigationChild(parentID, "История платежей", R.drawable.ic_user)
+        val child7 = NavigationChild(parentID, "Оказанные услуги", 0)
 
         return listOf(child1, child2, child3, child4, child5, child6, child7)
     }
@@ -107,10 +107,10 @@ object RepositoryOwner {
     }
 
     private fun makeParentOneChildOwnerAuthOff(): List<NavigationChild> {
-        val child1 = NavigationChild(1, "Резюме", "", R.drawable.ic_search)
-        val child2 = NavigationChild(2, "Кандидаты", "", R.drawable.ic_search)
-        val child3 = NavigationChild(3, "Вакансии", "", R.drawable.ic_search)
-        val child4 = NavigationChild(4, "Компании", "", R.drawable.ic_company)
+        val child1 = NavigationChild(1, "Резюме", R.drawable.ic_search)
+        val child2 = NavigationChild(2, "Кандидаты", R.drawable.ic_search)
+        val child3 = NavigationChild(3, "Вакансии", R.drawable.ic_search)
+        val child4 = NavigationChild(4, "Компании", R.drawable.ic_company)
 
         return listOf(child1, child2, child3, child4)
     }
