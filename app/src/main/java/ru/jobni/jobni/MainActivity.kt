@@ -132,8 +132,8 @@ class MainActivity : AppCompatActivity() {
                     closeKeyboard()
                 }
                 else {
-                    viewModelMain.setNoAuthRegVisible(false) //true
-                    viewModelMain.setYesAuthRegVisible(true) //false
+                    viewModelMain.setNoAuthRegVisible(true) //true
+                    viewModelMain.setYesAuthRegVisible(false) //false
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     closeKeyboard()
