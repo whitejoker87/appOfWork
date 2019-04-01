@@ -5,10 +5,7 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.UserAuth
 import ru.jobni.jobni.model.network.company.CompanyVacancy
-import ru.jobni.jobni.model.network.registration.RegContactFace
-import ru.jobni.jobni.model.network.registration.RegContactFaceContact
-import ru.jobni.jobni.model.network.registration.RegUser
-import ru.jobni.jobni.model.network.registration.ResponseReg
+import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
 import ru.jobni.jobni.model.network.vacancy.DetailVacancy
@@ -33,13 +30,22 @@ interface RetrofitQuery {
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<ResponseBody>
 
     @POST("api/registration_user/")
-    fun sendRegistrationUser(@Body user: RegUser): Call<ResponseReg>
+    fun sendRegistrationUser(@Body user: RegUser): Call<ResponseRegPass>
+
+    @POST("api/bind_email/")
+    fun sendBindEmail(@Header("Cookie") sid: String, @Body bindEmail: BindEmail): Call<ResponseReg>
+
+    @POST("api/validate_email_code/")
+    fun validateMailCode(@Header("Cookie") sid: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
 
     @POST("api/registration_contactface/")
-    fun sendRegistrationContactFace(@Header("Cookie") sessionID: String, @Body contactFace: RegContactFace): Call<ResponseReg>
+    fun sendRegistrationContactFace(@Header("Cookie") sessionID: String, @Body contactFace: RegContactFace): Call<ResponseRegContacts>
 
     @POST("api/registration_contactfacecontact/")
-    fun sendRegistrationContactFaceContact(@Body contacts: RegContactFaceContact): Call<ResponseReg>
+    fun sendRegistrationContactFaceContact(@Header("Cookie") sid:String, @Body contacts: RegContactFaceContact): Call<ResponseReg>
+
+    @GET("api/type_authorization/?format=json/")
+    fun getContactsForReg(@Header("Cookie") sid:String): Call<ResponseReg>
 
 //    @Multipart
 //    @POST("api/registration/")

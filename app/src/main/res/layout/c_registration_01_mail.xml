@@ -114,18 +114,18 @@
 			/>
 
 		<EditText
-			android:id = "@+id/password_2"
-			android:layout_width = "0dp"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/password_1"
-			app:layout_constraintStart_toStartOf = "@+id/mail"
-			app:layout_constraintEnd_toEndOf = "@+id/mail"
-			android:layout_marginTop = "16dp"
-			style = "@style/text_color_and_size"
-			android:inputType = "textPassword"
-			android:hint = "@string/password_4"
-			android:text = "@={viewmodelreg.regPassConfirm}"
-			/>
+		android:id = "@+id/password_2"
+		android:layout_width = "0dp"
+		android:layout_height = "wrap_content"
+		app:layout_constraintTop_toBottomOf = "@+id/password_1"
+		app:layout_constraintStart_toStartOf = "@+id/mail"
+		app:layout_constraintEnd_toEndOf = "@+id/mail"
+		android:layout_marginTop = "16dp"
+		style = "@style/text_color_and_size"
+		android:inputType = "textPassword"
+		android:hint = "@string/password_4"
+		android:text = "@={viewmodelreg.regPassConfirm}"
+		/>
 
 		<Button
 			android:id = "@+id/bind_account"
@@ -138,6 +138,33 @@
 			android:background = "@drawable/shape_button"
 			android:text = "@string/bind_account"
 			android:onClick = "@{() -> viewmodelreg.btnRegUserClick()}"
+			/>
+
+		<EditText
+			android:id = "@+id/code_mail"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/bind_account"
+			app:layout_constraintStart_toStartOf = "@+id/mail"
+			app:layout_constraintEnd_toEndOf = "@+id/mail"
+			android:layout_marginTop = "16dp"
+			style = "@style/text_color_and_size"
+			android:inputType = "textPassword"
+			android:hint = "@string/password_4"
+			android:text = "@={viewmodelreg.regMailCode}"
+			/>
+
+		<Button
+			android:id = "@+id/btn_check_mail_code"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/code_mail"
+			app:layout_constraintStart_toStartOf = "@+id/background"
+			app:layout_constraintEnd_toEndOf = "@+id/background"
+			android:layout_marginTop = "16dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/bind_account"
+			android:onClick = "@{() -> viewmodelreg.confirmEmail()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -250,7 +250,8 @@ class MainActivity : AppCompatActivity() {
             override fun onDrawerClosed(drawerView: View) {}
 
             override fun onDrawerOpened(drawerView: View) {
-                viewModelMain.setOpenDrawerLeft(true)
+                if (drawer.isDrawerOpen(GravityCompat.START)) viewModelMain.setOpenDrawerLeft(true)
+                else if(drawer.isDrawerOpen(GravityCompat.END)) viewModelMain.setOpenDrawerRight(true)
             }
         })
     }

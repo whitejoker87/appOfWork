@@ -54,9 +54,9 @@ class FragmentRegOnePhone : Fragment() {
 //        }
 
         /*временный костыль для авторизации после первого этапа регистрации*/
-        regViewModel.getResultReg1Success().observe(this, Observer {
-            regViewModel.tempAuthForRegOne()
-        })
+//        regViewModel.getResultReg1Success().observe(this, Observer {
+//            regViewModel.tempAuthForRegOne()
+//        })
 
         regViewModel.getResultAuthSuccess().observe(this, Observer {
             Toast.makeText(context, "Регистрация успешно проехала? ${it}", Toast.LENGTH_LONG).show()
