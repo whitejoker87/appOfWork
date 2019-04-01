@@ -1,11 +1,14 @@
 package ru.jobni.jobni.viewmodel
 
+import android.app.Activity
 import android.app.Application
 import android.graphics.drawable.Drawable
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.vk.api.sdk.VK
+import com.vk.api.sdk.auth.VKScope
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,6 +62,8 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     private val resultAuthSuccess = MutableLiveData<Boolean>(false)
     private val typeAddRegFragment = MutableLiveData<String>("")
+
+    private val vkRegStart = MutableLiveData<Boolean>()
 
     fun setRegMail(mail: String) {
         regMail.value = mail
@@ -210,6 +215,14 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     fun setTypeAddRegFragment(type: String) {
         typeAddRegFragment.value = type
     }
+
+
+    fun isVkRegStart(): MutableLiveData<Boolean> = vkRegStart
+
+    fun setVkRegStart(isStart: Boolean) {
+        vkRegStart.value = isStart
+    }
+
 
     /*для выполнения 1 этапа регистрации(отправка паролей)*/
     fun btnRegUserClick() {
@@ -649,6 +662,10 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
 
+    }
+
+    fun getVKReg(){
+        setVkRegStart(true)
     }
 
 }

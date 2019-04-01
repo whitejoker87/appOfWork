@@ -1,6 +1,7 @@
 package ru.jobni.jobni
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +21,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import com.vk.api.sdk.VK
+import com.vk.api.sdk.auth.VKScope
 import kotlinx.android.synthetic.main.nav_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
@@ -94,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         viewModelMain.loadRightMenuData()
 
         //viewModelMain.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
-        viewModelMain.saveLaunchFlag(true)//отладка первого запуска true
+        viewModelMain.saveLaunchFlag(false)//отладка первого запуска true
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
         }
@@ -168,7 +171,7 @@ class MainActivity : AppCompatActivity() {
                 "AuthUserLoggedMail" -> setFragment(FragmentAuthUserLoggedChangeMail())
                 "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
                 "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
-                "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")
+                "RegUserOther" -> regViewModel.setVkRegStart(true)//regViewModel.setTypeAddRegFragment("other")
                 else -> setFragment(FragmentWelcome())
             }
         })
@@ -203,6 +206,12 @@ class MainActivity : AppCompatActivity() {
         viewModelAuth.isAuthUser().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
+        })
+
+        regViewModel.isVkRegStart().observe(this, Observer {
+            if (it){
+                VK.login(this, arrayListOf(VKScope.WALL, VKScope.PHOTOS))
+            }
         })
     }
 

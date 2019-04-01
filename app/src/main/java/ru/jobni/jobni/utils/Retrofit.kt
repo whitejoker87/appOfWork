@@ -1,6 +1,7 @@
 package ru.jobni.jobni.utils
 
 import android.app.Application
+import com.vk.api.sdk.VK
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,6 +21,9 @@ class Retrofit : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+//        // VK иницилизация
+//        VK.initialize(this)
 
         retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL) //Базовая часть адреса
