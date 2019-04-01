@@ -16,9 +16,9 @@ import retrofit2.http.Header
 //    ):Serializable
 
 data class Contact (
-        @SerializedName("id")val id: Int
-//        @SerializedName("contact_type")val contact_type: String,
-//        @SerializedName("contact")val contact: String
+        @SerializedName("id")val id: Int,
+        @SerializedName("contact_type")val contact_type: String,
+        @SerializedName("contact")val contact: String
 )
 
 data class RegUser(

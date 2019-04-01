@@ -218,6 +218,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         typeAddRegFragment.value = type
     }
 
+    /*для выполнения 1 этапа регистрации(отправка паролей)*/
     fun btnRegUserClick() {
 
         val user = RegUser(
@@ -268,6 +269,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    /*Для сохранения Session ID полученного из первого этапа*/
     fun getSIDFromRegOne(responseHeaders: okhttp3.Headers) {
 
         val resultListHeaders = responseHeaders.get("Set-Cookie")
@@ -329,6 +331,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 
 
+    /*Для 1 этапа регистрации для отправки почты*/
     fun setBindEmail() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
@@ -359,6 +362,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    /*Для этапа подтверждения почты во время регистрации*/
     fun confirmEmail() {
 
         val listContacts = regContacts.value
@@ -405,6 +409,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    /*Для выполнения 3 этапа регистрации(Имя Фамилия Отчество)*/
     fun btnRegContactFaceClick() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
@@ -443,6 +448,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*для выполнения 4 этапа регистрации(контакты)*/
     fun btnRegContactFaceContactClick() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
@@ -453,7 +459,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
         /*Формируем из 3 листов Livedata один для отправки на сервер*/
         for (i in contactsString.indices) {
-            contacts.add(Contact(regContactsId.value!![i]/*, regContactsType.value!![i], contactsString[i]*/))
+            contacts.add(Contact(regContactsId.value!![i], regContactsType.value!![i], contactsString[i]))
         }
 
         val contactFaceContacts = RegContactFaceContact(
@@ -602,6 +608,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 //        })
 //    }
 
+    /*Для добавления контакта в список на 4 этапе регистрации*/
     fun btnAddContactClick() {
         val listContacts = regContacts.value
         val listContactsType = regContactsType.value
@@ -610,6 +617,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         setRegContacts(listContacts)
     }
 
+    /*Для загрузки прикрепленных контактов для испольщования в 4 этапе(пока костыль)*/
     fun getContactsForReg3() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
@@ -637,7 +645,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     /*{"success":false,"error_text":"Заполните необходимые поля."}*/
                     if (response.body()!!.result != null && response.body()!!.contacts.isNotEmpty() && response.body()!!.result.success) {
                         regContactsId.add(response.body()!!.contacts[0].id)
-                        if (response.body()!!.contacts[0].contact_type.equals("Почта")) regContactsType.add("main")
+                        if (response.body()!!.contacts[0].contact_type.equals("Почта")) regContactsType.add("mail")
                         regContacts.add(response.body()!!.contacts[0].contact)
                     }
                 }
