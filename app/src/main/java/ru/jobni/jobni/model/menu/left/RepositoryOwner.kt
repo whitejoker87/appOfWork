@@ -5,29 +5,45 @@ import androidx.lifecycle.MutableLiveData
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.menu.NavigationChild
 import ru.jobni.jobni.model.menu.NavigationParent
+import ru.jobni.jobni.model.network.company.ResultsCompany
 import java.util.*
 import kotlin.collections.ArrayList
 
 object RepositoryOwner {
 
-    val companyLiveData = MutableLiveData<MutableList<String>>()
-    val receiveCompanyList: MutableList<String> = mutableListOf()
+    val companyLiveData = MutableLiveData<MutableList<ResultsCompany>>()
+    val receiveCompanyList: MutableList<ResultsCompany> = mutableListOf()
+
+    val companyLiveDataBalance = MutableLiveData<Int>()
+    var receiveCompanyBalance: Int = 0
+
     val setCompanyList = ArrayList<NavigationParent>()
+
 
     init {
         companyLiveData.value = receiveCompanyList
+        companyLiveDataBalance.value = receiveCompanyBalance
     }
 
-    fun getCompany(): LiveData<MutableList<String>> {
+    fun getCompany(): LiveData<MutableList<ResultsCompany>> {
         return companyLiveData
     }
 
-    fun saveCompanyList(companyList: ArrayList<String>) {
+    fun getCompanyBalance(): LiveData<Int> {
+        return companyLiveDataBalance
+    }
+
+    fun saveCompanyList(companyList: ArrayList<ResultsCompany>) {
         // Отсчистить список при заполнении
         receiveCompanyList.clear()
         receiveCompanyList.addAll(companyList)
         // Обновить лайфдату
         companyLiveData.value = receiveCompanyList
+    }
+
+    fun saveCompanyBalance(companyBalance: Int) {
+        receiveCompanyBalance = companyBalance
+        companyLiveDataBalance.value = receiveCompanyBalance
     }
 
 
@@ -46,10 +62,10 @@ object RepositoryOwner {
                 R.drawable.ic_company
         ))
 
-        receiveCompanyList.forEach { companyName ->
+        companyLiveData.value?.forEach { companyName ->
             setCompanyList.add(NavigationParent(
-                    companyName,
-                    makeParentTwoChildOwnerAuthOn(),
+                    companyName.name,
+                    makeParentTwoChildOwnerAuthOn(companyName.id),
                     R.drawable.ic_user
             ))
         }
@@ -60,14 +76,14 @@ object RepositoryOwner {
         return listOf()
     }
 
-    private fun makeParentTwoChildOwnerAuthOn(): List<NavigationChild> {
-        val child1 = NavigationChild("Вакансии", 0)
-        val child2 = NavigationChild("Отзывы", 0)
-        val child3 = NavigationChild("Профиль", 0)
-        val child4 = NavigationChild("Баланс: 1000 Руб", 0)
-        val child5 = NavigationChild("Пополнить баланс", 0)
-        val child6 = NavigationChild("История платежей", R.drawable.ic_user)
-        val child7 = NavigationChild("Оказанные услуги", 0)
+    private fun makeParentTwoChildOwnerAuthOn(parentID: Int): List<NavigationChild> {
+        val child1 = NavigationChild(parentID, "Вакансии", 0)
+        val child2 = NavigationChild(parentID, "Отзывы", 0)
+        val child3 = NavigationChild(parentID, "Профиль", 0)
+        val child4 = NavigationChild(parentID, "Баланс: ", 0)
+        val child5 = NavigationChild(parentID, "Пополнить баланс", 0)
+        val child6 = NavigationChild(parentID, "История платежей", R.drawable.ic_user)
+        val child7 = NavigationChild(parentID, "Оказанные услуги", 0)
 
         return listOf(child1, child2, child3, child4, child5, child6, child7)
     }
@@ -91,10 +107,10 @@ object RepositoryOwner {
     }
 
     private fun makeParentOneChildOwnerAuthOff(): List<NavigationChild> {
-        val child1 = NavigationChild("Резюме", R.drawable.ic_search)
-        val child2 = NavigationChild("Кандидаты", R.drawable.ic_search)
-        val child3 = NavigationChild("Вакансии", R.drawable.ic_search)
-        val child4 = NavigationChild("Компании", R.drawable.ic_company)
+        val child1 = NavigationChild(1, "Резюме", R.drawable.ic_search)
+        val child2 = NavigationChild(2, "Кандидаты", R.drawable.ic_search)
+        val child3 = NavigationChild(3, "Вакансии", R.drawable.ic_search)
+        val child4 = NavigationChild(4, "Компании", R.drawable.ic_company)
 
         return listOf(child1, child2, child3, child4)
     }

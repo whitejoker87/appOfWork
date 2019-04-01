@@ -26,9 +26,6 @@ interface RetrofitQuery {
     @GET("api/vacancy/{id}/details/")
     fun loadVacancyCard(@Path("id") id: Int, @Query("detail") detail: Int): Call<CardVacancyDetail>
 
-    @GET("api/tags/")
-    fun getAuthData(@Header("Cookie") h1: String): Call<UserAuth>
-
     @POST("api/authorization/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<ResponseBody>
 
@@ -36,29 +33,32 @@ interface RetrofitQuery {
     fun sendRegistrationUser(@Body user: RegUser): Call<ResponseRegPass>
 
     @POST("api/bind_email/")
-    fun sendBindEmail(@Header("Cookie") sid: String, @Body bindEmail: BindEmail): Call<ResponseReg>
+    fun sendBindEmail(@Header("Cookie") sessionID: String, @Body bindEmail: BindEmail): Call<ResponseReg>
 
     @POST("api/validate_email_code/")
-    fun validateMailCode(@Header("Cookie") sid: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
+    fun validateMailCode(@Header("Cookie") sessionID: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
 
     @POST("api/registration_contactface/")
-    fun sendRegistrationContactFace(@Header("Cookie") sid:String, @Body contactFace: RegContactFace): Call<ResponseRegContacts>
+    fun sendRegistrationContactFace(@Header("Cookie") sessionID: String, @Body contactFace: RegContactFace): Call<ResponseRegContacts>
 
     @POST("api/registration_contactfacecontact/")
-    fun sendRegistrationContactFaceContact(@Header("Cookie") sid:String, @Body contacts: RegContactFaceContact): Call<ResponseReg>
+    fun sendRegistrationContactFaceContact(@Header("Cookie") sessionID: String, @Body contacts: RegContactFaceContact): Call<ResponseReg>
 
     @GET("api/type_authorization/?format=json/")
-    fun getContactsForReg(@Header("Cookie") sid:String): Call<ResponseReg>
+    fun getContactsForReg(@Header("Cookie") sessionID: String): Call<ResponseReg>
 
 //    @Multipart
 //    @POST("api/registration/")
 //    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
     @GET("api/company/?owner_or_worker=1")
-    fun ownerOrWorker(@Header("Cookie") h1: String): Call<CompanyVacancy>
+    fun ownerOrWorker(@Header("Cookie") sessionID: String): Call<CompanyVacancy>
 
     @GET("api/company/{id}/balance/")
-    fun ownerOrWorkerBalance(@Header("Cookie") h1: String, @Path("id") id: Int): Call<CompanyVacancy>
+    fun ownerOrWorkerBalance(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<Int>
+
+    @GET("api/vacancy/")
+    fun ownerOrWorkerCompany(@Header("Cookie") sessionID: String, @Query("company") detail: Int): Call<CardVacancy>
 }
 
 

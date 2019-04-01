@@ -8,19 +8,19 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.fragments.menuleft.FragmentReviewsUserAbout
 import ru.jobni.jobni.fragments.menuleft.FragmentReviewsUserMy
 
-class ReviewsUserPAdapter(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
+class ReviewsUserPAdapter(
+        private val fragment: FragmentManager,
+        private val _context: Context
+) : FragmentPagerAdapter(fragment) {
+
+    private val mFragmentList: ArrayList<Fragment> = arrayListOf(FragmentReviewsUserAbout(), FragmentReviewsUserMy())
 
     override fun getItem(position: Int): Fragment {
-        return when (position) {
-            0 -> FragmentReviewsUserAbout()
-            else -> {
-                return FragmentReviewsUserMy()
-            }
-        }
+        return mFragmentList[position]
     }
 
     override fun getCount(): Int {
-        return 2
+        return mFragmentList.size
     }
 
     override fun getPageTitle(position: Int): CharSequence {
@@ -30,5 +30,14 @@ class ReviewsUserPAdapter(fragment: FragmentManager, private val _context: Conte
                 return _context.getString(R.string.reviews_tab_my)
             }
         }
+    }
+
+    fun clear() {
+        val transaction = fragment.beginTransaction()
+        for (fragment in mFragmentList) {
+            transaction.remove(fragment)
+        }
+        mFragmentList.clear()
+        transaction.commitAllowingStateLoss()
     }
 }

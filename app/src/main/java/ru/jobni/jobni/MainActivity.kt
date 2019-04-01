@@ -132,8 +132,8 @@ class MainActivity : AppCompatActivity() {
                     closeKeyboard()
                 }
                 else {
-                    viewModelMain.setNoAuthRegVisible(true) //true
-                    viewModelMain.setYesAuthRegVisible(false) //false
+                    viewModelMain.setNoAuthRegVisible(false) //true
+                    viewModelMain.setYesAuthRegVisible(true) //false
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     closeKeyboard()
@@ -150,7 +150,8 @@ class MainActivity : AppCompatActivity() {
                 "Intro" -> setFragmentNoBackStack(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
-                "Card" -> setFragment(FragmentCard())
+                "Vacancy" -> setFragment(FragmentVacancy())
+                "VacancyCompany" -> setFragment(FragmentVacancyCompany())
                 "Summary" -> setFragment(FragmentSummary())
                 "ReviewsUser" -> setFragment(FragmentReviewsUser())
                 "ReviewsOwner" -> setFragment(FragmentReviewsOwner())

@@ -12,10 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CCardVacancyOpenMapOpenBinding
-import ru.jobni.jobni.model.RepositoryVacancy
+import ru.jobni.jobni.model.RepositoryCompanyVacancy
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentCard : Fragment() {
+class FragmentVacancyCompany : Fragment() {
 
     val SERVER_LOAD_CARD_DELAY: Long = 5000 // 5 sec. Время ожидания положительного ответа от АПИ
 
@@ -25,7 +25,7 @@ class FragmentCard : Fragment() {
 
     private lateinit var binding: CCardVacancyOpenMapOpenBinding
 
-    private val repository: RepositoryVacancy = RepositoryVacancy
+    private val repository: RepositoryCompanyVacancy = RepositoryCompanyVacancy
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_card_vacancy_open_map_open, container, false)
@@ -36,7 +36,7 @@ class FragmentCard : Fragment() {
 
         // Бля биндинга нужно не пустое значение
         // В нашем случаи берем первую вакансию в списке
-        binding.vacancy = repository.getVacancy().value?.get(0)
+        binding.vacancy = repository.getCompanyVacancy().value?.get(0)
 
         binding.viewmodel = viewModel
 
@@ -63,8 +63,9 @@ class FragmentCard : Fragment() {
             }
         })
 
-        viewModel.getModelVacancy().observe(this, Observer { vacancy ->
-            vacancy?.let { binding.vacancy = it.vacancyList[viewModel.cardPosition] }
+        viewModel.getModelCompanyVacancy().observe(this, Observer { vacancy ->
+            vacancy?.let { binding.vacancy = vacancy.companyVacancyList[viewModel.vacancyPosition]
+            }
         })
 
         return view

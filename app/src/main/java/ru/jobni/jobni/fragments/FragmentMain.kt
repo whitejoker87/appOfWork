@@ -18,15 +18,15 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentMainBinding
-import ru.jobni.jobni.utils.CardRVAdapter
 import ru.jobni.jobni.utils.SearchLVAdapter
+import ru.jobni.jobni.utils.VacancyRVAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
 class FragmentMain : Fragment() {
 
-    private lateinit var cardRecyclerView: RecyclerView
-    private lateinit var cardAdapter: CardRVAdapter
+    private lateinit var vacancyRecyclerView: RecyclerView
+    private lateinit var vacancyAdapter: VacancyRVAdapter
 
     private lateinit var searchView: SearchView
     private lateinit var searchListAdapter: SearchLVAdapter
@@ -70,14 +70,14 @@ class FragmentMain : Fragment() {
 
         binding.viewmodel = viewModel
 
-        cardRecyclerView = binding.rvCards
+        vacancyRecyclerView = binding.rvCards
 
-        cardAdapter = CardRVAdapter(activity as Context)
+        vacancyAdapter = VacancyRVAdapter(activity as Context)
 
         buildCardsRecyclerView()
 
         viewModel.getModelVacancy().observe(this, Observer { vacancy ->
-            vacancy?.let { cardAdapter.vacancies = vacancy.vacancyList }
+            vacancy?.let { vacancyAdapter.vacancies = vacancy.vacancyList }
         })
 
         searchView = binding.mainToolbar.searchviewToolbar
@@ -99,7 +99,7 @@ class FragmentMain : Fragment() {
         }
 
         viewModel.getSearchQuery().observe(this, Observer {
-            cardRecyclerView.smoothScrollToPosition(0) // Вернуть пользователя к началу списка
+            vacancyRecyclerView.smoothScrollToPosition(0) // Вернуть пользователя к началу списка
             searchView.setQuery(it, true)
         })
 
@@ -152,7 +152,7 @@ class FragmentMain : Fragment() {
 
     private fun buildCardsRecyclerView() {
 
-        cardAdapter.setHasStableIds(true)
-        cardRecyclerView.adapter = cardAdapter
+        vacancyAdapter.setHasStableIds(true)
+        vacancyRecyclerView.adapter = vacancyAdapter
     }
 }
