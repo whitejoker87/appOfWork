@@ -8,19 +8,19 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.fragments.menuleft.FragmentSummaryActive
 import ru.jobni.jobni.fragments.menuleft.FragmentSummaryArchive
 
-class SummaryPAdapter(fragment: FragmentManager, private val _context: Context) : FragmentPagerAdapter(fragment) {
+class SummaryPAdapter(
+        private val fragment: FragmentManager,
+        private val _context: Context
+) : FragmentPagerAdapter(fragment) {
+
+    private val mFragmentList: ArrayList<Fragment> = arrayListOf(FragmentSummaryActive(), FragmentSummaryArchive())
 
     override fun getItem(position: Int): Fragment {
-        return when (position) {
-            0 -> FragmentSummaryActive()
-            else -> {
-                return FragmentSummaryArchive()
-            }
-        }
+        return mFragmentList[position]
     }
 
     override fun getCount(): Int {
-        return 2
+        return mFragmentList.size
     }
 
     override fun getPageTitle(position: Int): CharSequence {
@@ -30,5 +30,14 @@ class SummaryPAdapter(fragment: FragmentManager, private val _context: Context) 
                 return _context.getString(R.string.summary_tab_archive)
             }
         }
+    }
+
+    fun clear() {
+        val transaction = fragment.beginTransaction()
+        for (fragment in mFragmentList) {
+            transaction.remove(fragment)
+        }
+        mFragmentList.clear()
+        transaction.commitAllowingStateLoss()
     }
 }

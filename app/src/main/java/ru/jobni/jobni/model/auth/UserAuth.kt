@@ -1,6 +1,6 @@
 package ru.jobni.jobni.model.auth
 
 class UserAuth(
-        val email: String?,
+        val login: String?,
         val password: String?
 )

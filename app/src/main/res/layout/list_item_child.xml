@@ -7,18 +7,8 @@
 	<data>
 
 		<variable
-			name = "position"
-			type = "Integer"
-			/>
-
-		<variable
-			name = "viewmodel"
-			type = "ru.jobni.jobni.viewmodel.MainViewModel"
-			/>
-
-		<variable
 			name = "child"
-			type = "ru.jobni.jobni.model.menuleft.NavigationChild"
+			type = "ru.jobni.jobni.model.menu.NavigationChild"
 			/>
 	</data>
 
@@ -33,7 +23,6 @@
 			android:layout_height = "wrap_content"
 			android:layout_marginStart = "30dp"
 			android:layout_gravity = "center_vertical"
-			android:src = "@{child.iconResId}"
 			tools:src = "@drawable/ic_bell"
 			/>
 
@@ -45,6 +34,18 @@
 			android:text = "@{child.name}"
 			android:gravity = "center_vertical"
 			tools:text = "Child Name"
+			/>
+
+		<CheckedTextView
+			android:id = "@+id/list_item_child_check"
+			android:visibility = "gone"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:layout_marginStart = "@dimen/list_item_left_margin"
+			android:layout_marginEnd = "@dimen/horizontal_margin"
+			android:checkMark = "?android:attr/listChoiceIndicatorMultiple"
+			android:gravity = "center"
+			android:textAllCaps = "true"
 			/>
 	</FrameLayout>
 </layout>

@@ -1,12 +1,19 @@
 package ru.jobni.jobni.viewmodel
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.os.Handler
+import android.provider.MediaStore
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,12 +23,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.R
-import ru.jobni.jobni.model.RepositoryVacancyEntity
+import ru.jobni.jobni.model.RepositoryCompanyVacancy
+import ru.jobni.jobni.model.RepositoryVacancy
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
+import ru.jobni.jobni.model.menu.left.RepositoryOwner
+import ru.jobni.jobni.model.network.company.CompanyVacancy
+import ru.jobni.jobni.model.network.company.ResultsCompany
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,47 +46,110 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val SERVER_RESPONSE_DELAY: Long = 1000 // 1 sec
     private val SERVER_RESPONSE_MAX_COUNT: Int = 10
     private val firstLaunchFlag = "firstLaunch"
+    private val authUserSessionID = "userSessionID"
 
     var sPref = application.getSharedPreferences("firstLaunchSavedData", AppCompatActivity.MODE_PRIVATE)
+    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
     private val suggestionsNamesList = MutableLiveData<ArrayList<SuggestionEntity>>(ArrayList())
 
     var isLoad = true
 
-    private lateinit var bodyResponse: DetailVacancy
-    private val headerList = MutableLiveData<MutableList<String>>()
+    /*список в первом уровне правог меню*/
+    private val headerList = MutableLiveData<MutableList<Any>>()
+    /*список второго уровня правого меню*/
     private val childList = MutableLiveData<HashMap<String, List<String>>>()
+    /*флаг открытого правого меню*/
     private val isOpenDrawerRight = MutableLiveData<Boolean>()
+    /*флаг открытого левого меню*/
     private val isOpenDrawerLeft = MutableLiveData<Boolean>()
+    /*параметр запуска фрагмента(для навигации)*/
     private val fragmentLaunch = MutableLiveData<String>()
+    /*параметр строки поиска(для наблюдения)*/
     private val searchQuery = MutableLiveData<String>()
-
+    /*параментр видимости поля поиска*/
     private val isSearchViewVisible = MutableLiveData<Boolean>(false)
+    /*параментр видимости нижнего меню*/
     private val isBottomNavigationViewVisible = MutableLiveData<Boolean>(false)
+    /*параметр блокировки правого меню*/
     private val isDrawerRightLocked = MutableLiveData<Boolean>(true)
+    /*парамент видимрости тулбара*/
     private val isToolbarVisible = MutableLiveData<Boolean>(false)
+    /*параметр видимости спика подсказок в строке поиска*/
     private val isSearchListViewVisible = MutableLiveData<Boolean>(false)
 
     // Позиция карточки для открытия в отдельном фрагменте
-    var cardPosition = 0
+    var vacancyPosition = 0
 
     val context = application
 
+    /*параметр uri для загружаемого фото*/
+    private var outputPhotoUri: MutableLiveData<Uri> = MutableLiveData(Uri.EMPTY)
+    /*параментр для запука активити(для фото)*/
+    private val activityLaunch: MutableLiveData<Intent> = MutableLiveData()
+    /*путь до файла с фото*/
+    private var mCurrentPhotoPath: String? = ""
+    /*флаг для определения откуда используется инклюд с кнопками соцсетей(из авторизации или регистрации)*/
+    private val isIncludeSocialNetworkReg: MutableLiveData<Boolean> = MutableLiveData(false)
+
     private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
-    private val repository: RepositoryVacancyEntity = RepositoryVacancyEntity
+    private val repositoryVacancy: RepositoryVacancy = RepositoryVacancy
+
+    private val modelOwner: MutableLiveData<OwnerViewState> = MutableLiveData()
+    private val repositoryOwner: RepositoryOwner = RepositoryOwner
+
+    private val modelCompanyVacancy: MutableLiveData<CompanyVacancyViewState> = MutableLiveData()
+    private val repositoryCompanyVacancy: RepositoryCompanyVacancy = RepositoryCompanyVacancy
 
     init {
-        repository.getVacancy().observeForever { vacancies ->
+        repositoryVacancy.getVacancy().observeForever { vacancies ->
             modelVacancy.value = modelVacancy.value?.copy(vacancyList = vacancies!!)
                     ?: MainFragmentViewState(vacancies!!)
+        }
+
+        repositoryOwner.getCompany().observeForever { receiveCompanyList ->
+            modelOwner.value = modelOwner.value?.copy(companyList = receiveCompanyList!!)
+                    ?: OwnerViewState(receiveCompanyList!!)
+        }
+
+        repositoryCompanyVacancy.getCompanyVacancy().observeForever { receiveCompanyVacancyList ->
+            modelCompanyVacancy.value =
+                    modelCompanyVacancy.value?.copy(companyVacancyList = receiveCompanyVacancyList!!)
+                            ?: CompanyVacancyViewState(receiveCompanyVacancyList!!)
         }
     }
 
     fun getModelVacancy(): LiveData<MainFragmentViewState> = modelVacancy
 
-    fun getHeaderList(): MutableLiveData<MutableList<String>> = headerList
+    fun getModelOwner(): LiveData<OwnerViewState> = modelOwner
 
-    fun getChildList(): MutableLiveData<HashMap<String, List<String>>> = childList
+    fun getModelCompanyVacancy(): LiveData<CompanyVacancyViewState> = modelCompanyVacancy
+
+
+    fun setHeaderList(list: MutableList<Any>) {
+        headerList.value = list
+    }
+
+    fun getHeaderList(): MutableLiveData<MutableList<Any>> = headerList
+
+
+    private val isNoAuthRegVisible = MutableLiveData<Boolean>()
+
+    fun setNoAuthRegVisible(isVisible: Boolean) {
+        isNoAuthRegVisible.value = isVisible
+    }
+
+    fun isNoAuthRegVisible(): MutableLiveData<Boolean> = isNoAuthRegVisible
+
+
+    private val isYesAuthRegVisible = MutableLiveData<Boolean>()
+
+    fun setYesAuthRegVisible(isVisible: Boolean) {
+        isYesAuthRegVisible.value = isVisible
+    }
+
+    fun isYesAuthRegVisible(): MutableLiveData<Boolean> = isYesAuthRegVisible
+
 
     fun setOpenDrawerLeft(isOpen: Boolean) {
         isOpenDrawerLeft.value = isOpen
@@ -135,20 +213,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getSuggestionsNamesList(): MutableLiveData<ArrayList<SuggestionEntity>> = suggestionsNamesList
 
-
-    private val users: MutableLiveData<List<String>> by lazy {
-        MutableLiveData<List<String>>().also {
-            //loadUsers()
-        }
+    fun setOutputPhotoUri(setUri: Uri) {
+        outputPhotoUri.value = setUri
     }
 
-    fun getUsers(): LiveData<List<String>> {
-        return users
+    fun getOutputPhotoUri(): MutableLiveData<Uri> = outputPhotoUri
+
+    fun setActivityLaunch(cameraIntent: Intent) {
+        activityLaunch.value = cameraIntent
     }
 
-//    private fun loadUsers(): List<String> {
-//        // Do an asynchronous operation to fetch users.
-//    }
+    fun getActivityLaunch(): MutableLiveData<Intent> = activityLaunch
+
+    fun setCurrentPhotoPath(mCurrentPhotoPath: String) {
+        this.mCurrentPhotoPath = mCurrentPhotoPath
+    }
+
+    fun getCurrentPhotoPath(): String? = mCurrentPhotoPath
+
+
+    fun setIncludeSocialNetworkReg(isReg: Boolean) {
+        isIncludeSocialNetworkReg.value = isReg
+    }
+
+    fun isIncludeSocialNetworkReg(): MutableLiveData<Boolean> = isIncludeSocialNetworkReg
 
 
     private val isCardExpandResponse = MutableLiveData<Boolean>(true)
@@ -178,59 +266,120 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun isLoadCardFailVisible(): MutableLiveData<Boolean> = isLoadCardFailVisible
 
 
+    /*открытие левого меню*/
     fun openLeftMenu() {
         setOpenDrawerLeft(true)
     }
 
-    fun openRightMenu() {
-        if (headerList.value == null) {
-            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
-                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
-                    if (response.body() != null) {
-                        bodyResponse = response.body()!!
-                        loadHeaderList()
+    /*открытие правого меню*/
+    fun loadLeftMenuOwnerData() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val sessionID = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.ownerOrWorker(sessionID)?.enqueue(object : Callback<CompanyVacancy> {
+            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
+                if (response.body() != null) {
+
+                    val resultList: ArrayList<ResultsCompany> = response.body()!!.results
+                    repositoryOwner.saveCompanyList(resultList)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {}
+        })
+    }
+
+    /*Баланс для левого меню*/
+    fun loadLeftMenuOwnerDataBalance(position: Int) {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val sessionID = String.format("%s%s", "sessionid=", id)
+
+        val companyID: Int = repositoryOwner.companyLiveData.value!![position].id
+
+        Retrofit.api?.ownerOrWorkerBalance(sessionID, companyID)?.enqueue(object : Callback<Int> {
+            override fun onResponse(@NonNull call: Call<Int>, @NonNull response: Response<Int>) {
+                if (response.code() == 401 || response.code() == 200) {
+
+                }
+
+                if (response.body() != null) {
+
+                    val resultList: Int = response.body()!!
+                    repositoryOwner.saveCompanyBalance(resultList)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<Int>, @NonNull t: Throwable) {
+            }
+        })
+    }
+
+    fun loadLeftMenuOwnerCompanyVacancy(companyID: Int) {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val sessionID = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.ownerOrWorkerCompany(sessionID, companyID)?.enqueue(object : Callback<CardVacancy> {
+            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+                if (response.code() == 401 || response.code() == 200) {
+
+                }
+
+                if (response.body() != null) {
+
+                    val resultList: List<ResultsVacancy> = response.body()!!.results
+
+                    for (i in 0 until resultList.size) {
+                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].employment.forEach { employment ->
+                            tmpEmploymentList.add(employment.name)
+                        }
+
+                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                        resultList[i].competences.forEach { competences ->
+                            tmpCompetenceList.add(competences.name)
+                        }
+
+                        repositoryCompanyVacancy.saveCompanyVacancy(
+                                VacancyEntity(
+                                        resultList[i].id,
+                                        resultList[i].name,
+                                        resultList[i].company.name,
+                                        resultList[i].salary_level_newbie.toString(),
+                                        resultList[i].salary_level_experienced.toString(),
+                                        resultList[i].format_of_work.name,
+                                        tmpEmploymentList,
+                                        tmpCompetenceList,
+                                        "",
+                                        "",
+                                        "",
+                                        ""
+                                )
+                        )
                     }
                 }
+            }
 
-                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
-                    //Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
-                }
-            })
-        }
+            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+            }
+        })
+    }
 
+    fun openRightMenu() {
+        if (getHeaderList().value == null) loadRightMenuData()
         setOpenDrawerRight(true)
-//        drawer.openDrawer(GravityCompat.END)
-//        //ниже закрываем клавиатуру если открыта
-//        val view = this.currentFocus
-//        view?.let { v ->
-//            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-//            imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-//        }
     }
 
-    fun loadChildList(headers: MutableList<String>) {
-        val top250 = ArrayList<String>()
-        val childs = HashMap<String, List<String>>()
-        top250.add("The Shawshank Redemption")
-        top250.add("The Godfather")
-        top250.add("The Godfather: Part II")
-        top250.add("Pulp Fiction")
-        top250.add("The Good, the Bad and the Ugly")
-        top250.add("The Dark Knight")
-        top250.add("12 Angry Men")
 
-        headers.forEach { str ->
-            // java ver. childList.put(str, top250)
-            childs[str] = top250
-        }
-        childList.value = childs
-    }
-
+    /*нажатие на кнопку в вьюпаджере первого запуска*/
     fun onClickBtnStart(typeFragment: String) {
-        if (typeFragment.equals("Intro")) saveLaunchFlag()
+        saveLaunchFlag()
         setFragmentLaunch(typeFragment)
     }
 
+    /*флаг первого запуска*/
     fun saveLaunchFlag() {
         val editor = sPref.edit()
         editor?.putBoolean(firstLaunchFlag, false)
@@ -243,45 +392,59 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         editor.apply()
     }
 
-    private fun loadHeaderList() {
-        val headers = ArrayList<String>()
-        val (competence,
-                languages,
-                work_places,
-                employment,
-                format_of_work,
-                field_of_activity,
-                age_company,
-                required_number_of_people,
-                zarplata, social_packet,
-                auto,
-                raiting) = bodyResponse
+    /*Загрузка правого меню*/
+    fun loadRightMenuData() {
+        if (getHeaderList().value == null) {
+            Retrofit.api?.loadDetailVacancy()?.enqueue(object : Callback<DetailVacancy> {
+                override fun onResponse(@NonNull call: Call<DetailVacancy>, @NonNull response: Response<DetailVacancy>) {
+                    if (response.body() != null) {
+                        val (language_and_level_of_proficiency,
+                                work_places,
+                                employment,
+                                format_of_work,
+                                field_of_activity,
+                                age,
+                                required_number_of_people,
+                                update_time,
+                                presence_geography,
+                                profession_and_competence,
+                                desired_salary_level,
+                                social_packet,
+                                more,
+                                auto,
+                                raiting,
+                                views_responses_invitations_int) = response.body()!!
 
-        val detailList: MutableList<Any> = mutableListOf(
-                competence,
-                languages,
-                work_places,
-                employment,
-                format_of_work,
-                field_of_activity,
-                age_company,
-                required_number_of_people,
-                zarplata,
-                social_packet,
-                auto,
-                raiting
-        )
-        detailList.forEach { str: Any ->
-            if (str is String) headers.add(str)
-            else when (str) {
-                is Zarplata -> headers.add("Зарплата")
-                is Social_packet -> headers.add("Социальный пакет")
-                is Auto -> headers.add("Авто")
-                is Raiting -> headers.add("Рейтинг")
-            }
+                        val detailList: MutableList<Any> = mutableListOf(
+                                language_and_level_of_proficiency,
+                                work_places,
+                                employment,
+                                format_of_work,
+                                field_of_activity,
+                                age,
+                                required_number_of_people,
+                                update_time,
+                                presence_geography,
+                                profession_and_competence,
+                                desired_salary_level,
+                                social_packet,
+                                more,
+                                auto,
+                                raiting,
+                                views_responses_invitations_int
+                        )
+                        setHeaderList(detailList)
+                    }
+                }
+
+                override fun onFailure(@NonNull call: Call<DetailVacancy>, @NonNull t: Throwable) {
+                    //Toast.makeText(applicationContext, "Error in download for menu!", Toast.LENGTH_LONG).show()
+                }
+            })
         }
-        headerList.value = headers
+
     }
+
 
     private val toolbarTitle = MutableLiveData<String>()
 
@@ -318,12 +481,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /*слушатель скролла списка поиска*/
     val onScrollViewRecycler = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val cardLayoutManager = recyclerView.layoutManager as LinearLayoutManager
             if (isLoad) {
-                if (cardLayoutManager.findLastCompletelyVisibleItemPosition() == repository.getSize() - 1) {
+                if (cardLayoutManager.findLastCompletelyVisibleItemPosition() == repositoryVacancy.getSize() - 1) {
                     //Нашли конец списка
                     loadMoreCards()
                     isLoad = false
@@ -332,6 +496,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /*слушатель строки поиска*/
     val onQuerySearchView = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String): Boolean {
             doSearchOnClick(query)
@@ -366,7 +531,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun switchToMainActivity() {
+    /*загрузка главного фрагмента после проверкаи на первый запуск*/
+    fun checkFirstLauch() {
         val duration = 2000L
 
         if (sPref.getBoolean(firstLaunchFlag, true))
@@ -379,16 +545,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }, duration)
     }
 
+    /*нажатие на список подсказок в поиске*/
     fun onSuggestionsListItemClick(position: Int) {
         doSearchOnClick(suggestionsNamesList.value!![position].suggestionName)
         setSearchQuery(suggestionsNamesList.value!![position].suggestionName)
         setSearchListViewVisible(false)
     }
 
+    /*загружаем больше в список поиска*/
     fun loadMoreCards() {
         val handler = Handler()
         handler.postDelayed({
-            val nextLimit = repository.getSize() + 10
+            val nextLimit = repositoryVacancy.getSize() + 10
             val nextOffset = nextLimit - 10
 
             buildCardsList(nextLimit, nextOffset)
@@ -396,26 +564,40 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }, SERVER_RESPONSE_DELAY)
     }
 
-    fun onCardExpandVacancyClick(position: Int) {
-        cardPosition = position
-        cardExpandInfo(position)
+    /*клик по кнопке развернуть на карточке в поиске*/
+    fun onExpandVacancyClick(position: Int) {
+        vacancyPosition = position
+        vacancyExpandInfo(position)
 
         val handler = Handler()
         handler.postDelayed({
-            setFragmentLaunch("Card")
+            setFragmentLaunch("Vacancy")
         }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
     }
 
+    /*клик по кнопке развернуть на карточке в списке вакансий компании*/
+    fun onExpandVacancyCompanyClick(position: Int) {
+        vacancyPosition = position
+        vacancyCompanyExpandInfo(position)
+
+        val handler = Handler()
+        handler.postDelayed({
+            setFragmentLaunch("VacancyCompany")
+        }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
+    }
+
+    /*клик по глазу в карточке в поиске*/
     fun onEyeRVVacancyClick(position: Int) {
         Toast.makeText(context, "eye $position", Toast.LENGTH_SHORT).show()
     }
 
-    private fun cardExpandInfo(position: Int) {
-        val requestID: Int = repository.getVacancy().value!![position].id
+    /*информация для развернутой карточки*/
+    private fun vacancyExpandInfo(position: Int) {
+        val requestID: Int = repositoryVacancy.getVacancy().value!![position].id
 
         Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
             override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
-                if (response.code() == 404){
+                if (response.code() == 404) {
                     setCardExpandResponse(false)
                 }
 
@@ -423,13 +605,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     val resultList: Detail = response.body()!!.detail
 
-                    val newObj: VacancyEntity = repository.getVacancy().value!![position].copy(
+                    val newObj: VacancyEntity = repositoryVacancy.getVacancy().value!![position].copy(
                             companyDescription = resultList.company_description,
                             vacancyDescription = resultList.description,
                             requirementsDescription = resultList.requirements,
                             dutiesDescription = resultList.duties
                     )
-                    repository.saveVacancy(newObj)
+                    repositoryVacancy.saveVacancy(newObj)
                     setCardExpandResponse(true)
                 }
             }
@@ -439,6 +621,37 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*информация для развернутой карточки компании*/
+    private fun vacancyCompanyExpandInfo(position: Int) {
+        val requestID: Int = repositoryCompanyVacancy.getCompanyVacancy().value!![position].id
+
+        Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
+            override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
+                if (response.code() == 404) {
+                    setCardExpandResponse(false)
+                }
+
+                if (response.body() != null) {
+
+                    val resultList: Detail = response.body()!!.detail
+
+                    val newObj: VacancyEntity = repositoryCompanyVacancy.getCompanyVacancy().value!![position].copy(
+                            companyDescription = resultList.company_description,
+                            vacancyDescription = resultList.description,
+                            requirementsDescription = resultList.requirements,
+                            dutiesDescription = resultList.duties
+                    )
+                    repositoryCompanyVacancy.saveCompanyVacancy(newObj)
+                    setCardExpandResponse(true)
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<CardVacancyDetail>, @NonNull t: Throwable) {
+            }
+        })
+    }
+
+    /*посик по клику в строке поиска*/
     fun doSearchOnClick(query: String) {
         Retrofit.api?.loadVacancyByCompetence(query)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
@@ -447,7 +660,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val resultList: List<ResultsVacancy> = response.body()!!.results
 
                     // Отчистить список для новых результатов
-                    repository.clearRepository()
+                    repositoryVacancy.clearRepository()
 
                     for (i in 0 until resultList.size) {
                         val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
@@ -460,7 +673,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        repository.saveVacancy(
+                        repositoryVacancy.saveVacancy(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -486,8 +699,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*заполнение списка карточек*/
     fun buildCardsList(limitNext: Int, offsetNext: Int) {
-        Retrofit.api?.loadVacancyNext(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
+        Retrofit.api?.loadVacancy(limitNext, offsetNext)?.enqueue(object : Callback<CardVacancy> {
             override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
                 if (response.body() != null) {
 
@@ -504,7 +718,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             tmpCompetenceList.add(competences.name)
                         }
 
-                        repository.saveVacancy(
+                        repositoryVacancy.saveVacancy(
                                 VacancyEntity(
                                         resultList[i].id,
                                         resultList[i].name,
@@ -530,6 +744,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*загрузка списка подсказок к строке поиска*/
     fun doSearchCompetence(query: String) {
         Retrofit.api?.loadCompetence(query, SERVER_RESPONSE_MAX_COUNT)
                 ?.enqueue(object : Callback<List<String>> {
@@ -556,6 +771,70 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     }
                 })
     }
+
+    /*открываем камеру для фото*/
+    fun openCamera() {
+
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Метод resolveActivity() поможет проверить активности, способное сделать фотографию.
+        // Если подходящего приложения не найдётся, то мы можем сделать кнопку для съёмки недоступной.
+        if (cameraIntent.resolveActivity(context.packageManager) != null) {
+            // создать файл для фотографии
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile(context.baseContext)
+            } catch (ex: IOException) {
+                // ошибка, возникшая в процессе создания файла
+            }
+
+            // если файл создан, запускаем приложение камеры
+            if (photoFile != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    setOutputPhotoUri(
+                            FileProvider.getUriForFile(
+                                    context.applicationContext,
+                                    BuildConfig.APPLICATION_ID + ".provider", //(use your app signature + ".provider" )
+                                    photoFile
+                            )
+                    )
+                } else
+                    setOutputPhotoUri(Uri.fromFile(photoFile))
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputPhotoUri.value)
+                //cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                setActivityLaunch(cameraIntent)
+            }
+        }
+    }
+
+    /*создание файла для фото*/
+    @Throws(IOException::class)
+    private fun createImageFile(context: Context): File {
+
+        // создание файла с уникальным именем
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "CAM" + timeStamp + "_"
+        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+
+        //        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        //        StrictMode.setVmPolicy(builder.build());
+
+        val image = File.createTempFile(
+                imageFileName, /* префикс */
+                ".jpg", /* расширение */
+                storageDir      /* директория */
+        )
+
+        //        ContentValues values = new ContentValues();
+        //        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        //        values.put(MediaStore.Images.Media.MIME_TYPE, "image/ipeg");
+        //        values.put(MediaStore.MediaColumns.DATA, image.getAbsolutePath());
+        //
+        //        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        // сохраняем пусть для использования с интентом ACTION_VIEW
+        setCurrentPhotoPath(/*"file:" + */image.absolutePath)
+        return image
+    }
 }
 
 //функция для оповещения наблюдателей после добавления элеента в спискоо(обычно нужно список перезаписать)
@@ -571,4 +850,19 @@ fun <T> MutableLiveData<ArrayList<T>>.clear() {
     updatedItems.clear()
     this.value = updatedItems
 }
+
+/*Для справки*/
+//    private val users: MutableLiveData<List<String>> by lazy {
+//        MutableLiveData<List<String>>().also {
+//            //loadUsers()
+//        }
+//    }
+//
+//    fun getUsers(): LiveData<List<String>> {
+//        return users
+//    }
+
+//    private fun loadUsers(): List<String> {
+//        // Do an asynchronous operation to fetch users.
+//    }
 

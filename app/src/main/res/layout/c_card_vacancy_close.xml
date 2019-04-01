@@ -347,7 +347,7 @@
 					android:layout_marginTop = "50dp"
 					android:background = "@color/theme_1_color_1"
 					android:drawableTop = "@drawable/ic_expand_more_black_24dp"
-					android:onClick = "@{() -> viewmodel.onCardExpandVacancyClick(position)}"
+					android:onClick = "@{() -> viewmodel.onExpandVacancyClick(position)}"
 					/>
 			</androidx.constraintlayout.widget.ConstraintLayout>
 		</androidx.cardview.widget.CardView>

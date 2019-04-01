@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	xmlns:tools = "http://schemas.android.com/tools"
+	>
+
+	<data>
+
+		<variable
+			name = "viewmodelmain"
+			type = "ru.jobni.jobni.viewmodel.MainViewModel"
+			/>
+
+		<import type = "android.view.View"/>
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		>
+
+		<LinearLayout
+			android:id = "@+id/ll_nav_header_auth_off"
+			android:visibility = "@{safeUnbox(viewmodelmain.isNoAuthRegVisible()) ? View.VISIBLE : View.GONE}"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			app:layout_constraintTop_toTopOf = "parent"
+			app:layout_constraintBottom_toBottomOf = "parent"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			android:orientation = "vertical"
+			>
+
+			<com.google.android.material.tabs.TabLayout
+				android:id = "@+id/tab_layout_nav_left_auth_off"
+				android:layout_width = "match_parent"
+				android:layout_height = "60dp"
+				style = "@style/menu_left_tab_layout"
+				>
+
+				<com.google.android.material.tabs.TabItem
+					android:id = "@+id/tab_item_user_auth_off"
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					tools:text = "@string/nav_header_left_user_tab"
+					/>
+
+				<com.google.android.material.tabs.TabItem
+					android:id = "@+id/tab_item_owner_auth_off"
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					tools:text = "@string/nav_header_left_owner_tab"
+					/>
+			</com.google.android.material.tabs.TabLayout>
+
+			<androidx.viewpager.widget.ViewPager
+				android:id = "@+id/view_pager_nav_left_auth_off"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id = "@+id/ll_nav_header_auth_on"
+			android:visibility = "@{safeUnbox(viewmodelmain.isYesAuthRegVisible()) ? View.VISIBLE : View.GONE}"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			app:layout_constraintTop_toTopOf = "parent"
+			app:layout_constraintBottom_toBottomOf = "parent"
+			app:layout_constraintStart_toStartOf = "parent"
+			app:layout_constraintEnd_toEndOf = "parent"
+			android:orientation = "vertical"
+			>
+
+			<com.google.android.material.tabs.TabLayout
+				android:id = "@+id/tab_layout_nav_left_auth_on"
+				android:layout_width = "match_parent"
+				android:layout_height = "60dp"
+				style = "@style/menu_left_tab_layout"
+				>
+
+				<com.google.android.material.tabs.TabItem
+					android:id = "@+id/tab_item_user_auth_on"
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					tools:text = "@string/nav_header_left_user_tab"
+					/>
+
+				<com.google.android.material.tabs.TabItem
+					android:id = "@+id/tab_item_owner_auth_on"
+					android:layout_width = "wrap_content"
+					android:layout_height = "wrap_content"
+					tools:text = "@string/nav_header_left_owner_tab"
+					/>
+			</com.google.android.material.tabs.TabLayout>
+
+			<androidx.viewpager.widget.ViewPager
+				android:id = "@+id/view_pager_nav_left_auth_on"
+				android:layout_width = "match_parent"
+				android:layout_height = "wrap_content"
+				/>
+		</LinearLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

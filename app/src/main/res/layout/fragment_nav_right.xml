@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	>
+
+	<data>
+
+		<variable
+			name = "viewmodel"
+			type = "ru.jobni.jobni.viewmodel.MainViewModel"
+			/>
+
+		<import type = "android.view.View"/>
+	</data>
+
+	<RelativeLayout
+		android:layout_width = "match_parent"
+		android:layout_height = "match_parent"
+		>
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id = "@+id/rv_nav_right"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			app:fixedSize = "@{true}"
+			/>
+	</RelativeLayout>
+</layout>
+
+	<!--app:layoutManager = "androidx.recyclerview.widget.LinearLayoutManager"-->

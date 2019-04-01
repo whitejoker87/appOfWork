@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <data>
-        <variable name="viewModel" type="ru.jobni.jobni.viewmodel.RegViewModel" />
-        <variable name="position" type="int" />
-        <import type="android.view.View"/>
-    </data>
+
+	<data>
+
+		<variable
+			name = "viewModel"
+			type = "ru.jobni.jobni.viewmodel.RegViewModel"
+			/>
+
+		<variable
+			name = "position"
+			type = "int"
+			/>
+
+		<import type = "android.view.View"/>
+	</data>
+
 	<LinearLayout
-			xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-	>
-
-	<TextView
-		android:id = "@+id/tv_header_reg"
+		xmlns:android = "http://schemas.android.com/apk/res/android"
 		android:layout_width = "match_parent"
 		android:layout_height = "wrap_content"
-		android:layout_margin = "16dp"
-		android:background = "@drawable/shape_button"
-		android:textColor = "@{position == safeUnbox(viewModel.numberOfVisibleItemReg) ? @color/white : @color/black}"
-		android:textSize = "18sp"
-		android:text='@{position == 0 ? "1.Регистрационные данные" : (position == 1 ? "2.Основная информация" : (position == 2 ? "3.Контактные данные" : ""))}'
-		/>
+		android:orientation = "vertical"
+		>
 
-	<FrameLayout
-		android:id = "@+id/container_reg_rv_item"
-		android:layout_width = "match_parent"
-		android:layout_height = "wrap_content"
-		android:visibility="@{position == safeUnbox(viewModel.numberOfVisibleItemReg) ? View.VISIBLE : View.GONE}"
-		/>
-</LinearLayout>
+		<TextView
+			android:id = "@+id/tv_header_reg"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:layout_margin = "16dp"
+			android:background = "@drawable/shape_button"
+			android:textColor = "@{position == safeUnbox(viewModel.numberOfVisibleItemReg) ? @color/white : @color/black}"
+			android:textSize = "18sp"
+			android:text = '@{position == 0 ? "1.Регистрационные данные" : (position == 1 ? "2.Основная информация" : (position == 2 ? "3.Контактные данные" : ""))}'
+			/>
+
+		<FrameLayout
+			android:id = "@+id/container_reg_rv_item"
+			android:visibility = "@{position == safeUnbox(viewModel.numberOfVisibleItemReg) ? View.VISIBLE : View.GONE}"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			/>
+	</LinearLayout>
 </layout>

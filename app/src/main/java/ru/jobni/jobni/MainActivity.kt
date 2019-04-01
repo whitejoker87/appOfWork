@@ -2,13 +2,13 @@ package ru.jobni.jobni
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
@@ -19,13 +19,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.menu_right.view.*
-import kotlinx.android.synthetic.main.nav_header_left.*
+import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.nav_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
+import ru.jobni.jobni.fragments.auth.*
 import ru.jobni.jobni.fragments.menuleft.*
-import ru.jobni.jobni.utils.ExpandableListAdapter
-import ru.jobni.jobni.utils.menuleft.NavPALeft
+import ru.jobni.jobni.fragments.reg.FragmentReg
+import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
+import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
@@ -36,17 +38,18 @@ class MainActivity : AppCompatActivity() {
     private val SET_CARDS: String = "SetCards"
 
     private val WRITE_REQUEST_CODE = 0
+    private val CAMERA_REQUEST = 0
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
     private lateinit var drawer: DrawerLayout
 
-    private val expandableListAdapter: ExpandableListAdapter by lazy {
-        ExpandableListAdapter(applicationContext, viewModel.getHeaderList().value!!, viewModel.getChildList().value!!)
-    }
-    private lateinit var expandableListView: ExpandableListView
+//    private val expandableListAdapter: ExpandableListAdapter by lazy {
+//        ExpandableListAdapter(applicationContext, viewModel.getHeaderList().value!!, viewModel.getChildList().value!!)
+//    }
+    //private lateinit var expandableListView: ExpandableListView
 
-    private val viewModel: MainViewModel by lazy {
+    private val viewModelMain: MainViewModel by lazy {
         ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
@@ -65,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
-        binding.viewmodel = viewModel
+        binding.viewmodelmain = viewModelMain
         drawer = binding.drawerLayout
 
         //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -73,101 +76,122 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView = binding.menuBottom
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        expandableListView = binding.expListInclude.exp_list_view
+        //expandableListView = binding.expListInclude.exp_list_view
 
         popup = PopupMenu(this@MainActivity, findViewById(R.id.bottom_menu_profile))
-        val inflater = popup.getMenuInflater()
-        inflater.inflate(R.menu.bottom_profile_not_logged_in, popup.getMenu())
+        val inflater = popup.menuInflater
+        inflater.inflate(R.menu.bottom_profile_not_logged_in, popup.menu)
         popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem): Boolean {
                 when (item.itemId) {
-                    R.id.reg_bottom_not_logged -> setFragment(FragmentReg())
-                    R.id.auth_bottom_not_logged -> setFragment(FragmentAuth())
+                    R.id.reg_bottom_not_logged -> viewModelMain.setFragmentLaunch("Registration")
+                    R.id.auth_bottom_not_logged -> viewModelMain.setFragmentLaunch("Auth")
                 }
                 return true
             }
         })
 
-        //viewModel.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
-        viewModel.saveLaunchFlag(true)//отладка первого запуска true
+        viewModelMain.loadRightMenuData()
+
+        //viewModelMain.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
+        viewModelMain.saveLaunchFlag(true)//отладка первого запуска true
         if (savedInstanceState == null) {
             setFragment(FragmentSplashScreen())
         }
 
-        viewModel.getHeaderList().observe(this, Observer { headerList ->
-            viewModel.loadChildList(headerList)
-        })
+//        viewModel.getHeaderList().observe(this, Observer { headerList ->
+//            viewModel.loadChildList(headerList)
+//        })
 
-        viewModel.getChildList().observe(this, Observer {
-            if (viewModel.getHeaderList().value != null) {
-                expandableListView.setAdapter(expandableListAdapter)
-            }
-        })
+//        viewModel.getChildList().observe(this, Observer {
+//            if (viewModel.getHeaderList().value != null) {
+//                expandableListView.setAdapter(expandableListAdapter)
+//            }
+//        })
 
-        viewModel.isOpenDrawerRight().observe(this, Observer { isOpen ->
+        checkDrawerOpenClose()
+        leftMenuPAdapters()
+
+        viewModelMain.isOpenDrawerRight().observe(this, Observer { isOpen ->
             if (isOpen) {
-                drawer.openDrawer(GravityCompat.END)//todo
+                drawer.openDrawer(GravityCompat.END)
                 //ниже закрываем клавиатуру если открыта
-                val view = this.currentFocus
-                view?.let { v ->
-                    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
-                }
+                closeKeyboard()
             } else {
                 drawer.closeDrawer(GravityCompat.END)
             }
         })
 
-        viewModel.isOpenDrawerLeft().observe(this, Observer { isOpen ->
+        viewModelMain.isOpenDrawerLeft().observe(this, Observer { isOpen ->
             if (isOpen) {
-                drawer.openDrawer(GravityCompat.START)//todo
-                //ниже закрываем клавиатуру если открыта
-                val view = this.currentFocus
-                view?.let { v ->
-                    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+                if(viewModelAuth.isAuthUser().value == true){
+                    viewModelMain.setNoAuthRegVisible(false)
+                    viewModelMain.setYesAuthRegVisible(true)
+                    drawer.openDrawer(GravityCompat.START)
+                    //ниже закрываем клавиатуру если открыта
+                    closeKeyboard()
                 }
-            } else {
+                else {
+                    viewModelMain.setNoAuthRegVisible(false) //true
+                    viewModelMain.setYesAuthRegVisible(true) //false
+                    drawer.openDrawer(GravityCompat.START)
+                    //ниже закрываем клавиатуру если открыта
+                    closeKeyboard()
+                }
+            }
+            else {
                 drawer.closeDrawer(GravityCompat.START)
             }
         })
 
-        viewModel.getFragmentLaunch().observe(this, Observer { fragmentType ->
-            when (fragmentType) {
+        viewModelMain.getFragmentLaunch().observe(this, Observer {
+            when (it) {
                 "Welcome" -> setFragmentNoBackStack(FragmentWelcome())
                 "Intro" -> setFragmentNoBackStack(FragmentIntro())
                 "Main_cards" -> setFragment(FragmentMain.newInstance(SET_CARDS))
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
-                "Card" -> setFragment(FragmentCard())
+                "Vacancy" -> setFragment(FragmentVacancy())
+                "VacancyCompany" -> setFragment(FragmentVacancyCompany())
                 "Summary" -> setFragment(FragmentSummary())
                 "ReviewsUser" -> setFragment(FragmentReviewsUser())
                 "ReviewsOwner" -> setFragment(FragmentReviewsOwner())
                 "ProfileUser" -> setFragment(FragmentProfileUser())
                 "ProfileOwner" -> setFragment(FragmentProfileOwner())
-                "CompanyAdd" -> setFragment(FragmentCompanyAdd())
+                "CompanyAddAuthOn" -> setFragment(FragmentCompanyAddAuthOn())
+                "CompanyAddAuthOff" -> setFragment(FragmentCompanyAddAuthOff())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
                 "Auth" -> setFragment(FragmentAuth())
+                "Registration" -> setFragment(FragmentReg())
                 "AuthUser" -> setFragment(FragmentAuthUser())
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
                 "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
                 "AuthUserLoggedMail" -> setFragment(FragmentAuthUserLoggedChangeMail())
+                "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
+                "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
+                "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")
                 else -> setFragment(FragmentWelcome())
             }
         })
 
-        viewModel.isBottomNavigationViewVisible().observe(this, Observer { isVisible ->
+        viewModelMain.isBottomNavigationViewVisible().observe(this, Observer { isVisible ->
             if (isVisible) binding.menuBottom.visibility = View.VISIBLE
             else binding.menuBottom.visibility = View.GONE
         })
 
-        viewModel.isDrawerRightLocked().observe(this, Observer { isLocked ->
+        viewModelMain.isDrawerRightLocked().observe(this, Observer { isLocked ->
             if (isLocked) binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
+        viewModelMain.getActivityLaunch().observe(this, Observer {
+            it?.let { intent ->
+                startActivityForResult(intent, CAMERA_REQUEST)
+            }
+        })
+
         regViewModel.isPrivilegesForFileDone().observe(this, Observer {
             if (!it) {
-                val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     ActivityCompat.requestPermissions(this, permissions, WRITE_REQUEST_CODE)
                 }
@@ -176,13 +200,59 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val fragmentAdapter = NavPALeft(supportFragmentManager, this)
-        view_pager_nav_left.adapter = fragmentAdapter
-        tab_layout_nav_left.setupWithViewPager(view_pager_nav_left)
-
         viewModelAuth.isAuthUser().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
+        })
+    }
+
+    private fun leftMenuPAdapters() {
+        val fragmentAdapterAuthOn = NavPALeftAuthOn(supportFragmentManager, this)
+        view_pager_nav_left_auth_on.adapter = fragmentAdapterAuthOn
+        tab_layout_nav_left_auth_on.setupWithViewPager(view_pager_nav_left_auth_on)
+
+        tab_layout_nav_left_auth_on.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                when (tab.position) {
+                    //0 -> Toast.makeText(applicationContext, "1", Toast.LENGTH_LONG).show()
+                    1 -> viewModelMain.loadLeftMenuOwnerData()
+                    //1 -> viewModelMain.loadLeftMenuOwnerDataBalance()
+                }
+            }
+        })
+
+        val fragmentAdapterAuthOff = NavPALeftAuthOff(supportFragmentManager, this)
+        view_pager_nav_left_auth_off.adapter = fragmentAdapterAuthOff
+        tab_layout_nav_left_auth_off.setupWithViewPager(view_pager_nav_left_auth_off)
+
+        tab_layout_nav_left_auth_off.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                when (tab.position) {
+                    //0 -> Toast.makeText(applicationContext, "3", Toast.LENGTH_LONG).show()
+                    //1 -> Toast.makeText(applicationContext, "4", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
+
+    private fun checkDrawerOpenClose() {
+        drawer.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {}
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerClosed(drawerView: View) {}
+
+            override fun onDrawerOpened(drawerView: View) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) viewModelMain.setOpenDrawerLeft(true)
+                else if(drawer.isDrawerOpen(GravityCompat.END)) viewModelMain.setOpenDrawerRight(true)
+            }
         })
     }
 
@@ -209,12 +279,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            //val uri: Uri? = null
+            when (requestCode) {
+                //GALLERY_REQUEST -> uri = data.data
+                CAMERA_REQUEST -> viewModelMain.setOutputPhotoUri(viewModelMain.getOutputPhotoUri().value!!)
+            }
+        }
+    }
+
     private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
 
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.bottom_menu_search -> {
-                    setFragment(FragmentMain())
+                    viewModelMain.setFragmentLaunch("Main_focus")
                     return true
                 }
                 R.id.bottom_menu_notification -> {
@@ -283,7 +364,7 @@ class MainActivity : AppCompatActivity() {
 //                            if (str is String) headerList.add(str)
 //                            else when (str) {
 //                                is Zarplata -> headerList.add("Зарплата")
-//                                is Social_packet -> headerList.add("Социальный пакет")
+//                                is SocialPacket -> headerList.add("Социальный пакет")
 //                                is Auto -> headerList.add("Авто")
 //                                is Raiting -> headerList.add("Рейтинг")
 //                            }

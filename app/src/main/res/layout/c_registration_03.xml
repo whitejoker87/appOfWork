@@ -43,17 +43,48 @@
                 app:srcCompat="@drawable/ic_plus"
                 android:clickable="true"
                 android:onClick="@{() -> viewmodel.btnAddContactClick()}"/>
-        <Button android:id="@+id/registration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/background"
-                app:layout_constraintEnd_toEndOf="@+id/background"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/shape_button"
-                android:text="@string/registration"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@+id/floatingActionButton"
-                android:onClick="@{() -> viewmodel.btnRegClick()}"/>
+
+        <CheckBox
+            android:id = "@+id/chb_consent_to_data_storage_and_protection"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            app:layout_constraintTop_toBottomOf = "@+id/floatingActionButton"
+            app:layout_constraintStart_toStartOf = "@+id/background"
+            app:layout_constraintEnd_toEndOf = "@+id/background"
+            android:layout_marginTop = "16dp"
+            android:layout_marginStart = "16dp"
+            android:layout_marginEnd = "16dp"
+            android:text = "@string/data_protection"
+            android:checked="@={viewmodel.regDataProtection}"
+            />
+
+        <CheckBox
+            android:id = "@+id/chb_consent_public_offers"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            app:layout_constraintTop_toBottomOf = "@+id/chb_consent_to_data_storage_and_protection"
+            app:layout_constraintStart_toStartOf = "@+id/background"
+            app:layout_constraintEnd_toEndOf = "@+id/background"
+            android:layout_marginTop = "16dp"
+            android:layout_marginStart = "16dp"
+            android:layout_marginEnd = "16dp"
+            android:text = "@string/public_offers"
+            android:checked="@={viewmodel.regPublicOffers}"
+            />
+
+		<Button
+			android:id = "@+id/registration"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/chb_consent_public_offers"
+			app:layout_constraintBottom_toBottomOf = "@+id/background"
+			app:layout_constraintEnd_toEndOf = "@+id/background"
+			android:layout_marginTop = "8dp"
+			android:layout_marginBottom = "16dp"
+			android:layout_marginEnd = "16dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/registration"
+			android:onClick = "@{() -> viewmodel.btnRegContactFaceContactClick()}"
+			/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

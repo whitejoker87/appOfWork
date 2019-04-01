@@ -15,6 +15,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentCompanyVacancy : Fragment() {
 
+    private lateinit var fragmentAdapter: VacancyPAdapter
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -31,13 +33,12 @@ class FragmentCompanyVacancy : Fragment() {
 
         binding.viewmodel = viewModel
 
-        val fragmentAdapter =
-            VacancyPAdapter(activity!!.supportFragmentManager, context!!)
+        fragmentAdapter = VacancyPAdapter(activity!!.supportFragmentManager, context!!)
         binding.viewPagerVacancy.adapter = fragmentAdapter
         binding.tabLayoutVacancy.setupWithViewPager(binding.viewPagerVacancy)
 
         binding.fabVacancy.setOnClickListener { fabView ->
-            Snackbar.make(fabView, "Summary FAB", Snackbar.LENGTH_LONG)
+            Snackbar.make(fabView, "CompanyVacancy FAB", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
@@ -47,6 +48,14 @@ class FragmentCompanyVacancy : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.setBottomNavigationViewVisible(false)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // При уходе с этого фрагмента в котором есть PageAdapter
+        // Отсчищаем список фрагментов, чтобы при возврате адаптер их пересоздал
+        fragmentAdapter.clear()
+        fragmentAdapter.notifyDataSetChanged()
     }
 }
 

@@ -1,34 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="@dimen/list_item_height"
-  android:layout_marginBottom="8dp"
-  android:layout_marginTop="8dp">
+<layout
+	xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:tools = "http://schemas.android.com/tools"
+	>
 
-  <ImageView
-    android:id="@+id/list_item_parent_icon"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:layout_marginStart="@dimen/horizontal_margin"
-    tools:src="@drawable/ic_bell" />
+	<data>
 
-  <TextView
-    android:id="@+id/list_item_parent_name"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/list_item_left_margin"
-    android:gravity="center_vertical"
-    tools:text="Parent" />
+		<variable
+			name = "parent"
+			type = "ru.jobni.jobni.model.menu.NavigationParent"
+			/>
+		<import type = "android.view.View" />
+	</data>
 
-  <ImageView
-    android:id="@+id/list_item_parent_arrow"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical|end"
-    android:layout_marginEnd="@dimen/horizontal_margin"
-    android:src="@drawable/ic_arrow_down" />
+	<FrameLayout
+		android:layout_width = "match_parent"
+		android:layout_height = "@dimen/list_item_height"
+		android:layout_marginTop = "8dp"
+		android:layout_marginBottom = "8dp"
+		>
 
-</FrameLayout>
+		<ImageView
+			android:id = "@+id/list_item_parent_icon"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_marginStart = "@dimen/horizontal_margin"
+			android:layout_gravity = "center_vertical"
+			tools:src = "@drawable/ic_bell"
+			/>
 
+		<TextView
+			android:id = "@+id/list_item_parent_name"
+			android:layout_width = "match_parent"
+			android:layout_height = "match_parent"
+			android:layout_marginStart = "@dimen/list_item_left_margin"
+			android:gravity = "center_vertical"
+			android:text='@{parent.title}'
+			tools:text = "Parent"
+			/>
+
+		<ImageView
+			android:id = "@+id/list_item_parent_arrow"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:layout_marginEnd = "@dimen/horizontal_margin"
+			android:layout_gravity = "center_vertical|end"
+			android:visibility="@{parent.items.size() > 0 ? View.VISIBLE : View.GONE}"
+			android:src = "@drawable/ic_arrow_down"
+			/>
+	</FrameLayout>
+</layout>

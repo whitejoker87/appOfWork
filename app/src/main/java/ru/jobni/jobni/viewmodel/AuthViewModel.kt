@@ -6,10 +6,10 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.jobni.jobni.R
 import ru.jobni.jobni.model.auth.UserAuth
 import ru.jobni.jobni.utils.Retrofit
 
@@ -24,8 +24,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
-
+    /*цвет кнопки при логине пользователя*/
     private val isBtnUserLoggedVisible = MutableLiveData<Boolean>(false)
+    /*кликабельность кнопки при навигации(изменяется внутри меню)*/
+    private val isBtnUserNotClickable = MutableLiveData<Boolean>()
+    private val isAuthUser = MutableLiveData<Boolean>()
+    private val authUser = MutableLiveData<String>()
+    private val authPass = MutableLiveData<String>()
 
     fun setBtnUserLoggedVisible(isVisible: Boolean) {
         isBtnUserLoggedVisible.value = isVisible
@@ -34,16 +39,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun isBtnUserLoggedVisible(): MutableLiveData<Boolean> = isBtnUserLoggedVisible
 
 
-    private val isBtnUserClickable = MutableLiveData<Boolean>(true)
-
-    fun setBtnUserClickable(isVisible: Boolean) {
-        isBtnUserClickable.value = isVisible
+    fun setBtnUserNotClickable(isVisible: Boolean) {
+        isBtnUserNotClickable.value = isVisible
     }
 
-    fun isBtnUserClickable(): MutableLiveData<Boolean> = isBtnUserClickable
+    fun isBtnUserNotClickable(): MutableLiveData<Boolean> = isBtnUserNotClickable
 
-
-    private val isAuthUser = MutableLiveData<Boolean>()
 
     fun setAuthUser(authKey: Boolean) {
         isAuthUser.value = authKey
@@ -52,16 +53,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun isAuthUser(): MutableLiveData<Boolean> = isAuthUser
 
 
-    private val authUser = MutableLiveData<String>()
-
     fun getAuthUser(): String? = authUser.value
 
     fun setAuthUser(query: String) {
         this.authUser.value = query
     }
 
-
-    private val authPass = MutableLiveData<String>()
 
     fun getAuthPass(): String? = authPass.value
 
@@ -78,10 +75,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         editor?.apply()
 
         setBtnUserLoggedVisible(false)
-
-        Toast.makeText(context, context.getString(R.string.user_auth_delete_info_text), Toast.LENGTH_SHORT).show()
-
-        setAuthUser(true)
+        setAuthUser(false)
 
         return false
     }
@@ -95,8 +89,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         val userData = UserAuth(getAuthUser(), getAuthPass())
 
-        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<UserAuth> {
-            override fun onResponse(@NonNull call: Call<UserAuth>, @NonNull response: Response<UserAuth>) {
+        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
                 if (response.body() != null) {
 
                     val resultListHeaders = response.headers().get("Set-Cookie")
@@ -121,25 +115,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<UserAuth>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun doAuthUserGet() {
-
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
-
-        Retrofit.api?.getAuthData(cid)?.enqueue(object : Callback<UserAuth> {
-            override fun onResponse(@NonNull call: Call<UserAuth>, @NonNull response: Response<UserAuth>) {
-                if (response.body() != null) {
-
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<UserAuth>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })
