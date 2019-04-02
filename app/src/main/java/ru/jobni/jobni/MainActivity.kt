@@ -194,27 +194,21 @@ class MainActivity : AppCompatActivity() {
 
                 "AuthFBUser" -> setFragment(FragmentAuthFBUser())
                 "AuthFBUserLogged" -> setFragment(FragmentAuthFBUserLogged())
-                "RegUserMail" -> viewModelAuth.setBtnUserLogged("mail")
-                "RegUserPhone" -> viewModelAuth.setBtnUserLogged("phone")
+
+                "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
+                "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
-                "RegVK" -> viewModelAuth.setBtnUserLogged("vk")
+                "RegVK" -> regViewModel.setBtnUserLogged("vk")
                 //"AuthVK" -> viewModelAuth.setBtnUserLogged("vk")
             }
         })
 
-        /*наблюдение за изменением статуса кнопок регистрации/авторизации*/
-        viewModelAuth.getBtnUserLogged().observe(this, Observer {
+        /*наблюдение за изменением статуса кнопок регистрации*/
+        regViewModel.getBtnUserLogged().observe(this, Observer {
             when (it) {
 
                 /*регистрация сначала использует getSocialLaunch т.к. нужно сперва изменить цвет кнопки*/
-//                "mail" -> {
-//                    when(viewModelMain.getSocialLaunch().value) {
-//                        "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
-//                        /*аутентификация запускаеться сразу тут*/
-//                        "AuthUser" -> return@Observer
-//                        "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
-//                }
-//                }
+                "mail" -> regViewModel.setTypeAddRegFragment("mail")
                 "phone" -> regViewModel.setTypeAddRegFragment("phone")
                 "vk" -> regViewModel.setTypeAddRegFragment("vk")
             }

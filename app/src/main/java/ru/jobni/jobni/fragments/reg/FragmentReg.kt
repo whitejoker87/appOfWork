@@ -30,10 +30,6 @@ class FragmentReg : Fragment() {
         ViewModelProviders.of(activity!!).get(RegViewModel::class.java)
     }
 
-    private val authViewModel: AuthViewModel by lazy {
-        ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
-    }
-
     private lateinit var binding: FragmentRegRecyclerBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

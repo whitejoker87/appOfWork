@@ -66,6 +66,9 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     private val vkRegStart = MutableLiveData<Boolean>()
 
+    /*цвет кнопки при регистрации пользователя*/
+    private val btnUserLogged = MutableLiveData<String>("")
+
     fun setRegMail(mail: String) {
         regMail.value = mail
     }
@@ -223,6 +226,12 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     fun setVkRegStart(isStart: Boolean) {
         vkRegStart.value = isStart
     }
+
+    fun setBtnUserLogged(typeLogged: String) {
+        btnUserLogged.value = typeLogged
+    }
+
+    fun getBtnUserLogged(): MutableLiveData<String> = btnUserLogged
 
 
     /*для выполнения 1 этапа регистрации(пустой запрос для старта)*/

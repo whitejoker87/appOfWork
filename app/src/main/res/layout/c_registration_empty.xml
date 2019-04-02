@@ -12,8 +12,8 @@
 			/>
 
 		<variable
-			name = "viewmodelauth"
-			type = "ru.jobni.jobni.viewmodel.AuthViewModel"
+			name = "viewmodelreg"
+			type = "ru.jobni.jobni.viewmodel.RegViewModel"
 			/>
 
 		<import type = "android.view.View"/>
@@ -46,7 +46,7 @@
 			android:textStyle = "bold"
 			android:textColor = "@color/font_color"
 			android:textSize = "14sp"
-			android:text = "@string/auth_info_text"
+			android:text = "@string/reg_info_text"
 			/>
 
 		<include
@@ -58,7 +58,7 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "36dp"
-			app:viewmodelauth = "@{viewmodelauth}"
+			app:viewmodelreg = "@{viewmodelreg}"
 			app:viewmodelmain = "@{viewmodelmain}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>

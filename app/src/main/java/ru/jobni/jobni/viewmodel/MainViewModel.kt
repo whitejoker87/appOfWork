@@ -91,8 +91,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val activityLaunch: MutableLiveData<Intent> = MutableLiveData()
     /*путь до файла с фото*/
     private var mCurrentPhotoPath: String? = ""
-    /*флаг для определения откуда используется инклюд с кнопками соцсетей(из авторизации или регистрации)*/
-    private val isIncludeSocialNetworkReg: MutableLiveData<Boolean> = MutableLiveData(false)
 
     private val modelVacancy: MutableLiveData<MainFragmentViewState> = MutableLiveData()
     private val repositoryVacancy: RepositoryVacancy = RepositoryVacancy
@@ -240,13 +238,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getCurrentPhotoPath(): String? = mCurrentPhotoPath
-
-
-    fun setIncludeSocialNetworkReg(isReg: Boolean) {
-        isIncludeSocialNetworkReg.value = isReg
-    }
-
-    fun isIncludeSocialNetworkReg(): MutableLiveData<Boolean> = isIncludeSocialNetworkReg
 
 
     private val isCardExpandResponse = MutableLiveData<Boolean>(true)

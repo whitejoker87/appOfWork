@@ -15,11 +15,6 @@
 			name = "viewmodelmain"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
-
-		<variable
-			name = "viewmodelauth"
-			type = "ru.jobni.jobni.viewmodel.AuthViewModel"
-			/>
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +67,7 @@
 
 		<include
 			android:id = "@+id/include_social_network"
-			layout = "@layout/c_social_network"
+			layout = "@layout/c_social_network_reg"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/referral_message"
@@ -81,7 +76,6 @@
 			android:layout_marginTop = "16dp"
 			app:viewmodelreg = "@{viewmodelreg}"
 			app:viewmodelmain = "@{viewmodelmain}"
-			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
 		<EditText

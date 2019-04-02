@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 
@@ -22,10 +19,6 @@ class FragmentRegOneOther : Fragment() {
 
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
-    }
-
-    private val authViewModel: AuthViewModel by lazy {
-        ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
     private lateinit var binding: ru.jobni.jobni.databinding.CRegistration01OtherBinding
@@ -46,23 +39,11 @@ class FragmentRegOneOther : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_registration_01_other, container, false)
         val view = binding.root;
 
-        /* для обработки нажатия в инклюде соцчетей*/
-        mainViewModel.setIncludeSocialNetworkReg(true)
 //        when(param1) {
 //            "vk" ->
 //        }
         binding.viewmodelreg = regViewModel
         binding.viewmodelmain = mainViewModel
-        binding.viewmodelauth = authViewModel
-
-        /*временный костыль для авторизации после первого этапа регистрации*/
-//        regViewModel.getResultReg1Success().observe(this, Observer {
-//            regViewModel.tempAuthForRegOne()
-//        })
-
-//        regViewModel.getResultAuthSuccess().observe(this, Observer {
-//            Toast.makeText(context, "Регистрация успешно проехала? ${it}", Toast.LENGTH_LONG).show()
-//        })
 
         return view
     }
@@ -75,6 +56,7 @@ class FragmentRegOneOther : Fragment() {
                     putString(ARG_PARAM1, param1)
                 }
             }
+
         private const val ARG_PARAM1 = "param1"
     }
 }

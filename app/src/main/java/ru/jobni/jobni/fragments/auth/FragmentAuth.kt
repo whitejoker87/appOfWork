@@ -40,8 +40,6 @@ class FragmentAuth : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.setIncludeSocialNetworkReg(false)
         viewModelAuth.setBtnUserNotClickable(false)
-        viewModelAuth.setBtnUserLogged("")
     }
 }

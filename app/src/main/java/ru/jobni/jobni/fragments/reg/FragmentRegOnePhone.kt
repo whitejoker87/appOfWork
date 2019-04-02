@@ -24,11 +24,6 @@ class FragmentRegOnePhone : Fragment() {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
-    private val authViewModel: AuthViewModel by lazy {
-        ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
-    }
-
-
     private lateinit var binding: ru.jobni.jobni.databinding.CRegistration01PhoneBinding
 
     private var param1: String? = null
@@ -50,23 +45,11 @@ class FragmentRegOnePhone : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_registration_01_phone, container, false)
         val view = binding.root;
 
-        /* для обработки нажатия в инклюде соцчетей*/
-        mainViewModel.setIncludeSocialNetworkReg(true)
         binding.viewmodelreg = regViewModel
         binding.viewmodelmain = mainViewModel
-        binding.viewmodelauth = authViewModel
-
-//        binding.includeSocialNetwork.btnUser.setOnClickListener {
-//            viewModel
-//        }
-
-        /*временный костыль для авторизации после первого этапа регистрации*/
-//        regViewModel.getResultReg1Success().observe(this, Observer {
-//            regViewModel.tempAuthForRegOne()
-//        })
 
         regViewModel.getResultAuthSuccess().observe(this, Observer {
-            Toast.makeText(context, "Регистрация успешно проехала? ${it}", Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, "Регистрация успешно проехала? ${it}", Toast.LENGTH_LONG).show()
         })
 
         return view

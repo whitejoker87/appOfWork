@@ -22,10 +22,6 @@ class FragmentRegOneMail : Fragment() {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
 
-    private val authViewModel: AuthViewModel by lazy {
-        ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
-    }
-
     private lateinit var binding: ru.jobni.jobni.databinding.CRegistration01MailBinding
 
     private var param1: String? = null
@@ -47,11 +43,8 @@ class FragmentRegOneMail : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_registration_01_mail, container, false)
         val view = binding.root
 
-        /* для обработки нажатия в инклюде соцчетей*/
-        mainViewModel.setIncludeSocialNetworkReg(true)
         binding.viewmodelreg = regViewModel
         binding.viewmodelmain = mainViewModel
-        binding.viewmodelauth = authViewModel
 
 //        binding.includeSocialNetwork.btnUser.setOnClickListener {
 //            viewModel
