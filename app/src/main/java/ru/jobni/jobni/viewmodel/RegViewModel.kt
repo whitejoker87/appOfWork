@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -224,47 +225,25 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    /*для выполнения 1 этапа регистрации(отправка паролей)*/
-    fun btnRegUserClick() {
+    /*для выполнения 1 этапа регистрации(пустой запрос для старта)*/
+    fun startRegistration() {
 
-        val user = RegUser(
-            regPassword.value!!,
-            regPassConfirm.value!!
-        )
-        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseRegPass> {
-            /*{"password":"namenamename","password_confirm":"namenamename"}*/
+        Retrofit.api?.postRegistrationUser()?.enqueue(object : Callback<ResponseRegPass> {
+            /**/
             override fun onResponse(call: Call<ResponseRegPass>, response: Response<ResponseRegPass>) {
-                /*strict-transport-security: max-age=3600
-                    x-content-type-options: nosniff
-                    x-xss-protection: 1; mode=block
-                    set-cookie: sessionid=kqh7bd5llhi6ry76fp543ft6biw475fd; expires=Sat, 13 Apr 2019 22:12:06 GMT; Max-Age=1209600; Path=/
-                    access-control-allow-headers: *
-                    {"success":true,"error_text":{}}*/
+                /*{"success":true,"error_text":{}}
+                * Set-Cookie: sessionid=1wutajt6fj109uqu9qzbnufd2ir9k7v3; expires=Tue, 16 Apr 2019 15:52:14 GMT; Max-Age=1209600; Path=/ */
                 if (response.body() != null) {
                         if (response.body()!!.success) {
-                            //setResultReg1Success(response.body()!!.success)
                             getSIDFromRegOne(response.headers())
-                            Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
                         } else if (!(response.body()!!.success)) {
-                            Toast.makeText(context, "Пароль не принят! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Неудача первого этапа ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
                         }
                 }
             }
-            /*Пример отрицательного ответа
-            {"success":false,
-            "error_text":
-                {"password":
-                    [
-                        "Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.",
-                        "Введённый пароль слишком широко распространён."
-                    ],
-                "password_general":
-                    []
-                }
-            }*/
-
+            /**/
             override fun onFailure(call: Call<ResponseRegPass>, t: Throwable) {
-                Toast.makeText(context, "Пароль не принят!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Неудача первого этапа onFailure", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -295,50 +274,14 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
         if (sessionID != null) {
             //setResultAuthSuccess(true)
-            //setResultReg1Success(true)
-            Toast.makeText(context, "А вот тебе сид ${sessionID}", Toast.LENGTH_LONG).show()
-            setBindEmail()
+            setResultReg1Success(true)
+            //postBindEmail()
+
         } else Toast.makeText(context, "Ошибка при получении СИД", Toast.LENGTH_LONG).show()
     }
 
-//    fun tempAuthForRegOne() {
-//
-//        val userData = UserAuth(regMail.value, regPassword.value)
-//
-//        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<ResponseBody> {
-//            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
-//                if (response.body() != null) {
-//
-//                    val resultListHeaders = response.headers().get("Set-Cookie")
-//
-//                    /* Пример ответа от АПИ
-//                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
-//                    Нам нужно выделить из этой строки sessionid
-//                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
-//
-//                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
-//
-//                    val editor = sPrefAuthUser.edit()
-//                    editor?.putString(authUserSessionID, sessionID)
-//                    editor?.putString(authUserName, regMail.value)
-//                    editor?.putString(authUserPass, regPassword.value)
-//                    editor?.apply()
-//
-//                    if (sessionID != null) {
-//                        setResultAuthSuccess(true)
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
-//                Toast.makeText(context, "Error! in zq rega 1", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-
-
     /*Для 1 этапа регистрации для отправки почты*/
-    fun setBindEmail() {
+    fun postBindEmail() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
@@ -355,7 +298,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
                     if (response.body()!!.success){
                         Toast.makeText(context, "Почта в норме! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
-
+                        postPassword()
                     } else Toast.makeText(context, "Почта не очень! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
                 }
             }
@@ -363,9 +306,50 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
 
             }
-
         })
+    }
 
+    /*для выполнения 2 этапа регистрации(отправка паролей)*/
+    fun postPassword() {
+
+        val user = RegUser(
+            regPassword.value!!,
+            regPassConfirm.value!!
+        )
+        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseRegPass> {
+            /*{"password":"namenamename","password_confirm":"namenamename"}*/
+            override fun onResponse(call: Call<ResponseRegPass>, response: Response<ResponseRegPass>) {
+                /*strict-transport-security: max-age=3600
+                    x-content-type-options: nosniff
+                    x-xss-protection: 1; mode=block
+                    set-cookie: sessionid=kqh7bd5llhi6ry76fp543ft6biw475fd; expires=Sat, 13 Apr 2019 22:12:06 GMT; Max-Age=1209600; Path=/
+                    access-control-allow-headers: *
+                    {"success":true,"error_text":{}}*/
+                if (response.body() != null) {
+                    if (response.body()!!.success) {
+                        Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "Пароль не принят! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+            /*Пример отрицательного ответа
+            {"success":false,
+            "error_text":
+                {"password":
+                    [
+                        "Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.",
+                        "Введённый пароль слишком широко распространён."
+                    ],
+                "password_general":
+                    []
+                }
+            }*/
+
+            override fun onFailure(call: Call<ResponseRegPass>, t: Throwable) {
+                Toast.makeText(context, "Пароль не принят!", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     /*Для этапа подтверждения почты во время регистрации*/
@@ -665,7 +649,24 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
     /*запуск активити вк апи из макета FragmentRegOneOther*/
     fun getVKReg(){
-        setVkRegStart(true)
+        //setVkRegStart(true)
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+        val process = "connect"
+
+        Retrofit.api?.postSocialReg(cid, "vk", process)?.enqueue(object : Callback<ResponseBody> {
+            /**/
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    /*{"success":false,"error_text":"Заполните необходимые поля."}*/
+
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
+            }
+        })
     }
 
 }

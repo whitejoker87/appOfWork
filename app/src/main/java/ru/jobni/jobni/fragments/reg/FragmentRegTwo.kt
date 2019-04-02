@@ -34,9 +34,9 @@ class FragmentRegTwo : Fragment() {
         binding.regViewModel = regViewModel
         binding.mainViewModel = mainViewModel
 
-        regViewModel.getResultReg1Success().observe(this, Observer {
-            //Toast.makeText(context, "Регистрация успешно проехала? ЭТАП 2 ${it}", Toast.LENGTH_LONG).show()
-        })
+//        regViewModel.getResultReg1Success().observe(this, Observer {
+//            Toast.makeText(context, "Регистрация успешно проехала? ЭТАП 2 ${it}", Toast.LENGTH_LONG).show()
+//        })
 
         return view
     }

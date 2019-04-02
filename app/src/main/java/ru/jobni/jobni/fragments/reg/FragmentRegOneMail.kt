@@ -59,7 +59,7 @@ class FragmentRegOneMail : Fragment() {
 
         /*временный костыль для авторизации после первого этапа регистрации*/
 //        regViewModel.getResultReg1Success().observe(this, Observer {
-//            regViewModel.setBindEmail()
+//            regViewModel.postBindEmail()
 //        })
 
 //        regViewModel.getResultAuthSuccess().observe(this, Observer {

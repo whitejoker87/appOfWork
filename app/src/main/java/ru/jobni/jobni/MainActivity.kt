@@ -1,7 +1,6 @@
 package ru.jobni.jobni
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,7 +21,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.vk.api.sdk.VK
-import com.vk.api.sdk.auth.VKScope
+import com.vk.api.sdk.auth.VKAccessToken
+import com.vk.api.sdk.auth.VKAuthCallback
 import kotlinx.android.synthetic.main.nav_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
@@ -174,8 +174,10 @@ class MainActivity : AppCompatActivity() {
         /*наблюдение за нажатием на кнопки регистрации/авторизации*/
         viewModelMain.getSocialLaunch().observe(this, Observer {
             when (it) {
+                /*аутентификация запускаеться сразу тут*/
                 "AuthUser" -> setFragment(FragmentAuthUser())
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
+
                 "RegUserMail" -> viewModelAuth.setBtnUserLogged("mail")
                 "RegUserPhone" -> viewModelAuth.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
@@ -187,7 +189,16 @@ class MainActivity : AppCompatActivity() {
         /*наблюдение за изменением статуса кнопок регистрации/авторизации*/
         viewModelAuth.getBtnUserLogged().observe(this, Observer {
             when (it) {
-                "mail" -> regViewModel.setTypeAddRegFragment("mail")
+
+                /*регистрация сначала использует getSocialLaunch т.к. нужно сперва изменить цвет кнопки*/
+//                "mail" -> {
+//                    when(viewModelMain.getSocialLaunch().value) {
+//                        "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
+//                        /*аутентификация запускаеться сразу тут*/
+//                        "AuthUser" -> return@Observer
+//                        "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
+//                }
+//                }
                 "phone" -> regViewModel.setTypeAddRegFragment("phone")
                 "vk" -> regViewModel.setTypeAddRegFragment("vk")
             }
@@ -228,6 +239,14 @@ class MainActivity : AppCompatActivity() {
         regViewModel.isVkRegStart().observe(this, Observer {
             if (it){
                 VK.login(this, arrayListOf())
+            }
+        })
+
+        regViewModel.getResultReg1Success().observe(this, Observer {
+            if (it){
+                when(viewModelMain.getSocialLaunch().value) {
+                    "mail" -> regViewModel.postBindEmail()
+                }
             }
         })
     }
@@ -314,7 +333,25 @@ class MainActivity : AppCompatActivity() {
                 CAMERA_REQUEST -> viewModelMain.setOutputPhotoUri(viewModelMain.getOutputPhotoUri().value!!)
             }
         }
+
+        val callback = object: VKAuthCallback {
+            override fun onLogin(token: VKAccessToken) {
+                // User passed authorization
+            }
+
+            override fun onLoginFailed(errorCode: Int) {
+                // User didn't pass authorization
+            }
+        }
+        if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+
     }
+
+
+
+
 
     private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
 

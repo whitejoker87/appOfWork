@@ -154,6 +154,7 @@
     <string name="reviews_tab_about">Активные</string>
     <string name="reviews_tab_my">Архивные</string>
 	<string name="auth_info_text">ВЫБЕРИТЕ СПОСОБ АВТОРИЗАЦИИ</string>
+	<string name="reg_info_text">ВЫБЕРИТЕ СПОСОБ РЕГИСТРАЦИИ</string>
     <string name="user_auth_info_text">УКАЖИТЕ ВАШИ ДАННЫЕ</string>
     <string name="user_auth_delete_info_text">Авторизация сброшена</string>
     <string name="btn_change_user_pass_text">Сменить пароль</string>

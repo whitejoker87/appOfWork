@@ -17,7 +17,6 @@ import javax.security.cert.CertificateException
 class Retrofit : Application() {
 
     private var retrofit: Retrofit? = null
-    private val BASE_URL = "https://test.jobni.ru/"
 
     override fun onCreate() {
         super.onCreate()
@@ -26,7 +25,7 @@ class Retrofit : Application() {
 //        VK.initialize(this)
 
         retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL) //Базовая часть адреса
+                .baseUrl(Companion.BASE_URL) //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
                 .client(getUnsafeOkHttpClient())
                 .build()
@@ -37,6 +36,8 @@ class Retrofit : Application() {
 
         var api: RetrofitQuery? = null
             private set
+        const val BASE_URL = "https://test.jobni.ru/"
+        const val DEV_URL = "http://dev.jobni.ru/"
     }
 
     private fun getUnsafeOkHttpClient(): OkHttpClient {
