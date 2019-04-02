@@ -191,10 +191,8 @@ class MainActivity : AppCompatActivity() {
                 /*аутентификация запускаеться сразу тут*/
                 "AuthUser" -> setFragment(FragmentAuthUser())
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
-
                 "AuthFBUser" -> setFragment(FragmentAuthFBUser())
                 "AuthFBUserLogged" -> setFragment(FragmentAuthFBUserLogged())
-
                 "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
                 "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
@@ -206,7 +204,6 @@ class MainActivity : AppCompatActivity() {
         /*наблюдение за изменением статуса кнопок регистрации*/
         regViewModel.getBtnUserLogged().observe(this, Observer {
             when (it) {
-
                 /*регистрация сначала использует getSocialLaunch т.к. нужно сперва изменить цвет кнопки*/
                 "mail" -> regViewModel.setTypeAddRegFragment("mail")
                 "phone" -> regViewModel.setTypeAddRegFragment("phone")
