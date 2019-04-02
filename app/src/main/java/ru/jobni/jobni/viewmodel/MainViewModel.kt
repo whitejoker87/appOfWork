@@ -77,6 +77,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val isToolbarVisible = MutableLiveData<Boolean>(false)
     /*параметр видимости спика подсказок в строке поиска*/
     private val isSearchListViewVisible = MutableLiveData<Boolean>(false)
+    /*параметр запуска окна привязки соцсетей при регистрации*/
+    private val socialLaunch = MutableLiveData<String>()
 
     // Позиция карточки для открытия в отдельном фрагменте
     var vacancyPosition = 0
@@ -206,6 +208,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun isSearchListViewVisible(): MutableLiveData<Boolean> = isSearchListViewVisible
+
+
+    fun setSocialLaunch(launchType: String) {
+        socialLaunch.value = launchType
+    }
+
+    fun getSocialLaunch(): MutableLiveData<String> = socialLaunch
+
 
     fun setSuggestionsNamesList(suggestionsNames: ArrayList<SuggestionEntity>) {
         suggestionsNamesList.value = suggestionsNames
