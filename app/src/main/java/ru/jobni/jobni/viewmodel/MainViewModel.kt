@@ -344,33 +344,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     val resultList: List<ResultsVacancy> = response.body()!!.results
 
-                    for (i in 0 until resultList.size) {
-                        val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].employment.forEach { employment ->
-                            tmpEmploymentList.add(employment.name)
-                        }
+                    if (resultList != null) {
+                        for (i in 0 until resultList.size) {
+                            val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
+                            resultList[i].employment.forEach { employment ->
+                                tmpEmploymentList.add(employment.name)
+                            }
 
-                        val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-                        resultList[i].competences.forEach { competences ->
-                            tmpCompetenceList.add(competences.name)
-                        }
+                            val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
+                            resultList[i].competences.forEach { competences ->
+                                tmpCompetenceList.add(competences.name)
+                            }
 
-                        repositoryCompanyVacancy.saveCompanyVacancy(
+                            repositoryCompanyVacancy.saveCompanyVacancy(
                                 VacancyEntity(
-                                        resultList[i].id,
-                                        resultList[i].name,
-                                        resultList[i].company.name,
-                                        resultList[i].salary_level_newbie.toString(),
-                                        resultList[i].salary_level_experienced.toString(),
-                                        resultList[i].format_of_work.name,
-                                        tmpEmploymentList,
-                                        tmpCompetenceList,
-                                        "",
-                                        "",
-                                        "",
-                                        ""
+                                    resultList[i].id,
+                                    resultList[i].name,
+                                    resultList[i].company.name,
+                                    resultList[i].salary_level_newbie.toString(),
+                                    resultList[i].salary_level_experienced.toString(),
+                                    resultList[i].format_of_work.name,
+                                    tmpEmploymentList,
+                                    tmpCompetenceList,
+                                    "",
+                                    "",
+                                    "",
+                                    ""
                                 )
-                        )
+                            )
+                        }
                     }
                 }
             }

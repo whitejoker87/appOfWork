@@ -1,7 +1,6 @@
 package ru.jobni.jobni
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,14 +18,20 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.facebook.AccessToken
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.vk.api.sdk.VK
-import com.vk.api.sdk.auth.VKScope
 import kotlinx.android.synthetic.main.nav_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
-import ru.jobni.jobni.fragments.auth.*
+import ru.jobni.jobni.fragments.auth.FragmentAuth
+import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUser
+import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUserLogged
+import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUser
+import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLogged
+import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangeMail
+import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangePass
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.fragments.reg.FragmentReg
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
@@ -68,6 +73,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Facebook check tokens
+        val accessToken = AccessToken.getCurrentAccessToken()
+        val isLoggedIn = accessToken != null && !accessToken.isExpired
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
@@ -127,22 +136,25 @@ class MainActivity : AppCompatActivity() {
 
         viewModelMain.isOpenDrawerLeft().observe(this, Observer { isOpen ->
             if (isOpen) {
-                if(viewModelAuth.isAuthUser().value == true){
+                if (viewModelAuth.isUserAuthid().value == true
+                        || viewModelAuth.isFBAuthid().value == true
+                ) {
                     viewModelMain.setNoAuthRegVisible(false)
                     viewModelMain.setYesAuthRegVisible(true)
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     closeKeyboard()
-                }
-                else {
-                    viewModelMain.setNoAuthRegVisible(true) //true
-                    viewModelMain.setYesAuthRegVisible(false) //false
+                } else {
+                    /* Debug, чтобы видеть полное меню без авторизации
+                    * setNoAuthRegVisible(false)
+                    * setYesAuthRegVisible(true)*/
+                    viewModelMain.setNoAuthRegVisible(true)
+                    viewModelMain.setYesAuthRegVisible(false)
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     closeKeyboard()
                 }
-            }
-            else {
+            } else {
                 drawer.closeDrawer(GravityCompat.START)
             }
         })
@@ -176,6 +188,8 @@ class MainActivity : AppCompatActivity() {
             when (it) {
                 "AuthUser" -> setFragment(FragmentAuthUser())
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
+                "AuthFBUser" -> setFragment(FragmentAuthFBUser())
+                "AuthFBUserLogged" -> setFragment(FragmentAuthFBUserLogged())
                 "RegUserMail" -> viewModelAuth.setBtnUserLogged("mail")
                 "RegUserPhone" -> viewModelAuth.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
@@ -220,13 +234,18 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModelAuth.isAuthUser().observe(this, Observer {
+        viewModelAuth.isUserAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isFBAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })
 
         regViewModel.isVkRegStart().observe(this, Observer {
-            if (it){
+            if (it) {
                 VK.login(this, arrayListOf())
             }
         })
@@ -277,7 +296,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onDrawerOpened(drawerView: View) {
                 if (drawer.isDrawerOpen(GravityCompat.START)) viewModelMain.setOpenDrawerLeft(true)
-                else if(drawer.isDrawerOpen(GravityCompat.END)) viewModelMain.setOpenDrawerRight(true)
+                else if (drawer.isDrawerOpen(GravityCompat.END)) viewModelMain.setOpenDrawerRight(true)
             }
         })
     }
