@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.auth
+package ru.jobni.jobni.fragments.auth.facebook
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserLoggedBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserFbLoggedBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentAuthUserLogged : Fragment() {
+class FragmentAuthFBUserLogged : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -22,16 +22,16 @@ class FragmentAuthUserLogged : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationUserLoggedBinding
+    private lateinit var binding: CAuthorizationUserFbLoggedBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_logged, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_fb_logged, container, false)
 
         binding.lifecycleOwner = this
 
         val view = binding.root
 
-        viewModelAuth.setBtnUserNotClickable(true)
+        viewModelAuth.setBtnFBNotClickable(true)
 
         binding.viewmodelauth = viewModelAuth
 

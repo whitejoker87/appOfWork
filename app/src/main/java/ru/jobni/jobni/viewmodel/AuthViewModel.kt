@@ -26,12 +26,24 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     /*цвет кнопки при логине пользователя*/
     private val btnUserLogged = MutableLiveData<String>("")
+
     /*кликабельность кнопки при навигации(изменяется внутри меню)*/
     private val isBtnUserNotClickable = MutableLiveData<Boolean>()
-    private val isAuthUser = MutableLiveData<Boolean>()
+
+    private val isUserAuthid = MutableLiveData<Boolean>()
     private val authUser = MutableLiveData<String>()
     private val authPass = MutableLiveData<String>()
 
+
+    /*кликабельность кнопки при навигации FB(изменяется внутри меню)*/
+    private val isBtnFBNotClickable = MutableLiveData<Boolean>()
+
+    private val isFBAuthid = MutableLiveData<Boolean>()
+    private val authFBUser = MutableLiveData<String>()
+    private val authFBPass = MutableLiveData<String>()
+
+
+    /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
         btnUserLogged.value = typeLogged
     }
@@ -46,11 +58,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun isBtnUserNotClickable(): MutableLiveData<Boolean> = isBtnUserNotClickable
 
 
-    fun setAuthUser(authKey: Boolean) {
-        isAuthUser.value = authKey
+    fun setUserAuthid(authKey: Boolean) {
+        isUserAuthid.value = authKey
     }
 
-    fun isAuthUser(): MutableLiveData<Boolean> = isAuthUser
+    fun isUserAuthid(): MutableLiveData<Boolean> = isUserAuthid
 
 
     fun getAuthUser(): String? = authUser.value
@@ -67,6 +79,35 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    /* Блок facebook авторизации */
+    fun setBtnFBNotClickable(isVisible: Boolean) {
+        isBtnFBNotClickable.value = isVisible
+    }
+
+    fun isBtnFBNotClickable(): MutableLiveData<Boolean> = isBtnFBNotClickable
+
+
+    fun setFBAuthid(authKey: Boolean) {
+        isFBAuthid.value = authKey
+    }
+
+    fun isFBAuthid(): MutableLiveData<Boolean> = isFBAuthid
+
+
+    fun getFBAuthUser(): String? = authFBUser.value
+
+    fun setFBAuthUser(query: String) {
+        this.authFBUser.value = query
+    }
+
+
+    fun getFBAuthPass(): String? = authFBPass.value
+
+    fun setFBAuthPass(query: String) {
+        this.authFBPass.value = query
+    }
+
+
     fun onAuthUserChangeClick(): Boolean {
         val editor = sPrefAuthUser.edit()
         editor?.remove(authUserSessionID)
@@ -75,7 +116,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         editor?.apply()
 
         setBtnUserLogged("")
-        setAuthUser(false)
+        setUserAuthid(false)
 
         return false
     }
@@ -109,7 +150,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     editor?.apply()
 
                     if (sessionID != null) {
-                        setAuthUser(true)
+                        setUserAuthid(true)
                         setBtnUserLogged("mail")
                     }
                 }
