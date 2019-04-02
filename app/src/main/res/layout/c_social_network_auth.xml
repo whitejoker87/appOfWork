@@ -34,7 +34,7 @@
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_user"
 			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("mail")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:clickable = "@{safeUnbox(viewmodelauth.isBtnUserNotClickable()) ? false : true}"
+			android:clickable = "@{safeUnbox(viewmodelauth.isBtnFBNotClickable()) ? false : true}"
 			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("mail") ? "AuthUserLogged" : "AuthUser")}'
 			/>
 
