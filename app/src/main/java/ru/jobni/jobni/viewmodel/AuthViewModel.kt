@@ -51,6 +51,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val authGooglePass = MutableLiveData<String>()
 
 
+    /*кликабельность кнопки при навигации OK(изменяется внутри меню)*/
+    private val isBtnOKNotClickable = MutableLiveData<Boolean>()
+
+    private val isOKAuthid = MutableLiveData<Boolean>()
+    private val authOKUser = MutableLiveData<String>()
+    private val authOKPass = MutableLiveData<String>()
+
+
     /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
         btnUserLogged.value = typeLogged
@@ -142,6 +150,35 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setGoogleAuthPass(query: String) {
         this.authGooglePass.value = query
+    }
+
+
+    /* Блок OK авторизации */
+    fun setBtnOKNotClickable(isVisible: Boolean) {
+        isBtnOKNotClickable.value = isVisible
+    }
+
+    fun isBtnOKNotClickable(): MutableLiveData<Boolean> = isBtnOKNotClickable
+
+
+    fun setOKAuthid(authKey: Boolean) {
+        isOKAuthid.value = authKey
+    }
+
+    fun isOKAuthid(): MutableLiveData<Boolean> = isOKAuthid
+
+
+    fun getOKAuthUser(): String? = authOKUser.value
+
+    fun setOKAuthUser(query: String) {
+        this.authOKUser.value = query
+    }
+
+
+    fun getOKAuthPass(): String? = authOKPass.value
+
+    fun setOKAuthPass(query: String) {
+        this.authOKPass.value = query
     }
 
 

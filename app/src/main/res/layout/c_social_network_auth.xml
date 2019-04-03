@@ -71,6 +71,8 @@
 			app:layout_constraintEnd_toEndOf = "@+id/btn_discord"
 			app:srcCompat = "@drawable/ic_ok"
 			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("ok")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:clickable = "@{safeUnbox(viewmodelauth.isBtnOKNotClickable()) ? false : true}"
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("ok") ? "AuthOKUserLogged" : "AuthOKUser")}'
 			/>
 
 		<ImageButton
