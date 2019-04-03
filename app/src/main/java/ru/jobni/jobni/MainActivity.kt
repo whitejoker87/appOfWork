@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.facebook.AccessToken
+import com.facebook.Profile
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.vk.api.sdk.VK
@@ -79,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         // Facebook check tokens
         val accessToken = AccessToken.getCurrentAccessToken()
         val isLoggedIn = accessToken != null && !accessToken.isExpired
+        val profile = Profile.getCurrentProfile()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
@@ -255,8 +257,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         regViewModel.getResultReg1Success().observe(this, Observer {
-            if (it){
-                when(viewModelMain.getSocialLaunch().value) {
+            if (it) {
+                when (viewModelMain.getSocialLaunch().value) {
                     "mail" -> regViewModel.postBindEmail()
                 }
             }
@@ -346,7 +348,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val callback = object: VKAuthCallback {
+        val callback = object : VKAuthCallback {
             override fun onLogin(token: VKAccessToken) {
                 // User passed authorization
             }
@@ -358,11 +360,7 @@ class MainActivity : AppCompatActivity() {
         if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {
             super.onActivityResult(requestCode, resultCode, data)
         }
-
     }
-
-
-
 
 
     private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {

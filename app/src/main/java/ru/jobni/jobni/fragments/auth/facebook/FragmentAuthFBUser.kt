@@ -34,7 +34,6 @@ class FragmentAuthFBUser : Fragment() {
     private lateinit var callbackManager: CallbackManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        callbackManager = CallbackManager.Factory.create()
 
         binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_fb, container, false)
 
@@ -45,6 +44,8 @@ class FragmentAuthFBUser : Fragment() {
         binding.viewmodelauth = viewModelAuth
 
         binding.viewmodelmain = viewModel
+
+        callbackManager = CallbackManager.Factory.create()
 
         binding.loginButtonFb.setReadPermissions("public_profile", "email")
         // If using in a fragment
@@ -65,20 +66,19 @@ class FragmentAuthFBUser : Fragment() {
             }
         })
 
-        LoginManager.getInstance().registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult> {
-                    override fun onSuccess(loginResult: LoginResult) {
-                        // App code
-                    }
+        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                // App code
+            }
 
-                    override fun onCancel() {
-                        // App code
-                    }
+            override fun onCancel() {
+                // App code
+            }
 
-                    override fun onError(exception: FacebookException) {
-                        // App code
-                    }
-                })
+            override fun onError(exception: FacebookException) {
+                // App code
+            }
+        })
 
         binding.btnEnter.setOnClickListener {
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"))
