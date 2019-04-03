@@ -66,6 +66,8 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    // API Google+
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
     // Карта в развернутой вакансии
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
 

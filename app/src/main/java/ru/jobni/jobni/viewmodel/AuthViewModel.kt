@@ -43,6 +43,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val authFBPass = MutableLiveData<String>()
 
 
+    /*кликабельность кнопки при навигации Google+(изменяется внутри меню)*/
+    private val isBtnGoogleNotClickable = MutableLiveData<Boolean>()
+
+    private val isGoogleAuthid = MutableLiveData<Boolean>()
+    private val authGoogleUser = MutableLiveData<String>()
+    private val authGooglePass = MutableLiveData<String>()
+
+
     /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
         btnUserLogged.value = typeLogged
@@ -105,6 +113,35 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setFBAuthPass(query: String) {
         this.authFBPass.value = query
+    }
+
+
+    /* Блок google+ авторизации */
+    fun setBtnGoogleNotClickable(isVisible: Boolean) {
+        isBtnGoogleNotClickable.value = isVisible
+    }
+
+    fun isBtnGoogleNotClickable(): MutableLiveData<Boolean> = isBtnGoogleNotClickable
+
+
+    fun setGoogleAuthid(authKey: Boolean) {
+        isGoogleAuthid.value = authKey
+    }
+
+    fun isGoogleAuthid(): MutableLiveData<Boolean> = isGoogleAuthid
+
+
+    fun getGoogleAuthUser(): String? = authGoogleUser.value
+
+    fun setGoogleAuthUser(query: String) {
+        this.authGoogleUser.value = query
+    }
+
+
+    fun getGoogleAuthPass(): String? = authGooglePass.value
+
+    fun setGoogleAuthPass(query: String) {
+        this.authGooglePass.value = query
     }
 
 

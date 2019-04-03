@@ -29,6 +29,8 @@ import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.auth.FragmentAuth
 import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUserLogged
+import ru.jobni.jobni.fragments.auth.google.FragmentAuthGoogleUser
+import ru.jobni.jobni.fragments.auth.google.FragmentAuthGoogleUserLogged
 import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUser
 import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLogged
 import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangeMail
@@ -135,6 +137,7 @@ class MainActivity : AppCompatActivity() {
             if (isOpen) {
                 if (viewModelAuth.isUserAuthid().value == true
                         || viewModelAuth.isFBAuthid().value == true
+                        || viewModelAuth.isGoogleAuthid().value == true
                 ) {
                     viewModelMain.setNoAuthRegVisible(false)
                     viewModelMain.setYesAuthRegVisible(true)
@@ -188,6 +191,8 @@ class MainActivity : AppCompatActivity() {
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
                 "AuthFBUser" -> setFragment(FragmentAuthFBUser())
                 "AuthFBUserLogged" -> setFragment(FragmentAuthFBUserLogged())
+                "AuthGoogleUser" -> setFragment(FragmentAuthGoogleUser())
+                "AuthGoogleUserLogged" -> setFragment(FragmentAuthGoogleUserLogged())
                 "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
                 "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
@@ -239,6 +244,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModelAuth.isFBAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isGoogleAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })
