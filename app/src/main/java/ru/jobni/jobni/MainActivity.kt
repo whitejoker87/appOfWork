@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
                 "Vacancy" -> setFragment(FragmentVacancy())
                 "VacancyCompany" -> setFragment(FragmentVacancyCompany())
-                "Summary" -> setFragment(FragmentSummary())
+                "SummaryUser" -> setFragment(FragmentSummaryUser())
                 "ReviewsUser" -> setFragment(FragmentReviewsUser())
                 "ReviewsOwner" -> setFragment(FragmentReviewsOwner())
                 "ProfileUser" -> setFragment(FragmentProfileUser())

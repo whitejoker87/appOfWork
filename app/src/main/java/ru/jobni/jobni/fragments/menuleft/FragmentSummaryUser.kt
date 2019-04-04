@@ -13,7 +13,7 @@ import ru.jobni.jobni.databinding.FragmentSummaryBinding
 import ru.jobni.jobni.utils.menuleft.SummaryPAdapter
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentSummary : Fragment() {
+class FragmentSummaryUser : Fragment() {
 
     private lateinit var fragmentAdapter: SummaryPAdapter
 

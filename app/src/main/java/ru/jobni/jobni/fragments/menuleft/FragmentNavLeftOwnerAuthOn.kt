@@ -126,6 +126,16 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
                 viewModel.setOpenDrawerLeft(false)
             }
 
+            if (childIndex == 1) {
+                viewModel.setFragmentLaunch("ReviewsOwner")
+                viewModel.setOpenDrawerLeft(false)
+            }
+
+            if (childIndex == 2) {
+                viewModel.setFragmentLaunch("ProfileOwner")
+                viewModel.setOpenDrawerLeft(false)
+            }
+
             if (childIndex == 3) {
                 viewModel.loadLeftMenuOwnerCompanyBalance(child.id)
                 viewModel.setFragmentLaunch("CompanyFinance")
