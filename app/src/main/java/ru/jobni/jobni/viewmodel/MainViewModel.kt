@@ -282,7 +282,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     val resultList: ArrayList<CompanyList> = response.body()!!
-                    repositoryOwner.saveCompanyList(resultList)
+                    if(repositoryOwner.receiveCompanyList.isEmpty()){
+                        repositoryOwner.saveCompanyList(resultList)
+                    } else {
+                        repositoryOwner.receiveCompanyList.clear()
+                        repositoryOwner.saveCompanyList(resultList)
+                    }
                 }
             }
 
