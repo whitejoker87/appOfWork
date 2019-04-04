@@ -27,7 +27,7 @@ class Retrofit : Application() {
         VK.addTokenExpiredHandler(tokenTracker)
 
         retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL) //Базовая часть адреса
+                .baseUrl(DEV_URL) //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
                 .client(getUnsafeOkHttpClient())
                 .build()

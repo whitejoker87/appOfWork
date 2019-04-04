@@ -45,11 +45,11 @@ interface RetrofitQuery {
 
 
     /*API authorization*/
-    @POST("api/authorization/")
+    @POST("api/authorization/mailbox/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<ResponseBody>
 
     /*API vacancy*/
-    @GET("api/filter/detail/vacancy")
+    @GET("api/filter/detail/vacancy/")
     fun loadDetailVacancy(): Call<DetailVacancy>
 
     @GET("api/search_competence_by_vacancy/")
