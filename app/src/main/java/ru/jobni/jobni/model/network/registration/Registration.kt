@@ -15,12 +15,12 @@ import com.google.gson.annotations.SerializedName
 //    ):Serializable
 
 data class Contact (
-        @SerializedName("id")val id: Int,
+        @SerializedName("contact_id")val contact_id: Int,
         @SerializedName("contact_type")val contact_type: String,
         @SerializedName("contact")val contact: String
 )
 
-data class RegUser(
+data class RegPass(
         @SerializedName("password")val password: String,
         @SerializedName("password_confirm")val password_confirm: String
 )
@@ -46,45 +46,124 @@ data class RegContactFaceContact(
 )
 
 
-data class ResponseReg(
+
+
+
+
+//{"success":true,"result":{"id":7}}
+data class ResponseRegStart(
         @SerializedName("success")val success: Boolean,
-        @SerializedName("error_text")val error_text:List<String>
+        @SerializedName("result")val result: RegStartResult
+
 )
 
+/*{"success":true,"result":{"_id":4350}}*/
+/*{"success":false,"errors":{"email":["Это поле не может быть пустым."]}}*/
+data class ResponseRegUser(
+        @SerializedName("success")val success: Boolean,
+        @SerializedName("result")val result: RegUserResult,
+        @SerializedName("errors")val errors: RegUserErrors
+
+)
+
+//{"success":true}
+/*{"success":false,"errors":{"non_field_errors":["Учетные данные не были предоставлены."]}}*/
 data class ResponseRegPass(
         @SerializedName("success")val success: Boolean,
-        @SerializedName("error_text")val error_text: ListErrors
+        @SerializedName("errors")val errors: RegPassErrors
 
 )
-
-data class ListErrors(
-        @SerializedName("password")val password: List<String>,
-        @SerializedName("password_general")val password_general:List<String>
-)
-
+//{"success":true,"result":{"id":8}}
+//{"success":false,"errors":{"non_field_errors":["Учетные данные не были предоставлены."]}}
 data class ResponseRegConfirmMail(
-        @SerializedName("success")val success: Boolean,
-        @SerializedName("error_text")val error_text: ListErrors,
+    @SerializedName("success")val success: Boolean,
+    @SerializedName("errors")val errors: RegPassErrors,
+    @SerializedName("result")val result: RegStartResult
+)
+
+/*{"success":true}
+{"success":false,
+"errors":{"name":["Это поле не может быть пустым."],
+"surname":["Это поле не может быть пустым."],
+"middlename":["Это поле не может быть пустым."]}}*/
+data class ResponseRegContactFace(
+    @SerializedName("success")val success: Boolean,
+    @SerializedName("errors")val errors: RegContactFaceErrors
+)
+/*{"success":true,
+"result":
+{"name":"Иван",
+"surname":"Иванов",
+"middlename":"Иванович",
+"referer":"",
+"photo":"",
+"consent_to_data_storage_and_protection":false,
+"consent_public_offers":false,
+"login":"16",
+"password":true,
+"contacts":[{
+"contact_type":"mail",
+"contact_id":9,
+"contact":"3@3.ru",
+"incomplete_registration":true}]}}*/
+data class ResponseRegGetContacts(
+    @SerializedName("success")val success: Boolean,
+    @SerializedName("result")val result: RegGetContactsResult
+)
+//{"success":false,"errors":{"contact_face":["Нельзя повторно пройти регистрацию"]}}
+//{"success":true}
+data class ResponseRegContactFaceContacts(
+    @SerializedName("success")val success: Boolean,
+    @SerializedName("errors")val errors: RegContactFaceContactsErrors
+)
+
+
+
+data class RegStartResult(
         @SerializedName("id")val id: Int
 )
 
-/*{"contacts":
-[
-{"id":87,
-"contact_type":"Почта",
-"contact":"anonimalesha@mail.ru"}
-],
-"result":
-{"success":true,
-"error_text":[]}}*/
-
-data class ResponseRegContacts(
-        @SerializedName("contacts")val contacts: List<ResponseContact>,
-        @SerializedName("result")val result: ResponseReg
+data class RegUserResult(
+        @SerializedName("_id")val _id: Int
 )
 
-data class ResponseContact(
-        @SerializedName("id")val id: Int,
-        @SerializedName("contact_type")val contact_type: String,
-        @SerializedName("contact")val contact:String
+data class RegUserErrors(
+        @SerializedName("email")val email: List<String>
+)
+
+data class RegPassErrors(
+    @SerializedName("non_field_errors")val non_field_errors: List<String>
+)
+
+data class RegContactFaceErrors(
+    @SerializedName("name")val name: List<String>,
+    @SerializedName("surname")val surname: List<String>,
+    @SerializedName("middlename")val middlename: List<String>
+)
+
+data class RegGetContactsResult(
+    @SerializedName("name")val name: String,
+    @SerializedName("surname")val surname: String,
+    @SerializedName("middlename")val middlename: String,
+    @SerializedName("referer")val referer: String,
+    @SerializedName("photo")val photo: String,
+    @SerializedName("consent_to_data_storage_and_protection")val consent_to_data_storage_and_protection: Boolean,
+    @SerializedName("consent_public_offers")val consent_public_offers: Boolean,
+    @SerializedName("login")val login: String,
+    @SerializedName("password")val password: Boolean,
+    @SerializedName("contacts")val contacts: List<ContactOptions>
+
+)
+
+data class RegContactFaceContactsErrors(
+    @SerializedName("contact_face")val contact_face: List<String>
+)
+
+
+
+data class ContactOptions(
+    @SerializedName("contact_type")val contact_type: String,
+    @SerializedName("contact_id")val contact_id: Int,
+    @SerializedName ("contact")val contact: String,
+    @SerializedName("incomplete_registration")val incomplete_registration: Boolean
 )

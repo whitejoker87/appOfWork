@@ -1,14 +1,11 @@
 package ru.jobni.jobni.viewmodel
 
-import android.app.Activity
 import android.app.Application
 import android.graphics.drawable.Drawable
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.vk.api.sdk.VK
-import com.vk.api.sdk.auth.VKScope
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,7 +24,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
-    private val regMail = MutableLiveData<String>("anonimalesha@mail.ru")
+    private val regMail = MutableLiveData<String>("1@1.ru")
     private val regPassword = MutableLiveData<String>("namenamename")
     private val regPassConfirm = MutableLiveData<String>("namenamename")
     private val regSurname = MutableLiveData<String>("Иванов")
@@ -237,21 +234,21 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     /*для выполнения 1 этапа регистрации(пустой запрос для старта)*/
     fun startRegistration() {
 
-        Retrofit.api?.postRegistrationUser()?.enqueue(object : Callback<ResponseRegPass> {
+        Retrofit.api?.postRegistrationUser()?.enqueue(object : Callback<ResponseRegStart> {
             /**/
-            override fun onResponse(call: Call<ResponseRegPass>, response: Response<ResponseRegPass>) {
-                /*{"success":true,"error_text":{}}
+            override fun onResponse(call: Call<ResponseRegStart>, response: Response<ResponseRegStart>) {
+                /*"success":true,"result":{"id":4}}
                 * Set-Cookie: sessionid=1wutajt6fj109uqu9qzbnufd2ir9k7v3; expires=Tue, 16 Apr 2019 15:52:14 GMT; Max-Age=1209600; Path=/ */
                 if (response.body() != null) {
                         if (response.body()!!.success) {
                             getSIDFromRegOne(response.headers())
                         } else if (!(response.body()!!.success)) {
-                            Toast.makeText(context, "Неудача первого этапа ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                            //Toast.makeText(context, "Неудача первого этапа ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
                         }
                 }
             }
             /**/
-            override fun onFailure(call: Call<ResponseRegPass>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRegStart>, t: Throwable) {
                 Toast.makeText(context, "Неудача первого этапа onFailure", Toast.LENGTH_LONG).show()
             }
         })
@@ -283,7 +280,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
         if (sessionID != null) {
             //setResultAuthSuccess(true)
-            setResultReg1Success(true)
+            if (!getResultReg1Success().value!!) setResultReg1Success(true)
             //postBindEmail()
 
         } else Toast.makeText(context, "Ошибка при получении СИД", Toast.LENGTH_LONG).show()
@@ -299,61 +296,55 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             regMail.value!!
         )
 
-        Retrofit.api?.sendBindEmail(cid, bindEmail)?.enqueue(object : Callback<ResponseReg> {
+        Retrofit.api?.sendBindEmail(cid, bindEmail)?.enqueue(object : Callback<ResponseRegUser> {
             /*{"email":"1@1.ru"}*/
-            override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
+            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
                 /*{"success":true,"error_text":["Перейдите на почту для её подтверждения."]}*/
-                /*{"email":["Введите корректный адрес электронной почты."]}*/
+
+                /*{"success":true,"result":{"_id":4350}}*/
+                /*{"success":false,"errors":{"email":["Это поле не может быть пустым."]}}*/
                 if (response.body() != null) {
                     if (response.body()!!.success){
-                        Toast.makeText(context, "Почта в норме! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Почта в норме! ${response.body()!!.result._id}", Toast.LENGTH_LONG).show()
                         postPassword()
-                    } else Toast.makeText(context, "Почта не очень! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                    } else Toast.makeText(context, "Почта не очень! ${response.body()!!.errors.email}", Toast.LENGTH_LONG).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
 
             }
         })
     }
 
+
+    
+
     /*для выполнения 2 этапа регистрации(отправка паролей)*/
     fun postPassword() {
 
-        val user = RegUser(
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val pass = RegPass(
             regPassword.value!!,
             regPassConfirm.value!!
         )
-        Retrofit.api?.sendRegistrationUser(user)?.enqueue(object : Callback<ResponseRegPass> {
+        Retrofit.api?.sendRegistrationPass(cid, pass)?.enqueue(object : Callback<ResponseRegPass> {
             /*{"password":"namenamename","password_confirm":"namenamename"}*/
             override fun onResponse(call: Call<ResponseRegPass>, response: Response<ResponseRegPass>) {
-                /*strict-transport-security: max-age=3600
-                    x-content-type-options: nosniff
-                    x-xss-protection: 1; mode=block
-                    set-cookie: sessionid=kqh7bd5llhi6ry76fp543ft6biw475fd; expires=Sat, 13 Apr 2019 22:12:06 GMT; Max-Age=1209600; Path=/
-                    access-control-allow-headers: *
-                    {"success":true,"error_text":{}}*/
+                /*{"success":true}*/
                 if (response.body() != null) {
                     if (response.body()!!.success) {
+                        getSIDFromRegOne(response.headers())
                         Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
                     } else if (!(response.body()!!.success)) {
-                        Toast.makeText(context, "Пароль не принят! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Пароль не принят! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
             /*Пример отрицательного ответа
-            {"success":false,
-            "error_text":
-                {"password":
-                    [
-                        "Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.",
-                        "Введённый пароль слишком широко распространён."
-                    ],
-                "password_general":
-                    []
-                }
-            }*/
+            {"success":false,"errors":{"non_field_errors":["Учетные данные не были предоставлены."]}}*/
 
             override fun onFailure(call: Call<ResponseRegPass>, t: Throwable) {
                 Toast.makeText(context, "Пароль не принят!", Toast.LENGTH_LONG).show()
@@ -379,22 +370,22 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             /*{"code":"0000"}*/
             override fun onResponse(call: Call<ResponseRegConfirmMail>, response: Response<ResponseRegConfirmMail>) {
                 /*после неправильной отправки кода
-                * {"detail":"Учетные данные не были предоставлены."}*/
+                * {"success":false,"errors":{"non_field_errors":["Учетные данные не были предоставлены."]}}*/
                 /*После правильной отправки
-                * {"success":true,"error_text":{},"id":55}*/
+                * {{"success":true,"result":{"id":8}}*/
                 if (response.body() != null) {
 
                     if (response.body()!!.success){
-                        Toast.makeText(context, "Код подтвержден! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
                         listContacts!!.add(regMail.value!!)
-                        listContactsId!!.add(response.body()!!.id)
+                        listContactsId!!.add(response.body()!!.result.id)
                         listContactsType!!.add("main")//пока апи работает так
                         setRegContacts(listContacts)
                         setRegContactsId(listContactsId)
                         setRegContactsType(listContactsType)
 
-                    } else Toast.makeText(context, "Код лох! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                    } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -419,7 +410,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             regName.value!!,
             regMiddlename.value!!
         )
-        Retrofit.api?.sendRegistrationContactFace(cid, contactFace)?.enqueue(object : Callback<ResponseRegContacts> {
+        Retrofit.api?.sendRegistrationContactFace(cid, contactFace)?.enqueue(object : Callback<ResponseRegContactFace> {
 
             /*{"contacts":
             [
@@ -431,17 +422,21 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             {"success":true,
             "error_text":[]}}*/
 
-            override fun onResponse(call: Call<ResponseRegContacts>, response: Response<ResponseRegContacts>) {
+            override fun onResponse(call: Call<ResponseRegContactFace>, response: Response<ResponseRegContactFace>) {
                 if (response.body() != null) {
-                    /*{"success":false,"error_text":"Заполните необходимые поля."}*/
-                    if (response.body()!!.result != null && response.body()!!.result.success) {
-                        setResultReg2Success(response.body()!!.result.success)
+                    /*{"success":true}
+                    {"success":false,
+                    "errors":{"name":["Это поле не может быть пустым."],
+                    "surname":["Это поле не может быть пустым."],
+                    "middlename":["Это поле не может быть пустым."]}}*/
+                    if (response.body()!!.success) {
+                        setResultReg2Success(response.body()!!.success)
                         Toast.makeText(context, "Успешно добавлено контактное лицо!", Toast.LENGTH_LONG).show()
                     } else Toast.makeText(context, "Безуспешно не добавлено контактное лицо", Toast.LENGTH_LONG).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseRegContacts>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRegContactFace>, t: Throwable) {
                 Toast.makeText(context, "Error! in zq rega 222", Toast.LENGTH_SHORT).show()
             }
         })
@@ -466,11 +461,12 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 regPublicOffers.value!!,
                 contacts
         )
-        Retrofit.api?.sendRegistrationContactFaceContact(cid, contactFaceContacts)?.enqueue(object : Callback<ResponseReg> {
+        Retrofit.api?.sendRegistrationContactFaceContact(cid, contactFaceContacts)?.enqueue(object : Callback<ResponseRegContactFaceContacts> {
 
-            override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
+            override fun onResponse(call: Call<ResponseRegContactFaceContacts>, response: Response<ResponseRegContactFaceContacts>) {
                 if (response.body() != null) {
-
+                    /*{"success":true}
+                    * {"success":false,"errors":{"contact_face":["Нельзя повторно пройти регистрацию"]}}*/
                     response.body()?.let {
                         if (it.success) {
                             setResultReg3Success(it.success)
@@ -483,9 +479,8 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
                 }
             }
-            /*
-            * {"success":false,"error_text":"Невозможно сохранить не приняв согласия на обработку персональных данных"}*/
-            override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
+            /**/
+            override fun onFailure(call: Call<ResponseRegContactFaceContacts>, t: Throwable) {
                 Toast.makeText(context, "Ahtung!!! нет согласия на обработку", Toast.LENGTH_SHORT).show()
             }
         })
@@ -622,35 +617,37 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val contactFace = RegContactFace(
-                regSurname.value!!,
-                regName.value!!,
-                regMiddlename.value!!
-        )
-        Retrofit.api?.sendRegistrationContactFace(cid, contactFace)?.enqueue(object : Callback<ResponseRegContacts> {
+        Retrofit.api?.getContactsForReg(cid)?.enqueue(object : Callback<ResponseRegGetContacts> {
 
-            /*{"contacts":
-            [
-            {"id":87,
-            "contact_type":"Почта",
-            "contact":"anonimalesha@mail.ru"}
-            ],
+            /*{"success":true,
             "result":
-            {"success":true,
-            "error_text":[]}}*/
-
-            override fun onResponse(call: Call<ResponseRegContacts>, response: Response<ResponseRegContacts>) {
+            {"name":"Иван",
+            "surname":"Иванов",
+            "middlename":"Иванович",
+            "referer":"",
+            "photo":"",
+            "consent_to_data_storage_and_protection":false,
+            "consent_public_offers":false,
+            "login":"16",
+            "password":true,
+            "contacts":[{
+            "contact_type":"mail",
+            "contact_id":9,
+            "contact":"3@3.ru",
+            "incomplete_registration":true}]}}*/
+            override fun onResponse(call: Call<ResponseRegGetContacts>, response: Response<ResponseRegGetContacts>) {
                 if (response.body() != null) {
-                    /*{"success":false,"error_text":"Заполните необходимые поля."}*/
-                    if (response.body()!!.result != null && response.body()!!.contacts.isNotEmpty() && response.body()!!.result.success) {
-                        regContactsId.add(response.body()!!.contacts[0].id)
-                        if (response.body()!!.contacts[0].contact_type.equals("Почта")) regContactsType.add("mail")
-                        regContacts.add(response.body()!!.contacts[0].contact)
+                    if (response.body()!!.success) {
+                        response.body()!!.result.contacts.forEach {
+                            regContactsId.add(it.contact_id)
+                            regContactsType.add(it.contact_type)
+                            regContacts.add(it.contact)
+                        }
                     }
                 }
             }
 
-            override fun onFailure(call: Call<ResponseRegContacts>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRegGetContacts>, t: Throwable) {
 
             }
         })

@@ -21,11 +21,11 @@ class Retrofit : Application() {
     override fun onCreate() {
         super.onCreate()
 
-//        // VK иницилизация
+//        // VK иницилизация не нужна в версии 2.0.0
 //        VK.initialize(this)
 
         retrofit = Retrofit.Builder()
-                .baseUrl(Companion.BASE_URL) //Базовая часть адреса
+                .baseUrl(Companion.DEV_URL) //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
                 .client(getUnsafeOkHttpClient())
                 .build()

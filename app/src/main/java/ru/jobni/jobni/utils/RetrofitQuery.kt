@@ -13,26 +13,26 @@ import ru.jobni.jobni.model.network.vacancy.DetailVacancy
 interface RetrofitQuery {
 
     /*API registration*/
-    @POST("api/registration_user/")
-    fun postRegistrationUser(): Call<ResponseRegPass>
+    @POST("api/registration/user/")
+    fun postRegistrationUser(): Call<ResponseRegStart>
 
-    @POST("api/registration_user/")
-    fun sendRegistrationUser(@Body user: RegUser): Call<ResponseRegPass>
+    @POST("api/registration/bind_email/")
+    fun sendBindEmail(@Header("Cookie") sessionID: String, @Body bindEmail: BindEmail): Call<ResponseRegUser>
 
-    @POST("api/bind_email/")
-    fun sendBindEmail(@Header("Cookie") sessionID: String, @Body bindEmail: BindEmail): Call<ResponseReg>
-
-    @POST("api/validate_email_code/")
+    @POST("api/registration/email_code/")
     fun validateMailCode(@Header("Cookie") sessionID: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
 
-    @POST("api/registration_contactface/")
-    fun sendRegistrationContactFace(@Header("Cookie") sessionID: String, @Body contactFace: RegContactFace): Call<ResponseRegContacts>
+    @POST("api/registration/password/")
+    fun sendRegistrationPass(@Header("Cookie") sessionID: String, @Body pass: RegPass): Call<ResponseRegPass>
 
-    @POST("api/registration_contactfacecontact/")
-    fun sendRegistrationContactFaceContact(@Header("Cookie") sessionID: String, @Body contacts: RegContactFaceContact): Call<ResponseReg>
+    @POST("api/registration/contact_face/")
+    fun sendRegistrationContactFace(@Header("Cookie") sessionID: String, @Body contactFace: RegContactFace): Call<ResponseRegContactFace>
 
-    @GET("api/type_authorization/?format=json/")
-    fun getContactsForReg(@Header("Cookie") sessionID: String): Call<ResponseReg>
+    @POST("api/registration/contact_face_contact/")
+    fun sendRegistrationContactFaceContact(@Header("Cookie") sessionID: String, @Body contacts: RegContactFaceContact): Call<ResponseRegContactFaceContacts>
+
+    @GET("api/registration/get_stages/")
+    fun getContactsForReg(@Header("Cookie") sessionID: String): Call<ResponseRegGetContacts>
 
     @POST("api/accounts/{type_social}/login/")
     fun postSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
