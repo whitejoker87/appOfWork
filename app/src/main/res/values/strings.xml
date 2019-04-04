@@ -189,4 +189,8 @@
 	<integer name = "com_vk_sdk_AppId">6923050</integer>
 	<string name = "facebook_app_id">2250712614985944</string>
 	<string name = "fb_login_protocol_scheme">fb2250712614985944</string>
+	<string name = "btn_company_vacancy_show_text">Опубликовать</string>
+	<string name = "btn_company_vacancy_edit_text">Редактировать</string>
+	<string name = "btn_company_vacancy_delete_text">Удалить</string>
+	<string name = "btn_company_vacancy_archive_text">В архив</string>
 </resources>
