@@ -150,8 +150,8 @@ class MainActivity : AppCompatActivity() {
                     /* Debug, чтобы видеть полное меню без авторизации
                     * setNoAuthRegVisible(false)
                     * setYesAuthRegVisible(true)*/
-                    viewModelMain.setNoAuthRegVisible(false)
-                    viewModelMain.setYesAuthRegVisible(true)
+                    viewModelMain.setNoAuthRegVisible(true)
+                    viewModelMain.setYesAuthRegVisible(false)
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     closeKeyboard()
