@@ -158,6 +158,14 @@
 	<string name = "btn_company_balance_fill_text">Пополнить баланс</string>
 	<string name = "btn_company_balance_history_text">История платежей</string>
 	<string name = "btn_company_balance_provided_text">Оказанные услуги</string>
+	<string name = "tv_user_balance_text">ВАШ БАЛАНС:</string>
+	<string name = "tv_user_balance_amount_text">10000</string>
+	<string name = "btn_user_balance_fill_text">Пополнить баланс</string>
+	<string name = "btn_user_balance_history_text">История платежей</string>
+	<string name = "btn_user_balance_provided_text">Оказанные услуги</string>
+	<string name = "btn_user_balance_provided_full_text">Оказанные услуги (детально)</string>
+	<string name = "btn_user_refal_text">Рефальная программа</string>
+	<string name = "btn_user_cashback_text">CashBack</string>
 	<string name = "auth_info_text">ВЫБЕРИТЕ СПОСОБ АВТОРИЗАЦИИ</string>
 	<string name = "reg_info_text">ВЫБЕРИТЕ СПОСОБ РЕГИСТРАЦИИ</string>
 	<string name = "user_auth_info_text">УКАЖИТЕ ВАШИ ДАННЫЕ</string>

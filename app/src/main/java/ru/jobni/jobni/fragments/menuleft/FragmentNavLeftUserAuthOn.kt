@@ -68,6 +68,12 @@ class FragmentNavLeftUserAuthOn : Fragment() {
                     return false
                 }
 
+                if (flatPos == 3) {
+                    viewModel.setFragmentLaunch("FinanceUser")
+                    viewModel.setOpenDrawerLeft(false)
+                    return false
+                }
+
                 return false
             }
         })

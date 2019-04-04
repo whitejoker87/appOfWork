@@ -174,6 +174,7 @@ class MainActivity : AppCompatActivity() {
                 "ReviewsOwner" -> setFragment(FragmentReviewsOwner())
                 "ProfileUser" -> setFragment(FragmentProfileUser())
                 "ProfileOwner" -> setFragment(FragmentProfileOwner())
+                "FinanceUser" -> setFragment(FragmentFinanceUser())
                 "CompanyAddAuthOn" -> setFragment(FragmentCompanyAddAuthOn())
                 "CompanyAddAuthOff" -> setFragment(FragmentCompanyAddAuthOff())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
