@@ -11,7 +11,7 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentSummaryActiveBinding
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentSummaryActive : Fragment() {
+class FragmentSummaryUserActive : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)

@@ -15,11 +15,6 @@
 			name = "viewmodelmain"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
-
-		<variable
-			name = "viewmodelauth"
-			type = "ru.jobni.jobni.viewmodel.AuthViewModel"
-			/>
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +67,7 @@
 
 		<include
 			android:id = "@+id/include_social_network"
-			layout = "@layout/c_social_network"
+			layout = "@layout/c_social_network_reg"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/referral_message"
@@ -81,7 +76,6 @@
 			android:layout_marginTop = "16dp"
 			app:viewmodelreg = "@{viewmodelreg}"
 			app:viewmodelmain = "@{viewmodelmain}"
-			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
 		<EditText
@@ -137,7 +131,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/bind_account"
-			android:onClick = "@{() -> viewmodelreg.btnRegUserClick()}"
+			android:onClick = '@{() -> viewmodelreg.startRegistration()}'
 			/>
 
 		<EditText
@@ -150,7 +144,7 @@
 			android:layout_marginTop = "16dp"
 			style = "@style/text_color_and_size"
 			android:inputType = "textPassword"
-			android:hint = "@string/password_4"
+			android:hint = "Введите код подтверждения"
 			android:text = "@={viewmodelreg.regMailCode}"
 			/>
 
@@ -163,7 +157,7 @@
 			app:layout_constraintEnd_toEndOf = "@+id/background"
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
-			android:text = "@string/bind_account"
+			android:text = "Подтвердить почту"
 			android:onClick = "@{() -> viewmodelreg.confirmEmail()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>

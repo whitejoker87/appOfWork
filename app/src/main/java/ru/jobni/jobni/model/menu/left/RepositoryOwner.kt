@@ -5,45 +5,32 @@ import androidx.lifecycle.MutableLiveData
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.menu.NavigationChild
 import ru.jobni.jobni.model.menu.NavigationParent
-import ru.jobni.jobni.model.network.company.ResultsCompany
+import ru.jobni.jobni.model.network.company.CompanyList
 import java.util.*
 import kotlin.collections.ArrayList
 
 object RepositoryOwner {
 
-    val companyLiveData = MutableLiveData<MutableList<ResultsCompany>>()
-    val receiveCompanyList: MutableList<ResultsCompany> = mutableListOf()
-
-    val companyLiveDataBalance = MutableLiveData<Int>()
-    var receiveCompanyBalance: Int = 0
+    val companyLiveData = MutableLiveData<MutableList<CompanyList>>()
+    val receiveCompanyList: MutableList<CompanyList> = mutableListOf()
 
     val setCompanyList = ArrayList<NavigationParent>()
 
 
     init {
         companyLiveData.value = receiveCompanyList
-        companyLiveDataBalance.value = receiveCompanyBalance
     }
 
-    fun getCompany(): LiveData<MutableList<ResultsCompany>> {
+    fun getCompany(): LiveData<MutableList<CompanyList>> {
         return companyLiveData
     }
 
-    fun getCompanyBalance(): LiveData<Int> {
-        return companyLiveDataBalance
-    }
-
-    fun saveCompanyList(companyList: ArrayList<ResultsCompany>) {
+    fun saveCompanyList(companyList: ArrayList<CompanyList>) {
         // Отсчистить список при заполнении
         receiveCompanyList.clear()
         receiveCompanyList.addAll(companyList)
         // Обновить лайфдату
         companyLiveData.value = receiveCompanyList
-    }
-
-    fun saveCompanyBalance(companyBalance: Int) {
-        receiveCompanyBalance = companyBalance
-        companyLiveDataBalance.value = receiveCompanyBalance
     }
 
 
@@ -80,12 +67,9 @@ object RepositoryOwner {
         val child1 = NavigationChild(parentID, "Вакансии", 0)
         val child2 = NavigationChild(parentID, "Отзывы", 0)
         val child3 = NavigationChild(parentID, "Профиль", 0)
-        val child4 = NavigationChild(parentID, "Баланс: ", 0)
-        val child5 = NavigationChild(parentID, "Пополнить баланс", 0)
-        val child6 = NavigationChild(parentID, "История платежей", R.drawable.ic_user)
-        val child7 = NavigationChild(parentID, "Оказанные услуги", 0)
+        val child4 = NavigationChild(parentID, "Финансы", 0)
 
-        return listOf(child1, child2, child3, child4, child5, child6, child7)
+        return listOf(child1, child2, child3, child4)
     }
 
 

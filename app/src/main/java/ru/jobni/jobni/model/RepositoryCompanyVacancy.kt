@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 
 object RepositoryCompanyVacancy {
 
-    private val companyVacancyLiveData = MutableLiveData<MutableList<VacancyEntity>>()
+    private val companyVacancyLiveData = MutableLiveData<MutableList<CompanyVacancyEntity>>()
 
-    private val companyVacancies: MutableList<VacancyEntity> = mutableListOf()
+    private val companyVacancies: MutableList<CompanyVacancyEntity> = mutableListOf()
 
     init {
         companyVacancyLiveData.value = companyVacancies
@@ -21,16 +21,16 @@ object RepositoryCompanyVacancy {
         return companyVacancyLiveData.value!!.size
     }
 
-    fun getCompanyVacancy(): LiveData<MutableList<VacancyEntity>> {
+    fun getCompanyVacancy(): LiveData<MutableList<CompanyVacancyEntity>> {
         return companyVacancyLiveData
     }
 
-    fun saveCompanyVacancy(vacancy: VacancyEntity) {
+    fun saveCompanyVacancy(vacancy: CompanyVacancyEntity) {
         addOrReplace(vacancy)
         companyVacancyLiveData.value = companyVacancies
     }
 
-    private fun addOrReplace(vacancy: VacancyEntity) {
+    private fun addOrReplace(vacancy: CompanyVacancyEntity) {
         for (i in 0 until companyVacancies.size) {
             if (companyVacancies[i] == vacancy) {
                 companyVacancies[i] = vacancy

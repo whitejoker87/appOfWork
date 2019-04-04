@@ -5,15 +5,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.menuleft.FragmentSummaryActive
-import ru.jobni.jobni.fragments.menuleft.FragmentSummaryArchive
+import ru.jobni.jobni.fragments.menuleft.FragmentSummaryUserActive
+import ru.jobni.jobni.fragments.menuleft.FragmentSummaryUserArchive
 
 class SummaryPAdapter(
         private val fragment: FragmentManager,
         private val _context: Context
 ) : FragmentPagerAdapter(fragment) {
 
-    private val mFragmentList: ArrayList<Fragment> = arrayListOf(FragmentSummaryActive(), FragmentSummaryArchive())
+    private val mFragmentList: ArrayList<Fragment> = arrayListOf(FragmentSummaryUserActive(), FragmentSummaryUserArchive())
 
     override fun getItem(position: Int): Fragment {
         return mFragmentList[position]

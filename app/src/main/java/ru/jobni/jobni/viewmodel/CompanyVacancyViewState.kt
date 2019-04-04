@@ -1,5 +1,5 @@
 package ru.jobni.jobni.viewmodel
 
-import ru.jobni.jobni.model.VacancyEntity
+import ru.jobni.jobni.model.CompanyVacancyEntity
 
-data class CompanyVacancyViewState(val companyVacancyList: MutableList<VacancyEntity>)
+data class CompanyVacancyViewState(val companyVacancyList: MutableList<CompanyVacancyEntity>)

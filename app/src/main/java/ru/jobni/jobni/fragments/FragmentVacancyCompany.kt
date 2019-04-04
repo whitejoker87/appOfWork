@@ -36,7 +36,7 @@ class FragmentVacancyCompany : Fragment() {
 
         // Бля биндинга нужно не пустое значение
         // В нашем случаи берем первую вакансию в списке
-        binding.vacancy = repository.getCompanyVacancy().value?.get(0)
+//        binding.vacancy = repository.getCompanyVacancy().value?.get(0)
 
         binding.viewmodel = viewModel
 
@@ -63,10 +63,10 @@ class FragmentVacancyCompany : Fragment() {
             }
         })
 
-        viewModel.getModelCompanyVacancy().observe(this, Observer { vacancy ->
-            vacancy?.let { binding.vacancy = vacancy.companyVacancyList[viewModel.vacancyPosition]
-            }
-        })
+//        viewModel.getModelCompanyVacancy().observe(this, Observer { vacancy ->
+//            vacancy?.let { binding.vacancy = vacancy.companyVacancyListList[viewModel.vacancyPosition]
+//            }
+//        })
 
         return view
     }

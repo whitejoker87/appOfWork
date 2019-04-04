@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.MainActivity
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.RegPhaseRecyclerItemBinding
+import ru.jobni.jobni.fragments.auth.FragmentAuth
 import ru.jobni.jobni.fragments.reg.*
 import ru.jobni.jobni.viewmodel.RegViewModel
 
@@ -40,7 +41,7 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
     // Get fragment manager inside our fragment
     val fragmentManager = (mContext as MainActivity).supportFragmentManager
 
-    var typeReg = "mail"
+    var typeReg = ""
         set(value) {
             field = value
             notifyItemChanged(viewModel.getNumberOfVisibleItemReg().value!!)
@@ -117,9 +118,11 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
         when (position) {
             0 -> {
                 when(typeReg) {
-                    "mail" -> f = FragmentRegOneMail()
-                    "phone" -> f = FragmentRegOnePhone()
-                    "other" -> f = FragmentRegOneOther()
+                    "" -> f = FragmentRegEmpty()
+                    "mail" -> f = FragmentRegOneMail()//регистрация почта
+                    "phone" -> f = FragmentRegOnePhone()//регистрация телефон
+                    "other" -> f = FragmentRegOneOther()//временный вариант открытия всех соцсетей
+                    "vk" -> f = FragmentRegOneOther.newInstance("vk")//регистрация вк
                     else -> f = FragmentRegOneMail()
                 }
             }

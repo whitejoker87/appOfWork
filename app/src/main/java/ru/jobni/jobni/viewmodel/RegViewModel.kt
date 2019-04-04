@@ -1,11 +1,15 @@
 package ru.jobni.jobni.viewmodel
 
+import android.app.Activity
 import android.app.Application
 import android.graphics.drawable.Drawable
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.vk.api.sdk.VK
+import com.vk.api.sdk.auth.VKScope
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,6 +63,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     private val resultAuthSuccess = MutableLiveData<Boolean>(false)
     private val typeAddRegFragment = MutableLiveData<String>("")
+
+    private val vkRegStart = MutableLiveData<Boolean>()
+
+    /*цвет кнопки при регистрации пользователя*/
+    private val btnUserLogged = MutableLiveData<String>("")
 
     fun setRegMail(mail: String) {
         regMail.value = mail
@@ -211,7 +220,106 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         typeAddRegFragment.value = type
     }
 
-    fun btnRegUserClick() {
+
+    fun isVkRegStart(): MutableLiveData<Boolean> = vkRegStart
+
+    fun setVkRegStart(isStart: Boolean) {
+        vkRegStart.value = isStart
+    }
+
+    fun setBtnUserLogged(typeLogged: String) {
+        btnUserLogged.value = typeLogged
+    }
+
+    fun getBtnUserLogged(): MutableLiveData<String> = btnUserLogged
+
+
+    /*для выполнения 1 этапа регистрации(пустой запрос для старта)*/
+    fun startRegistration() {
+
+        Retrofit.api?.postRegistrationUser()?.enqueue(object : Callback<ResponseRegPass> {
+            /**/
+            override fun onResponse(call: Call<ResponseRegPass>, response: Response<ResponseRegPass>) {
+                /*{"success":true,"error_text":{}}
+                * Set-Cookie: sessionid=1wutajt6fj109uqu9qzbnufd2ir9k7v3; expires=Tue, 16 Apr 2019 15:52:14 GMT; Max-Age=1209600; Path=/ */
+                if (response.body() != null) {
+                        if (response.body()!!.success) {
+                            getSIDFromRegOne(response.headers())
+                        } else if (!(response.body()!!.success)) {
+                            Toast.makeText(context, "Неудача первого этапа ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                        }
+                }
+            }
+            /**/
+            override fun onFailure(call: Call<ResponseRegPass>, t: Throwable) {
+                Toast.makeText(context, "Неудача первого этапа onFailure", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    fun btnRegClick() {
+
+        setPrivilegesForFileDone(false)
+
+    }
+
+    /*Для сохранения Session ID полученного из первого этапа*/
+    fun getSIDFromRegOne(responseHeaders: okhttp3.Headers) {
+
+        val resultListHeaders = responseHeaders.get("Set-Cookie")
+
+        /* Пример ответа от АПИ
+        set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
+        Нам нужно выделить из этой строки sessionid
+        На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
+
+        val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
+
+        val editor = sPrefAuthUser.edit()
+        editor?.putString(authUserSessionID, sessionID)
+        editor?.putString(authUserName, regMail.value)
+        editor?.putString(authUserPass, regPassword.value)
+        editor?.apply()
+
+        if (sessionID != null) {
+            //setResultAuthSuccess(true)
+            setResultReg1Success(true)
+            //postBindEmail()
+
+        } else Toast.makeText(context, "Ошибка при получении СИД", Toast.LENGTH_LONG).show()
+    }
+
+    /*Для 1 этапа регистрации для отправки почты*/
+    fun postBindEmail() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val bindEmail = BindEmail(
+            regMail.value!!
+        )
+
+        Retrofit.api?.sendBindEmail(cid, bindEmail)?.enqueue(object : Callback<ResponseReg> {
+            /*{"email":"1@1.ru"}*/
+            override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
+                /*{"success":true,"error_text":["Перейдите на почту для её подтверждения."]}*/
+                /*{"email":["Введите корректный адрес электронной почты."]}*/
+                if (response.body() != null) {
+                    if (response.body()!!.success){
+                        Toast.makeText(context, "Почта в норме! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                        postPassword()
+                    } else Toast.makeText(context, "Почта не очень! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
+
+            }
+        })
+    }
+
+    /*для выполнения 2 этапа регистрации(отправка паролей)*/
+    fun postPassword() {
 
         val user = RegUser(
             regPassword.value!!,
@@ -227,13 +335,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     access-control-allow-headers: *
                     {"success":true,"error_text":{}}*/
                 if (response.body() != null) {
-                        if (response.body()!!.success) {
-                            //setResultReg1Success(response.body()!!.success)
-                            getSIDFromRegOne(response.headers())
-                            Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
-                        } else if (!(response.body()!!.success)) {
-                            Toast.makeText(context, "Пароль не принят! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
-                        }
+                    if (response.body()!!.success) {
+                        Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "Пароль не принят! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
             /*Пример отрицательного ответа
@@ -255,103 +361,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    fun btnRegClick() {
-
-        setPrivilegesForFileDone(false)
-
-    }
-
-    fun getSIDFromRegOne(responseHeaders: okhttp3.Headers) {
-
-        val resultListHeaders = responseHeaders.get("Set-Cookie")
-
-        /* Пример ответа от АПИ
-        set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
-        Нам нужно выделить из этой строки sessionid
-        На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
-
-        val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
-
-        val editor = sPrefAuthUser.edit()
-        editor?.putString(authUserSessionID, sessionID)
-        editor?.putString(authUserName, regMail.value)
-        editor?.putString(authUserPass, regPassword.value)
-        editor?.apply()
-
-        if (sessionID != null) {
-            //setResultAuthSuccess(true)
-            //setResultReg1Success(true)
-            Toast.makeText(context, "А вот тебе сид ${sessionID}", Toast.LENGTH_LONG).show()
-            setBindEmail()
-        } else Toast.makeText(context, "Ошибка при получении СИД", Toast.LENGTH_LONG).show()
-    }
-
-//    fun tempAuthForRegOne() {
-//
-//        val userData = UserAuth(regMail.value, regPassword.value)
-//
-//        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<ResponseBody> {
-//            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
-//                if (response.body() != null) {
-//
-//                    val resultListHeaders = response.headers().get("Set-Cookie")
-//
-//                    /* Пример ответа от АПИ
-//                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
-//                    Нам нужно выделить из этой строки sessionid
-//                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
-//
-//                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
-//
-//                    val editor = sPrefAuthUser.edit()
-//                    editor?.putString(authUserSessionID, sessionID)
-//                    editor?.putString(authUserName, regMail.value)
-//                    editor?.putString(authUserPass, regPassword.value)
-//                    editor?.apply()
-//
-//                    if (sessionID != null) {
-//                        setResultAuthSuccess(true)
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
-//                Toast.makeText(context, "Error! in zq rega 1", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-
-
-    fun setBindEmail() {
-
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
-
-        val bindEmail = BindEmail(
-            regMail.value!!
-        )
-
-        Retrofit.api?.sendBindEmail(cid, bindEmail)?.enqueue(object : Callback<ResponseReg> {
-            /*{"email":"1@1.ru"}*/
-            override fun onResponse(call: Call<ResponseReg>, response: Response<ResponseReg>) {
-                /*{"success":true,"error_text":["Перейдите на почту для её подтверждения."]}*/
-                /*{"email":["Введите корректный адрес электронной почты."]}*/
-                if (response.body() != null) {
-                    if (response.body()!!.success){
-                        Toast.makeText(context, "Почта в норме! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
-
-                    } else Toast.makeText(context, "Почта не очень! ${response.body()!!.error_text}", Toast.LENGTH_LONG).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseReg>, t: Throwable) {
-
-            }
-
-        })
-
-    }
-
+    /*Для этапа подтверждения почты во время регистрации*/
     fun confirmEmail() {
 
         val listContacts = regContacts.value
@@ -398,6 +408,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    /*Для выполнения 3 этапа регистрации(Имя Фамилия Отчество)*/
     fun btnRegContactFaceClick() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
@@ -436,6 +447,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*для выполнения 4 этапа регистрации(контакты)*/
     fun btnRegContactFaceContactClick() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
@@ -446,7 +458,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
         /*Формируем из 3 листов Livedata один для отправки на сервер*/
         for (i in contactsString.indices) {
-            contacts.add(Contact(regContactsId.value!![i]/*, regContactsType.value!![i], contactsString[i]*/))
+            contacts.add(Contact(regContactsId.value!![i], regContactsType.value!![i], contactsString[i]))
         }
 
         val contactFaceContacts = RegContactFaceContact(
@@ -595,6 +607,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 //        })
 //    }
 
+    /*Для добавления контакта в список на 4 этапе регистрации*/
     fun btnAddContactClick() {
         val listContacts = regContacts.value
         val listContactsType = regContactsType.value
@@ -603,6 +616,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         setRegContacts(listContacts)
     }
 
+    /*Для загрузки прикрепленных контактов для испольщования в 4 этапе(пока костыль)*/
     fun getContactsForReg3() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
@@ -630,7 +644,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     /*{"success":false,"error_text":"Заполните необходимые поля."}*/
                     if (response.body()!!.result != null && response.body()!!.contacts.isNotEmpty() && response.body()!!.result.success) {
                         regContactsId.add(response.body()!!.contacts[0].id)
-                        if (response.body()!!.contacts[0].contact_type.equals("Почта")) regContactsType.add("main")
+                        if (response.body()!!.contacts[0].contact_type.equals("Почта")) regContactsType.add("mail")
                         regContacts.add(response.body()!!.contacts[0].contact)
                     }
                 }
@@ -641,6 +655,27 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
 
+    }
+    /*запуск активити вк апи из макета FragmentRegOneOther*/
+    fun getVKReg(){
+        //setVkRegStart(true)
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+        val process = "connect"
+
+        Retrofit.api?.postSocialReg(cid, "vk", process)?.enqueue(object : Callback<ResponseBody> {
+            /**/
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    /*{"success":false,"error_text":"Заполните необходимые поля."}*/
+
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
+            }
+        })
     }
 
 }
