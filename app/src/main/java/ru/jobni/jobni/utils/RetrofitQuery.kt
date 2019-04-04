@@ -4,7 +4,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.UserAuth
-import ru.jobni.jobni.model.network.company.CompanyVacancy
+import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.model.network.vacancy.CardVacancy
 import ru.jobni.jobni.model.network.vacancy.CardVacancyDetail
@@ -67,8 +67,8 @@ interface RetrofitQuery {
     fun ownerOrWorkerCompany(@Header("Cookie") sessionID: String, @Query("company") detail: Int): Call<CardVacancy>
 
     /*API company*/
-    @GET("api/company/?owner_or_worker=1")
-    fun ownerOrWorker(@Header("Cookie") sessionID: String): Call<CompanyVacancy>
+    @GET("api/company/get_short_representation_of_companies/")
+    fun ownerOrWorker(@Header("Cookie") sessionID: String): Call<ArrayList<CompanyList>>
 
     @GET("api/company/{id}/balance/")
     fun ownerOrWorkerBalance(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<Int>

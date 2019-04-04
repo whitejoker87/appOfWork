@@ -125,6 +125,12 @@ class FragmentNavLeftOwnerAuthOn : Fragment() {
                 viewModel.setFragmentLaunch("CompanyVacancy")
                 viewModel.setOpenDrawerLeft(false)
             }
+
+            if (childIndex == 3) {
+                viewModel.loadLeftMenuOwnerCompanyBalance(child.id)
+                viewModel.setFragmentLaunch("CompanyFinance")
+                viewModel.setOpenDrawerLeft(false)
+            }
         }
     }
 }

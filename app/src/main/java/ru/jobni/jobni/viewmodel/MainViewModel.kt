@@ -30,8 +30,7 @@ import ru.jobni.jobni.model.RepositoryVacancy
 import ru.jobni.jobni.model.SuggestionEntity
 import ru.jobni.jobni.model.VacancyEntity
 import ru.jobni.jobni.model.menu.left.RepositoryOwner
-import ru.jobni.jobni.model.network.company.CompanyVacancy
-import ru.jobni.jobni.model.network.company.ResultsCompany
+import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
 import java.io.File
@@ -278,31 +277,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
-        Retrofit.api?.ownerOrWorker(sessionID)?.enqueue(object : Callback<CompanyVacancy> {
-            override fun onResponse(@NonNull call: Call<CompanyVacancy>, @NonNull response: Response<CompanyVacancy>) {
+        Retrofit.api?.ownerOrWorker(sessionID)?.enqueue(object : Callback<ArrayList<CompanyList>> {
+            override fun onResponse(@NonNull call: Call<ArrayList<CompanyList>>, @NonNull response: Response<ArrayList<CompanyList>>) {
                 if (response.body() != null) {
 
-                    val resultList: ArrayList<ResultsCompany> = response.body()!!.results
-
-                    if(!repositoryOwner.receiveCompanyList.isEmpty()){
-                        repositoryOwner.saveCompanyList(resultList)
-                    }
+                    val resultList: ArrayList<CompanyList> = response.body()!!
+                    repositoryOwner.saveCompanyList(resultList)
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<CompanyVacancy>, @NonNull t: Throwable) {}
+            override fun onFailure(@NonNull call: Call<ArrayList<CompanyList>>, @NonNull t: Throwable) {}
         })
     }
 
     /*Баланс для левого меню*/
-    fun loadLeftMenuOwnerDataBalance(position: Int) {
+    fun loadLeftMenuOwnerCompanyBalance(position: Int) {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
-        val companyID: Int = repositoryOwner.companyLiveData.value!![position].id
-
-        Retrofit.api?.ownerOrWorkerBalance(sessionID, companyID)?.enqueue(object : Callback<Int> {
+        Retrofit.api?.ownerOrWorkerBalance(sessionID, position)?.enqueue(object : Callback<Int> {
             override fun onResponse(@NonNull call: Call<Int>, @NonNull response: Response<Int>) {
                 if (response.code() == 401 || response.code() == 200) {
 
@@ -348,20 +342,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             }
 
                             repositoryCompanyVacancy.saveCompanyVacancy(
-                                VacancyEntity(
-                                    resultList[i].id,
-                                    resultList[i].name,
-                                    resultList[i].company.name,
-                                    resultList[i].salary_level_newbie.toString(),
-                                    resultList[i].salary_level_experienced.toString(),
-                                    resultList[i].format_of_work.name,
-                                    tmpEmploymentList,
-                                    tmpCompetenceList,
-                                    "",
-                                    "",
-                                    "",
-                                    ""
-                                )
+                                    VacancyEntity(
+                                            resultList[i].id,
+                                            resultList[i].name,
+                                            resultList[i].company.name,
+                                            resultList[i].salary_level_newbie.toString(),
+                                            resultList[i].salary_level_experienced.toString(),
+                                            resultList[i].format_of_work.name,
+                                            tmpEmploymentList,
+                                            tmpCompetenceList,
+                                            "",
+                                            "",
+                                            "",
+                                            ""
+                                    )
                             )
                         }
                     }

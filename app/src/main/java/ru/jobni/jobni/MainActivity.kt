@@ -150,8 +150,8 @@ class MainActivity : AppCompatActivity() {
                     /* Debug, чтобы видеть полное меню без авторизации
                     * setNoAuthRegVisible(false)
                     * setYesAuthRegVisible(true)*/
-                    viewModelMain.setNoAuthRegVisible(true)
-                    viewModelMain.setYesAuthRegVisible(false)
+                    viewModelMain.setNoAuthRegVisible(false)
+                    viewModelMain.setYesAuthRegVisible(true)
                     drawer.openDrawer(GravityCompat.START)
                     //ниже закрываем клавиатуру если открыта
                     closeKeyboard()
@@ -177,6 +177,7 @@ class MainActivity : AppCompatActivity() {
                 "CompanyAddAuthOn" -> setFragment(FragmentCompanyAddAuthOn())
                 "CompanyAddAuthOff" -> setFragment(FragmentCompanyAddAuthOff())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
+                "CompanyFinance" -> setFragment(FragmentCompanyFinance())
                 "Auth" -> setFragment(FragmentAuth())
                 "Registration" -> setFragment(FragmentReg())
                 "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
