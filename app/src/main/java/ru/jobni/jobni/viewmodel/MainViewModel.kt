@@ -170,11 +170,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getFragmentLaunch(): MutableLiveData<String> = fragmentLaunch
 
+
     fun setSearchQuery(query: String) {
         searchQuery.value = query
     }
 
     fun getSearchQuery(): MutableLiveData<String> = searchQuery
+
 
     fun setSearchViewVisible(isVisible: Boolean) {
         isSearchViewVisible.value = isVisible
@@ -182,11 +184,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isSearchViewVisible(): MutableLiveData<Boolean> = isSearchViewVisible
 
+
     fun setBottomNavigationViewVisible(isVisible: Boolean) {
         isBottomNavigationViewVisible.value = isVisible
     }
 
     fun isBottomNavigationViewVisible(): MutableLiveData<Boolean> = isBottomNavigationViewVisible
+
 
     fun setDrawerRightLocked(isVisible: Boolean) {
         isDrawerRightLocked.value = isVisible
@@ -194,11 +198,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isDrawerRightLocked(): MutableLiveData<Boolean> = isDrawerRightLocked
 
+
     fun setToolbarVisible(isVisible: Boolean) {
         isToolbarVisible.value = isVisible
     }
 
     fun isToolbarVisible(): MutableLiveData<Boolean> = isToolbarVisible
+
 
     fun setSearchListViewVisible(isVisible: Boolean) {
         isSearchListViewVisible.value = isVisible
@@ -220,17 +226,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getSuggestionsNamesList(): MutableLiveData<ArrayList<SuggestionEntity>> = suggestionsNamesList
 
+
     fun setOutputPhotoUri(setUri: Uri) {
         outputPhotoUri.value = setUri
     }
 
     fun getOutputPhotoUri(): MutableLiveData<Uri> = outputPhotoUri
 
+
     fun setActivityLaunch(cameraIntent: Intent) {
         activityLaunch.value = cameraIntent
     }
 
     fun getActivityLaunch(): MutableLiveData<Intent> = activityLaunch
+
 
     fun setCurrentPhotoPath(mCurrentPhotoPath: String) {
         this.mCurrentPhotoPath = mCurrentPhotoPath
@@ -264,6 +273,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun isLoadCardFailVisible(): MutableLiveData<Boolean> = isLoadCardFailVisible
+
+
+    private val companyBalance = MutableLiveData<String>()
+
+    fun setCompanyBalance(balanceAmount: String) {
+        companyBalance.value = balanceAmount
+    }
+
+    fun getCompanyBalance(): MutableLiveData<String> = companyBalance
 
 
     /*открытие левого меню*/
@@ -310,7 +328,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     val resultList: Int = response.body()!!
-                    repositoryOwner.saveCompanyBalance(resultList)
+                    setCompanyBalance(resultList.toString())
                 }
             }
 

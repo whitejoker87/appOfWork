@@ -14,23 +14,15 @@ object RepositoryOwner {
     val companyLiveData = MutableLiveData<MutableList<CompanyList>>()
     val receiveCompanyList: MutableList<CompanyList> = mutableListOf()
 
-    val companyLiveDataBalance = MutableLiveData<Int>()
-    var receiveCompanyBalance: Int = 0
-
     val setCompanyList = ArrayList<NavigationParent>()
 
 
     init {
         companyLiveData.value = receiveCompanyList
-        companyLiveDataBalance.value = receiveCompanyBalance
     }
 
     fun getCompany(): LiveData<MutableList<CompanyList>> {
         return companyLiveData
-    }
-
-    fun getCompanyBalance(): LiveData<Int> {
-        return companyLiveDataBalance
     }
 
     fun saveCompanyList(companyList: ArrayList<CompanyList>) {
@@ -39,11 +31,6 @@ object RepositoryOwner {
         receiveCompanyList.addAll(companyList)
         // Обновить лайфдату
         companyLiveData.value = receiveCompanyList
-    }
-
-    fun saveCompanyBalance(companyBalance: Int) {
-        receiveCompanyBalance = companyBalance
-        companyLiveDataBalance.value = receiveCompanyBalance
     }
 
 

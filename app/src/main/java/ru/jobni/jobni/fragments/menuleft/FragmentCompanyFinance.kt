@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.FragmentCompanyFinanceBinding
@@ -35,6 +36,11 @@ class FragmentCompanyFinance : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.title = "Финансы компании"
 
+        viewModel.getCompanyBalance().observe(this, Observer { balance ->
+            balance?.let {
+                binding.tvCompanyBalanceAmount.text = balance
+            }
+        })
         return view
     }
 
