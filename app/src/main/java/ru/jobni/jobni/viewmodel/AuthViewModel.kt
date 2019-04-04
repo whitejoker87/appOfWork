@@ -59,6 +59,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val authOKPass = MutableLiveData<String>()
 
 
+    /*кликабельность кнопки при навигации VK(изменяется внутри меню)*/
+    private val isBtnVKNotClickable = MutableLiveData<Boolean>()
+
+    private val isVKAuthid = MutableLiveData<Boolean>()
+    private val authVKUser = MutableLiveData<String>()
+    private val authVKPass = MutableLiveData<String>()
+
+
     /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
         btnUserLogged.value = typeLogged
@@ -179,6 +187,35 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setOKAuthPass(query: String) {
         this.authOKPass.value = query
+    }
+
+
+    /* Блок VK авторизации */
+    fun setBtnVKNotClickable(isVisible: Boolean) {
+        isBtnVKNotClickable.value = isVisible
+    }
+
+    fun isBtnVKNotClickable(): MutableLiveData<Boolean> = isBtnVKNotClickable
+
+
+    fun setVKAuthid(authKey: Boolean) {
+        isVKAuthid.value = authKey
+    }
+
+    fun isVKAuthid(): MutableLiveData<Boolean> = isVKAuthid
+
+
+    fun getVKAuthUser(): String? = authVKUser.value
+
+    fun setVKAuthUser(query: String) {
+        this.authVKUser.value = query
+    }
+
+
+    fun getVKAuthPass(): String? = authVKPass.value
+
+    fun setVKAuthPass(query: String) {
+        this.authVKPass.value = query
     }
 
 

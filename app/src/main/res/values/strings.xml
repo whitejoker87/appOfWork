@@ -172,6 +172,7 @@
 	<string name = "user_auth_fb_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ FACEBOOK</string>
 	<string name = "user_auth_ok_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ ОДНОКЛАСНИКИ</string>
 	<string name = "user_auth_google_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ GOOGLE+</string>
+	<string name = "user_auth_vk_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ ВКОНТАКТЕ</string>
 	<string name = "user_auth_delete_info_text">Авторизация сброшена</string>
 	<string name = "btn_change_user_pass_text">Сменить пароль</string>
 	<string name = "btn_change_user_mail_text">Сменить почту</string>

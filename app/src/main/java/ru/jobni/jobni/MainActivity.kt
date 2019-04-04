@@ -37,6 +37,8 @@ import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangeMail
 import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangePass
 import ru.jobni.jobni.fragments.auth.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.auth.ok.FragmentAuthOKUserLogged
+import ru.jobni.jobni.fragments.auth.vk.FragmentAuthVKUser
+import ru.jobni.jobni.fragments.auth.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.fragments.reg.FragmentReg
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
@@ -199,6 +201,8 @@ class MainActivity : AppCompatActivity() {
                 "AuthGoogleUserLogged" -> setFragment(FragmentAuthGoogleUserLogged())
                 "AuthOKUser" -> setFragment(FragmentAuthOKUser())
                 "AuthOKUserLogged" -> setFragment(FragmentAuthOKUserLogged())
+                "AuthVKUser" -> setFragment(FragmentAuthVKUser())
+                "AuthVKUserLogged" -> setFragment(FragmentAuthVKUserLogged())
                 "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
                 "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
@@ -260,6 +264,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModelAuth.isOKAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isVKAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })
