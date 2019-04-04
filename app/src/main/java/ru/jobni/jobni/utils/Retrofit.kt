@@ -1,6 +1,8 @@
 package ru.jobni.jobni.utils
 
 import android.app.Application
+import com.vk.api.sdk.VK
+import com.vk.api.sdk.VKTokenExpiredHandler
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -13,6 +15,7 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 import javax.security.cert.CertificateException
 
+
 class Retrofit : Application() {
 
     private var retrofit: Retrofit? = null
@@ -20,23 +23,28 @@ class Retrofit : Application() {
     override fun onCreate() {
         super.onCreate()
 
-//        // VK иницилизация
-//        VK.initialize(this)
+        // VK Проверка Token (например, пользователь сменил пароль)
+        VK.addTokenExpiredHandler(tokenTracker)
 
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL) //Базовая часть адреса
-            .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
-            .client(getUnsafeOkHttpClient())
-            .build()
+                .baseUrl(BASE_URL) //Базовая часть адреса
+                .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
+                .client(getUnsafeOkHttpClient())
+                .build()
         api = retrofit?.create(RetrofitQuery::class.java) //Создаем объект, при помощи которого будем выполнять запросы
     }
 
     companion object {
-
         var api: RetrofitQuery? = null
             private set
         const val BASE_URL = "https://test.jobni.ru/"
         const val DEV_URL = "http://dev.jobni.ru/"
+    }
+
+    private val tokenTracker = object : VKTokenExpiredHandler {
+        override fun onTokenExpired() {
+            // VKAccessToken is invalid
+        }
     }
 
     private fun getUnsafeOkHttpClient(): OkHttpClient {
@@ -72,9 +80,9 @@ class Retrofit : Application() {
             builder.sslSocketFactory(sslSocketFactory, trustManager)
             builder.hostnameVerifier { _, _ -> true }
             return builder
-                //Для дебага запросов Retrofit GET/POST
-                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .build()
+                    //Для дебага запросов Retrofit GET/POST
+                    .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    .build()
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
