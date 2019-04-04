@@ -340,6 +340,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
+        // Почистить репозиторий перед заполнением списка вакансий
+        repositoryCompanyVacancy.clearRepository()
+
         Retrofit.api?.ownerOrWorkerCompanyVacancy(sessionID, companyID)?.enqueue(object : Callback<ArrayList<CompanyVacancyList>> {
             override fun onResponse(@NonNull call: Call<ArrayList<CompanyVacancyList>>, @NonNull response: Response<ArrayList<CompanyVacancyList>>) {
                 if (response.code() == 401 || response.code() == 200) {
@@ -349,8 +352,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     val resultList: ArrayList<CompanyVacancyList> = response.body()!!
-
-                    repositoryCompanyVacancy.clearRepository()
 
                     for (i in 0 until resultList.size) {
                         repositoryCompanyVacancy.saveCompanyVacancy(
