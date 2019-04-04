@@ -25,12 +25,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.R
-import ru.jobni.jobni.model.RepositoryCompanyVacancy
-import ru.jobni.jobni.model.RepositoryVacancy
-import ru.jobni.jobni.model.SuggestionEntity
-import ru.jobni.jobni.model.VacancyEntity
+import ru.jobni.jobni.model.*
 import ru.jobni.jobni.model.menu.left.RepositoryOwner
 import ru.jobni.jobni.model.network.company.CompanyList
+import ru.jobni.jobni.model.network.company.CompanyVacancyList
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
 import java.io.File
@@ -342,50 +340,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
-        Retrofit.api?.ownerOrWorkerCompany(sessionID, companyID)?.enqueue(object : Callback<CardVacancy> {
-            override fun onResponse(@NonNull call: Call<CardVacancy>, @NonNull response: Response<CardVacancy>) {
+        Retrofit.api?.ownerOrWorkerCompanyVacancy(sessionID, companyID)?.enqueue(object : Callback<ArrayList<CompanyVacancyList>> {
+            override fun onResponse(@NonNull call: Call<ArrayList<CompanyVacancyList>>, @NonNull response: Response<ArrayList<CompanyVacancyList>>) {
                 if (response.code() == 401 || response.code() == 200) {
 
                 }
 
                 if (response.body() != null) {
 
-                    val resultList: List<ResultsVacancy> = response.body()!!.results
+                    val resultList: ArrayList<CompanyVacancyList> = response.body()!!
 
-                    if (resultList != null) {
-                        for (i in 0 until resultList.size) {
-                            val tmpEmploymentList: MutableList<String> = java.util.ArrayList()
-                            resultList[i].employment.forEach { employment ->
-                                tmpEmploymentList.add(employment.name)
-                            }
+                    repositoryCompanyVacancy.clearRepository()
 
-                            val tmpCompetenceList: MutableList<String> = java.util.ArrayList()
-                            resultList[i].competences.forEach { competences ->
-                                tmpCompetenceList.add(competences.name)
-                            }
-
-                            repositoryCompanyVacancy.saveCompanyVacancy(
-                                    VacancyEntity(
-                                            resultList[i].id,
-                                            resultList[i].name,
-                                            resultList[i].company.name,
-                                            resultList[i].salary_level_newbie.toString(),
-                                            resultList[i].salary_level_experienced.toString(),
-                                            resultList[i].format_of_work.name,
-                                            tmpEmploymentList,
-                                            tmpCompetenceList,
-                                            "",
-                                            "",
-                                            "",
-                                            ""
-                                    )
+                    for (i in 0 until resultList.size) {
+                        repositoryCompanyVacancy.saveCompanyVacancy(
+                            CompanyVacancyEntity(
+                                resultList[i].id,
+                                resultList[i].name,
+                                resultList[i].archival
                             )
-                        }
+                        )
                     }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<CardVacancy>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<ArrayList<CompanyVacancyList>>, @NonNull t: Throwable) {
             }
         })
     }
@@ -599,15 +578,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /*клик по кнопке развернуть на карточке в списке вакансий компании*/
-    fun onExpandVacancyCompanyClick(position: Int) {
-        vacancyPosition = position
-        vacancyCompanyExpandInfo(position)
-
-        val handler = Handler()
-        handler.postDelayed({
-            setFragmentLaunch("VacancyCompany")
-        }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
-    }
+//    fun onExpandVacancyCompanyClick(position: Int) {
+//        vacancyPosition = position
+//        vacancyCompanyExpandInfo(position)
+//
+//        val handler = Handler()
+//        handler.postDelayed({
+//            setFragmentLaunch("VacancyCompany")
+//        }, SERVER_RESPONSE_DELAY) // 1 сек чтобы обработать запрос от АПИ и вывести уже заполненную карточку
+//    }
 
     /*клик по глазу в карточке в поиске*/
     fun onEyeRVVacancyClick(position: Int) {
@@ -645,34 +624,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /*информация для развернутой карточки компании*/
-    private fun vacancyCompanyExpandInfo(position: Int) {
-        val requestID: Int = repositoryCompanyVacancy.getCompanyVacancy().value!![position].id
-
-        Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
-            override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
-                if (response.code() == 404) {
-                    setCardExpandResponse(false)
-                }
-
-                if (response.body() != null) {
-
-                    val resultList: Detail = response.body()!!.detail
-
-                    val newObj: VacancyEntity = repositoryCompanyVacancy.getCompanyVacancy().value!![position].copy(
-                            companyDescription = resultList.company_description,
-                            vacancyDescription = resultList.description,
-                            requirementsDescription = resultList.requirements,
-                            dutiesDescription = resultList.duties
-                    )
-                    repositoryCompanyVacancy.saveCompanyVacancy(newObj)
-                    setCardExpandResponse(true)
-                }
-            }
-
-            override fun onFailure(@NonNull call: Call<CardVacancyDetail>, @NonNull t: Throwable) {
-            }
-        })
-    }
+//    private fun vacancyCompanyExpandInfo(position: Int) {
+//        val requestID: Int = repositoryCompanyVacancy.getCompanyVacancy().value!![position].id
+//
+//        Retrofit.api?.loadVacancyCard(requestID, requestID)?.enqueue(object : Callback<CardVacancyDetail> {
+//            override fun onResponse(@NonNull call: Call<CardVacancyDetail>, @NonNull response: Response<CardVacancyDetail>) {
+//                if (response.code() == 404) {
+//                    setCardExpandResponse(false)
+//                }
+//
+//                if (response.body() != null) {
+//
+//                    val resultList: Detail = response.body()!!.detail
+//
+//                    val newObj: VacancyEntity = repositoryCompanyVacancy.getCompanyVacancy().value!![position].copy(
+//                            companyDescription = resultList.company_description,
+//                            vacancyDescription = resultList.description,
+//                            requirementsDescription = resultList.requirements,
+//                            dutiesDescription = resultList.duties
+//                    )
+//                    repositoryCompanyVacancy.saveCompanyVacancy(newObj)
+//                    setCardExpandResponse(true)
+//                }
+//            }
+//
+//            override fun onFailure(@NonNull call: Call<CardVacancyDetail>, @NonNull t: Throwable) {
+//            }
+//        })
+//    }
 
     /*посик по клику в строке поиска*/
     fun doSearchOnClick(query: String) {
