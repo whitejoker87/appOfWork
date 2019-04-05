@@ -33,6 +33,12 @@ data class MailCode(
         @SerializedName("code")val code: String
 )
 
+data class RegVK(
+        @SerializedName("uid")val uid: String,
+        @SerializedName("provider")val provider: String,
+        @SerializedName("access_token")val access_token: String
+)
+
 data class RegContactFace(
         @SerializedName("surname")val surname: String,
         @SerializedName("name")val name: String,

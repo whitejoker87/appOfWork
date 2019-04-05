@@ -44,6 +44,8 @@ class Retrofit : Application() {
     private val tokenTracker = object : VKTokenExpiredHandler {
         override fun onTokenExpired() {
             // VKAccessToken is invalid
+            // Запускать фрагмент где нужно по новой авторизоваться
+//            FragmentAuthVKUser.startFrom(this@Retrofit)
         }
     }
 
