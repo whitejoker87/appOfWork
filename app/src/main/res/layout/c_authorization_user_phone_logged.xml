@@ -46,7 +46,7 @@
 			android:textStyle = "bold"
 			android:textColor = "@color/font_color"
 			android:textSize = "14sp"
-			android:text = "@string/user_auth_info_text"
+			android:text = "@string/user_auth_options_text"
 			/>
 
 		<include
@@ -62,48 +62,43 @@
 			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
-		<EditText
-			android:id = "@+id/et_mail"
-			android:layout_width = "0dp"
+		<Button
+			android:id = "@+id/btn_change_user_pass"
+			android:layout_width = "180dp"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@id/iv_background"
-			android:layout_marginTop = "16dp"
-			android:layout_marginStart = "16dp"
-			android:layout_marginEnd = "16dp"
-			style = "@style/text_color_and_size"
-			android:inputType = "textEmailAddress"
-			android:hint = "@string/mail_1"
-			android:text = "@={viewmodelauth.authUser}"
-			app:layout_constraintHorizontal_bias = "1.0"
-			/>
-
-		<EditText
-			android:id = "@+id/et_password"
-			android:layout_width = "0dp"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/et_mail"
-			app:layout_constraintStart_toStartOf = "@+id/et_mail"
-			app:layout_constraintEnd_toEndOf = "@+id/et_mail"
-			android:layout_marginTop = "16dp"
-			style = "@style/text_color_and_size"
-			android:inputType = "textPassword"
-			android:hint = "@string/password_1"
-			android:text = "@={viewmodelauth.authPass}"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "26dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/btn_change_user_pass_text"
+			android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthPhoneUserLoggedPass")}'
 			/>
 
 		<Button
-			android:id = "@+id/btn_enter"
-			android:layout_width = "wrap_content"
+			android:id = "@+id/btn_change_user_mail"
+			android:layout_width = "180dp"
 			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/et_password"
+			app:layout_constraintTop_toBottomOf = "@+id/btn_change_user_pass"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
-			android:text = "@string/enter"
-			android:onClick = "@{() -> viewmodelauth.onAuthUserClick()}"
+			android:text = "@string/btn_change_user_mail_text"
+			android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthPhoneUserLogged")}'
+			/>
+
+		<Button
+			android:id = "@+id/btn_change_user_auth"
+			android:layout_width = "180dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/btn_change_user_mail"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "16dp"
+			android:background = "@drawable/shape_badge"
+			android:text = "@string/btn_change_user_auth_text"
+			android:onClick = "@{() -> viewmodelauth.onAuthPhoneUserChangeClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

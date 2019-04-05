@@ -84,7 +84,7 @@
 					android:layout_marginTop = "16dp"
 					android:background = "@drawable/shape_button"
 					android:text = "@string/btn_change_user_mail_text"
-					android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthUserLoggedMail")}'
+					android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthMailUserLoggedChangeMail")}'
 					/>
 
 				<Button
