@@ -20,6 +20,11 @@ data class Contact (
         @SerializedName("contact")val contact: String
 )
 
+data class ContactWithoutId (
+    @SerializedName("contact_type")val contact_type: String,
+    @SerializedName("contact")val contact: String
+)
+
 data class RegPass(
         @SerializedName("password")val password: String,
         @SerializedName("password_confirm")val password_confirm: String
@@ -33,7 +38,7 @@ data class BindPhone(
     @SerializedName("phone")val phone: String
 )
 
-data class MailCode(
+data class ConfirmCode(
         @SerializedName("code")val code: String
 )
 
@@ -46,7 +51,7 @@ data class RegContactFace(
 data class RegContactFaceContact(
         @SerializedName("consent_to_data_storage_and_protection")val protection: Boolean,
         @SerializedName("consent_public_offers")val offers: Boolean,
-        @SerializedName("contacts")val contacts: ArrayList<Contact>
+        @SerializedName("contacts")val contacts: ArrayList<Any>
 )
 
 
@@ -63,10 +68,14 @@ data class ResponseRegStart(
 
 /*{"success":true,"result":{"_id":4350}}*/
 /*{"success":false,"errors":{"email":["Это поле не может быть пустым."]}}*/
+/*{"success":false,"errors":{"phone":["Номер телефона может содержать только цифры.","Длина номера телефона должна быть 10 цифр."]}}*/
+/*{"success":true,"message":["Перейдите на почту для её подтверждения."]}*/
 data class ResponseRegUser(
         @SerializedName("success")val success: Boolean,
         @SerializedName("result")val result: RegUserResult,
-        @SerializedName("errors")val errors: RegUserErrors
+        @SerializedName("errors")val errors: RegUserErrors,
+        @SerializedName("message")val message: List<String>
+
 
 )
 
@@ -79,7 +88,8 @@ data class ResponseRegPass(
 )
 //{"success":true,"result":{"id":8}}
 //{"success":false,"errors":{"non_field_errors":["Учетные данные не были предоставлены."]}}
-data class ResponseRegConfirmMail(
+//{"success":false,"errors":{"code":["Время жизни кода активации вышло, зарегистрируйтесь заново"]}}
+data class ResponseRegConfirm(
     @SerializedName("success")val success: Boolean,
     @SerializedName("errors")val errors: RegPassErrors,
     @SerializedName("result")val result: RegStartResult
@@ -132,11 +142,14 @@ data class RegUserResult(
 )
 
 data class RegUserErrors(
-        @SerializedName("email")val email: List<String>
+        @SerializedName("email")val email: List<String>,
+        @SerializedName("phone")val phone: List<String>
+
 )
 
 data class RegPassErrors(
-    @SerializedName("non_field_errors")val non_field_errors: List<String>
+    @SerializedName("non_field_errors")val non_field_errors: List<String>,
+    @SerializedName("code")val code: List<String>
 )
 
 data class RegContactFaceErrors(

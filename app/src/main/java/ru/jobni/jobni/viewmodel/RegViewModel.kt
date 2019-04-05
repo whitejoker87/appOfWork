@@ -24,7 +24,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
-    private val regMail = MutableLiveData<String>("1@1.ru")
+    private val regMail = MutableLiveData<String>("anonimalesha@mail.ru")
     private val regPassword = MutableLiveData<String>("namenamename")
     private val regPassConfirm = MutableLiveData<String>("namenamename")
     private val regSurname = MutableLiveData<String>("Иванов")
@@ -54,8 +54,8 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     private val numberOfVisibleItemReg = MutableLiveData<Int>(-1)
 
-    private val resultReg1Success = MutableLiveData<Boolean>(false)
-    private val resultReg2Success = MutableLiveData<Boolean>(false)
+    private val resultReg1Success = MutableLiveData<Boolean>(false)//флаг пройденного начала регистрации. получен первый sessionid
+    private val resultReg2Success = MutableLiveData<Boolean>(false)//флаг зарегистрированного пароля
     private val resultReg3Success = MutableLiveData<Boolean>(false)
 
     private val resultAuthSuccess = MutableLiveData<Boolean>(false)
@@ -230,6 +230,18 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getBtnUserLogged(): MutableLiveData<String> = btnUserLogged
 
+    fun regOrBindMail(){
+        if (getResultReg2Success().value!!){ //если пароль уже выдали и пройдена регистрация на 1 основной контакт
+            postBindEmail()
+        } else startRegistration()
+    }
+
+    fun regOrBindPhone(){
+        if (getResultReg2Success().value!!){ //если пароль уже выдали и пройдена регистрация на 1 основной контакт
+            postBindPhone()
+        } else startRegistration()
+    }
+
 
     /*для выполнения 1 этапа регистрации(пустой запрос для старта)*/
     fun startRegistration() {
@@ -280,7 +292,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
         if (sessionID != null) {
             //setResultAuthSuccess(true)
-            if (!getResultReg1Success().value!!) setResultReg1Success(true)
+            if (!getResultReg1Success().value!!) setResultReg1Success(true) //изменяем флаг первого этапа для запуска  регистрации пароля
             //postBindEmail()
 
         } else Toast.makeText(context, "Ошибка при получении СИД", Toast.LENGTH_LONG).show()
@@ -299,20 +311,23 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         Retrofit.api?.sendBindEmail(cid, bindEmail)?.enqueue(object : Callback<ResponseRegUser> {
             /*{"email":"1@1.ru"}*/
             override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
-                /*{"success":true,"error_text":["Перейдите на почту для её подтверждения."]}*/
+                /*{"success":true,"message":["Перейдите на почту для её подтверждения."]}*/
 
                 /*{"success":true,"result":{"_id":4350}}*/
                 /*{"success":false,"errors":{"email":["Это поле не может быть пустым."]}}*/
                 if (response.body() != null) {
                     if (response.body()!!.success){
-                        Toast.makeText(context, "Почта в норме! ${response.body()!!.result._id}", Toast.LENGTH_LONG).show()
-                        postPassword()
-                    } else Toast.makeText(context, "Почта не очень! ${response.body()!!.errors.email}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Почта в норме! ${response.body()!!.message}", Toast.LENGTH_LONG).show()
+                        if (!getResultReg2Success().value!!) postPassword() //работает только для первой реги
+                    } else {
+                        Toast.makeText(context, "Почта не очень! ${response.body()!!.errors.email}", Toast.LENGTH_LONG).show()
+                        if (!getResultReg2Success().value!!) setResultReg1Success(false)
+                    }
                 }
             }
 
             override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
-
+                if (!getResultReg2Success().value!!) setResultReg1Success(false)
             }
         })
     }
@@ -323,27 +338,28 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val bindEmail = BindEmail(
-            regMail.value!!
+        val bindPhone = BindPhone(
+            regPhone.value!!
         )
 
-        Retrofit.api?.sendBindEmail(cid, bindEmail)?.enqueue(object : Callback<ResponseRegUser> {
-            /*{"email":"1@1.ru"}*/
+        Retrofit.api?.sendBindPhone(cid, bindPhone)?.enqueue(object : Callback<ResponseRegUser> {
+            /**/
             override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
-                /*{"success":true,"error_text":["Перейдите на почту для её подтверждения."]}*/
-
-                /*{"success":true,"result":{"_id":4350}}*/
-                /*{"success":false,"errors":{"email":["Это поле не может быть пустым."]}}*/
+                /*{"success":true,"result":{"_id":4968}}*/
+                /*{"success":false,"errors":{"phone":["Номер телефона может содержать только цифры.","Длина номера телефона должна быть 10 цифр."]}}*/
                 if (response.body() != null) {
                     if (response.body()!!.success){
-                        Toast.makeText(context, "Почта в норме! ${response.body()!!.result._id}", Toast.LENGTH_LONG).show()
-                        postPassword()
-                    } else Toast.makeText(context, "Почта не очень! ${response.body()!!.errors.email}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "телефон в норме! ${response.body()!!.result._id}", Toast.LENGTH_LONG).show()
+                        if (!getResultReg2Success().value!!) postPassword()//работает только для первой реги
+                    } else {
+                        Toast.makeText(context, "телефон не очень! ${response.body()!!.errors.email}", Toast.LENGTH_LONG).show()
+                        if (!getResultReg2Success().value!!) setResultReg1Success(false)
+                    }
                 }
             }
 
             override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
-
+                if (!getResultReg2Success().value!!) setResultReg1Success(false)
             }
         })
     }
@@ -367,8 +383,10 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     if (response.body()!!.success) {
                         getSIDFromRegOne(response.headers())
                         Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
+                        setResultReg2Success(true)
                     } else if (!(response.body()!!.success)) {
                         Toast.makeText(context, "Пароль не принят! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                        setResultReg2Success(false)
                     }
                 }
             }
@@ -377,6 +395,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(call: Call<ResponseRegPass>, t: Throwable) {
                 Toast.makeText(context, "Пароль не принят!", Toast.LENGTH_LONG).show()
+                setResultReg2Success(false)
             }
         })
     }
@@ -384,20 +403,16 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     /*Для этапа подтверждения почты во время регистрации*/
     fun confirmEmail() {
 
-        val listContacts = regContacts.value
-        val listContactsId = regContactsId.value
-        val listContactsType = regContactsType.value
-
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val mailCode = MailCode(
-                regMailCode.value!!
+        val mailCode = ConfirmCode(
+            regMailCode.value!!
         )
 
-        Retrofit.api?.validateMailCode(cid, mailCode)?.enqueue(object : Callback<ResponseRegConfirmMail> {
+        Retrofit.api?.validateMailCode(cid, mailCode)?.enqueue(object : Callback<ResponseRegConfirm> {
             /*{"code":"0000"}*/
-            override fun onResponse(call: Call<ResponseRegConfirmMail>, response: Response<ResponseRegConfirmMail>) {
+            override fun onResponse(call: Call<ResponseRegConfirm>, response: Response<ResponseRegConfirm>) {
                 /*после неправильной отправки кода
                 * {"success":false,"errors":{"non_field_errors":["Учетные данные не были предоставлены."]}}*/
                 /*После правильной отправки
@@ -407,12 +422,41 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     if (response.body()!!.success){
                         Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
-                        listContacts!!.add(regMail.value!!)
-                        listContactsId!!.add(response.body()!!.result.id)
-                        listContactsType!!.add("main")//пока апи работает так
-                        setRegContacts(listContacts)
-                        setRegContactsId(listContactsId)
-                        setRegContactsType(listContactsType)
+                    } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            /*отправил неправильный код
+            {"success":false,"error_text":"Время жизни кода активации вышло, зарегистрируйтесь заново"}*/
+            override fun onFailure(call: Call<ResponseRegConfirm>, t: Throwable) {
+                Toast.makeText(context, "Код не работает!", Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+    }
+
+    /*Для этапа подтверждения телефона во время регистрации*/
+    fun confirmPhone() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val mailCode = ConfirmCode(
+            regPhoneCode.value!!
+        )
+
+        Retrofit.api?.validatePhoneCode(cid, mailCode)?.enqueue(object : Callback<ResponseRegConfirm> {
+            /*{"code":"0000"}*/
+            override fun onResponse(call: Call<ResponseRegConfirm>, response: Response<ResponseRegConfirm>) {
+                /*после неправильной отправки кода
+                * {"success":false,"errors":{"code":["Время жизни кода активации вышло, зарегистрируйтесь заново"]}}*/
+                /*После правильной отправки
+                * {{"success":true,"result":{"id":8}}*/
+                if (response.body() != null) {
+
+                    if (response.body()!!.success){
+                        Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
                     } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                 }
@@ -420,7 +464,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
             /*отправил неправильный код
             {"success":false,"error_text":"Время жизни кода активации вышло, зарегистрируйтесь заново"}*/
-            override fun onFailure(call: Call<ResponseRegConfirmMail>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRegConfirm>, t: Throwable) {
                 Toast.makeText(context, "Код не работает!", Toast.LENGTH_LONG).show()
             }
 
@@ -477,12 +521,13 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val contacts = ArrayList<Contact>()
+        val contacts = ArrayList<Any>()//Contact нужно было посылать с 2 и 3 полями
         val contactsString = regContacts.value!!
 
         /*Формируем из 3 листов Livedata один для отправки на сервер*/
         for (i in contactsString.indices) {
-            contacts.add(Contact(regContactsId.value!![i], regContactsType.value!![i], contactsString[i]))
+            if (regContactsId.value!![i] > 0) contacts.add(Contact(regContactsId.value!![i], regContactsType.value!![i], contactsString[i]))
+            else contacts.add(ContactWithoutId(regContactsType.value!![i], contactsString[i]))
         }
 
         val contactFaceContacts = RegContactFaceContact(
@@ -633,11 +678,9 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     /*Для добавления контакта в список на 4 этапе регистрации*/
     fun btnAddContactClick() {
-        val listContacts = regContacts.value
-        val listContactsType = regContactsType.value
-        listContacts!!.add("")
-        listContactsType!!.add("")
-        setRegContacts(listContacts)
+        regContactsId.add(0)
+        regContactsType.add("phone")
+        regContacts.add("")
     }
 
     /*Для загрузки прикрепленных контактов для испольщования в 4 этапе(пока костыль)*/

@@ -279,10 +279,11 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        regViewModel.getResultReg1Success().observe(this, Observer {
+        regViewModel. getResultReg1Success().observe(this, Observer {
             if (it) {
                 when (viewModelMain.getSocialLaunch().value) {
                     "RegUserMail" -> regViewModel.postBindEmail()
+                    "RegUserPhone" -> regViewModel.postBindPhone()
                 }
             }
         })

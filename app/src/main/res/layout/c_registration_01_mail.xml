@@ -15,6 +15,7 @@
 			name = "viewmodelmain"
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
+        <import type="android.view.View" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -105,6 +106,7 @@
 			android:inputType = "textPassword"
 			android:hint = "@string/password_1"
 			android:text = "@={viewmodelreg.regPassword}"
+			android:visibility="@{viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE}"
 			/>
 
 		<EditText
@@ -119,6 +121,7 @@
 		android:inputType = "textPassword"
 		android:hint = "@string/password_4"
 		android:text = "@={viewmodelreg.regPassConfirm}"
+		android:visibility="@{viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE}"
 		/>
 
 		<Button
@@ -131,7 +134,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/bind_account"
-			android:onClick = '@{() -> viewmodelreg.startRegistration()}'
+			android:onClick = '@{() -> viewmodelreg.regOrBindMail()}'
 			/>
 
 		<EditText

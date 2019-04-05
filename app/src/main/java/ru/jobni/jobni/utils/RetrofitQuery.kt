@@ -24,7 +24,10 @@ interface RetrofitQuery {
     fun sendBindPhone(@Header("Cookie") sessionID: String, @Body bindPhone: BindPhone): Call<ResponseRegUser>
 
     @POST("api/registration/email_code/")
-    fun validateMailCode(@Header("Cookie") sessionID: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
+    fun validateMailCode(@Header("Cookie") sessionID: String, @Body confirmCode: ConfirmCode): Call<ResponseRegConfirm>
+
+    @POST("api/registration/phone_code/")
+    fun validatePhoneCode(@Header("Cookie") sessionID: String, @Body confirmCode: ConfirmCode): Call<ResponseRegConfirm>
 
     @POST("api/registration/password/")
     fun sendRegistrationPass(@Header("Cookie") sessionID: String, @Body pass: RegPass): Call<ResponseRegPass>

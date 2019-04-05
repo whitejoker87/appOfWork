@@ -6,6 +6,7 @@
     <data>
         <variable name="viewmodelreg" type="ru.jobni.jobni.viewmodel.RegViewModel"/>
         <variable name="viewmodelmain" type="ru.jobni.jobni.viewmodel.MainViewModel"/>
+        <import type="android.view.View" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             xmlns:tools="http://schemas.android.com/tools"
@@ -67,15 +68,45 @@
                   android:inputType="phone"
                   android:hint="@string/phone"
                   android:text="@={viewmodelreg.regPhone}"/>
+        <EditText
+                android:id = "@+id/password_phone"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                app:layout_constraintTop_toBottomOf = "@+id/phone"
+                app:layout_constraintStart_toStartOf = "@+id/phone"
+                app:layout_constraintEnd_toEndOf = "@+id/phone"
+                android:layout_marginTop = "16dp"
+                style = "@style/text_color_and_size"
+                android:inputType = "textPassword"
+                android:hint = "@string/password_1"
+                android:text = "@={viewmodelreg.regPassword}"
+                android:visibility="@{viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE}"
+        />
+
+        <EditText
+                android:id = "@+id/password_confirm_phone"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                app:layout_constraintTop_toBottomOf = "@+id/password_phone"
+                app:layout_constraintStart_toStartOf = "@+id/phone"
+                app:layout_constraintEnd_toEndOf = "@+id/phone"
+                android:layout_marginTop = "16dp"
+                style = "@style/text_color_and_size"
+                android:inputType = "textPassword"
+                android:hint = "@string/password_4"
+                android:text = "@={viewmodelreg.regPassConfirm}"
+                android:visibility="@{viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE}"
+        />
         <Button android:id="@+id/phone_code_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/phone"
+                app:layout_constraintTop_toBottomOf="@+id/password_confirm_phone"
                 app:layout_constraintStart_toStartOf="@+id/background"
                 app:layout_constraintEnd_toEndOf="@+id/background"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/shape_button"
-                android:text="@string/phone_code_send"/>
+                android:text="@string/phone_code_send"
+                android:onClick = '@{() -> viewmodelreg.regOrBindPhone()}'/>
         <EditText android:id="@+id/phone_code"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
@@ -95,15 +126,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/background"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/shape_button"
-                android:text="@string/bind_account"/>
-        <Button android:id="@+id/next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/background"
-                app:layout_constraintEnd_toEndOf="@+id/background"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/shape_button"
-                android:text="@string/next"/>
+                android:text="@string/bind_account"
+                android:onClick = "@{() -> viewmodelreg.confirmPhone()}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
