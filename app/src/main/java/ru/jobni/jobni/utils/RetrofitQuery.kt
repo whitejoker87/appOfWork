@@ -48,8 +48,8 @@ interface RetrofitQuery {
     @POST("api/registration/social_account/")
     fun postVKAuthData(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
 
-    @POST("api/registration/social_account/")
-    fun postVKAuthUP(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
+    @POST("api/accounts/vk/login/?process=login")
+    fun postVKAuthUP(@Header("Cookie") sessionID: String): Call<ResponseBody>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")
