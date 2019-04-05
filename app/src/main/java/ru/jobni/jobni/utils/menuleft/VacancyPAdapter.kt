@@ -5,15 +5,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.menuleft.FragmentVacancyActive
-import ru.jobni.jobni.fragments.menuleft.FragmentVacancyArchive
+import ru.jobni.jobni.fragments.menuleft.FragmentCompanyVacancyActive
+import ru.jobni.jobni.fragments.menuleft.FragmentCompanyVacancyArchive
 
 class VacancyPAdapter(
         private val fragment: FragmentManager,
         private val _context: Context
 ) : FragmentPagerAdapter(fragment) {
 
-    private val mFragmentList: ArrayList<Fragment> = arrayListOf(FragmentVacancyActive(), FragmentVacancyArchive())
+    private val mFragmentList: ArrayList<Fragment> = arrayListOf(FragmentCompanyVacancyActive(), FragmentCompanyVacancyArchive())
 
     override fun getItem(position: Int): Fragment {
         return mFragmentList[position]

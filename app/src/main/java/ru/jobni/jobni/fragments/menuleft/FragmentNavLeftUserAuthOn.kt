@@ -51,7 +51,7 @@ class FragmentNavLeftUserAuthOn : Fragment() {
         navAdapter.setOnGroupClickListener(object : OnGroupClickListener {
             override fun onGroupClick(flatPos: Int): Boolean {
                 if (flatPos == 0) {
-                    viewModel.setFragmentLaunch("Summary")
+                    viewModel.setFragmentLaunch("SummaryUser")
                     viewModel.setOpenDrawerLeft(false)
                     return false
                 }
@@ -64,6 +64,12 @@ class FragmentNavLeftUserAuthOn : Fragment() {
 
                 if (flatPos == 2) {
                     viewModel.setFragmentLaunch("ProfileUser")
+                    viewModel.setOpenDrawerLeft(false)
+                    return false
+                }
+
+                if (flatPos == 3) {
+                    viewModel.setFragmentLaunch("FinanceUser")
                     viewModel.setOpenDrawerLeft(false)
                     return false
                 }

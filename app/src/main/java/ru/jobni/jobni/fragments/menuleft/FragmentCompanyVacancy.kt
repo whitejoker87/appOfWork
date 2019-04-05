@@ -38,7 +38,7 @@ class FragmentCompanyVacancy : Fragment() {
         binding.tabLayoutVacancy.setupWithViewPager(binding.viewPagerVacancy)
 
         binding.fabVacancy.setOnClickListener { fabView ->
-            Snackbar.make(fabView, "CompanyVacancy FAB", Snackbar.LENGTH_LONG)
+            Snackbar.make(fabView, "CompanyVacancyList FAB", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 

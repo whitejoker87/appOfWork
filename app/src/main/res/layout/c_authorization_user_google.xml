@@ -46,7 +46,7 @@
 			android:textStyle = "bold"
 			android:textColor = "@color/font_color"
 			android:textSize = "14sp"
-			android:text = "@string/user_auth_fb_info_text"
+			android:text = "@string/user_auth_google_info_text"
 			/>
 
 		<include
@@ -62,28 +62,56 @@
 			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
-		<com.facebook.login.widget.LoginButton
-			android:id = "@+id/login_button_fb"
+		<com.google.android.gms.common.SignInButton
+			android:id = "@+id/sign_in_button"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "30dp"
+			android:layout_marginTop = "60dp"
+			android:enabled = "false"
 			app:layout_constraintHorizontal_bias = "0.5"
 			/>
 
-		<!--<Button-->
-			<!--android:id = "@+id/btn_enter"-->
-			<!--android:layout_width = "wrap_content"-->
-			<!--android:layout_height = "wrap_content"-->
-			<!--app:layout_constraintTop_toBottomOf = "@+id/include_social_network"-->
-			<!--app:layout_constraintStart_toStartOf = "@+id/iv_background"-->
-			<!--app:layout_constraintEnd_toEndOf = "@+id/iv_background"-->
-			<!--android:layout_marginTop = "60dp"-->
-			<!--android:background = "@drawable/shape_button"-->
-			<!--android:text = "@string/enter"-->
-			<!--app:layout_constraintHorizontal_bias = "0.498"-->
-			<!--/>-->
+		<Button
+			android:id = "@+id/sign_out_button"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/sign_in_button"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "8dp"
+			android:background = "@drawable/shape_button"
+			android:text = "Sign Out"
+			android:enabled = "true"
+			app:layout_constraintHorizontal_bias = "0.5"
+			/>
+
+		<Button
+			android:id = "@+id/revoke_access_button"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/sign_out_button"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "8dp"
+			android:background = "@drawable/shape_button"
+			android:text = "Revoke Access"
+			android:enabled = "true"
+			app:layout_constraintHorizontal_bias = "0.5"
+			/>
+
+		<TextView
+			android:id = "@+id/statuslabel"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/revoke_access_button"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "8dp"
+			android:text = "Status"
+			app:layout_constraintHorizontal_bias = "0.5"
+			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

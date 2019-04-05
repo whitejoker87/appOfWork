@@ -9,8 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CCardVacancyCompanyCloseBinding
-
-import ru.jobni.jobni.model.VacancyEntity
+import ru.jobni.jobni.model.CompanyVacancyEntity
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
@@ -22,7 +21,7 @@ class VacancyCompanyRVAdapter(context: Context) : RecyclerView.Adapter<VacancyCo
 
     private val VIEW_TYPE_ITEM = 0
 
-    var vacancies: MutableList<VacancyEntity> = mutableListOf()
+    var vacancies: MutableList<CompanyVacancyEntity> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -59,7 +58,7 @@ class VacancyCompanyRVAdapter(context: Context) : RecyclerView.Adapter<VacancyCo
     class CardViewHolder(val binding: CCardVacancyCompanyCloseBinding, val viewmodel: MainViewModel) :
             RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(vacancy: VacancyEntity) {
+        fun bind(vacancy: CompanyVacancyEntity) {
             binding.vacancy = vacancy
             binding.position = adapterPosition
             binding.viewmodel = viewmodel

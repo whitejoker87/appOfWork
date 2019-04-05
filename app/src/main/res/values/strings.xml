@@ -153,10 +153,26 @@
 	<string name = "vacancy_tab_archive">Архивные</string>
 	<string name = "reviews_tab_about">Активные</string>
 	<string name = "reviews_tab_my">Архивные</string>
+	<string name = "tv_company_balance_text">БАЛАНС КОМПАНИИ:</string>
+	<string name = "tv_company_balance_amount_text">10000</string>
+	<string name = "btn_company_balance_fill_text">Пополнить баланс</string>
+	<string name = "btn_company_balance_history_text">История платежей</string>
+	<string name = "btn_company_balance_provided_text">Оказанные услуги</string>
+	<string name = "tv_user_balance_text">ВАШ БАЛАНС:</string>
+	<string name = "tv_user_balance_amount_text">10000</string>
+	<string name = "btn_user_balance_fill_text">Пополнить баланс</string>
+	<string name = "btn_user_balance_history_text">История платежей</string>
+	<string name = "btn_user_balance_provided_text">Оказанные услуги</string>
+	<string name = "btn_user_balance_provided_full_text">Оказанные услуги (детально)</string>
+	<string name = "btn_user_refal_text">Рефальная программа</string>
+	<string name = "btn_user_cashback_text">CashBack</string>
 	<string name = "auth_info_text">ВЫБЕРИТЕ СПОСОБ АВТОРИЗАЦИИ</string>
-	<string name="reg_info_text">ВЫБЕРИТЕ СПОСОБ РЕГИСТРАЦИИ</string>
-    <string name = "user_auth_info_text">УКАЖИТЕ ВАШИ ДАННЫЕ</string>
+	<string name = "reg_info_text">ВЫБЕРИТЕ СПОСОБ РЕГИСТРАЦИИ</string>
+	<string name = "user_auth_info_text">УКАЖИТЕ ВАШИ ДАННЫЕ</string>
 	<string name = "user_auth_fb_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ FACEBOOK</string>
+	<string name = "user_auth_ok_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ ОДНОКЛАСНИКИ</string>
+	<string name = "user_auth_google_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ GOOGLE+</string>
+	<string name = "user_auth_vk_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ ВКОНТАКТЕ</string>
 	<string name = "user_auth_delete_info_text">Авторизация сброшена</string>
 	<string name = "btn_change_user_pass_text">Сменить пароль</string>
 	<string name = "btn_change_user_mail_text">Сменить почту</string>
@@ -182,4 +198,8 @@
 	<integer name = "com_vk_sdk_AppId">6746499</integer>
 	<string name = "facebook_app_id">2250712614985944</string>
 	<string name = "fb_login_protocol_scheme">fb2250712614985944</string>
+	<string name = "btn_company_vacancy_show_text">Опубликовать</string>
+	<string name = "btn_company_vacancy_edit_text">Редактировать</string>
+	<string name = "btn_company_vacancy_delete_text">Удалить</string>
+	<string name = "btn_company_vacancy_archive_text">В архив</string>
 </resources>

@@ -18,7 +18,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.facebook.AccessToken
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.vk.api.sdk.VK
@@ -30,10 +29,16 @@ import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.auth.FragmentAuth
 import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUserLogged
+import ru.jobni.jobni.fragments.auth.google.FragmentAuthGoogleUser
+import ru.jobni.jobni.fragments.auth.google.FragmentAuthGoogleUserLogged
 import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUser
 import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLogged
 import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangeMail
 import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangePass
+import ru.jobni.jobni.fragments.auth.ok.FragmentAuthOKUser
+import ru.jobni.jobni.fragments.auth.ok.FragmentAuthOKUserLogged
+import ru.jobni.jobni.fragments.auth.vk.FragmentAuthVKUser
+import ru.jobni.jobni.fragments.auth.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.fragments.reg.FragmentReg
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
@@ -75,10 +80,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Facebook check tokens
-        val accessToken = AccessToken.getCurrentAccessToken()
-        val isLoggedIn = accessToken != null && !accessToken.isExpired
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
@@ -140,6 +141,7 @@ class MainActivity : AppCompatActivity() {
             if (isOpen) {
                 if (viewModelAuth.isUserAuthid().value == true
                         || viewModelAuth.isFBAuthid().value == true
+                        || viewModelAuth.isGoogleAuthid().value == true
                 ) {
                     viewModelMain.setNoAuthRegVisible(false)
                     viewModelMain.setYesAuthRegVisible(true)
@@ -169,14 +171,16 @@ class MainActivity : AppCompatActivity() {
                 "Main_focus" -> setFragment(FragmentMain.newInstance(SET_FOCUS))
                 "Vacancy" -> setFragment(FragmentVacancy())
                 "VacancyCompany" -> setFragment(FragmentVacancyCompany())
-                "Summary" -> setFragment(FragmentSummary())
+                "SummaryUser" -> setFragment(FragmentSummaryUser())
                 "ReviewsUser" -> setFragment(FragmentReviewsUser())
                 "ReviewsOwner" -> setFragment(FragmentReviewsOwner())
                 "ProfileUser" -> setFragment(FragmentProfileUser())
                 "ProfileOwner" -> setFragment(FragmentProfileOwner())
+                "FinanceUser" -> setFragment(FragmentFinanceUser())
                 "CompanyAddAuthOn" -> setFragment(FragmentCompanyAddAuthOn())
                 "CompanyAddAuthOff" -> setFragment(FragmentCompanyAddAuthOff())
                 "CompanyVacancy" -> setFragment(FragmentCompanyVacancy())
+                "CompanyFinance" -> setFragment(FragmentCompanyFinance())
                 "Auth" -> setFragment(FragmentAuth())
                 "Registration" -> setFragment(FragmentReg())
                 "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
@@ -191,10 +195,14 @@ class MainActivity : AppCompatActivity() {
                 /*аутентификация запускаеться сразу тут*/
                 "AuthUser" -> setFragment(FragmentAuthUser())
                 "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
-
                 "AuthFBUser" -> setFragment(FragmentAuthFBUser())
                 "AuthFBUserLogged" -> setFragment(FragmentAuthFBUserLogged())
-
+                "AuthGoogleUser" -> setFragment(FragmentAuthGoogleUser())
+                "AuthGoogleUserLogged" -> setFragment(FragmentAuthGoogleUserLogged())
+                "AuthOKUser" -> setFragment(FragmentAuthOKUser())
+                "AuthOKUserLogged" -> setFragment(FragmentAuthOKUserLogged())
+                "AuthVKUser" -> setFragment(FragmentAuthVKUser())
+                "AuthVKUserLogged" -> setFragment(FragmentAuthVKUserLogged())
                 "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
                 "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
@@ -206,7 +214,6 @@ class MainActivity : AppCompatActivity() {
         /*наблюдение за изменением статуса кнопок регистрации*/
         regViewModel.getBtnUserLogged().observe(this, Observer {
             when (it) {
-
                 /*регистрация сначала использует getSocialLaunch т.к. нужно сперва изменить цвет кнопки*/
                 "mail" -> regViewModel.setTypeAddRegFragment("mail")
                 "phone" -> regViewModel.setTypeAddRegFragment("phone")
@@ -251,6 +258,21 @@ class MainActivity : AppCompatActivity() {
             closeKeyboard()
         })
 
+        viewModelAuth.isGoogleAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isOKAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isVKAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
         regViewModel.isVkRegStart().observe(this, Observer {
             if (it) {
                 VK.login(this, arrayListOf())
@@ -258,8 +280,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         regViewModel.getResultReg1Success().observe(this, Observer {
-            if (it){
-                when(viewModelMain.getSocialLaunch().value) {
+            if (it) {
+                when (viewModelMain.getSocialLaunch().value) {
                     "RegUserMail" -> regViewModel.postBindEmail()
                 }
             }
@@ -349,7 +371,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val callback = object: VKAuthCallback {
+        val callback = object : VKAuthCallback {
             override fun onLogin(token: VKAccessToken) {
                 // User passed authorization
             }
@@ -361,11 +383,7 @@ class MainActivity : AppCompatActivity() {
         if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {
             super.onActivityResult(requestCode, resultCode, data)
         }
-
     }
-
-
-
 
 
     private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
