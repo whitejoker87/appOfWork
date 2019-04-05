@@ -725,26 +725,26 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
 
     }
-    /*запуск активити вк апи из макета FragmentRegOneOther*/
-    fun getVKReg(){
-        //setVkRegStart(true)
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
-        val process = "connect"
-
-        Retrofit.api?.postSocialReg(cid, "vk", process)?.enqueue(object : Callback<ResponseBody> {
-            /**/
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
-                    /*{"success":false,"error_text":"Заполните необходимые поля."}*/
-
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
-            }
-        })
-    }
+//    /*запуск активити вк апи из макета FragmentRegOneOther*/
+//    fun getVKReg(){
+//        //setVkRegStart(true)
+//        val id = sPrefAuthUser.getString(authUserSessionID, null)
+//        val cid = String.format("%s%s", "sessionid=", id)
+//        val process = "connect"
+//
+//        Retrofit.api?.postSocialReg(cid, "vk", process)?.enqueue(object : Callback<ResponseBody> {
+//            /**/
+//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                if (response.body() != null) {
+//                    /*{"success":false,"error_text":"Заполните необходимые поля."}*/
+//
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//
+//            }
+//        })
+//    }
 
 }
