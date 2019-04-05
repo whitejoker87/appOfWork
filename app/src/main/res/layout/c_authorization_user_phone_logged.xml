@@ -72,7 +72,7 @@
 			android:layout_marginTop = "26dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/btn_change_user_pass_text"
-			android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthUserLoggedPass")}'
+			android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthPhoneUserLoggedPass")}'
 			/>
 
 		<Button
@@ -85,7 +85,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
 			android:text = "@string/btn_change_user_mail_text"
-			android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthUserLoggedMail")}'
+			android:onClick = '@{() -> viewmodelmain.setFragmentLaunch("AuthPhoneUserLogged")}'
 			/>
 
 		<Button
@@ -98,7 +98,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_badge"
 			android:text = "@string/btn_change_user_auth_text"
-			android:onClick="@{() -> viewmodelauth.onAuthUserChangeClick()}"
+			android:onClick = "@{() -> viewmodelauth.onAuthPhoneUserChangeClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

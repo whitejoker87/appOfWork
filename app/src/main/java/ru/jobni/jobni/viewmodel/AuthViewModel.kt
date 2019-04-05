@@ -10,7 +10,8 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.jobni.jobni.model.auth.UserAuth
+import ru.jobni.jobni.model.auth.mail.UserMailAuth
+import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -18,20 +19,27 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     val context = application
 
-    private val authUserSessionID = "userSessionID"
-    private val authUserName = "userName"
-    private val authUserPass = "userPass"
+    private val authMailSessionID = "userMailSessionID"
+    private val authMailUser = "userMail"
+    private val authMailPass = "userPass"
 
-    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
+    var sPrefAuthMailUser = application.getSharedPreferences("authMail", AppCompatActivity.MODE_PRIVATE)
+
+
+    private val authPhoneSessionID = "userPhoneSessionID"
+    private val authPhoneUser = "userPhone"
+
+    var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
+
 
     /*цвет кнопки при логине пользователя*/
     private val btnUserLogged = MutableLiveData<String>("")
 
     /*кликабельность кнопки при навигации(изменяется внутри меню)*/
-    private val isBtnUserNotClickable = MutableLiveData<Boolean>()
+    private val isBtnMailNotClickable = MutableLiveData<Boolean>()
 
-    private val isUserAuthid = MutableLiveData<Boolean>()
-    private val authUser = MutableLiveData<String>()
+    private val isMailAuthid = MutableLiveData<Boolean>()
+    private val authMail = MutableLiveData<String>()
     private val authPass = MutableLiveData<String>()
 
 
@@ -67,6 +75,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val authVKPass = MutableLiveData<String>()
 
 
+    /*кликабельность кнопки при навигации Phone(изменяется внутри меню)*/
+    private val isBtnPhoneNotClickable = MutableLiveData<Boolean>()
+
+    private val isPhoneAuthid = MutableLiveData<Boolean>()
+    private val authPhone = MutableLiveData<String>()
+
+
     /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
         btnUserLogged.value = typeLogged
@@ -75,24 +90,24 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun getBtnUserLogged(): MutableLiveData<String> = btnUserLogged
 
 
-    fun setBtnUserNotClickable(isVisible: Boolean) {
-        isBtnUserNotClickable.value = isVisible
+    fun setBtnMailNotClickable(isVisible: Boolean) {
+        isBtnMailNotClickable.value = isVisible
     }
 
-    fun isBtnUserNotClickable(): MutableLiveData<Boolean> = isBtnUserNotClickable
+    fun isBtnMailNotClickable(): MutableLiveData<Boolean> = isBtnMailNotClickable
 
 
-    fun setUserAuthid(authKey: Boolean) {
-        isUserAuthid.value = authKey
+    fun setMailAuthid(authKey: Boolean) {
+        isMailAuthid.value = authKey
     }
 
-    fun isUserAuthid(): MutableLiveData<Boolean> = isUserAuthid
+    fun isMailAuthid(): MutableLiveData<Boolean> = isMailAuthid
 
 
-    fun getAuthUser(): String? = authUser.value
+    fun getAuthMail(): String? = authMail.value
 
-    fun setAuthUser(query: String) {
-        this.authUser.value = query
+    fun setAuthMail(query: String) {
+        this.authMail.value = query
     }
 
 
@@ -219,29 +234,51 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    /* Блок Phone авторизации */
+    fun setBtnPhoneNotClickable(isVisible: Boolean) {
+        isBtnPhoneNotClickable.value = isVisible
+    }
+
+    fun isBtnPhoneNotClickable(): MutableLiveData<Boolean> = isBtnPhoneNotClickable
+
+
+    fun setPhoneAuthid(authKey: Boolean) {
+        isPhoneAuthid.value = authKey
+    }
+
+    fun isPhoneAuthid(): MutableLiveData<Boolean> = isPhoneAuthid
+
+
+    fun getAuthPhone(): String? = authPhone.value
+
+    fun setAuthPhone(query: String) {
+        this.authPhone.value = query
+    }
+
+
+    // Временный метод для разных авторизаций
     fun onAuthUserChangeClick(): Boolean {
-        val editor = sPrefAuthUser.edit()
-        editor?.remove(authUserSessionID)
-        editor?.remove(authUserName)
-        editor?.remove(authUserPass)
+        return false
+    }
+
+    fun onAuthMailUserChangeClick(): Boolean {
+        val editor = sPrefAuthMailUser.edit()
+        editor?.remove(authMailSessionID)
+        editor?.remove(authMailUser)
+        editor?.remove(authMailPass)
         editor?.apply()
 
         setBtnUserLogged("")
-        setUserAuthid(false)
+        setMailAuthid(false)
 
         return false
     }
 
-    fun onAuthUserClick() {
-        doAuthUserPost()
-    }
+    fun onAuthMailUserClick() {
 
+        val userData = UserMailAuth(getAuthMail(), getAuthPass())
 
-    fun doAuthUserPost() {
-
-        val userData = UserAuth(getAuthUser(), getAuthPass())
-
-        Retrofit.api?.postAuthData("AuthUser", userData)?.enqueue(object : Callback<ResponseBody> {
+        Retrofit.api?.postAuthData("AuthMailUser", userData)?.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
                 if (response.body() != null) {
 
@@ -254,15 +291,54 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                     val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                    val editor = sPrefAuthUser.edit()
-                    editor?.putString(authUserSessionID, sessionID)
-                    editor?.putString(authUserName, getAuthUser())
-                    editor?.putString(authUserPass, getAuthPass())
+                    val editor = sPrefAuthMailUser.edit()
+                    editor?.putString(authMailSessionID, sessionID)
+                    editor?.putString(authMailUser, getAuthMail())
+                    editor?.putString(authMailPass, getAuthPass())
                     editor?.apply()
 
                     if (sessionID != null) {
-                        setUserAuthid(true)
+                        setMailAuthid(true)
                         setBtnUserLogged("mail")
+                    }
+                }
+            }
+
+            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthPhoneUserChangeClick(): Boolean {
+        return false
+    }
+
+    fun onAuthPhoneUserClick() {
+
+        val userData = UserPhoneAuth(getAuthPhone())
+
+        Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
+                if (response.body() != null) {
+
+                    val resultListHeaders = response.headers().get("Set-Cookie")
+
+                    /* Пример ответа от АПИ
+                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
+                    Нам нужно выделить из этой строки sessionid
+                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
+
+                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
+
+                    val editor = sPrefAuthPhoneUser.edit()
+                    editor?.putString(authPhoneSessionID, sessionID)
+                    editor?.putString(authPhoneUser, getAuthPhone())
+                    editor?.apply()
+
+                    if (sessionID != null) {
+                        setPhoneAuthid(true)
+                        setBtnUserLogged("phone")
                     }
                 }
             }

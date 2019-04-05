@@ -31,12 +31,14 @@ import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUserLogged
 import ru.jobni.jobni.fragments.auth.google.FragmentAuthGoogleUser
 import ru.jobni.jobni.fragments.auth.google.FragmentAuthGoogleUserLogged
-import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUser
-import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLogged
-import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangeMail
-import ru.jobni.jobni.fragments.auth.mail.FragmentAuthUserLoggedChangePass
+import ru.jobni.jobni.fragments.auth.mail.FragmentAuthMailUser
+import ru.jobni.jobni.fragments.auth.mail.FragmentAuthMailUserLogged
+import ru.jobni.jobni.fragments.auth.mail.FragmentAuthMailUserLoggedChangeMail
+import ru.jobni.jobni.fragments.auth.mail.FragmentAuthMailUserLoggedChangePass
 import ru.jobni.jobni.fragments.auth.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.auth.ok.FragmentAuthOKUserLogged
+import ru.jobni.jobni.fragments.auth.phone.FragmentAuthPhoneUser
+import ru.jobni.jobni.fragments.auth.phone.FragmentAuthPhoneUserLogged
 import ru.jobni.jobni.fragments.auth.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.auth.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
@@ -139,7 +141,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModelMain.isOpenDrawerLeft().observe(this, Observer { isOpen ->
             if (isOpen) {
-                if (viewModelAuth.isUserAuthid().value == true
+                if (viewModelAuth.isMailAuthid().value == true
                         || viewModelAuth.isFBAuthid().value == true
                         || viewModelAuth.isGoogleAuthid().value == true
                 ) {
@@ -183,8 +185,8 @@ class MainActivity : AppCompatActivity() {
                 "CompanyFinance" -> setFragment(FragmentCompanyFinance())
                 "Auth" -> setFragment(FragmentAuth())
                 "Registration" -> setFragment(FragmentReg())
-                "AuthUserLoggedPass" -> setFragment(FragmentAuthUserLoggedChangePass())
-                "AuthUserLoggedMail" -> setFragment(FragmentAuthUserLoggedChangeMail())
+                "AuthMailUserLoggedChangePass" -> setFragment(FragmentAuthMailUserLoggedChangePass())
+                "AuthMailUserLoggedChangeMail" -> setFragment(FragmentAuthMailUserLoggedChangeMail())
                 else -> setFragment(FragmentWelcome())
             }
         })
@@ -193,8 +195,8 @@ class MainActivity : AppCompatActivity() {
         viewModelMain.getSocialLaunch().observe(this, Observer {
             when (it) {
                 /*аутентификация запускаеться сразу тут*/
-                "AuthUser" -> setFragment(FragmentAuthUser())
-                "AuthUserLogged" -> setFragment(FragmentAuthUserLogged())
+                "AuthMailUser" -> setFragment(FragmentAuthMailUser())
+                "AuthMailUserLogged" -> setFragment(FragmentAuthMailUserLogged())
                 "AuthFBUser" -> setFragment(FragmentAuthFBUser())
                 "AuthFBUserLogged" -> setFragment(FragmentAuthFBUserLogged())
                 "AuthGoogleUser" -> setFragment(FragmentAuthGoogleUser())
@@ -203,6 +205,8 @@ class MainActivity : AppCompatActivity() {
                 "AuthOKUserLogged" -> setFragment(FragmentAuthOKUserLogged())
                 "AuthVKUser" -> setFragment(FragmentAuthVKUser())
                 "AuthVKUserLogged" -> setFragment(FragmentAuthVKUserLogged())
+                "AuthPhoneUser" -> setFragment(FragmentAuthPhoneUser())
+                "AuthPhoneUserLogged" -> setFragment(FragmentAuthPhoneUserLogged())
                 "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
                 "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
@@ -248,7 +252,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModelAuth.isUserAuthid().observe(this, Observer {
+        viewModelAuth.isMailAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })
@@ -269,6 +273,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModelAuth.isVKAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isPhoneAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })

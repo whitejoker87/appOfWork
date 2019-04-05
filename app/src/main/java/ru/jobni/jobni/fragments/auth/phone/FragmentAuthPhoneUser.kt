@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.auth.mail
+package ru.jobni.jobni.fragments.auth.phone
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserLoggedChangePassBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserPhoneBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentAuthUserLoggedChangePass : Fragment() {
+
+class FragmentAuthPhoneUser : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -22,10 +23,11 @@ class FragmentAuthUserLoggedChangePass : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationUserLoggedChangePassBinding
+    private lateinit var binding: CAuthorizationUserPhoneBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_logged_change_pass, container, false)
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_phone, container, false)
 
         binding.lifecycleOwner = this
 

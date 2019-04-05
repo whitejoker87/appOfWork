@@ -3,7 +3,8 @@ package ru.jobni.jobni.utils
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
-import ru.jobni.jobni.model.auth.UserAuth
+import ru.jobni.jobni.model.auth.mail.UserMailAuth
+import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
 import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.company.CompanyVacancyList
 import ru.jobni.jobni.model.network.registration.*
@@ -52,7 +53,10 @@ interface RetrofitQuery {
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")
-    fun postAuthData(@Header("Authorization") basicAuth: String, @Body user: UserAuth): Call<ResponseBody>
+    fun postAuthData(@Header("Authorization") basicAuth: String, @Body userMail: UserMailAuth): Call<ResponseBody>
+
+    @POST("api/authorization/phone/")
+    fun postAuthDataPhone(@Header("Authorization") basicAuth: String, @Body userPhone: UserPhoneAuth): Call<ResponseBody>
 
     /*API vacancy*/
     @GET("api/filter/detail/vacancy/")
