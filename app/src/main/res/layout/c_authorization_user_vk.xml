@@ -16,6 +16,11 @@
 			type = "ru.jobni.jobni.viewmodel.AuthViewModel"
 			/>
 
+		<variable
+			name = "viewmodelreg"
+			type = "ru.jobni.jobni.viewmodel.RegViewModel"
+			/>
+
 		<import type = "android.view.View"/>
 	</data>
 
@@ -71,7 +76,20 @@
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
-			android:text = "@string/enter"
+			android:text = "test"
+			/>
+
+		<Button
+			android:id = "@+id/btn_user_vk_auth"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/btn_user_vk_login"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "8dp"
+			android:background = "@drawable/shape_button"
+			android:text = "auth"
+			app:layout_constraintHorizontal_bias = "0.501"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

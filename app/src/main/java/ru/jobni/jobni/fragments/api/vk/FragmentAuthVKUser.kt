@@ -12,6 +12,7 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserVkBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
+import ru.jobni.jobni.viewmodel.RegViewModel
 
 class FragmentAuthVKUser : Fragment() {
 
@@ -29,6 +30,10 @@ class FragmentAuthVKUser : Fragment() {
 
     private val viewModelAuth: AuthViewModel by lazy {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
+    }
+
+    private val viewModelReg: RegViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(RegViewModel::class.java)
     }
 
     private lateinit var binding: CAuthorizationUserVkBinding
@@ -50,8 +55,14 @@ class FragmentAuthVKUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
+        binding.viewmodelreg = viewModelReg
+
         binding.btnUserVkLogin.setOnClickListener {
             VK.login(activity!!, arrayListOf())
+        }
+
+        binding.btnUserVkAuth.setOnClickListener {
+            viewModelReg.btnVKClickAuth()
         }
 
         return view
