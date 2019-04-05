@@ -317,8 +317,37 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*Для 1 этапа регистрации для отправки телефона*/
+    fun postBindPhone() {
 
-    
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val bindEmail = BindEmail(
+            regMail.value!!
+        )
+
+        Retrofit.api?.sendBindEmail(cid, bindEmail)?.enqueue(object : Callback<ResponseRegUser> {
+            /*{"email":"1@1.ru"}*/
+            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
+                /*{"success":true,"error_text":["Перейдите на почту для её подтверждения."]}*/
+
+                /*{"success":true,"result":{"_id":4350}}*/
+                /*{"success":false,"errors":{"email":["Это поле не может быть пустым."]}}*/
+                if (response.body() != null) {
+                    if (response.body()!!.success){
+                        Toast.makeText(context, "Почта в норме! ${response.body()!!.result._id}", Toast.LENGTH_LONG).show()
+                        postPassword()
+                    } else Toast.makeText(context, "Почта не очень! ${response.body()!!.errors.email}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
+
+            }
+        })
+    }
+
 
     /*для выполнения 2 этапа регистрации(отправка паролей)*/
     fun postPassword() {

@@ -29,6 +29,10 @@ data class BindEmail(
         @SerializedName("email")val email: String
 )
 
+data class BindPhone(
+    @SerializedName("phone")val phone: String
+)
+
 data class MailCode(
         @SerializedName("code")val code: String
 )

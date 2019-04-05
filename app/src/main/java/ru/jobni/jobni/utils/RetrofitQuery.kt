@@ -19,6 +19,9 @@ interface RetrofitQuery {
     @POST("api/registration/bind_email/")
     fun sendBindEmail(@Header("Cookie") sessionID: String, @Body bindEmail: BindEmail): Call<ResponseRegUser>
 
+    @POST("api/registration/bind_phone/")
+    fun sendBindPhone(@Header("Cookie") sessionID: String, @Body bindPhone: BindPhone): Call<ResponseRegUser>
+
     @POST("api/registration/email_code/")
     fun validateMailCode(@Header("Cookie") sessionID: String, @Body mailCode: MailCode): Call<ResponseRegConfirmMail>
 
