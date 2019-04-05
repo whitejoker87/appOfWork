@@ -273,7 +273,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun isLoadCardFailVisible(): MutableLiveData<Boolean> = isLoadCardFailVisible
 
 
-    private val companyBalance = MutableLiveData<String>()
+    private val companyBalance = MutableLiveData<String>("")
 
     fun setCompanyBalance(balanceAmount: String) {
         companyBalance.value = balanceAmount

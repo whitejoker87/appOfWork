@@ -79,6 +79,7 @@
 			android:textAlignment = "textEnd"
 			tools:text = "@string/tv_company_balance_amount_text"
 			app:layout_constraintHorizontal_bias = "0.1"
+			app:formattedTextSalary = "@{viewmodel.companyBalance}"
 			/>
 
 		<TextView
