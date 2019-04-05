@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModelMain.isOpenDrawerLeft().observe(this, Observer { isOpen ->
             if (isOpen) {
-                if (viewModelAuth.isUserAuthid().value == true
+                if (viewModelAuth.isMailAuthid().value == true
                         || viewModelAuth.isFBAuthid().value == true
                         || viewModelAuth.isGoogleAuthid().value == true
                 ) {
@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModelAuth.isUserAuthid().observe(this, Observer {
+        viewModelAuth.isMailAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })

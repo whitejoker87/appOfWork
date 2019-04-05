@@ -75,7 +75,7 @@
 			style = "@style/text_color_and_size"
 			android:inputType = "phone|number"
 			android:hint = "@string/mail_5"
-			android:text = "@={viewmodelauth.authUser}"
+			android:text = "@={viewmodelauth.authPhone}"
 			app:layout_constraintHorizontal_bias = "1.0"
 			/>
 

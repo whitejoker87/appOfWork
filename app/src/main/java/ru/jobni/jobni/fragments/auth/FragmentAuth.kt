@@ -40,6 +40,6 @@ class FragmentAuth : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModelAuth.setBtnUserNotClickable(false)
+        viewModelAuth.setBtnMailNotClickable(false)
     }
 }

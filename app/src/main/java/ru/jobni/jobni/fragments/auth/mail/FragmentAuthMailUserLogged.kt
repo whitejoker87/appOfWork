@@ -31,7 +31,7 @@ class FragmentAuthMailUserLogged : Fragment() {
 
         val view = binding.root
 
-        viewModelAuth.setBtnUserNotClickable(true)
+        viewModelAuth.setBtnMailNotClickable(true)
 
         binding.viewmodelauth = viewModelAuth
 
