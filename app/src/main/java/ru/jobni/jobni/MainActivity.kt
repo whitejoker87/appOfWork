@@ -26,23 +26,23 @@ import com.vk.api.sdk.auth.VKAuthCallback
 import kotlinx.android.synthetic.main.nav_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
-import ru.jobni.jobni.fragments.auth.FragmentAuth
-import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUser
-import ru.jobni.jobni.fragments.auth.facebook.FragmentAuthFBUserLogged
-import ru.jobni.jobni.fragments.auth.google.FragmentAuthGoogleUser
-import ru.jobni.jobni.fragments.auth.google.FragmentAuthGoogleUserLogged
-import ru.jobni.jobni.fragments.auth.mail.FragmentAuthMailUser
-import ru.jobni.jobni.fragments.auth.mail.FragmentAuthMailUserLogged
-import ru.jobni.jobni.fragments.auth.mail.FragmentAuthMailUserLoggedChangeMail
-import ru.jobni.jobni.fragments.auth.mail.FragmentAuthMailUserLoggedChangePass
-import ru.jobni.jobni.fragments.auth.ok.FragmentAuthOKUser
-import ru.jobni.jobni.fragments.auth.ok.FragmentAuthOKUserLogged
-import ru.jobni.jobni.fragments.auth.phone.FragmentAuthPhoneUser
-import ru.jobni.jobni.fragments.auth.phone.FragmentAuthPhoneUserLogged
-import ru.jobni.jobni.fragments.auth.vk.FragmentAuthVKUser
-import ru.jobni.jobni.fragments.auth.vk.FragmentAuthVKUserLogged
+import ru.jobni.jobni.fragments.api.auth.FragmentAuth
+import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUser
+import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLogged
+import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangeMail
+import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangePass
+import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
+import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
+import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
+import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUserLogged
+import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
+import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUserLogged
+import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
+import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
+import ru.jobni.jobni.fragments.api.reg.FragmentReg
+import ru.jobni.jobni.fragments.api.vk.FragmentAuthVKUser
+import ru.jobni.jobni.fragments.api.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
-import ru.jobni.jobni.fragments.reg.FragmentReg
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
@@ -383,16 +383,26 @@ class MainActivity : AppCompatActivity() {
 
         val callback = object : VKAuthCallback {
             override fun onLogin(token: VKAccessToken) {
-                // User passed authorization
+                // Пользователь успешно авторизовался
+                val acsessToken = token.accessToken
+                val acsessTokenSecretKey = token.secret
+                val userLogin = token.userId
+
+                regViewModel.btnVKClick(userLogin.toString(), "vk", acsessToken)
+
+                println("111 " + acsessToken + acsessTokenSecretKey + userLogin)
+
+//                FragmentAuthVKUserData.startFrom(activity as Context)
             }
 
             override fun onLoginFailed(errorCode: Int) {
-                // User didn't pass authorization
+                // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
             }
         }
-        if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {
+        if (!VK.onActivityResult(requestCode, resultCode, data, callback)) {
             super.onActivityResult(requestCode, resultCode, data)
         }
+
     }
 
 

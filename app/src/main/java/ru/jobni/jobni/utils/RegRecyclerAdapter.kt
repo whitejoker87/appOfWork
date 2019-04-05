@@ -17,8 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.MainActivity
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.RegPhaseRecyclerItemBinding
-import ru.jobni.jobni.fragments.auth.FragmentAuth
-import ru.jobni.jobni.fragments.reg.*
+import ru.jobni.jobni.fragments.api.reg.*
 import ru.jobni.jobni.viewmodel.RegViewModel
 
 

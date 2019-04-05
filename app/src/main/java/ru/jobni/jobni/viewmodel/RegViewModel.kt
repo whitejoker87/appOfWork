@@ -243,6 +243,30 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    fun btnVKClick(userLogin: String, provider: String, acsessToken: String) {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val contactFace = RegVK(
+                userLogin,
+                provider,
+                acsessToken
+        )
+        Retrofit.api?.postVKAuthData(cid, contactFace)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
     /*для выполнения 1 этапа регистрации(пустой запрос для старта)*/
     fun startRegistration() {
 
