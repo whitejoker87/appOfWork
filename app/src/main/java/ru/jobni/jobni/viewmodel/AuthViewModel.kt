@@ -286,6 +286,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         setBtnUserLogged("")
         setMailAuthid(false)
+        setBtnPhoneNotClickable(false)
 
         return false
     }
@@ -317,6 +318,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         setMailAuthid(true)
                         setBtnUserLogged("mail")
+                        setBtnPhoneNotClickable(true)
 
                     } else if (!(response.body()!!.success)) {
                         Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()

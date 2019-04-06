@@ -380,28 +380,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /* VK callback block */
         val callback = object : VKAuthCallback {
             override fun onLogin(token: VKAccessToken) {
-                // Пользователь успешно авторизовался
-                val acsessToken = token.accessToken
-                val acsessTokenSecretKey = token.secret
+                val accessToken = token.accessToken
                 val userLogin = token.userId
 
-                regViewModel.btnVKClick(userLogin.toString(), "vk", acsessToken)
-
-                println("111 " + acsessToken + acsessTokenSecretKey + userLogin)
-
-//                FragmentAuthVKUserData.startFrom(activity as Context)
+                regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
             }
 
-            override fun onLoginFailed(errorCode: Int) {
-                // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
-            }
+            override fun onLoginFailed(errorCode: Int) {}
         }
         if (!VK.onActivityResult(requestCode, resultCode, data, callback)) {
             super.onActivityResult(requestCode, resultCode, data)
         }
-
     }
 
 
