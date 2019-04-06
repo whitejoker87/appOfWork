@@ -12,7 +12,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
-import ru.jobni.jobni.model.network.auth.Authentication
+import ru.jobni.jobni.model.network.auth.AuthMail
+import ru.jobni.jobni.model.network.auth.AuthPhone
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -293,34 +294,38 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         val userData = UserMailAuth(getAuthMail(), getAuthPass())
 
-        Retrofit.api?.postAuthData("AuthMailUser", userData)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
+        Retrofit.api?.postAuthData("AuthMailUser", userData)?.enqueue(object : Callback<AuthMail> {
+            override fun onResponse(@NonNull call: Call<AuthMail>, @NonNull response: Response<AuthMail>) {
                 if (response.body() != null) {
 
-                    val resultListHeaders = response.headers().get("Set-Cookie")
+                    if (response.body()!!.success) {
 
-                    /* Пример ответа от АПИ
-                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
-                    Нам нужно выделить из этой строки sessionid
-                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
+                        val resultListHeaders = response.headers().get("Set-Cookie")
 
-                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
+                        /* Пример ответа от АПИ
+                        set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
+                        Нам нужно выделить из этой строки sessionid
+                        На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
 
-                    val editor = sPrefAuthMailUser.edit()
-                    editor?.putString(authMailSessionID, sessionID)
-                    editor?.putString(authMailUser, getAuthMail())
-                    editor?.putString(authMailPass, getAuthPass())
-                    editor?.apply()
+                        val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                    if (sessionID != null) {
+                        val editor = sPrefAuthMailUser.edit()
+                        editor?.putString(authMailSessionID, sessionID)
+                        editor?.putString(authMailUser, getAuthMail())
+                        editor?.putString(authMailPass, getAuthPass())
+                        editor?.apply()
+
                         setMailAuthid(true)
                         setBtnUserLogged("mail")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            override fun onFailure(@NonNull call: Call<AuthMail>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error onAuthMailUserClick!", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -336,8 +341,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         val userData = UserPhoneAuth(getAuthPhone(), getAuthPhonePassword())
 
-        Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<Authentication> {
-            override fun onResponse(@NonNull call: Call<Authentication>, @NonNull response: Response<Authentication>) {
+        Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<AuthPhone> {
+            override fun onResponse(@NonNull call: Call<AuthPhone>, @NonNull response: Response<AuthPhone>) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
@@ -361,12 +366,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                         setBtnUserLogged("phone")
 
                     } else if (!(response.body()!!.success)) {
-                        Toast.makeText(context, "2 ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<Authentication>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<AuthPhone>, @NonNull t: Throwable) {
                 Toast.makeText(context, "Error onAuthPhoneUserClick!", Toast.LENGTH_SHORT).show()
             }
         })

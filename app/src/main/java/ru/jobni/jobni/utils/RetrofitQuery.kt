@@ -5,7 +5,8 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
-import ru.jobni.jobni.model.network.auth.Authentication
+import ru.jobni.jobni.model.network.auth.AuthMail
+import ru.jobni.jobni.model.network.auth.AuthPhone
 import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.company.CompanyVacancyList
 import ru.jobni.jobni.model.network.registration.*
@@ -55,10 +56,10 @@ interface RetrofitQuery {
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")
-    fun postAuthData(@Header("Authorization") basicAuth: String, @Body userMail: UserMailAuth): Call<ResponseBody>
+    fun postAuthData(@Header("Authorization") basicAuth: String, @Body userMail: UserMailAuth): Call<AuthMail>
 
     @POST("api/authorization/phone/")
-    fun postAuthDataPhone(@Header("Authorization") basicAuth: String, @Body userPhone: UserPhoneAuth): Call<Authentication>
+    fun postAuthDataPhone(@Header("Authorization") basicAuth: String, @Body userPhone: UserPhoneAuth): Call<AuthPhone>
 
     /*API vacancy*/
     @GET("api/filter/detail/vacancy/")
