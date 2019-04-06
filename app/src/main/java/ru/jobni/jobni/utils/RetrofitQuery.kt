@@ -45,11 +45,12 @@ interface RetrofitQuery {
 //    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
 
+    /*API VK*/
     @POST("api/registration/social_account/")
-    fun postVKAuthData(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
+    fun postVKReg(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
 
     @POST("api/accounts/vk/login/?process=login")
-    fun postVKAuthUP(@Header("Cookie") sessionID: String): Call<ResponseBody>
+    fun postVKAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")

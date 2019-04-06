@@ -32,6 +32,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
 
 
+    // Данные при регистрации, читаем здесь для sessionID
+    private val authUserSessionID = "userSessionID"
+
+    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
+
+
     /*цвет кнопки при логине пользователя*/
     private val btnUserLogged = MutableLiveData<String>("")
 
@@ -311,6 +317,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onAuthPhoneUserChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setPhoneAuthid(false)
+
         return false
     }
 
@@ -344,6 +353,33 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthVKChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setVKAuthid(false)
+
+        return false
+    }
+
+    fun onAuthVKClick() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.postVKAuth(cid)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+
+                    setVKAuthid(true)
+                    setBtnUserLogged("vk")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })

@@ -38,7 +38,7 @@ class Retrofit : Application() {
         var api: RetrofitQuery? = null
             private set
         const val BASE_URL = "https://test.jobni.ru/"
-        const val DEV_URL = "http://dev.jobni.ru/"
+        const val DEV_URL = "https://dev.jobni.ru/"
     }
 
     private val tokenTracker = object : VKTokenExpiredHandler {
