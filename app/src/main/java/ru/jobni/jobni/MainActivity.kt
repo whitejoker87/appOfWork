@@ -282,6 +282,11 @@ class MainActivity : AppCompatActivity() {
             closeKeyboard()
         })
 
+        viewModelAuth.isInstagramAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
         regViewModel.isVkRegStart().observe(this, Observer {
             if (it) {
                 VK.login(this, arrayListOf())

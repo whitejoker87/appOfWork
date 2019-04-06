@@ -54,6 +54,10 @@ interface RetrofitQuery {
     @POST("api/accounts/vk/login/?process=login")
     fun postVKAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
 
+    /*API Instagram*/
+    @POST("api/accounts/instagram/login/?process=login")
+    fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
+
     /*API authorization*/
     @POST("api/authorization/mailbox/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body userMail: UserMailAuth): Call<AuthMail>

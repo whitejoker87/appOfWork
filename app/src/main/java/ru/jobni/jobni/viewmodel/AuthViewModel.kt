@@ -91,6 +91,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val authPhone = MutableLiveData<String>("")
     private val authPhonePassword = MutableLiveData<String>("")
 
+
+    /*кликабельность кнопки при навигации Instagram(изменяется внутри меню)*/
+    private val isBtnInstagramNotClickable = MutableLiveData<Boolean>()
+
+    private val isInstagramAuthid = MutableLiveData<Boolean>()
+
+
     /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
         btnUserLogged.value = typeLogged
@@ -272,6 +279,21 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    /* Блок Instagram авторизации */
+    fun setBtnInstagramNotClickable(isVisible: Boolean) {
+        isBtnInstagramNotClickable.value = isVisible
+    }
+
+    fun isBtnInstagramNotClickable(): MutableLiveData<Boolean> = isBtnInstagramNotClickable
+
+
+    fun setInstagramAuthid(authKey: Boolean) {
+        isInstagramAuthid.value = authKey
+    }
+
+    fun isInstagramAuthid(): MutableLiveData<Boolean> = isInstagramAuthid
+
+
     // Временный метод для разных авторизаций
     fun onAuthUserChangeClick(): Boolean {
         return false
@@ -405,5 +427,33 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
     }
+
+    fun onAuthInstagramChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setInstagramAuthid(false)
+
+        return false
+    }
+
+    fun onAuthInstagramClick() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.postInstagramAuth(cid)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+
+                    setInstagramAuthid(true)
+                    setBtnUserLogged("instagram")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthInstagramClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 }
 
