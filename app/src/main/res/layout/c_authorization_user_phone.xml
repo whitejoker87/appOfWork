@@ -77,31 +77,18 @@
 			android:text = "@={viewmodelauth.authPhone}"
 			/>
 
-		<Button
-			android:id = "@+id/phone_code_send"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/et_phone"
-			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "16dp"
-			android:background = "@drawable/shape_button"
-			android:text = "@string/phone_code_send"
-			android:onClick = "@{() -> viewmodelauth.onAuthPhoneCodeClick()}"
-			/>
-
 		<EditText
 			android:id = "@+id/et_phonecode"
 			android:layout_width = "0dp"
 			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/phone_code_send"
+			app:layout_constraintTop_toBottomOf = "@+id/et_phone"
 			app:layout_constraintStart_toStartOf = "@+id/et_phone"
 			app:layout_constraintEnd_toEndOf = "@+id/et_phone"
 			android:layout_marginTop = "16dp"
 			style = "@style/text_color_and_size"
 			android:inputType = "numberPassword"
-			android:hint = "@string/phone_code"
-			android:text = "@={viewmodelauth.authPhoneCode}"
+			android:hint = "@string/password_1"
+			android:text = "@={viewmodelauth.authPhonePassword}"
 			/>
 
 		<Button

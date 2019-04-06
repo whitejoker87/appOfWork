@@ -12,6 +12,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
+import ru.jobni.jobni.model.network.auth.Authentication
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -28,7 +29,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authPhoneSessionID = "userPhoneSessionID"
     private val authPhoneUser = "userPhone"
-    private val authPhoneUserCode = "userPhoneCode"
+    private val authPhoneUserPassword = "userPhonePassword"
 
     var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
 
@@ -87,7 +88,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val isPhoneAuthid = MutableLiveData<Boolean>()
     private val authPhone = MutableLiveData<String>("")
-    private val authPhoneCode = MutableLiveData<String>("")
+    private val authPhonePassword = MutableLiveData<String>("")
 
     /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
@@ -263,10 +264,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun getAuthPhoneCode(): String? = authPhoneCode.value
+    fun getAuthPhonePassword(): String? = authPhonePassword.value
 
-    fun setAuthPhoneCode(query: String) {
-        this.authPhoneCode.value = query
+    fun setAuthPhonePassword(query: String) {
+        this.authPhonePassword.value = query
     }
 
 
@@ -337,36 +338,40 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAuthPhoneUserClick() {
 
-        val userData = UserPhoneAuth(getAuthPhone(), getAuthPhoneCode())
+        val userData = UserPhoneAuth(getAuthPhone(), getAuthPhonePassword())
 
-        Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
+        Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<Authentication> {
+            override fun onResponse(@NonNull call: Call<Authentication>, @NonNull response: Response<Authentication>) {
                 if (response.body() != null) {
 
-                    val resultListHeaders = response.headers().get("Set-Cookie")
+                    if (response.body()!!.success) {
 
-                    /* Пример ответа от АПИ
-                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
-                    Нам нужно выделить из этой строки sessionid
-                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
+                        val resultListHeaders = response.headers().get("Set-Cookie")
 
-                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
+                        /* Пример ответа от АПИ
+                        set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
+                        Нам нужно выделить из этой строки sessionid
+                        На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
 
-                    val editor = sPrefAuthPhoneUser.edit()
-                    editor?.putString(authPhoneSessionID, sessionID)
-                    editor?.putString(authPhoneUser, getAuthPhone())
-                    editor?.putString(authPhoneUserCode, getAuthPhoneCode())
-                    editor?.apply()
+                        val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                    if (sessionID != null) {
+                        val editor = sPrefAuthPhoneUser.edit()
+                        editor?.putString(authPhoneSessionID, sessionID)
+                        editor?.putString(authPhoneUser, getAuthPhone())
+                        editor?.putString(authPhoneUserPassword, getAuthPhonePassword())
+                        editor?.apply()
+
                         setPhoneAuthid(true)
                         setBtnUserLogged("phone")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "2 ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            override fun onFailure(@NonNull call: Call<Authentication>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error onAuthPhoneUserClick!", Toast.LENGTH_SHORT).show()
             }
         })
     }
