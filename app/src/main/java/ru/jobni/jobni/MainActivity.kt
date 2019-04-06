@@ -33,6 +33,8 @@ import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangeMa
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangePass
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
+import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
+import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUserLogged
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
@@ -40,8 +42,6 @@ import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUserLogged
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
-import ru.jobni.jobni.fragments.api.vk.FragmentAuthVKUser
-import ru.jobni.jobni.fragments.api.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn

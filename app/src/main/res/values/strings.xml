@@ -97,7 +97,6 @@
 	<string name = "mail_2">Старая почта</string>
 	<string name = "mail_3">Новая почта</string>
 	<string name = "mail_4">Подтвердите новую почту</string>
-	<string name = "mail_5">Номер телефона</string>
 	<string name = "password_1">Пароль</string>
 	<string name = "password_2">Старый пароль</string>
 	<string name = "password_3">Новый пароль</string>

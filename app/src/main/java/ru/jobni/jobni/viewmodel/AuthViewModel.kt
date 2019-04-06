@@ -28,6 +28,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authPhoneSessionID = "userPhoneSessionID"
     private val authPhoneUser = "userPhone"
+    private val authPhoneUserCode = "userPhoneCode"
 
     var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
 
@@ -85,8 +86,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val isBtnPhoneNotClickable = MutableLiveData<Boolean>()
 
     private val isPhoneAuthid = MutableLiveData<Boolean>()
-    private val authPhone = MutableLiveData<String>()
-
+    private val authPhone = MutableLiveData<String>("")
+    private val authPhoneCode = MutableLiveData<String>("")
 
     /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
@@ -262,6 +263,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    fun getAuthPhoneCode(): String? = authPhoneCode.value
+
+    fun setAuthPhoneCode(query: String) {
+        this.authPhoneCode.value = query
+    }
+
+
     // Временный метод для разных авторизаций
     fun onAuthUserChangeClick(): Boolean {
         return false
@@ -316,6 +324,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    fun onAuthPhoneCodeClick(): Boolean {
+        return false
+    }
+
     fun onAuthPhoneUserChangeClick(): Boolean {
         setBtnUserLogged("")
         setPhoneAuthid(false)
@@ -325,7 +337,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAuthPhoneUserClick() {
 
-        val userData = UserPhoneAuth(getAuthPhone())
+        val userData = UserPhoneAuth(getAuthPhone(), getAuthPhoneCode())
 
         Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
@@ -343,6 +355,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     val editor = sPrefAuthPhoneUser.edit()
                     editor?.putString(authPhoneSessionID, sessionID)
                     editor?.putString(authPhoneUser, getAuthPhone())
+                    editor?.putString(authPhoneUserCode, getAuthPhoneCode())
                     editor?.apply()
 
                     if (sessionID != null) {

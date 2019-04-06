@@ -68,22 +68,47 @@
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_margin = "16dp"
 			android:layout_marginTop = "16dp"
-			android:layout_marginStart = "16dp"
-			android:layout_marginEnd = "16dp"
 			style = "@style/text_color_and_size"
 			android:inputType = "phone|number"
-			android:hint = "@string/mail_5"
+			android:hint = "@string/phone"
 			android:text = "@={viewmodelauth.authPhone}"
-			app:layout_constraintHorizontal_bias = "1.0"
+			/>
+
+		<Button
+			android:id = "@+id/phone_code_send"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/et_phone"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "16dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/phone_code_send"
+			android:onClick = "@{() -> viewmodelauth.onAuthPhoneCodeClick()}"
+			/>
+
+		<EditText
+			android:id = "@+id/et_phonecode"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/phone_code_send"
+			app:layout_constraintStart_toStartOf = "@+id/et_phone"
+			app:layout_constraintEnd_toEndOf = "@+id/et_phone"
+			android:layout_marginTop = "16dp"
+			style = "@style/text_color_and_size"
+			android:inputType = "numberPassword"
+			android:hint = "@string/phone_code"
+			android:text = "@={viewmodelauth.authPhoneCode}"
 			/>
 
 		<Button
 			android:id = "@+id/btn_phone_enter"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/et_phone"
+			app:layout_constraintTop_toBottomOf = "@+id/et_phonecode"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "16dp"
