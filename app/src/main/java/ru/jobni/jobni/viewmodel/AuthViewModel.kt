@@ -325,10 +325,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    fun onAuthPhoneCodeClick(): Boolean {
-        return false
-    }
-
     fun onAuthPhoneUserChangeClick(): Boolean {
         setBtnUserLogged("")
         setPhoneAuthid(false)
