@@ -64,6 +64,19 @@ class FragmentNavLeftOwnerAuthOff : Fragment() {
                     return false
                 }
 
+                // Когда список развернут элементы меняют свои ИД (генерация адаптером)
+                if (flatPos == 5) {
+                    viewModel.setFragmentLaunch("CompanyAddAuthOff")
+                    viewModel.setOpenDrawerLeft(false)
+                    return false
+                }
+
+                if (flatPos == 6) {
+                    viewModel.setFragmentLaunch("Registration")
+                    viewModel.setOpenDrawerLeft(false)
+                    return false
+                }
+
                 return false
             }
         })
