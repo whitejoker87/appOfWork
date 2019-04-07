@@ -41,11 +41,8 @@ class FragmentAuthInstagramUser : Fragment() {
 
         binding.btnInstagramEnter.setOnClickListener{
             authenticationDialog = AuthenticationDialog(context!!, object : AuthenticationListener {
-                    override fun onTokenReceived(auth_token: String) {
-//                        appPreferences?.putString(AppPreferences.TOKEN, auth_token)
-//                        token = auth_token
-//                        getUserInfoByAccessToken(token!!)
-                        viewModelAuth.convertInstagramCode(auth_token)
+                    override fun onTokenReceived(code: String) {
+                        viewModelAuth.convertInstagramCode(code)
                     }
                 })
             authenticationDialog!!.setCancelable(true)

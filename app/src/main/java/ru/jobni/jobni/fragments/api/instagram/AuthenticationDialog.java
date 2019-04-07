@@ -2,7 +2,6 @@ package ru.jobni.jobni.fragments.api.instagram;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
@@ -44,10 +43,6 @@ public class AuthenticationDialog extends Dialog {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//            if (url.startsWith(redirect_url)) {
-//                AuthenticationDialog.this.dismiss();
-//                return true;
-//            }
             return false;
         }
 
@@ -55,30 +50,13 @@ public class AuthenticationDialog extends Dialog {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 
-            Uri uri = Uri.parse(url);
-
-            System.out.println("333 " + url);
-            System.out.println("444 " + uri);
-
             if (url.contains("?code=")) {
-                String access_token = url;
-                access_token = access_token.substring(access_token.lastIndexOf("=") + 1);
+                String code = url;
+                code = code.substring(code.lastIndexOf("=") + 1);
 
-                System.out.println("555 " + access_token);
-                listener.onTokenReceived(access_token);
-                //dismiss();
+                listener.onTokenReceived(code);
+                dismiss();
 
-//                if (access_token != null) {
-//                    access_token = access_token.substring(access_token.lastIndexOf("=") + 1);
-//
-//                    Log.e("access_token", access_token);
-//                    listener.onTokenReceived(access_token);
-//                    dismiss();
-//
-//                    System.out.println("111 " + access_token);
-//                }
-
-//                System.out.println("222 " + access_token);
             } else if (url.contains("?error")) {
                 Log.e("code", "getting error fetching code");
                 dismiss();

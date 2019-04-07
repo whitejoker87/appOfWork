@@ -5,7 +5,7 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
-import ru.jobni.jobni.model.network.auth.AccessToken
+import ru.jobni.jobni.model.network.auth.AuthInstagram
 import ru.jobni.jobni.model.network.auth.AuthMail
 import ru.jobni.jobni.model.network.auth.AuthPhone
 import ru.jobni.jobni.model.network.company.CompanyList
@@ -59,26 +59,14 @@ interface RetrofitQuery {
     @POST("api/accounts/instagram/login/?process=login")
     fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
 
-//    @Headers("Content-Type: application/x-www-form-urlencoded")
-//    @POST("https://api.instagram.com/oauth/access_token" +
-//            "?client_id=de279bd8e8e242e2aa5acb80d3dfcd6b" +
-//            "?client_secret=f9b1bf2579ec46a4be9084236dc79b40" +
-//            "?grant_type=authorization_code" +
-//            "?redirect_uri=https://instagram.com/"
-//    )
-//    @PUT
     @FormUrlEncoded
     @POST("https://api.instagram.com/oauth/access_token")
-//    fun postInstagramCode(@Query("code") code: String): Call<AccessToken>
-
-//    fun getAccessToken(@Body tokenRequest: TokenRequest): Call<AccessToken>
-
     fun getAccessToken(
             @Field("client_id") client_id: String,
             @Field("client_secret") client_secret: String,
             @Field("grant_type") grant_type: String,
             @Field("redirect_uri") redirect_uri: String,
-            @Field("code") code: String): Call<AccessToken>
+            @Field("code") code: String): Call<AuthInstagram>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")

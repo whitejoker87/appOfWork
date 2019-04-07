@@ -10,9 +10,10 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.jobni.jobni.R
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
-import ru.jobni.jobni.model.network.auth.AccessToken
+import ru.jobni.jobni.model.network.auth.AuthInstagram
 import ru.jobni.jobni.model.network.auth.AuthMail
 import ru.jobni.jobni.model.network.auth.AuthPhone
 import ru.jobni.jobni.utils.Retrofit
@@ -456,10 +457,15 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+
     fun convertInstagramCode(code: String) {
 
-        Retrofit.api?.getAccessToken("de279bd8e8e242e2aa5acb80d3dfcd6b", "f9b1bf2579ec46a4be9084236dc79b40", "authorization_code", "https://instagram.com/", code)?.enqueue(object : Callback<AccessToken> {
-            override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
+        Retrofit.api?.getAccessToken(
+                context.resources.getString(R.string.client_id),
+                context.resources.getString(R.string.client_secret),
+                "authorization_code",
+                context.resources.getString(R.string.redirect_url), code)?.enqueue(object : Callback<AuthInstagram> {
+            override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
                 if (response.body() != null) {
 
                     setInstagramAuthid(true)
@@ -467,8 +473,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
 
-            override fun onFailure(call: Call<AccessToken>, t: Throwable) {
-                Toast.makeText(context, "Error onAuthInstagramClick!", Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<AuthInstagram>, t: Throwable) {
+                Toast.makeText(context, "Error convertInstagramCode!", Toast.LENGTH_SHORT).show()
             }
         })
     }

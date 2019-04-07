@@ -207,6 +207,7 @@
 	<string name = "btn_user_vk_auth_text">Пройти авторизацию</string>
 	<string name = "tv_vk">ОТВЯЗАТЬ УЧЕТНУЮ ЗАПИСЬ</string>
 	<string name = "client_id">de279bd8e8e242e2aa5acb80d3dfcd6b</string>
+	<string name = "client_secret">f9b1bf2579ec46a4be9084236dc79b40 </string>
 	<string name = "redirect_url">https://instagram.com/</string>
 	<string name = "base_url">https://api.instagram.com/</string>
 </resources>
