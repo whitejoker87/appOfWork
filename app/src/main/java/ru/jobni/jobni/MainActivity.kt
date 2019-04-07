@@ -39,6 +39,8 @@ import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUserLogged
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUserLogged
+import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUser
+import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUserLogged
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
@@ -207,6 +209,8 @@ class MainActivity : AppCompatActivity() {
                 "AuthVKUserLogged" -> setFragment(FragmentAuthVKUserLogged())
                 "AuthPhoneUser" -> setFragment(FragmentAuthPhoneUser())
                 "AuthPhoneUserLogged" -> setFragment(FragmentAuthPhoneUserLogged())
+                "AuthInstagramUser" -> setFragment(FragmentAuthInstagramUser())
+                "AuthInstagramUserLogged" -> setFragment(FragmentAuthInstagramUserLogged())
                 "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
                 "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
