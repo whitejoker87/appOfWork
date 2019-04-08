@@ -5,6 +5,7 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
+import ru.jobni.jobni.model.network.auth.AuthDiscord
 import ru.jobni.jobni.model.network.auth.AuthInstagram
 import ru.jobni.jobni.model.network.auth.AuthMail
 import ru.jobni.jobni.model.network.auth.AuthPhone
@@ -79,7 +80,7 @@ interface RetrofitQuery {
             @Field("grant_type") grant_type: String,
             @Field("code") code: String,
             @Field("redirect_uri") redirect_uri: String,
-            @Field("scope") scope: String): Call<AuthInstagram>
+            @Field("scope") scope: String): Call<AuthDiscord>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")

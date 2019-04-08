@@ -13,6 +13,7 @@ import retrofit2.Response
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
+import ru.jobni.jobni.model.network.auth.AuthDiscord
 import ru.jobni.jobni.model.network.auth.AuthInstagram
 import ru.jobni.jobni.model.network.auth.AuthMail
 import ru.jobni.jobni.model.network.auth.AuthPhone
@@ -543,20 +544,19 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 "authorization_code",
                 code,
                 context.resources.getString(R.string.discord_redirect_url),
-                "identify")?.enqueue(object : Callback<AuthInstagram> {
-            override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
+                "identify")?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
                 if (response.body() != null) {
 
                     val access_token = response.body()?.access_token
-                    val user = response.body()?.user
 
                     setInstagramAuthid(true)
                     setBtnUserLogged("instagram")
                 }
             }
 
-            override fun onFailure(call: Call<AuthInstagram>, t: Throwable) {
-                Toast.makeText(context, "Error convertInstagramCode!", Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
             }
         })
     }
