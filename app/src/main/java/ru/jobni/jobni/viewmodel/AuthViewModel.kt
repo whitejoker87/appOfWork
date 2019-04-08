@@ -468,6 +468,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
                 if (response.body() != null) {
 
+                    val access_token = response.body()?.access_token
+                    val user = response.body()?.user
+
                     setInstagramAuthid(true)
                     setBtnUserLogged("instagram")
                 }

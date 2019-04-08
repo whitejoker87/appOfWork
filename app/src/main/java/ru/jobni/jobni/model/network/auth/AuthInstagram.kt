@@ -14,7 +14,7 @@ data class AuthInstagram(
 
 data class User(
 
-        @SerializedName("id") val id: Int,
+        @SerializedName("id") val id: Long,
         @SerializedName("username") val username: String,
         @SerializedName("profile_picture") val profile_picture: String,
         @SerializedName("full_name") val full_name: String,
