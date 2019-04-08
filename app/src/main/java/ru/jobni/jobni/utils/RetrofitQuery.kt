@@ -57,7 +57,7 @@ interface RetrofitQuery {
     /*API Instagram*/
     @FormUrlEncoded
     @POST("https://api.instagram.com/oauth/access_token")
-    fun getAccessToken(
+    fun getInstagramAccessToken(
             @Field("client_id") client_id: String,
             @Field("client_secret") client_secret: String,
             @Field("grant_type") grant_type: String,
@@ -70,6 +70,16 @@ interface RetrofitQuery {
     /*API Discord*/
     @POST("api/accounts/discord/login/?process=login")
     fun postDiscordAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("https://discordapp.com/api/v6/oauth2/token")
+    fun getDiscordAccessToken(
+            @Field("client_id") client_id: String,
+            @Field("client_secret") client_secret: String,
+            @Field("grant_type") grant_type: String,
+            @Field("code") code: String,
+            @Field("redirect_uri") redirect_uri: String,
+            @Field("scope") scope: String): Call<AuthInstagram>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")

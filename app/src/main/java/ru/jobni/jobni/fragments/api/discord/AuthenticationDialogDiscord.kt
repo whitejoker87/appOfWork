@@ -17,10 +17,8 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
             "?response_type=code" +
             "&client_id=" + context.resources.getString(R.string.discord_client_id) +
             "&scope=identify" +
-//            "&state=24569016ghq5428habn" +
+            //"&state=24569016ghq5428habn" +
             "&redirect_uri=" + context.resources.getString(R.string.discord_redirect_url)
-
-//    https://discordapp.com/oauth2/authorize?response_type=code&client_id=564805611997626388&scope=webhook.incoming&redirect_uri=https://discordapp.com/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +48,7 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
                 code = code.substring(code.lastIndexOf("=") + 1)
 
                 println("111 " + code)
-//                listener.onTokenReceived(code)
+                listener.onTokenReceived(code)
 //                dismiss()
 
             } else if (url.contains("?error")) {

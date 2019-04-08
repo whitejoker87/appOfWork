@@ -486,7 +486,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun convertInstagramCode(code: String) {
 
-        Retrofit.api?.getAccessToken(
+        Retrofit.api?.getInstagramAccessToken(
                 context.resources.getString(R.string.client_id),
                 context.resources.getString(R.string.client_secret),
                 "authorization_code",
@@ -531,6 +531,32 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(context, "Error onAuthDiscordClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun convertDiscordCode(code: String) {
+
+        Retrofit.api?.getDiscordAccessToken(
+                context.resources.getString(R.string.discord_client_id),
+                context.resources.getString(R.string.discord_client_secret),
+                "authorization_code",
+                code,
+                context.resources.getString(R.string.discord_redirect_url),
+                "identify")?.enqueue(object : Callback<AuthInstagram> {
+            override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
+                if (response.body() != null) {
+
+                    val access_token = response.body()?.access_token
+                    val user = response.body()?.user
+
+                    setInstagramAuthid(true)
+                    setBtnUserLogged("instagram")
+                }
+            }
+
+            override fun onFailure(call: Call<AuthInstagram>, t: Throwable) {
+                Toast.makeText(context, "Error convertInstagramCode!", Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -43,7 +43,7 @@ class FragmentAuthDiscordUser : Fragment() {
         binding.btnUserDiscordAuth.setOnClickListener{
             authenticationDialogDiscord = AuthenticationDialogDiscord(context!!, object : AuthenticationListenerDiscord {
                 override fun onTokenReceived(code: String) {
-                    viewModelAuth.convertInstagramCode(code)
+                    viewModelAuth.convertDiscordCode(code)
                 }
             })
             authenticationDialogDiscord!!.setCancelable(true)
