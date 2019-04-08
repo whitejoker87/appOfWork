@@ -35,6 +35,8 @@ import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
+import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUser
+import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUserLogged
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUserLogged
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
@@ -211,6 +213,8 @@ class MainActivity : AppCompatActivity() {
                 "AuthPhoneUserLogged" -> setFragment(FragmentAuthPhoneUserLogged())
                 "AuthInstagramUser" -> setFragment(FragmentAuthInstagramUser())
                 "AuthInstagramUserLogged" -> setFragment(FragmentAuthInstagramUserLogged())
+                "AuthDiscordUser" -> setFragment(FragmentAuthDiscordUser())
+                "AuthDiscordUserLogged" -> setFragment(FragmentAuthDiscordUserLogged())
                 "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
                 "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
                 "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
@@ -287,6 +291,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModelAuth.isInstagramAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isDiscordAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })

@@ -100,6 +100,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val isInstagramAuthid = MutableLiveData<Boolean>()
 
 
+    /*кликабельность кнопки при навигации Discord(изменяется внутри меню)*/
+    private val isBtnDiscordNotClickable = MutableLiveData<Boolean>()
+
+    private val isDiscordAuthid = MutableLiveData<Boolean>()
+
+
     /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
         btnUserLogged.value = typeLogged
@@ -296,6 +302,20 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun isInstagramAuthid(): MutableLiveData<Boolean> = isInstagramAuthid
 
 
+    /* Блок Discord авторизации */
+    fun setBtnDiscordNotClickable(isVisible: Boolean) {
+        isBtnDiscordNotClickable.value = isVisible
+    }
+
+    fun isBtnDiscordNotClickable(): MutableLiveData<Boolean> = isBtnDiscordNotClickable
+
+    fun setDiscordAuthid(authKey: Boolean) {
+        isDiscordAuthid.value = authKey
+    }
+
+    fun isDiscordAuthid(): MutableLiveData<Boolean> = isDiscordAuthid
+
+
     // Временный метод для разных авторизаций
     fun onAuthUserChangeClick(): Boolean {
         return false
@@ -488,5 +508,31 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    fun onAuthDiscordChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setDiscordAuthid(false)
+
+        return false
+    }
+
+    fun onAuthDiscordClick() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.postDiscordAuth(cid)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+
+                    setDiscordAuthid(true)
+                    setBtnUserLogged("discord")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthDiscordClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }
 

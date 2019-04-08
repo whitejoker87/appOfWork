@@ -47,7 +47,6 @@ interface RetrofitQuery {
 //    @POST("api/registration/")
 //    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
-
     /*API VK*/
     @POST("api/registration/social_account/")
     fun postVKReg(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
@@ -56,9 +55,6 @@ interface RetrofitQuery {
     fun postVKAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
 
     /*API Instagram*/
-    @POST("api/accounts/instagram/login/?process=login")
-    fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
-
     @FormUrlEncoded
     @POST("https://api.instagram.com/oauth/access_token")
     fun getAccessToken(
@@ -67,6 +63,13 @@ interface RetrofitQuery {
             @Field("grant_type") grant_type: String,
             @Field("redirect_uri") redirect_uri: String,
             @Field("code") code: String): Call<AuthInstagram>
+
+    @POST("api/accounts/instagram/login/?process=login")
+    fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
+
+    /*API Discord*/
+    @POST("api/accounts/discord/login/?process=login")
+    fun postDiscordAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")
