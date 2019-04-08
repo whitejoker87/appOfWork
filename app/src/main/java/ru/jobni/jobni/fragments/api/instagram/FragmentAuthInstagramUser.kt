@@ -15,7 +15,7 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthInstagramUser : Fragment() {
 
-    private var authenticationDialog: AuthenticationDialog? = null
+    private var authenticationDialogInstagram: AuthenticationDialogInstagram? = null
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -40,13 +40,13 @@ class FragmentAuthInstagramUser : Fragment() {
         binding.viewmodelmain = viewModel
 
         binding.btnInstagramEnter.setOnClickListener{
-            authenticationDialog = AuthenticationDialog(context!!, object : AuthenticationListener {
+            authenticationDialogInstagram = AuthenticationDialogInstagram(context!!, object : AuthenticationListenerInstagram {
                     override fun onTokenReceived(code: String) {
                         viewModelAuth.convertInstagramCode(code)
                     }
                 })
-            authenticationDialog!!.setCancelable(true)
-            authenticationDialog!!.show()
+            authenticationDialogInstagram!!.setCancelable(true)
+            authenticationDialogInstagram!!.show()
         }
 
         return view

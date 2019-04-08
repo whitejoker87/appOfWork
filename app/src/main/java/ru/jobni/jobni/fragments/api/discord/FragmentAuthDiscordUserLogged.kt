@@ -31,7 +31,7 @@ class FragmentAuthDiscordUserLogged : Fragment() {
 
         val view = binding.root
 
-        viewModelAuth.setBtnFBNotClickable(true)
+        viewModelAuth.setBtnDiscordNotClickable(true)
 
         binding.viewmodelauth = viewModelAuth
 

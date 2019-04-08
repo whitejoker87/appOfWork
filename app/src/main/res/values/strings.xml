@@ -211,4 +211,8 @@
 	<string name = "client_secret">f9b1bf2579ec46a4be9084236dc79b40 </string>
 	<string name = "redirect_url">https://instagram.com/</string>
 	<string name = "base_url">https://api.instagram.com/</string>
+	<string name = "discord_client_id">564805611997626388</string>
+	<string name = "discord_client_secret">IumshvS2iBrxR5m73veXQeZ92z1RKRfN</string>
+	<string name = "discord_base_url">https://discordapp.com/api/</string>
+	<string name = "discord_redirect_url">https://discordapp.com/</string>
 </resources>
