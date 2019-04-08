@@ -10,16 +10,14 @@ import android.webkit.WebViewClient
 import ru.jobni.jobni.R
 
 class AuthenticationDialog(context: Context, private val listener: AuthenticationListener) : Dialog(context) {
-    private val request_url: String
-    private val redirect_url: String = context.resources.getString(R.string.redirect_url)
 
-    init {
-        this.request_url = context.resources.getString(R.string.base_url) +
-                "oauth/authorize/?client_id=" +
-                context.resources.getString(R.string.client_id) +
-                "&redirect_uri=" + redirect_url +
-                "&response_type=code"
-    }
+    private val request_url: String = context.resources.getString(R.string.base_url) +
+            "oauth/authorize/?client_id=" +
+            context.resources.getString(R.string.client_id) +
+            "&redirect_uri=" +
+            context.resources.getString(R.string.redirect_url) +
+            "&response_type=code" +
+            "&display=touch&scope=public_content"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +36,6 @@ class AuthenticationDialog(context: Context, private val listener: Authenticatio
     private val InstaWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            if (url.startsWith(redirect_url)) {
-                dismiss()
-                return true
-            }
             return false
         }
 
@@ -53,7 +47,7 @@ class AuthenticationDialog(context: Context, private val listener: Authenticatio
                 code = code.substring(code.lastIndexOf("=") + 1)
 
                 listener.onTokenReceived(code)
-                dismiss()
+                //dismiss()
 
             } else if (url.contains("?error")) {
                 Log.e("code", "getting error fetching code")
