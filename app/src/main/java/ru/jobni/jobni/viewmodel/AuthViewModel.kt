@@ -357,6 +357,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onAuthPhoneUserChangeClick(): Boolean {
+        val editor = sPrefAuthPhoneUser.edit()
+        editor?.remove(authPhoneSessionID)
+        editor?.remove(authPhoneUser)
+        editor?.remove(authPhoneUserPassword)
+        editor?.apply()
+
         setBtnUserLogged("")
         setPhoneAuthid(false)
 
