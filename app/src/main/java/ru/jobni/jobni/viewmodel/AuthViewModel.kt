@@ -564,8 +564,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                     val access_token = response.body()?.access_token
 
-                    setInstagramAuthid(true)
-                    setBtnUserLogged("instagram")
+                    setDiscordAuthid(true)
+                    setBtnUserLogged("discord")
                 }
             }
 

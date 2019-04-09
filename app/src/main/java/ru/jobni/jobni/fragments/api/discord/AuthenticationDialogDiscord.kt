@@ -17,7 +17,6 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
             "?response_type=code" +
             "&client_id=" + context.resources.getString(R.string.discord_client_id) +
             "&scope=identify" +
-            //"&state=24569016ghq5428habn" +
             "&redirect_uri=" + context.resources.getString(R.string.discord_redirect_url)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,21 +29,9 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
     private fun initializeWebView() {
         val webView = findViewById<WebView>(R.id.web_view_discord)
         webView.settings.javaScriptEnabled = true
+        webView.settings.domStorageEnabled = true
         webView.loadUrl(request_url)
         webView.webViewClient = DiscordWebViewClient
-
-//        val address = Uri.parse(request_url)
-//        val openLinkIntent = Intent(Intent.ACTION_VIEW, address)
-//
-//        if (openLinkIntent.resolveActivity(context.packageManager) != null) {
-//            startActivity(context, openLinkIntent, null)
-//        } else {
-//            Log.d("Intent", "Не получается обработать намерение!")
-//        }
-//
-//        val intent = getIntent(address.toString())
-//        val action = intent.action
-//        val data = intent.data
     }
 
     private val DiscordWebViewClient = object : WebViewClient() {
@@ -60,7 +47,6 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
                 var code = url
                 code = code.substring(code.lastIndexOf("=") + 1)
 
-                println("111 " + code)
                 listener.onTokenReceived(code)
 //                dismiss()
 
