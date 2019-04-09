@@ -1,7 +1,5 @@
-package ru.jobni.jobni.fragments.api.vk
+package ru.jobni.jobni.fragments.api.instagram
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,22 +8,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserVkDataBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserInstagramBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentAuthVKUserData : Fragment() {
 
-    companion object {
-        private const val TAG = "UserActivity"
+class FragmentAuthInstagramUser : Fragment() {
 
-        private const val IMAGE_REQ_CODE = 101
-
-        fun startFrom(context: Context) {
-            val intent = Intent(context, FragmentAuthVKUserData::class.java)
-//            context.startActivity(intent)
-        }
-    }
+    private var authenticationDialogInstagram: AuthenticationDialogInstagram? = null
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -35,11 +25,11 @@ class FragmentAuthVKUserData : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationUserVkDataBinding
+    private lateinit var binding: CAuthorizationUserInstagramBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_vk_data, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_instagram, container, false)
 
         binding.lifecycleOwner = this
 
@@ -48,6 +38,16 @@ class FragmentAuthVKUserData : Fragment() {
         binding.viewmodelauth = viewModelAuth
 
         binding.viewmodelmain = viewModel
+
+        binding.btnInstagramEnter.setOnClickListener{
+            authenticationDialogInstagram = AuthenticationDialogInstagram(context!!, object : AuthenticationListenerInstagram {
+                    override fun onTokenReceived(code: String) {
+                        viewModelAuth.convertInstagramCode(code)
+                    }
+                })
+            authenticationDialogInstagram!!.setCancelable(true)
+            authenticationDialogInstagram!!.show()
+        }
 
         return view
     }

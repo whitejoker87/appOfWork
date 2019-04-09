@@ -63,7 +63,7 @@
 			/>
 
 		<Button
-			android:id = "@+id/btn_change_user_auth"
+			android:id = "@+id/btn_change_discord_auth"
 			android:layout_width = "180dp"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
@@ -72,7 +72,7 @@
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_badge"
 			android:text = "@string/btn_change_user_auth_text"
-			android:onClick = "@{() -> viewmodelauth.onAuthPhoneUserChangeClick()}"
+			android:onClick = "@{() -> viewmodelauth.onAuthDiscordChangeClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

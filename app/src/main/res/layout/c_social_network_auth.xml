@@ -89,6 +89,8 @@
 			android:layout_marginStart = "12dp"
 			app:srcCompat = "@drawable/ic_instagram"
 			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("inst")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:clickable = "@{safeUnbox(viewmodelauth.isBtnInstagramNotClickable()) ? false : true}"
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("inst") ? "AuthInstagramUserLogged" : "AuthInstagramUser")}'
 			/>
 
 		<ImageButton
@@ -155,6 +157,8 @@
 			android:layout_marginStart = "12dp"
 			app:srcCompat = "@drawable/ic_discord"
 			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("discord")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:clickable = "@{safeUnbox(viewmodelauth.isBtnDiscordNotClickable()) ? false : true}"
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("discord") ? "AuthDiscordUserLogged" : "AuthDiscordUser")}'
 			/>
 
 		<ImageButton

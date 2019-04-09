@@ -33,16 +33,22 @@ import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangeMa
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangePass
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
+import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
+import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
+import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
+import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
+import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUser
+import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUserLogged
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUserLogged
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUserLogged
+import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUser
+import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUserLogged
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
-import ru.jobni.jobni.fragments.api.vk.FragmentAuthVKUser
-import ru.jobni.jobni.fragments.api.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
@@ -213,6 +219,10 @@ class MainActivity : AppCompatActivity() {
                 "AuthVKUserLogged" -> setFragment(FragmentAuthVKUserLogged())
                 "AuthPhoneUser" -> setFragment(FragmentAuthPhoneUser())
                 "AuthPhoneUserLogged" -> setFragment(FragmentAuthPhoneUserLogged())
+                "AuthInstagramUser" -> setFragment(FragmentAuthInstagramUser())
+                "AuthInstagramUserLogged" -> setFragment(FragmentAuthInstagramUserLogged())
+                "AuthDiscordUser" -> setFragment(FragmentAuthDiscordUser())
+                "AuthDiscordUserLogged" -> setFragment(FragmentAuthDiscordUserLogged())
                 "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
                 "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
                 "RegVK" -> regViewModel.setTypeAddRegFragment("soc")
@@ -277,7 +287,21 @@ class MainActivity : AppCompatActivity() {
             closeKeyboard()
         })
 
+        viewModelAuth.isVkAuthStart().observe(this, Observer {
+            VK.login(this, arrayListOf())
+        })
+
         viewModelAuth.isPhoneAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isInstagramAuthid().observe(this, Observer {
+            setFragmentReturnBackStack()
+            closeKeyboard()
+        })
+
+        viewModelAuth.isDiscordAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })
@@ -422,23 +446,22 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
 
-            val callback = object : VKAuthCallback {
+            /* VK callback block */val callback = object : VKAuthCallback {
                 override fun onLogin(token: VKAccessToken) {
-                    // Пользователь успешно авторизовался
-                    val acsessToken = token.accessToken
-                    val acsessTokenSecretKey = token.secret
+
+                    val accessToken = token.accessToken
+
                     val userLogin = token.userId
 
-                    regViewModel.btnVKClick(userLogin.toString(), "vk", acsessToken)
-
-                    println("111 " + acsessToken + acsessTokenSecretKey + userLogin)
-
-//                FragmentAuthVKUserData.startFrom(activity as Context)
+                    if (regViewModel.isVkRegStart().value == true) {
+                    regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
+                } else if (viewModelAuth.isVkAuthStart().value == true) {
+                    viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
+                }
                 }
 
-                override fun onLoginFailed(errorCode: Int) {
-                    // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
-                }
+                override fun onLoginFailed(errorCode: Int) {}
+
             }
             if (!VK.onActivityResult(requestCode, resultCode, data, callback)) {
                 super.onActivityResult(requestCode, resultCode, data)
@@ -459,7 +482,6 @@ class MainActivity : AppCompatActivity() {
 //                }
             }
         }
-
 
 
     }

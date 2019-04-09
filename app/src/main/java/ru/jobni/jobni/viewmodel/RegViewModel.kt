@@ -326,7 +326,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun btnVKClick(userLogin: String, provider: String, acsessToken: String) {
+    fun btnVKClick(userLogin: String, provider: String, accessToken: String) {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
@@ -334,28 +334,10 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val contactFace = RegVK(
                 userLogin,
                 provider,
-                acsessToken
+                accessToken
         )
-        Retrofit.api?.postVKAuthData(cid, contactFace)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
 
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-
-    fun btnVKClickAuth() {
-
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
-
-        Retrofit.api?.postVKAuthUP(cid)?.enqueue(object : Callback<ResponseBody> {
+        Retrofit.api?.postVKReg(cid, contactFace)?.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.body() != null) {
 

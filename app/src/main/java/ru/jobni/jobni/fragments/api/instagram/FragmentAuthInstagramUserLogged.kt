@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.vk
+package ru.jobni.jobni.fragments.api.instagram
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserVkLoggedBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserInstagramLoggedBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentAuthVKUserLogged : Fragment() {
+class FragmentAuthInstagramUserLogged : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -22,16 +22,16 @@ class FragmentAuthVKUserLogged : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationUserVkLoggedBinding
+    private lateinit var binding: CAuthorizationUserInstagramLoggedBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_vk_logged, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_instagram_logged, container, false)
 
         binding.lifecycleOwner = this
 
         val view = binding.root
 
-        viewModelAuth.setBtnFBNotClickable(true)
+        viewModelAuth.setBtnInstagramNotClickable(true)
 
         binding.viewmodelauth = viewModelAuth
 

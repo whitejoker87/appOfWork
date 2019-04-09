@@ -65,6 +65,7 @@ class FragmentAuthFBUser : Fragment() {
         binding.loginButtonFb.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 val accessTokenFB = loginResult.accessToken.token
+                val userID = loginResult.accessToken.userId
 
                 // save accessToken to SharedPreference
                 prefUtil?.saveAccessToken(accessTokenFB)

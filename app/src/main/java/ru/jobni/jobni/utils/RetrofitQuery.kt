@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
+import ru.jobni.jobni.model.network.auth.*
 import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.company.CompanyVacancyList
 import ru.jobni.jobni.model.network.registration.*
@@ -54,19 +55,48 @@ interface RetrofitQuery {
 //    @POST("api/registration/")
 //    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
-
+    /*API VK*/
     @POST("api/registration/social_account/")
-    fun postVKAuthData(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
+    fun postVKReg(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
 
-    @POST("api/accounts/vk/login/?process=login")
-    fun postVKAuthUP(@Header("Cookie") sessionID: String): Call<ResponseBody>
+    @POST("api/authorization/social_account/")
+    fun postVKAuth(@Body userMail: AuthVKJobni): Call<AuthVK>
+
+    /*API Instagram*/
+    @FormUrlEncoded
+    @POST("https://api.instagram.com/oauth/access_token")
+    fun getInstagramAccessToken(
+            @Field("client_id") client_id: String,
+            @Field("client_secret") client_secret: String,
+            @Field("grant_type") grant_type: String,
+            @Field("redirect_uri") redirect_uri: String,
+            @Field("code") code: String
+    ): Call<AuthInstagram>
+
+    @POST("api/accounts/instagram/login/?process=login")
+    fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
+
+    /*API Discord*/
+    @POST("api/authorization/social_account/")
+    fun postDiscordAuth(@Body userDiscord: AuthDiscordJobni): Call<AuthDiscord>
+
+    @FormUrlEncoded
+    @POST("https://discordapp.com/api/v6/oauth2/token")
+    fun getDiscordAccessToken(
+            @Field("client_id") client_id: String,
+            @Field("client_secret") client_secret: String,
+            @Field("grant_type") grant_type: String,
+            @Field("code") code: String,
+            @Field("redirect_uri") redirect_uri: String,
+            @Field("scope") scope: String
+    ): Call<AuthDiscord>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")
-    fun postAuthData(@Header("Authorization") basicAuth: String, @Body userMail: UserMailAuth): Call<ResponseBody>
+    fun postAuthData(@Header("Authorization") basicAuth: String, @Body userMail: UserMailAuth): Call<AuthMail>
 
     @POST("api/authorization/phone/")
-    fun postAuthDataPhone(@Header("Authorization") basicAuth: String, @Body userPhone: UserPhoneAuth): Call<ResponseBody>
+    fun postAuthDataPhone(@Header("Authorization") basicAuth: String, @Body userPhone: UserPhoneAuth): Call<AuthPhone>
 
     /*API vacancy*/
     @GET("api/filter/detail/vacancy/")

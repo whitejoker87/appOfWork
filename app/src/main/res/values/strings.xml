@@ -97,7 +97,6 @@
 	<string name = "mail_2">Старая почта</string>
 	<string name = "mail_3">Новая почта</string>
 	<string name = "mail_4">Подтвердите новую почту</string>
-	<string name = "mail_5">Номер телефона</string>
 	<string name = "password_1">Пароль</string>
 	<string name = "password_2">Старый пароль</string>
 	<string name = "password_3">Новый пароль</string>
@@ -175,6 +174,8 @@
 	<string name = "user_auth_google_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ GOOGLE+</string>
 	<string name = "user_auth_vk_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ ВКОНТАКТЕ</string>
 	<string name = "user_auth_phone_info_text">ИСПОЛЬЗУЙТЕ НОМЕР ТЕЛЕФОНА</string>
+	<string name = "user_auth_instagram_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ INSTAGRAM</string>
+	<string name = "user_auth_discord_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ DISCORD</string>
 	<string name = "user_auth_delete_info_text">Авторизация сброшена</string>
 	<string name = "btn_change_user_pass_text">Сменить пароль</string>
 	<string name = "btn_change_user_mail_text">Сменить почту</string>
@@ -204,4 +205,14 @@
 	<string name = "btn_company_vacancy_edit_text">Редактировать</string>
 	<string name = "btn_company_vacancy_delete_text">Удалить</string>
 	<string name = "btn_company_vacancy_archive_text">В архив</string>
+	<string name = "btn_user_vk_auth_text">Пройти авторизацию</string>
+	<string name = "tv_vk">ОТВЯЗАТЬ УЧЕТНУЮ ЗАПИСЬ</string>
+	<string name = "client_id">de279bd8e8e242e2aa5acb80d3dfcd6b</string>
+	<string name = "client_secret">f9b1bf2579ec46a4be9084236dc79b40 </string>
+	<string name = "redirect_url">https://instagram.com/</string>
+	<string name = "base_url">https://api.instagram.com/</string>
+	<string name = "discord_client_id">564805611997626388</string>
+	<string name = "discord_client_secret">IumshvS2iBrxR5m73veXQeZ92z1RKRfN</string>
+	<string name = "discord_base_url">https://discordapp.com/api/</string>
+	<string name = "discord_redirect_url">https://discordapp.com/</string>
 </resources>

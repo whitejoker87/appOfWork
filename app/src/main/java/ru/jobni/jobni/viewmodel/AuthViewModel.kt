@@ -10,8 +10,10 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.jobni.jobni.R
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
+import ru.jobni.jobni.model.network.auth.*
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -28,8 +30,15 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authPhoneSessionID = "userPhoneSessionID"
     private val authPhoneUser = "userPhone"
+    private val authPhoneUserPassword = "userPhonePassword"
 
     var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
+
+
+    // Данные при регистрации, читаем здесь для sessionID
+    private val authUserSessionID = "userSessionID"
+
+    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
 
     /*цвет кнопки при логине пользователя*/
@@ -73,13 +82,27 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val isVKAuthid = MutableLiveData<Boolean>()
     private val authVKUser = MutableLiveData<String>()
     private val authVKPass = MutableLiveData<String>()
+    private val vkAuthStart = MutableLiveData<Boolean>()
 
 
     /*кликабельность кнопки при навигации Phone(изменяется внутри меню)*/
     private val isBtnPhoneNotClickable = MutableLiveData<Boolean>()
 
     private val isPhoneAuthid = MutableLiveData<Boolean>()
-    private val authPhone = MutableLiveData<String>()
+    private val authPhone = MutableLiveData<String>("")
+    private val authPhonePassword = MutableLiveData<String>("")
+
+
+    /*кликабельность кнопки при навигации Instagram(изменяется внутри меню)*/
+    private val isBtnInstagramNotClickable = MutableLiveData<Boolean>()
+
+    private val isInstagramAuthid = MutableLiveData<Boolean>()
+
+
+    /*кликабельность кнопки при навигации Discord(изменяется внутри меню)*/
+    private val isBtnDiscordNotClickable = MutableLiveData<Boolean>()
+
+    private val isDiscordAuthid = MutableLiveData<Boolean>()
 
 
     /* Блок обычной авторизации */
@@ -234,6 +257,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    fun isVkAuthStart(): MutableLiveData<Boolean> = vkAuthStart
+
+    fun setVkAuthStart(isStart: Boolean) {
+        vkAuthStart.value = isStart
+    }
+
+
     /* Блок Phone авторизации */
     fun setBtnPhoneNotClickable(isVisible: Boolean) {
         isBtnPhoneNotClickable.value = isVisible
@@ -254,6 +284,43 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun setAuthPhone(query: String) {
         this.authPhone.value = query
     }
+
+
+    fun getAuthPhonePassword(): String? = authPhonePassword.value
+
+    fun setAuthPhonePassword(query: String) {
+        this.authPhonePassword.value = query
+    }
+
+
+    /* Блок Instagram авторизации */
+    fun setBtnInstagramNotClickable(isVisible: Boolean) {
+        isBtnInstagramNotClickable.value = isVisible
+    }
+
+    fun isBtnInstagramNotClickable(): MutableLiveData<Boolean> = isBtnInstagramNotClickable
+
+
+    fun setInstagramAuthid(authKey: Boolean) {
+        isInstagramAuthid.value = authKey
+    }
+
+    fun isInstagramAuthid(): MutableLiveData<Boolean> = isInstagramAuthid
+
+
+    /* Блок Discord авторизации */
+    fun setBtnDiscordNotClickable(isVisible: Boolean) {
+        isBtnDiscordNotClickable.value = isVisible
+    }
+
+    fun isBtnDiscordNotClickable(): MutableLiveData<Boolean> = isBtnDiscordNotClickable
+
+
+    fun setDiscordAuthid(authKey: Boolean) {
+        isDiscordAuthid.value = authKey
+    }
+
+    fun isDiscordAuthid(): MutableLiveData<Boolean> = isDiscordAuthid
 
 
     // Временный метод для разных авторизаций
@@ -278,73 +345,236 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         val userData = UserMailAuth(getAuthMail(), getAuthPass())
 
-        Retrofit.api?.postAuthData("AuthMailUser", userData)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
+        Retrofit.api?.postAuthData("AuthMailUser", userData)?.enqueue(object : Callback<AuthMail> {
+            override fun onResponse(@NonNull call: Call<AuthMail>, @NonNull response: Response<AuthMail>) {
                 if (response.body() != null) {
 
-                    val resultListHeaders = response.headers().get("Set-Cookie")
+                    if (response.body()!!.success) {
 
-                    /* Пример ответа от АПИ
-                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
-                    Нам нужно выделить из этой строки sessionid
-                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
+                        val resultListHeaders = response.headers().get("Set-Cookie")
 
-                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
+                        /* Пример ответа от АПИ
+                        set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
+                        Нам нужно выделить из этой строки sessionid
+                        На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
 
-                    val editor = sPrefAuthMailUser.edit()
-                    editor?.putString(authMailSessionID, sessionID)
-                    editor?.putString(authMailUser, getAuthMail())
-                    editor?.putString(authMailPass, getAuthPass())
-                    editor?.apply()
+                        val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                    if (sessionID != null) {
+                        val editor = sPrefAuthMailUser.edit()
+                        editor?.putString(authMailSessionID, sessionID)
+                        editor?.putString(authMailUser, getAuthMail())
+                        editor?.putString(authMailPass, getAuthPass())
+                        editor?.apply()
+
                         setMailAuthid(true)
                         setBtnUserLogged("mail")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            override fun onFailure(@NonNull call: Call<AuthMail>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error onAuthMailUserClick!", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     fun onAuthPhoneUserChangeClick(): Boolean {
+        val editor = sPrefAuthPhoneUser.edit()
+        editor?.remove(authPhoneSessionID)
+        editor?.remove(authPhoneUser)
+        editor?.remove(authPhoneUserPassword)
+        editor?.apply()
+
+        setBtnUserLogged("")
+        setPhoneAuthid(false)
+
         return false
     }
 
     fun onAuthPhoneUserClick() {
 
-        val userData = UserPhoneAuth(getAuthPhone())
+        val userData = UserPhoneAuth(getAuthPhone(), getAuthPhonePassword())
 
-        Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(@NonNull call: Call<ResponseBody>, @NonNull response: Response<ResponseBody>) {
+        Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<AuthPhone> {
+            override fun onResponse(@NonNull call: Call<AuthPhone>, @NonNull response: Response<AuthPhone>) {
                 if (response.body() != null) {
 
-                    val resultListHeaders = response.headers().get("Set-Cookie")
+                    if (response.body()!!.success) {
 
-                    /* Пример ответа от АПИ
-                    set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
-                    Нам нужно выделить из этой строки sessionid
-                    На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
+                        val resultListHeaders = response.headers().get("Set-Cookie")
 
-                    val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
+                        /* Пример ответа от АПИ
+                        set-cookie: sessionid=26jmvokos705ehtv7l2fe86fmuwem5n3; expires=Wed, 03 Apr 2019 09:33:23 GMT; Max-Age=1209600; Path=/
+                        Нам нужно выделить из этой строки sessionid
+                        На выходе получаем 26jmvokos705ehtv7l2fe86fmuwem5n3 */
 
-                    val editor = sPrefAuthPhoneUser.edit()
-                    editor?.putString(authPhoneSessionID, sessionID)
-                    editor?.putString(authPhoneUser, getAuthPhone())
-                    editor?.apply()
+                        val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                    if (sessionID != null) {
+                        val editor = sPrefAuthPhoneUser.edit()
+                        editor?.putString(authPhoneSessionID, sessionID)
+                        editor?.putString(authPhoneUser, getAuthPhone())
+                        editor?.putString(authPhoneUserPassword, getAuthPhonePassword())
+                        editor?.apply()
+
                         setPhoneAuthid(true)
                         setBtnUserLogged("phone")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<ResponseBody>, @NonNull t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            override fun onFailure(@NonNull call: Call<AuthPhone>, @NonNull t: Throwable) {
+                Toast.makeText(context, "Error onAuthPhoneUserClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthVKChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setVKAuthid(false)
+
+        return false
+    }
+
+    fun onAuthVKClick(userLogin: String, provider: String, accessToken: String) {
+
+        val contactFace = AuthVKJobni(
+                userLogin,
+                provider,
+                accessToken
+        )
+
+        Retrofit.api?.postVKAuth(contactFace)?.enqueue(object : Callback<AuthVK> {
+            override fun onResponse(call: Call<AuthVK>, response: Response<AuthVK>) {
+                if (response.body() != null) {
+
+                    if (response.body()!!.success) {
+                        setVKAuthid(true)
+                        setBtnUserLogged("vk")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AuthVK>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthVKClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthInstagramChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setInstagramAuthid(false)
+
+        return false
+    }
+
+    fun onAuthInstagramClick() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.postInstagramAuth(cid)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+
+                    setInstagramAuthid(true)
+                    setBtnUserLogged("instagram")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthInstagramClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    fun convertInstagramCode(code: String) {
+
+        Retrofit.api?.getInstagramAccessToken(
+                context.resources.getString(R.string.client_id),
+                context.resources.getString(R.string.client_secret),
+                "authorization_code",
+                context.resources.getString(R.string.redirect_url), code)?.enqueue(object : Callback<AuthInstagram> {
+            override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
+                if (response.body() != null) {
+
+                    val access_token = response.body()?.access_token
+                    val user = response.body()?.user
+
+                }
+            }
+
+            override fun onFailure(call: Call<AuthInstagram>, t: Throwable) {
+                Toast.makeText(context, "Error convertInstagramCode!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthDiscordChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setDiscordAuthid(false)
+
+        return false
+    }
+
+    fun onAuthDiscordClick(accessToken: String) {
+
+        val provider = "discord"
+        val contactFace = AuthDiscordJobni(
+                "", // где брать? дискорд не присылает - Сделать поле не обязательным?
+                provider,
+                accessToken
+        )
+
+        Retrofit.api?.postDiscordAuth(contactFace)?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+                if (response.body() != null) {
+
+                    if (response.body()!!.success) {
+                        setDiscordAuthid(true)
+                        setBtnUserLogged("discord")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthDiscordClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun convertDiscordCode(code: String) {
+
+        Retrofit.api?.getDiscordAccessToken(
+                context.resources.getString(R.string.discord_client_id),
+                context.resources.getString(R.string.discord_client_secret),
+                "authorization_code",
+                code,
+                context.resources.getString(R.string.discord_redirect_url),
+                "identify")?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+                if (response.body() != null) {
+
+                    val dscAccessToken = response.body()?.access_token
+
+                    onAuthDiscordClick(dscAccessToken!!)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
             }
         })
     }
