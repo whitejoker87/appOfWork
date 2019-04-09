@@ -31,8 +31,6 @@ class FragmentAuthOKUserLogged : Fragment() {
 
         val view = binding.root
 
-        viewModelAuth.setBtnFBNotClickable(true)
-
         binding.viewmodelauth = viewModelAuth
 
         binding.viewmodelmain = viewModel

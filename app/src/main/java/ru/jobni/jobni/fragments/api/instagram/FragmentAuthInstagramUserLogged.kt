@@ -31,8 +31,6 @@ class FragmentAuthInstagramUserLogged : Fragment() {
 
         val view = binding.root
 
-        viewModelAuth.setBtnInstagramNotClickable(true)
-
         binding.viewmodelauth = viewModelAuth
 
         binding.viewmodelmain = viewModel

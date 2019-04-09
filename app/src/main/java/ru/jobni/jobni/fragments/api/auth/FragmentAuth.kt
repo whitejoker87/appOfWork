@@ -37,13 +37,4 @@ class FragmentAuth : Fragment() {
 
         return view
     }
-
-    override fun onResume() {
-        super.onResume()
-        viewModelAuth.setBtnMailNotClickable(false)
-        viewModelAuth.setBtnPhoneNotClickable(false)
-        viewModelAuth.setBtnVKNotClickable(false)
-        viewModelAuth.setBtnInstagramNotClickable(false)
-        viewModelAuth.setBtnDiscordNotClickable(false)
-    }
 }
