@@ -32,6 +32,19 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
         webView.settings.javaScriptEnabled = true
         webView.loadUrl(request_url)
         webView.webViewClient = DiscordWebViewClient
+
+//        val address = Uri.parse(request_url)
+//        val openLinkIntent = Intent(Intent.ACTION_VIEW, address)
+//
+//        if (openLinkIntent.resolveActivity(context.packageManager) != null) {
+//            startActivity(context, openLinkIntent, null)
+//        } else {
+//            Log.d("Intent", "Не получается обработать намерение!")
+//        }
+//
+//        val intent = getIntent(address.toString())
+//        val action = intent.action
+//        val data = intent.data
     }
 
     private val DiscordWebViewClient = object : WebViewClient() {
