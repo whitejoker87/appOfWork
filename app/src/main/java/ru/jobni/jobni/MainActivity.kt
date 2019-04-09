@@ -285,6 +285,10 @@ class MainActivity : AppCompatActivity() {
             closeKeyboard()
         })
 
+        viewModelAuth.isVkAuthStart().observe(this, Observer {
+            VK.login(this, arrayListOf())
+        })
+
         viewModelAuth.isPhoneAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
@@ -404,7 +408,15 @@ class MainActivity : AppCompatActivity() {
                 val accessToken = token.accessToken
                 val userLogin = token.userId
 
-                regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
+                if (regViewModel.isVkRegStart().value == true) {
+                    regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
+                }
+//                else {
+//                    viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
+//                }
+                if (viewModelAuth.isVkAuthStart().value == true) {
+                    viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
+                }
             }
 
             override fun onLoginFailed(errorCode: Int) {}

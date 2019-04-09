@@ -5,10 +5,7 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
-import ru.jobni.jobni.model.network.auth.AuthDiscord
-import ru.jobni.jobni.model.network.auth.AuthInstagram
-import ru.jobni.jobni.model.network.auth.AuthMail
-import ru.jobni.jobni.model.network.auth.AuthPhone
+import ru.jobni.jobni.model.network.auth.*
 import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.company.CompanyVacancyList
 import ru.jobni.jobni.model.network.registration.*
@@ -52,8 +49,8 @@ interface RetrofitQuery {
     @POST("api/registration/social_account/")
     fun postVKReg(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
 
-    @POST("api/accounts/vk/login/?process=login")
-    fun postVKAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
+    @POST("api/authorization/social_account/")
+    fun postVKAuth(@Body userMail: RegVK): Call<AuthVK>
 
     /*API Instagram*/
     @FormUrlEncoded
@@ -63,7 +60,8 @@ interface RetrofitQuery {
             @Field("client_secret") client_secret: String,
             @Field("grant_type") grant_type: String,
             @Field("redirect_uri") redirect_uri: String,
-            @Field("code") code: String): Call<AuthInstagram>
+            @Field("code") code: String
+    ): Call<AuthInstagram>
 
     @POST("api/accounts/instagram/login/?process=login")
     fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
@@ -80,7 +78,8 @@ interface RetrofitQuery {
             @Field("grant_type") grant_type: String,
             @Field("code") code: String,
             @Field("redirect_uri") redirect_uri: String,
-            @Field("scope") scope: String): Call<AuthDiscord>
+            @Field("scope") scope: String
+    ): Call<AuthDiscord>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")

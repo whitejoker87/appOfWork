@@ -13,10 +13,8 @@ import retrofit2.Response
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
-import ru.jobni.jobni.model.network.auth.AuthDiscord
-import ru.jobni.jobni.model.network.auth.AuthInstagram
-import ru.jobni.jobni.model.network.auth.AuthMail
-import ru.jobni.jobni.model.network.auth.AuthPhone
+import ru.jobni.jobni.model.network.auth.*
+import ru.jobni.jobni.model.network.registration.RegVK
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -85,6 +83,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val isVKAuthid = MutableLiveData<Boolean>()
     private val authVKUser = MutableLiveData<String>()
     private val authVKPass = MutableLiveData<String>()
+    private val vkAuthStart = MutableLiveData<Boolean>()
 
 
     /*кликабельность кнопки при навигации Phone(изменяется внутри меню)*/
@@ -256,6 +255,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setVKAuthPass(query: String) {
         this.authVKPass.value = query
+    }
+
+
+    fun isVkAuthStart(): MutableLiveData<Boolean> = vkAuthStart
+
+    fun setVkAuthStart(isStart: Boolean) {
+        vkAuthStart.value = isStart
     }
 
 
@@ -437,22 +443,30 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun onAuthVKClick() {
+    fun onAuthVKClick(userLogin: String, provider: String, accessToken: String) {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
+        val contactFace = RegVK(
+                userLogin,
+                provider,
+                accessToken
+        )
 
-        Retrofit.api?.postVKAuth(cid)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        Retrofit.api?.postVKAuth(contactFace)?.enqueue(object : Callback<AuthVK> {
+            override fun onResponse(call: Call<AuthVK>, response: Response<AuthVK>) {
                 if (response.body() != null) {
 
-                    setVKAuthid(true)
-                    setBtnUserLogged("vk")
+                    if (response.body()!!.success) {
+                        setVKAuthid(true)
+                        setBtnUserLogged("vk")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<AuthVK>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthVKClick!", Toast.LENGTH_SHORT).show()
             }
         })
     }

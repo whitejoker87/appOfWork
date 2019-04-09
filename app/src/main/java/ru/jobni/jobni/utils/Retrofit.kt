@@ -23,7 +23,7 @@ class Retrofit : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // VK Проверка Token (например, пользователь сменил пароль)
+        // VKAccessToken Проверка (например, пользователь сменил пароль)
         VK.addTokenExpiredHandler(tokenTracker)
 
         retrofit = Retrofit.Builder()
@@ -45,7 +45,6 @@ class Retrofit : Application() {
         override fun onTokenExpired() {
             // VKAccessToken is invalid
             // Запускать фрагмент где нужно по новой авторизоваться
-//            FragmentAuthVKUser.startFrom(this@Retrofit)
         }
     }
 
