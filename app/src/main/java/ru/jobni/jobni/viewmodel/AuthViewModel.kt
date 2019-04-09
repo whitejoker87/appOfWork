@@ -316,6 +316,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isBtnDiscordNotClickable(): MutableLiveData<Boolean> = isBtnDiscordNotClickable
 
+
     fun setDiscordAuthid(authKey: Boolean) {
         isDiscordAuthid.value = authKey
     }
@@ -337,7 +338,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         setBtnUserLogged("")
         setMailAuthid(false)
-        setBtnPhoneNotClickable(false)
 
         return false
     }
@@ -369,7 +369,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         setMailAuthid(true)
                         setBtnUserLogged("mail")
-                        setBtnPhoneNotClickable(true)
 
                     } else if (!(response.body()!!.success)) {
                         Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
@@ -512,8 +511,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     val access_token = response.body()?.access_token
                     val user = response.body()?.user
 
-                    setInstagramAuthid(true)
-                    setBtnUserLogged("instagram")
                 }
             }
 
@@ -530,21 +527,30 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun onAuthDiscordClick() {
+    fun onAuthDiscordClick(accessToken: String) {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
+        val provider = "discord"
+        val contactFace = AuthDiscordJobni(
+                "", // где брать? дискорд не присылает - Сделать поле не обязательным?
+                provider,
+                accessToken
+        )
 
-        Retrofit.api?.postDiscordAuth(cid)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        Retrofit.api?.postDiscordAuth(contactFace)?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
                 if (response.body() != null) {
 
-                    setDiscordAuthid(true)
-                    setBtnUserLogged("discord")
+                    if (response.body()!!.success) {
+                        setDiscordAuthid(true)
+                        setBtnUserLogged("discord")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
                 Toast.makeText(context, "Error onAuthDiscordClick!", Toast.LENGTH_SHORT).show()
             }
         })
@@ -562,10 +568,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
                 if (response.body() != null) {
 
-                    val access_token = response.body()?.access_token
+                    val dscAccessToken = response.body()?.access_token
 
-                    setDiscordAuthid(true)
-                    setBtnUserLogged("discord")
+                    onAuthDiscordClick(dscAccessToken!!)
                 }
             }
 

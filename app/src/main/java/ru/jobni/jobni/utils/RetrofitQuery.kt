@@ -67,8 +67,8 @@ interface RetrofitQuery {
     fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
 
     /*API Discord*/
-    @POST("api/accounts/discord/login/?process=login")
-    fun postDiscordAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
+    @POST("api/authorization/social_account/")
+    fun postDiscordAuth(@Body userDiscord: AuthDiscordJobni): Call<AuthDiscord>
 
     @FormUrlEncoded
     @POST("https://discordapp.com/api/v6/oauth2/token")
