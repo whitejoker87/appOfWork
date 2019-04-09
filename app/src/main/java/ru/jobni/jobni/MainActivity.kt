@@ -53,8 +53,6 @@ import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
-import android.provider.MediaStore
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -152,9 +150,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModelMain.isOpenDrawerLeft().observe(this, Observer { isOpen ->
             if (isOpen) {
-                if (viewModelAuth.isMailAuthid().value == true
-                        || viewModelAuth.isFBAuthid().value == true
-                        || viewModelAuth.isGoogleAuthid().value == true
+                if (viewModelAuth.isUserAuthid().value == true
                 ) {
                     viewModelMain.setNoAuthRegVisible(false)
                     viewModelMain.setYesAuthRegVisible(true)
@@ -260,48 +256,13 @@ class MainActivity : AppCompatActivity() {
             } else regViewModel.openCamera()
         })
 
-        viewModelAuth.isMailAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isFBAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isGoogleAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isOKAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isVKAuthid().observe(this, Observer {
+        viewModelAuth.isUserAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })
 
         viewModelAuth.isVkAuthStart().observe(this, Observer {
             VK.login(this, arrayListOf())
-        })
-
-        viewModelAuth.isPhoneAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isInstagramAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isDiscordAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
         })
 
         regViewModel.getSocialRegStart().observe(this, Observer {
@@ -317,7 +278,6 @@ class MainActivity : AppCompatActivity() {
 //                    "RegDiscord" -> regViewModel.setBtnUserLogged("discord")
 //                    "RegMic" -> regViewModel.setBtnUserLogged("mic")
                 }
-
             }
         })
 
