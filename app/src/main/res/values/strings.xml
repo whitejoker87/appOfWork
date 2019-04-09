@@ -197,7 +197,7 @@
 	<string name = "nav_header_btn_auth_click">Auth</string>
 	<string name = "data_protection">Согласие на хранение и защиту персональных данных</string>
 	<string name = "public_offers">Согласие публичной оферты</string>
-	<integer name = "com_vk_sdk_AppId">6927648</integer>
+	<integer name = "com_vk_sdk_AppId">6746499</integer>
 	<string name = "facebook_app_id">2250712614985944</string>
 	<string name = "fb_login_protocol_scheme">fb2250712614985944</string>
 	<string name = "btn_company_vacancy_show_text">Опубликовать</string>

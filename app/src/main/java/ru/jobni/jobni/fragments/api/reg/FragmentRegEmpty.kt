@@ -32,7 +32,6 @@ class FragmentRegEmpty : Fragment() {
         val view = binding.root
 
         binding.viewmodelmain = viewModelMain
-        binding.viewmodelreg = viewModelReg
 
         return view
     }

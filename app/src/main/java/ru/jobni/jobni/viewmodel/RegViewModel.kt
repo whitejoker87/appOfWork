@@ -1,17 +1,34 @@
 package ru.jobni.jobni.viewmodel
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.utils.Retrofit
+import ru.jobni.jobni.utils.getRealPath
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class RegViewModel(application: Application) : AndroidViewModel(application) {
@@ -61,10 +78,28 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     private val resultAuthSuccess = MutableLiveData<Boolean>(false)
     private val typeAddRegFragment = MutableLiveData<String>("")
 
-    private val vkRegStart = MutableLiveData<Boolean>()
+    private val socialRegStart = MutableLiveData<Boolean>()
 
-    /*цвет кнопки при регистрации пользователя*/
-    private val btnUserLogged = MutableLiveData<String>("")
+    /*For observe to launch fragment*/
+    private val fragmentLaunch = MutableLiveData<String>()
+
+    /*For observe to launch camera intent*/
+    private val photoLaunch = MutableLiveData<String>()
+
+    /*photo bitmap for iv*/
+    private val bitmapPhoto = MutableLiveData<Bitmap>()
+
+    /*Access of dialog load photo*/
+    private val isPhotoDialogEnabled = MutableLiveData<Boolean>()
+
+    /*параметр uri для загружаемого фото*/
+    private var outputPhotoUri: MutableLiveData<Uri> = MutableLiveData(Uri.EMPTY)
+    /*параментр для запука активити(для фото)*/
+    private val activityLaunch: MutableLiveData<Intent> = MutableLiveData()
+    /*путь до файла с фото*/
+    private var mCurrentPhotoPath: String? = ""
+    /*файл с фото*/
+    private lateinit var currentPhoto: File
 
     fun setRegMail(mail: String) {
         regMail.value = mail
@@ -218,18 +253,66 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun isVkRegStart(): MutableLiveData<Boolean> = vkRegStart
+    fun getSocialRegStart(): MutableLiveData<Boolean> = socialRegStart
 
-    fun setVkRegStart(isStart: Boolean) {
-        vkRegStart.value = isStart
+    fun setSocialRegStart(isStart: Boolean) {
+        socialRegStart.value = isStart
     }
 
-    fun setBtnUserLogged(typeLogged: String) {
-        btnUserLogged.value = typeLogged
+
+    fun setFragmentLaunch(setLaunch: String) {
+        fragmentLaunch.value = setLaunch
     }
 
-    fun getBtnUserLogged(): MutableLiveData<String> = btnUserLogged
+    fun getFragmentLaunch(): MutableLiveData<String> = fragmentLaunch
 
+    fun setPhotoLaunch(setPhoto: String) {
+        photoLaunch.value = setPhoto
+    }
+
+    fun getPhotoLaunch(): MutableLiveData<String> = photoLaunch
+
+    fun setBitmapPhoto(setBitmap: Bitmap) {
+        bitmapPhoto.value = setBitmap
+    }
+
+    fun getBitmapPhoto(): MutableLiveData<Bitmap> = bitmapPhoto
+
+    fun setPhotoDialogEnabled(dialogEnabled: Boolean) {
+        isPhotoDialogEnabled.value = dialogEnabled
+    }
+
+    fun isPhotoDialogEnabled(): MutableLiveData<Boolean> = isPhotoDialogEnabled
+
+    fun setOutputPhotoUri(setUri: Uri) {
+        outputPhotoUri.value = setUri
+    }
+
+    fun getOutputPhotoUri(): MutableLiveData<Uri> = outputPhotoUri
+
+
+    fun setActivityLaunch(cameraIntent: Intent) {
+        activityLaunch.value = cameraIntent
+    }
+
+    fun getActivityLaunch(): MutableLiveData<Intent> = activityLaunch
+
+
+    fun setCurrentPhotoPath(mCurrentPhotoPath: String) {
+        this.mCurrentPhotoPath = mCurrentPhotoPath
+    }
+
+    fun getCurrentPhotoPath(): String? = mCurrentPhotoPath
+
+
+    fun setCurrentPhoto(photo: File) {
+        currentPhoto = photo
+    }
+
+    fun getCurrentPhoto(): File? = currentPhoto
+
+
+    /*other methods*/
     fun regOrBindMail(){
         if (getResultReg2Success().value!!){ //если пароль уже выдали и пройдена регистрация на 1 основной контакт
             postBindEmail()
@@ -309,11 +392,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    fun btnRegClick() {
-
-        setPrivilegesForFileDone(false)
-
-    }
+//    fun btnRegClick() {
+//
+//        setPrivilegesForFileDone(false)
+//
+//    }
 
     /*Для сохранения Session ID полученного из первого этапа*/
     fun getSIDFromRegOne(responseHeaders: okhttp3.Headers) {
@@ -603,6 +686,30 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    /*Для выполнения отправки фото при регистрации*/
+    fun regContactPhotoSend() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+        val file: File
+        if (getCurrentPhoto() != null) file = getCurrentPhoto()!!
+
+        /*if (getPhotoLaunch().value.equals("camera"))*/ //file = File(getOutputPhotoUri().value!!.path)
+        else  file = File(getRealPath(context, getOutputPhotoUri().value!!))
+        val requestFile = RequestBody.create(MediaType.parse("image/jpg"), file)
+        Retrofit.api?.postPhotoReg(cid, requestFile)?.enqueue(object : Callback<ResponseBody> {
+
+            override fun onResponse(call: Call<ResponseBody> , response: Response<ResponseBody> ) {
+
+            }
+
+            override fun onFailure(call: Call<ResponseBody> , t: Throwable ) {
+
+            }
+        });
+
+    }
+
 //
 //
 //    @SuppressLint("ResourceType")
@@ -770,7 +877,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 //    /*запуск активити вк апи из макета FragmentRegOneOther*/
 //    fun getVKReg(){
-//        //setVkRegStart(true)
+//        //setSocialRegStart(true)
 //        val id = sPrefAuthUser.getString(authUserSessionID, null)
 //        val cid = String.format("%s%s", "sessionid=", id)
 //        val process = "connect"
@@ -790,4 +897,66 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 //        })
 //    }
 
+    /*открываем камеру для фото*/
+    fun openCamera() {
+
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Метод resolveActivity() поможет проверить активности, способное сделать фотографию.
+        // Если подходящего приложения не найдётся, то мы можем сделать кнопку для съёмки недоступной.
+        if (cameraIntent.resolveActivity(context.packageManager) != null) {
+            // создать файл для фотографии
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile(context.baseContext)
+            } catch (ex: IOException) {
+                // ошибка, возникшая в процессе создания файла
+            }
+
+            // если файл создан, запускаем приложение камеры
+            if (photoFile != null) {
+                    setOutputPhotoUri(
+                        FileProvider.getUriForFile(
+                            context.applicationContext,
+                            BuildConfig.APPLICATION_ID + ".provider", //(use your app signature + ".provider" )
+                            photoFile
+                        )
+                    )
+                setCurrentPhoto(photoFile)
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputPhotoUri.value)
+                //cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                setActivityLaunch(cameraIntent)
+            }
+        }
+    }
+
+    /*создание файла для фото*/
+    @Throws(IOException::class)
+    private fun createImageFile(context: Context): File {
+
+        // создание файла с уникальным именем
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "CAM" + timeStamp + "_"
+        val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        //        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        //        StrictMode.setVmPolicy(builder.build());
+
+        val image = File.createTempFile(
+            imageFileName, /* префикс */
+            ".jpg", /* расширение */
+            storageDir      /* директория */
+        )
+
+        //        ContentValues values = new ContentValues();
+        //        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        //        values.put(MediaStore.Images.Media.MIME_TYPE, "image/ipeg");
+        //        values.put(MediaStore.MediaColumns.DATA, image.getAbsolutePath());
+        //
+        //        context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        // сохраняем пусть для использования с интентом ACTION_VIEW
+        //setOutputPhotoUri(Uri.fromFile(image))
+        //setOutputPhotoUri(Uri.parse("file://" + image.absolutePath))
+        return image
+    }
 }

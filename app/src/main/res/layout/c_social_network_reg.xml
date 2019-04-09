@@ -11,11 +11,6 @@
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
 
-		<variable
-			name = "viewmodelreg"
-			type = "ru.jobni.jobni.viewmodel.RegViewModel"
-			/>
-
 		<import type = "android.view.View"/>
 	</data>
 
@@ -33,7 +28,7 @@
 			app:layout_constraintEnd_toStartOf = "@+id/btn_phone"
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_user"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("mail")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegUserMail")) ? @drawable/shape_button : @drawable/shape_badge}'
 			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserMail")}'
 			/>
 
@@ -46,7 +41,7 @@
 			app:layout_constraintEnd_toStartOf = "@+id/btn_vk"
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_phone"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("phone")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegUserPhone")) ? @drawable/shape_button : @drawable/shape_badge}'
 			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserPhone")}'
 			/>
 
@@ -59,7 +54,7 @@
 			app:layout_constraintEnd_toStartOf = "@+id/bnt_ok"
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_vk"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("vk")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegVK")) ? @drawable/shape_button : @drawable/shape_badge}'
 			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegVK")}'
 			/>
 
@@ -71,8 +66,8 @@
 			app:layout_constraintStart_toStartOf = "@+id/btn_mail_ru"
 			app:layout_constraintEnd_toEndOf = "@+id/btn_discord"
 			app:srcCompat = "@drawable/ic_ok"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("ok")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserOther")}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegOK")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegOK")}'
 			/>
 
 		<ImageButton
@@ -84,8 +79,8 @@
 			app:layout_constraintStart_toEndOf = "@+id/bnt_ok"
 			android:layout_marginStart = "12dp"
 			app:srcCompat = "@drawable/ic_instagram"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("inst")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserOther")}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegInst")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegInst")}'
 			/>
 
 		<ImageButton
@@ -97,8 +92,8 @@
 			app:layout_constraintStart_toEndOf = "@+id/btn_instagram"
 			android:layout_marginStart = "12dp"
 			app:srcCompat = "@drawable/ic_telegram"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("tel")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserOther")}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegTel")}'
 			/>
 
 		<ImageButton
@@ -110,8 +105,8 @@
 			app:layout_constraintEnd_toStartOf = "@+id/btn_facebook"
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_gmail"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("google")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserOther")}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegGoogle")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegGoogle")}'
 			/>
 
 		<ImageButton
@@ -123,8 +118,8 @@
 			app:layout_constraintEnd_toStartOf = "@+id/btn_mail_ru"
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_facebook"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("fb")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserOther")}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegFB")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegFB")}'
 			/>
 
 		<ImageButton
@@ -138,8 +133,8 @@
 			android:layout_marginStart = "16dp"
 			android:layout_marginEnd = "16dp"
 			app:srcCompat = "@drawable/ic_mail_ru"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("mailru")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserOther")}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegMailRu")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegMailRu")}'
 			/>
 
 		<ImageButton
@@ -151,8 +146,8 @@
 			app:layout_constraintStart_toEndOf = "@+id/btn_mail_ru"
 			android:layout_marginStart = "12dp"
 			app:srcCompat = "@drawable/ic_discord"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("discord")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserOther")}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegDiscord")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegDiscord")}'
 			/>
 
 		<ImageButton
@@ -164,8 +159,8 @@
 			app:layout_constraintStart_toEndOf = "@+id/btn_discord"
 			android:layout_marginStart = "12dp"
 			app:srcCompat = "@drawable/ic_microsoft"
-			android:background = '@{safeUnbox(viewmodelreg.btnUserLogged.equals("micro")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegUserOther")}'
+			android:background = '@{safeUnbox(viewmodelmain.socialLaunch.equals("RegMic")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch("RegMic")}'
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

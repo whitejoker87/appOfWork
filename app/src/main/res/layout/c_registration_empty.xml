@@ -11,11 +11,6 @@
 			type = "ru.jobni.jobni.viewmodel.MainViewModel"
 			/>
 
-		<variable
-			name = "viewmodelreg"
-			type = "ru.jobni.jobni.viewmodel.RegViewModel"
-			/>
-
 		<import type = "android.view.View"/>
 	</data>
 
@@ -58,7 +53,6 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "36dp"
-			app:viewmodelreg = "@{viewmodelreg}"
 			app:viewmodelmain = "@{viewmodelmain}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>

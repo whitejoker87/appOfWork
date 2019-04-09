@@ -75,7 +75,6 @@
 			app:layout_constraintStart_toStartOf = "@+id/background"
 			app:layout_constraintEnd_toEndOf = "@+id/background"
 			android:layout_marginTop = "16dp"
-			app:viewmodelreg = "@{viewmodelreg}"
 			app:viewmodelmain = "@{viewmodelmain}"
 			/>
 

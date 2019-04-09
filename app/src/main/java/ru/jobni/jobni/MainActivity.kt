@@ -39,6 +39,7 @@ import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUserLogged
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
+import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
 import ru.jobni.jobni.fragments.api.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.api.vk.FragmentAuthVKUserLogged
@@ -48,6 +49,9 @@ import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
+import android.provider.MediaStore
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,6 +60,9 @@ class MainActivity : AppCompatActivity() {
 
     private val WRITE_REQUEST_CODE = 0
     private val CAMERA_REQUEST = 0
+    private val GALLERY_REQUEST = 1
+    private val VK_REQUEST = 1
+
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
@@ -194,7 +201,6 @@ class MainActivity : AppCompatActivity() {
         /*наблюдение за нажатием на кнопки регистрации/авторизации*/
         viewModelMain.getSocialLaunch().observe(this, Observer {
             when (it) {
-                /*аутентификация запускаеться сразу тут*/
                 "AuthMailUser" -> setFragment(FragmentAuthMailUser())
                 "AuthMailUserLogged" -> setFragment(FragmentAuthMailUserLogged())
                 "AuthFBUser" -> setFragment(FragmentAuthFBUser())
@@ -207,21 +213,17 @@ class MainActivity : AppCompatActivity() {
                 "AuthVKUserLogged" -> setFragment(FragmentAuthVKUserLogged())
                 "AuthPhoneUser" -> setFragment(FragmentAuthPhoneUser())
                 "AuthPhoneUserLogged" -> setFragment(FragmentAuthPhoneUserLogged())
-                "RegUserMail" -> regViewModel.setBtnUserLogged("mail")
-                "RegUserPhone" -> regViewModel.setBtnUserLogged("phone")
-                "RegUserOther" -> regViewModel.setTypeAddRegFragment("other")//временный вариант пока нет всех соцсетей
-                "RegVK" -> regViewModel.setBtnUserLogged("vk")
-                //"AuthVK" -> viewModelAuth.setBtnUserLogged("vk")
-            }
-        })
-
-        /*наблюдение за изменением статуса кнопок регистрации*/
-        regViewModel.getBtnUserLogged().observe(this, Observer {
-            when (it) {
-                /*регистрация сначала использует getSocialLaunch т.к. нужно сперва изменить цвет кнопки*/
-                "mail" -> regViewModel.setTypeAddRegFragment("mail")
-                "phone" -> regViewModel.setTypeAddRegFragment("phone")
-                "vk" -> regViewModel.setTypeAddRegFragment("vk")
+                "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
+                "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
+                "RegVK" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegOK" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegInst" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegTel" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegGoogle" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegFB" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegMailRu" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegDiscord" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegMic" -> regViewModel.setTypeAddRegFragment("soc")
             }
         })
 
@@ -235,7 +237,7 @@ class MainActivity : AppCompatActivity() {
             else binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         })
 
-        viewModelMain.getActivityLaunch().observe(this, Observer {
+        regViewModel.getActivityLaunch().observe(this, Observer {
             it?.let { intent ->
                 startActivityForResult(intent, CAMERA_REQUEST)
             }
@@ -247,9 +249,7 @@ class MainActivity : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     ActivityCompat.requestPermissions(this, permissions, WRITE_REQUEST_CODE)
                 }
-            } else {
-                //regViewModel.registration()
-            }
+            } else regViewModel.openCamera()
         })
 
         viewModelAuth.isMailAuthid().observe(this, Observer {
@@ -282,17 +282,63 @@ class MainActivity : AppCompatActivity() {
             closeKeyboard()
         })
 
-        regViewModel.isVkRegStart().observe(this, Observer {
+        regViewModel.getSocialRegStart().observe(this, Observer {
             if (it) {
-                VK.login(this, arrayListOf())
+                when(viewModelMain.getSocialLaunch().value){
+                    "RegVK" -> VK.login(this, arrayListOf())
+//                    "RegOK" -> regViewModel.setBtnUserLogged("ok")
+//                    "RegInst" -> regViewModel.setBtnUserLogged("inst")
+//                    "RegTel" -> regViewModel.setBtnUserLogged("tel")
+//                    "RegGoogle" -> regViewModel.setBtnUserLogged("google")
+//                    "RegFB" -> regViewModel.setBtnUserLogged("fb")
+//                    "RegMailRu" -> regViewModel.setBtnUserLogged("mailru")
+//                    "RegDiscord" -> regViewModel.setBtnUserLogged("discord")
+//                    "RegMic" -> regViewModel.setBtnUserLogged("mic")
+                }
+
             }
         })
 
-        regViewModel. getResultReg1Success().observe(this, Observer {
+        regViewModel.getResultReg1Success().observe(this, Observer {
             if (it) {
                 when (viewModelMain.getSocialLaunch().value) {
                     "RegUserMail" -> regViewModel.postBindEmail()
                     "RegUserPhone" -> regViewModel.postBindPhone()
+                }
+            }
+        })
+
+        regViewModel.isPhotoDialogEnabled().observe(this, Observer {
+                aBoolean -> if (aBoolean != null) if (aBoolean) photoDialogBottomSheetEnable()
+        })
+
+        regViewModel.getPhotoLaunch().observe(this, Observer {
+            if (it != null) {
+                regViewModel.setPhotoDialogEnabled(false)
+                when (it) {
+                    "camera" -> {
+                        regViewModel.setPhotoLaunch("")
+                        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            requestPermissions(permissions, WRITE_REQUEST_CODE)
+                        } else
+                            regViewModel.openCamera()
+                    }
+                    "gallery" -> {
+                        regViewModel.setPhotoLaunch("")
+                        val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                        photoPickerIntent.type = "image/*"
+                        startActivityForResult(photoPickerIntent, GALLERY_REQUEST)
+
+//                        val pickPhoto = Intent(
+//                            Intent.ACTION_PICK,
+//                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//                        )
+//                        pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//                        startActivityForResult(pickPhoto, GALLERY_REQUEST)
+                    }
+                    else -> {
+                    }
                 }
             }
         })
@@ -366,7 +412,8 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             WRITE_REQUEST_CODE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                regViewModel.setPrivilegesForFileDone(true)
+                regViewModel.openCamera()
+                //regViewModel.setPrivilegesForFileDone(true)
             }
         }
     }
@@ -374,34 +421,46 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            //val uri: Uri? = null
-            when (requestCode) {
-                //GALLERY_REQUEST -> uri = data.data
-                CAMERA_REQUEST -> viewModelMain.setOutputPhotoUri(viewModelMain.getOutputPhotoUri().value!!)
-            }
-        }
 
-        val callback = object : VKAuthCallback {
-            override fun onLogin(token: VKAccessToken) {
-                // Пользователь успешно авторизовался
-                val acsessToken = token.accessToken
-                val acsessTokenSecretKey = token.secret
-                val userLogin = token.userId
+            val callback = object : VKAuthCallback {
+                override fun onLogin(token: VKAccessToken) {
+                    // Пользователь успешно авторизовался
+                    val acsessToken = token.accessToken
+                    val acsessTokenSecretKey = token.secret
+                    val userLogin = token.userId
 
-                regViewModel.btnVKClick(userLogin.toString(), "vk", acsessToken)
+                    regViewModel.btnVKClick(userLogin.toString(), "vk", acsessToken)
 
-                println("111 " + acsessToken + acsessTokenSecretKey + userLogin)
+                    println("111 " + acsessToken + acsessTokenSecretKey + userLogin)
 
 //                FragmentAuthVKUserData.startFrom(activity as Context)
+                }
+
+                override fun onLoginFailed(errorCode: Int) {
+                    // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+                }
+            }
+            if (!VK.onActivityResult(requestCode, resultCode, data, callback)) {
+                super.onActivityResult(requestCode, resultCode, data)
             }
 
-            override fun onLoginFailed(errorCode: Int) {
-                // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+            //val uri: Uri? = null
+            when (requestCode) {
+                GALLERY_REQUEST -> {
+                    regViewModel.setOutputPhotoUri(data!!.data!!)
+                    regViewModel.regContactPhotoSend()
+                }
+                CAMERA_REQUEST -> {
+                    regViewModel.setOutputPhotoUri(regViewModel.getOutputPhotoUri().value!!)
+                    regViewModel.regContactPhotoSend()
+                }
+//                VK_REQUEST -> {
+//
+//                }
             }
         }
-        if (!VK.onActivityResult(requestCode, resultCode, data, callback)) {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
+
+
 
     }
 
@@ -453,6 +512,11 @@ class MainActivity : AppCompatActivity() {
             val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(v.windowToken, 0)
         }
+    }
+
+    fun photoDialogBottomSheetEnable() {
+        val bottomSheetDialogFragment = AttachPhotoBottomSheetDialogFragment()
+        bottomSheetDialogFragment.show(supportFragmentManager, bottomSheetDialogFragment.tag)
     }
 
 //    private fun openRightMenu() {

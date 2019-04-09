@@ -120,8 +120,7 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
                     "" -> f = FragmentRegEmpty()
                     "mail" -> f = FragmentRegOneMail()//регистрация почта
                     "phone" -> f = FragmentRegOnePhone()//регистрация телефон
-                    "other" -> f = FragmentRegOneOther()//временный вариант открытия всех соцсетей
-                    "vk" -> f = FragmentRegOneOther.newInstance("vk")//регистрация вк
+                    "soc" -> f = FragmentRegOneOther()//вариант открытия всех соцсетей
                     else -> f = FragmentRegOneMail()
                 }
             }

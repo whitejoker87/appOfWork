@@ -141,7 +141,9 @@ object BindingAdapters {
     fun loadPhotoPartsList(view: ImageView, uri: Uri, errorImage: Drawable) {
         Picasso.get()
                 .load(uri)
-                //.resize(50, 50)
+                //.resize(160, 160)
+                .fit()
+                .rotate(270F)//для поворота в нормальную ориентацию
                 .placeholder(errorImage)
                 .error(errorImage)
                 .into(view)
