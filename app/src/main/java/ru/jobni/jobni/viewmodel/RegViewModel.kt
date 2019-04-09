@@ -16,6 +16,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -99,7 +100,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     /*путь до файла с фото*/
     private var mCurrentPhotoPath: String? = ""
     /*файл с фото*/
-    private lateinit var currentPhoto: File
+    private var currentPhoto = File("")
 
     fun setRegMail(mail: String) {
         regMail.value = mail
@@ -674,12 +675,16 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
         val file: File
-        if (getCurrentPhoto() != null) file = getCurrentPhoto()!!
+        if (!getCurrentPhoto()!!.path.equals("")) file = getCurrentPhoto()!!
 
         /*if (getPhotoLaunch().value.equals("camera"))*/ //file = File(getOutputPhotoUri().value!!.path)
         else  file = File(getRealPath(context, getOutputPhotoUri().value!!))
-        val requestFile = RequestBody.create(MediaType.parse("image/jpg"), file)
-        Retrofit.api?.postPhotoReg(cid, requestFile)?.enqueue(object : Callback<ResponseBody> {
+//        val requestFile = RequestBody.create(MediaType.parse("image/jpg"), file)
+        val image = MultipartBody.Part.createFormData(
+            "photo",
+            "photo.jpg",
+            RequestBody.create(MediaType.parse("image/jpg"), file))
+        Retrofit.api?.postPhotoReg(cid, image)?.enqueue(object : Callback<ResponseBody> {
 
             override fun onResponse(call: Call<ResponseBody> , response: Response<ResponseBody> ) {
 

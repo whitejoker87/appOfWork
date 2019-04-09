@@ -1,5 +1,6 @@
 package ru.jobni.jobni.utils
 
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -47,9 +48,13 @@ interface RetrofitQuery {
     @POST("api/accounts/{type_social}/login/")
     fun postSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
 
-    @POST("api/registration/photo/")
-    fun postPhotoReg(@Header("Cookie") sessionID: String, @Body file: RequestBody): Call<ResponseBody>
+    /*старый нерабочий вариант*/
+//    @POST("api/registration/photo/")
+//    fun postPhotoReg(@Header("Cookie") sessionID: String, @Body file: RequestBody): Call<ResponseBody>
 
+    @Multipart
+    @POST("api/registration/photo/")
+    fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseBody>
     /*заготовка для отправки картинки*/
 //    @Multipart
 //    @POST("api/registration/")
