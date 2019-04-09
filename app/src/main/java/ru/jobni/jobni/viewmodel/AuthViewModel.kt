@@ -14,7 +14,6 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
 import ru.jobni.jobni.model.network.auth.*
-import ru.jobni.jobni.model.network.registration.RegVK
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -444,7 +443,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAuthVKClick(userLogin: String, provider: String, accessToken: String) {
 
-        val contactFace = RegVK(
+        val contactFace = AuthVKJobni(
                 userLogin,
                 provider,
                 accessToken

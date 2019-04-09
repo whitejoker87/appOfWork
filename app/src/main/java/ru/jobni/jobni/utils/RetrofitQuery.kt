@@ -50,7 +50,7 @@ interface RetrofitQuery {
     fun postVKReg(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
 
     @POST("api/authorization/social_account/")
-    fun postVKAuth(@Body userMail: RegVK): Call<AuthVK>
+    fun postVKAuth(@Body userMail: AuthVKJobni): Call<AuthVK>
 
     /*API Instagram*/
     @FormUrlEncoded
