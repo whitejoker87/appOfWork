@@ -44,68 +44,44 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     /*цвет кнопки при логине пользователя*/
     private val btnUserLogged = MutableLiveData<String>("")
 
-    /*кликабельность кнопки при навигации(изменяется внутри меню)*/
-    private val isBtnMailNotClickable = MutableLiveData<Boolean>()
-
+    /*Блок Mail*/
     private val isMailAuthid = MutableLiveData<Boolean>()
     private val authMail = MutableLiveData<String>()
     private val authPass = MutableLiveData<String>()
 
-
-    /*кликабельность кнопки при навигации FB(изменяется внутри меню)*/
-    private val isBtnFBNotClickable = MutableLiveData<Boolean>()
-
+    /*Блок FB*/
     private val isFBAuthid = MutableLiveData<Boolean>()
     private val authFBUser = MutableLiveData<String>()
     private val authFBPass = MutableLiveData<String>()
 
-
-    /*кликабельность кнопки при навигации Google+(изменяется внутри меню)*/
-    private val isBtnGoogleNotClickable = MutableLiveData<Boolean>()
-
+    /*Блок Google+*/
     private val isGoogleAuthid = MutableLiveData<Boolean>()
     private val authGoogleUser = MutableLiveData<String>()
     private val authGooglePass = MutableLiveData<String>()
 
-
-    /*кликабельность кнопки при навигации OK(изменяется внутри меню)*/
-    private val isBtnOKNotClickable = MutableLiveData<Boolean>()
-
+    /*Блок OK*/
     private val isOKAuthid = MutableLiveData<Boolean>()
     private val authOKUser = MutableLiveData<String>()
     private val authOKPass = MutableLiveData<String>()
 
-
-    /*кликабельность кнопки при навигации VK(изменяется внутри меню)*/
-    private val isBtnVKNotClickable = MutableLiveData<Boolean>()
-
+    /*Блок VK*/
     private val isVKAuthid = MutableLiveData<Boolean>()
     private val authVKUser = MutableLiveData<String>()
     private val authVKPass = MutableLiveData<String>()
     private val vkAuthStart = MutableLiveData<Boolean>()
 
-
-    /*кликабельность кнопки при навигации Phone(изменяется внутри меню)*/
-    private val isBtnPhoneNotClickable = MutableLiveData<Boolean>()
-
+    /*Блок Phone*/
     private val isPhoneAuthid = MutableLiveData<Boolean>()
     private val authPhone = MutableLiveData<String>("")
     private val authPhonePassword = MutableLiveData<String>("")
 
-
-    /*кликабельность кнопки при навигации Instagram(изменяется внутри меню)*/
-    private val isBtnInstagramNotClickable = MutableLiveData<Boolean>()
-
+    /*Блок Instagram*/
     private val isInstagramAuthid = MutableLiveData<Boolean>()
 
-
-    /*кликабельность кнопки при навигации Discord(изменяется внутри меню)*/
-    private val isBtnDiscordNotClickable = MutableLiveData<Boolean>()
-
+    /*Блок Discord*/
     private val isDiscordAuthid = MutableLiveData<Boolean>()
 
 
-    /* Блок обычной авторизации */
     fun setBtnUserLogged(typeLogged: String) {
         btnUserLogged.value = typeLogged
     }
@@ -113,13 +89,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun getBtnUserLogged(): MutableLiveData<String> = btnUserLogged
 
 
-    fun setBtnMailNotClickable(isVisible: Boolean) {
-        isBtnMailNotClickable.value = isVisible
-    }
-
-    fun isBtnMailNotClickable(): MutableLiveData<Boolean> = isBtnMailNotClickable
-
-
+    /* Блок обычной авторизации */
     fun setMailAuthid(authKey: Boolean) {
         isMailAuthid.value = authKey
     }
@@ -142,13 +112,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок facebook авторизации */
-    fun setBtnFBNotClickable(isVisible: Boolean) {
-        isBtnFBNotClickable.value = isVisible
-    }
-
-    fun isBtnFBNotClickable(): MutableLiveData<Boolean> = isBtnFBNotClickable
-
-
     fun setFBAuthid(authKey: Boolean) {
         isFBAuthid.value = authKey
     }
@@ -171,13 +134,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок google+ авторизации */
-    fun setBtnGoogleNotClickable(isVisible: Boolean) {
-        isBtnGoogleNotClickable.value = isVisible
-    }
-
-    fun isBtnGoogleNotClickable(): MutableLiveData<Boolean> = isBtnGoogleNotClickable
-
-
     fun setGoogleAuthid(authKey: Boolean) {
         isGoogleAuthid.value = authKey
     }
@@ -200,13 +156,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок OK авторизации */
-    fun setBtnOKNotClickable(isVisible: Boolean) {
-        isBtnOKNotClickable.value = isVisible
-    }
-
-    fun isBtnOKNotClickable(): MutableLiveData<Boolean> = isBtnOKNotClickable
-
-
     fun setOKAuthid(authKey: Boolean) {
         isOKAuthid.value = authKey
     }
@@ -229,13 +178,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок VK авторизации */
-    fun setBtnVKNotClickable(isVisible: Boolean) {
-        isBtnVKNotClickable.value = isVisible
-    }
-
-    fun isBtnVKNotClickable(): MutableLiveData<Boolean> = isBtnVKNotClickable
-
-
     fun setVKAuthid(authKey: Boolean) {
         isVKAuthid.value = authKey
     }
@@ -265,13 +207,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок Phone авторизации */
-    fun setBtnPhoneNotClickable(isVisible: Boolean) {
-        isBtnPhoneNotClickable.value = isVisible
-    }
-
-    fun isBtnPhoneNotClickable(): MutableLiveData<Boolean> = isBtnPhoneNotClickable
-
-
     fun setPhoneAuthid(authKey: Boolean) {
         isPhoneAuthid.value = authKey
     }
@@ -294,13 +229,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок Instagram авторизации */
-    fun setBtnInstagramNotClickable(isVisible: Boolean) {
-        isBtnInstagramNotClickable.value = isVisible
-    }
-
-    fun isBtnInstagramNotClickable(): MutableLiveData<Boolean> = isBtnInstagramNotClickable
-
-
     fun setInstagramAuthid(authKey: Boolean) {
         isInstagramAuthid.value = authKey
     }
@@ -309,13 +237,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок Discord авторизации */
-    fun setBtnDiscordNotClickable(isVisible: Boolean) {
-        isBtnDiscordNotClickable.value = isVisible
-    }
-
-    fun isBtnDiscordNotClickable(): MutableLiveData<Boolean> = isBtnDiscordNotClickable
-
-
     fun setDiscordAuthid(authKey: Boolean) {
         isDiscordAuthid.value = authKey
     }
