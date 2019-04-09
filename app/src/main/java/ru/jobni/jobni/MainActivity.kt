@@ -410,11 +410,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (regViewModel.isVkRegStart().value == true) {
                     regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
-                }
-//                else {
-//                    viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
-//                }
-                if (viewModelAuth.isVkAuthStart().value == true) {
+                } else if (viewModelAuth.isVkAuthStart().value == true) {
                     viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
                 }
             }
