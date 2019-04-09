@@ -35,8 +35,6 @@ import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
-import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
-import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUser
 import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUserLogged
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
@@ -453,7 +451,7 @@ class MainActivity : AppCompatActivity() {
 
                     val userLogin = token.userId
 
-                    if (regViewModel.isVkRegStart().value == true) {
+                    if (viewModelMain.getSocialLaunch().value.equals("RegVK")) {
                     regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
                 } else if (viewModelAuth.isVkAuthStart().value == true) {
                     viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
