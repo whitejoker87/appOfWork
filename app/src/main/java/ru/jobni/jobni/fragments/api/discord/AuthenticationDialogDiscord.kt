@@ -8,7 +8,6 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.api.instagram.AuthenticationListenerDiscord
 
 class AuthenticationDialogDiscord(context: Context, private val listener: AuthenticationListenerDiscord) : Dialog(context) {
 
