@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserDiscordBinding
-import ru.jobni.jobni.fragments.api.instagram.AuthenticationListenerDiscord
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
@@ -40,7 +39,7 @@ class FragmentAuthDiscordUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
-        binding.btnUserDiscordAuth.setOnClickListener{
+        binding.btnUserDiscordAuth.setOnClickListener {
             authenticationDialogDiscord = AuthenticationDialogDiscord(context!!, object : AuthenticationListenerDiscord {
                 override fun onTokenReceived(code: String) {
                     viewModelAuth.convertDiscordCode(code)
