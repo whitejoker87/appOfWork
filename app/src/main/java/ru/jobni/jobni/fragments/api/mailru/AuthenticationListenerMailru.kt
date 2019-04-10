@@ -1,5 +1,5 @@
-package ru.jobni.jobni.fragments.api.instagram
+package ru.jobni.jobni.fragments.api.mailru
 
 interface AuthenticationListenerMailru {
-    fun onTokenReceived(code: String)
+    fun onTokenReceived(accessToken: String, vid: String)
 }

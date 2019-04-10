@@ -8,16 +8,16 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.api.instagram.AuthenticationListenerMailru
 
 class AuthenticationDialogMailru(context: Context, private val listener: AuthenticationListenerMailru) : Dialog(context) {
 
-    private val request_url: String = context.resources.getString(R.string.discord_base_url) +
-            "oauth2/authorize" +
-            "?response_type=code" +
-            "&client_id=" + context.resources.getString(R.string.discord_client_id) +
-            "&scope=identify" +
-            "&redirect_uri=" + context.resources.getString(R.string.discord_redirect_url)
+    private val request_url: String = context.resources.getString(R.string.mailru_base_url) +
+            "oauth/authorize?" +
+            "client_id=" + context.resources.getString(R.string.mailru_client_id) +
+            "&response_type=token" +
+            "&scope=events" +
+            "&redirect_uri=" + context.resources.getString(R.string.mailru_redirect_url) +
+            "&display=mobile"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +31,10 @@ class AuthenticationDialogMailru(context: Context, private val listener: Authent
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.loadUrl(request_url)
-        webView.webViewClient = DiscordWebViewClient
+        webView.webViewClient = MailruWebViewClient
     }
 
-    private val DiscordWebViewClient = object : WebViewClient() {
+    private val MailruWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             return false
@@ -43,15 +43,15 @@ class AuthenticationDialogMailru(context: Context, private val listener: Authent
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
-            if (url.contains("?code=")) {
-                var code = url
-                code = code.substring(code.lastIndexOf("=") + 1)
+            if (url.contains("&access_token=")) {
+                val accessToken = url.substring(url.indexOf("access_token=") + 13, url.lastIndexOf("&token_type"))
+                val vid = url.substring(url.lastIndexOf("=") + 1)
 
-                listener.onTokenReceived(code)
+                listener.onTokenReceived(accessToken, vid)
 //                dismiss()
 
             } else if (url.contains("?error")) {
-                Log.e("code", "getting error fetching code")
+                Log.e("access_token", "getting error fetching access_token")
                 dismiss()
             }
         }

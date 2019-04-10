@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserMailruBinding
-import ru.jobni.jobni.fragments.api.instagram.AuthenticationListenerMailru
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
@@ -42,8 +41,8 @@ class FragmentAuthMailruUser : Fragment() {
 
         binding.btnUserMailruAuth.setOnClickListener{
             authenticationDialogMailru = AuthenticationDialogMailru(context!!, object : AuthenticationListenerMailru {
-                override fun onTokenReceived(code: String) {
-                    viewModelAuth.convertMailruCode(code)
+                override fun onTokenReceived(accessToken: String, vid: String) {
+                    viewModelAuth.onAuthMailruClick(accessToken, vid)
                 }
             })
             authenticationDialogMailru!!.setCancelable(true)

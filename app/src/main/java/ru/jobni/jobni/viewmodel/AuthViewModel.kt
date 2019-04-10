@@ -429,22 +429,22 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun onAuthMailruClick(accessToken: String) {
+    fun onAuthMailruClick(accessToken: String, vid: String) {
 
-        val provider = "discord"
-        val contactFace = AuthDiscordJobni(
-                "", // где брать? дискорд не присылает - Сделать поле не обязательным?
+        val provider = "mailru"
+        val contactFace = AuthMailruJobni(
+                vid,
                 provider,
                 accessToken
         )
 
-        Retrofit.api?.postDiscordAuth(contactFace)?.enqueue(object : Callback<AuthDiscord> {
-            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+        Retrofit.api?.postMailruAuth(contactFace)?.enqueue(object : Callback<AuthMailru> {
+            override fun onResponse(call: Call<AuthMailru>, response: Response<AuthMailru>) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
                         setUserAuthid(true)
-                        setBtnUserLogged("discord")
+                        setBtnUserLogged("mailru")
 
                     } else if (!(response.body()!!.success)) {
                         Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
@@ -452,32 +452,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
 
-            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
-                Toast.makeText(context, "Error onAuthDiscordClick!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun convertMailruCode(code: String) {
-
-        Retrofit.api?.getDiscordAccessToken(
-                context.resources.getString(R.string.discord_client_id),
-                context.resources.getString(R.string.discord_client_secret),
-                "authorization_code",
-                code,
-                context.resources.getString(R.string.discord_redirect_url),
-                "identify")?.enqueue(object : Callback<AuthDiscord> {
-            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
-                if (response.body() != null) {
-
-                    val dscAccessToken = response.body()?.access_token
-
-                    onAuthDiscordClick(dscAccessToken!!)
-                }
-            }
-
-            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
-                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<AuthMailru>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthMailruClick!", Toast.LENGTH_SHORT).show()
             }
         })
     }

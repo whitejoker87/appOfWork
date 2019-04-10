@@ -216,4 +216,7 @@
 	<string name = "discord_client_secret">IumshvS2iBrxR5m73veXQeZ92z1RKRfN</string>
 	<string name = "discord_base_url">https://discordapp.com/api/</string>
 	<string name = "discord_redirect_url">https://discordapp.com/</string>
+	<string name = "mailru_client_id">764749</string>
+	<string name = "mailru_base_url">https://connect.mail.ru/</string>
+	<string name = "mailru_redirect_url">https://mail.ru/</string>
 </resources>
