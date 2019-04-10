@@ -47,10 +47,14 @@ import ru.jobni.jobni.fragments.api.instagram.AuthenticationDialogInstagram
 import ru.jobni.jobni.fragments.api.instagram.AuthenticationListenerInstagram
 import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUser
 import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUserLogged
+import ru.jobni.jobni.fragments.api.mailru.FragmentAuthMailruUser
+import ru.jobni.jobni.fragments.api.mailru.FragmentAuthMailruUserLogged
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
+import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUser
+import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
@@ -60,7 +64,6 @@ import ru.jobni.jobni.viewmodel.RegViewModel
 import ru.ok.android.sdk.Odnoklassniki
 import ru.ok.android.sdk.util.OkAuthType
 import ru.ok.android.sdk.util.OkScope
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -163,9 +166,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModelMain.isOpenDrawerLeft().observe(this, Observer { isOpen ->
             if (isOpen) {
-                if (viewModelAuth.isMailAuthid().value == true
-                        || viewModelAuth.isFBAuthid().value == true
-                        || viewModelAuth.isGoogleAuthid().value == true
+                if (viewModelAuth.isUserAuthid().value == true
                 ) {
                     viewModelMain.setNoAuthRegVisible(false)
                     viewModelMain.setYesAuthRegVisible(true)
@@ -232,6 +233,10 @@ class MainActivity : AppCompatActivity() {
                 "AuthInstagramUserLogged" -> setFragment(FragmentAuthInstagramUserLogged())
                 "AuthDiscordUser" -> setFragment(FragmentAuthDiscordUser())
                 "AuthDiscordUserLogged" -> setFragment(FragmentAuthDiscordUserLogged())
+                "AuthMailruUser" -> setFragment(FragmentAuthMailruUser())
+                "AuthMailruUserLogged" -> setFragment(FragmentAuthMailruUserLogged())
+                "AuthTelegramUser" -> setFragment(FragmentAuthTelegramUser())
+                "AuthTelegramUserLogged" -> setFragment(FragmentAuthTelegramUserLogged())
                 "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
                 "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
                 "RegSocial" -> regViewModel.setTypeAddRegFragment("soc")
@@ -271,48 +276,13 @@ class MainActivity : AppCompatActivity() {
             } else regViewModel.openCamera()
         })
 
-        viewModelAuth.isMailAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isFBAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isGoogleAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isOKAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isVKAuthid().observe(this, Observer {
+        viewModelAuth.isUserAuthid().observe(this, Observer {
             setFragmentReturnBackStack()
             closeKeyboard()
         })
 
         viewModelAuth.isVkAuthStart().observe(this, Observer {
             VK.login(this, arrayListOf())
-        })
-
-        viewModelAuth.isPhoneAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isInstagramAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
-        })
-
-        viewModelAuth.isDiscordAuthid().observe(this, Observer {
-            setFragmentReturnBackStack()
-            closeKeyboard()
         })
 
         regViewModel.getSocialRegStart().observe(this, Observer {
@@ -338,7 +308,6 @@ class MainActivity : AppCompatActivity() {
 //                    "RegDiscord" -> regViewModel.setBtnUserLogged("discord")
 //                    "RegMic" -> regViewModel.setBtnUserLogged("mic")
                 }
-
             }
         })
 

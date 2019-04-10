@@ -176,6 +176,8 @@
 	<string name = "user_auth_phone_info_text">ИСПОЛЬЗУЙТЕ НОМЕР ТЕЛЕФОНА</string>
 	<string name = "user_auth_instagram_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ INSTAGRAM</string>
 	<string name = "user_auth_discord_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ DISCORD</string>
+	<string name = "user_auth_mailru_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ МОЙ МИР</string>
+	<string name = "user_auth_telegram_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ TELEGRAM</string>
 	<string name = "user_auth_delete_info_text">Авторизация сброшена</string>
 	<string name = "btn_change_user_pass_text">Сменить пароль</string>
 	<string name = "btn_change_user_mail_text">Сменить почту</string>
@@ -215,4 +217,7 @@
 	<string name = "discord_client_secret">IumshvS2iBrxR5m73veXQeZ92z1RKRfN</string>
 	<string name = "discord_base_url">https://discordapp.com/api/</string>
 	<string name = "discord_redirect_url">https://discordapp.com/</string>
+	<string name = "mailru_client_id">764749</string>
+	<string name = "mailru_base_url">https://connect.mail.ru/</string>
+	<string name = "mailru_redirect_url">https://mail.ru/</string>
 </resources>

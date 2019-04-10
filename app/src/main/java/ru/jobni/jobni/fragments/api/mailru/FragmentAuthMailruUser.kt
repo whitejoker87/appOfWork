@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.discord
+package ru.jobni.jobni.fragments.api.mailru
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,14 +8,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserDiscordBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserMailruBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
-class FragmentAuthDiscordUser : Fragment() {
+class FragmentAuthMailruUser : Fragment() {
 
-    private var authenticationDialogDiscord: AuthenticationDialogDiscord? = null
+    private var authenticationDialogMailru: AuthenticationDialogMailru? = null
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -25,11 +25,11 @@ class FragmentAuthDiscordUser : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationUserDiscordBinding
+    private lateinit var binding: CAuthorizationUserMailruBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_discord, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_mailru, container, false)
 
         binding.lifecycleOwner = this
 
@@ -39,14 +39,14 @@ class FragmentAuthDiscordUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
-        binding.btnUserDiscordAuth.setOnClickListener {
-            authenticationDialogDiscord = AuthenticationDialogDiscord(context!!, object : AuthenticationListenerDiscord {
-                override fun onTokenReceived(code: String) {
-                    viewModelAuth.convertDiscordCode(code)
+        binding.btnUserMailruAuth.setOnClickListener{
+            authenticationDialogMailru = AuthenticationDialogMailru(context!!, object : AuthenticationListenerMailru {
+                override fun onTokenReceived(accessToken: String, vid: String) {
+                    viewModelAuth.onAuthMailruClick(accessToken, vid)
                 }
             })
-            authenticationDialogDiscord!!.setCancelable(true)
-            authenticationDialogDiscord!!.show()
+            authenticationDialogMailru!!.setCancelable(true)
+            authenticationDialogMailru!!.show()
         }
 
         return view

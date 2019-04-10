@@ -46,7 +46,7 @@
 			android:textStyle = "bold"
 			android:textColor = "@color/font_color"
 			android:textSize = "14sp"
-			android:text = "@string/user_auth_discord_info_text"
+			android:text = "@string/user_auth_options_text"
 			/>
 
 		<include
@@ -63,15 +63,16 @@
 			/>
 
 		<Button
-			android:id = "@+id/btn_user_discord_auth"
-			android:layout_width = "wrap_content"
+			android:id = "@+id/btn_change_user_auth"
+			android:layout_width = "180dp"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "16dp"
-			android:background = "@drawable/shape_button"
-			android:text = "@string/btn_user_vk_auth_text"
+			android:background = "@drawable/shape_badge"
+			android:text = "@string/btn_change_user_auth_text"
+			android:onClick = "@{() -> viewmodelauth.onAuthPhoneUserChangeClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

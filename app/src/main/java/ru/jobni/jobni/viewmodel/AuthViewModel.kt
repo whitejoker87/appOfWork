@@ -43,43 +43,30 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     /*цвет кнопки при логине пользователя*/
     private val btnUserLogged = MutableLiveData<String>("")
+    private val isUserAuthid = MutableLiveData<Boolean>()
 
     /*Блок Mail*/
-    private val isMailAuthid = MutableLiveData<Boolean>()
     private val authMail = MutableLiveData<String>()
     private val authPass = MutableLiveData<String>()
 
     /*Блок FB*/
-    private val isFBAuthid = MutableLiveData<Boolean>()
     private val authFBUser = MutableLiveData<String>()
     private val authFBPass = MutableLiveData<String>()
 
     /*Блок Google+*/
-    private val isGoogleAuthid = MutableLiveData<Boolean>()
     private val authGoogleUser = MutableLiveData<String>()
     private val authGooglePass = MutableLiveData<String>()
 
     /*Блок OK*/
-    private val isOKAuthid = MutableLiveData<Boolean>()
     private val authOKUser = MutableLiveData<String>()
     private val authOKPass = MutableLiveData<String>()
 
     /*Блок VK*/
-    private val isVKAuthid = MutableLiveData<Boolean>()
-    private val authVKUser = MutableLiveData<String>()
-    private val authVKPass = MutableLiveData<String>()
     private val vkAuthStart = MutableLiveData<Boolean>()
 
     /*Блок Phone*/
-    private val isPhoneAuthid = MutableLiveData<Boolean>()
     private val authPhone = MutableLiveData<String>("")
     private val authPhonePassword = MutableLiveData<String>("")
-
-    /*Блок Instagram*/
-    private val isInstagramAuthid = MutableLiveData<Boolean>()
-
-    /*Блок Discord*/
-    private val isDiscordAuthid = MutableLiveData<Boolean>()
 
 
     fun setBtnUserLogged(typeLogged: String) {
@@ -89,14 +76,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun getBtnUserLogged(): MutableLiveData<String> = btnUserLogged
 
 
-    /* Блок обычной авторизации */
-    fun setMailAuthid(authKey: Boolean) {
-        isMailAuthid.value = authKey
+    fun setUserAuthid(authKey: Boolean) {
+        isUserAuthid.value = authKey
     }
 
-    fun isMailAuthid(): MutableLiveData<Boolean> = isMailAuthid
+    fun isUserAuthid(): MutableLiveData<Boolean> = isUserAuthid
 
 
+    /* Блок обычной авторизации */
     fun getAuthMail(): String? = authMail.value
 
     fun setAuthMail(query: String) {
@@ -112,13 +99,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок facebook авторизации */
-    fun setFBAuthid(authKey: Boolean) {
-        isFBAuthid.value = authKey
-    }
-
-    fun isFBAuthid(): MutableLiveData<Boolean> = isFBAuthid
-
-
     fun getFBAuthUser(): String? = authFBUser.value
 
     fun setFBAuthUser(query: String) {
@@ -134,13 +114,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок google+ авторизации */
-    fun setGoogleAuthid(authKey: Boolean) {
-        isGoogleAuthid.value = authKey
-    }
-
-    fun isGoogleAuthid(): MutableLiveData<Boolean> = isGoogleAuthid
-
-
     fun getGoogleAuthUser(): String? = authGoogleUser.value
 
     fun setGoogleAuthUser(query: String) {
@@ -156,13 +129,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок OK авторизации */
-    fun setOKAuthid(authKey: Boolean) {
-        isOKAuthid.value = authKey
-    }
-
-    fun isOKAuthid(): MutableLiveData<Boolean> = isOKAuthid
-
-
     fun getOKAuthUser(): String? = authOKUser.value
 
     fun setOKAuthUser(query: String) {
@@ -178,27 +144,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок VK авторизации */
-    fun setVKAuthid(authKey: Boolean) {
-        isVKAuthid.value = authKey
-    }
-
-    fun isVKAuthid(): MutableLiveData<Boolean> = isVKAuthid
-
-
-    fun getVKAuthUser(): String? = authVKUser.value
-
-    fun setVKAuthUser(query: String) {
-        this.authVKUser.value = query
-    }
-
-
-    fun getVKAuthPass(): String? = authVKPass.value
-
-    fun setVKAuthPass(query: String) {
-        this.authVKPass.value = query
-    }
-
-
     fun isVkAuthStart(): MutableLiveData<Boolean> = vkAuthStart
 
     fun setVkAuthStart(isStart: Boolean) {
@@ -207,13 +152,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок Phone авторизации */
-    fun setPhoneAuthid(authKey: Boolean) {
-        isPhoneAuthid.value = authKey
-    }
-
-    fun isPhoneAuthid(): MutableLiveData<Boolean> = isPhoneAuthid
-
-
     fun getAuthPhone(): String? = authPhone.value
 
     fun setAuthPhone(query: String) {
@@ -226,22 +164,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun setAuthPhonePassword(query: String) {
         this.authPhonePassword.value = query
     }
-
-
-    /* Блок Instagram авторизации */
-    fun setInstagramAuthid(authKey: Boolean) {
-        isInstagramAuthid.value = authKey
-    }
-
-    fun isInstagramAuthid(): MutableLiveData<Boolean> = isInstagramAuthid
-
-
-    /* Блок Discord авторизации */
-    fun setDiscordAuthid(authKey: Boolean) {
-        isDiscordAuthid.value = authKey
-    }
-
-    fun isDiscordAuthid(): MutableLiveData<Boolean> = isDiscordAuthid
 
 
     // Временный метод для разных авторизаций
@@ -257,7 +179,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         editor?.apply()
 
         setBtnUserLogged("")
-        setMailAuthid(false)
+        setUserAuthid(false)
 
         return false
     }
@@ -287,7 +209,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                         editor?.putString(authMailPass, getAuthPass())
                         editor?.apply()
 
-                        setMailAuthid(true)
+                        setUserAuthid(true)
                         setBtnUserLogged("mail")
 
                     } else if (!(response.body()!!.success)) {
@@ -310,7 +232,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         editor?.apply()
 
         setBtnUserLogged("")
-        setPhoneAuthid(false)
+        setUserAuthid(false)
 
         return false
     }
@@ -340,7 +262,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                         editor?.putString(authPhoneUserPassword, getAuthPhonePassword())
                         editor?.apply()
 
-                        setPhoneAuthid(true)
+                        setUserAuthid(true)
                         setBtnUserLogged("phone")
 
                     } else if (!(response.body()!!.success)) {
@@ -357,7 +279,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAuthVKChangeClick(): Boolean {
         setBtnUserLogged("")
-        setVKAuthid(false)
+        setUserAuthid(false)
 
         return false
     }
@@ -368,6 +290,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 userLogin,
                 provider,
                 accessToken
+//              "ba352282246678fe6c7f60b6c7b23464640a34b3c0dffb9b9f9245e911ad2874a0831dba3d29849727d62"
         )
 
         Retrofit.api?.postVKAuth(contactFace)?.enqueue(object : Callback<AuthVK> {
@@ -375,7 +298,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
-                        setVKAuthid(true)
+                        setUserAuthid(true)
                         setBtnUserLogged("vk")
 
                     } else if (!(response.body()!!.success)) {
@@ -392,7 +315,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAuthInstagramChangeClick(): Boolean {
         setBtnUserLogged("")
-        setInstagramAuthid(false)
+        setUserAuthid(false)
 
         return false
     }
@@ -406,7 +329,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.body() != null) {
 
-                    setInstagramAuthid(true)
+                    setUserAuthid(true)
                     setBtnUserLogged("instagram")
                 }
             }
@@ -442,16 +365,16 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onAuthDiscordChangeClick(): Boolean {
         setBtnUserLogged("")
-        setDiscordAuthid(false)
+        setUserAuthid(false)
 
         return false
     }
 
-    fun onAuthDiscordClick(accessToken: String) {
+    fun onAuthDiscordClick(accessToken: String, uid: String) {
 
         val provider = "discord"
         val contactFace = AuthDiscordJobni(
-                "", // где брать? дискорд не присылает - Сделать поле не обязательным?
+                uid,
                 provider,
                 accessToken
         )
@@ -461,7 +384,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
-                        setDiscordAuthid(true)
+                        setUserAuthid(true)
                         setBtnUserLogged("discord")
 
                     } else if (!(response.body()!!.success)) {
@@ -490,12 +413,66 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                     val dscAccessToken = response.body()?.access_token
 
-                    onAuthDiscordClick(dscAccessToken!!)
+                    getDiscordUID(dscAccessToken!!)
                 }
             }
 
             override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
                 Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun getDiscordUID(AccessToken: String) {
+
+        Retrofit.api?.getDiscordUID("Bearer $AccessToken")?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+                if (response.body() != null) {
+
+                    val dscUserUD = response.body()?.id.toString()
+
+                    onAuthDiscordClick(AccessToken, dscUserUD)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthMailruChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setUserAuthid(false)
+
+        return false
+    }
+
+    fun onAuthMailruClick(accessToken: String, vid: String) {
+
+        val provider = "mailru"
+        val contactFace = AuthMailruJobni(
+                vid,
+                provider,
+                accessToken
+        )
+
+        Retrofit.api?.postMailruAuth(contactFace)?.enqueue(object : Callback<AuthMailru> {
+            override fun onResponse(call: Call<AuthMailru>, response: Response<AuthMailru>) {
+                if (response.body() != null) {
+
+                    if (response.body()!!.success) {
+                        setUserAuthid(true)
+                        setBtnUserLogged("mailru")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AuthMailru>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthMailruClick!", Toast.LENGTH_SHORT).show()
             }
         })
     }
