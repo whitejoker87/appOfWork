@@ -6,12 +6,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -327,7 +325,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun btnVKClick(userLogin: String, provider: String, accessToken: String) {
+    fun sendSocialData(userLogin: String, provider: String, accessToken: String) {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
@@ -338,7 +336,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 accessToken
         )
 
-        Retrofit.api?.postVKReg(cid, contactFace)?.enqueue(object : Callback<ResponseBody> {
+        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.body() != null) {
 

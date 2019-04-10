@@ -53,8 +53,6 @@ import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
-import android.provider.MediaStore
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -452,7 +450,7 @@ class MainActivity : AppCompatActivity() {
                     val userLogin = token.userId
 
                     if (viewModelMain.getSocialLaunch().value.equals("RegVK")) {
-                    regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
+                    regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
                 } else if (viewModelAuth.isVkAuthStart().value == true) {
                     viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
                 }

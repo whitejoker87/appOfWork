@@ -62,7 +62,7 @@ interface RetrofitQuery {
 
     /*API VK*/
     @POST("api/registration/social_account/")
-    fun postVKReg(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
+    fun postSocialReg(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
 
     @POST("api/authorization/social_account/")
     fun postVKAuth(@Body userMail: AuthVKJobni): Call<AuthVK>

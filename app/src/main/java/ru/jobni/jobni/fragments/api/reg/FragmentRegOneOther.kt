@@ -93,6 +93,9 @@ class FragmentRegOneOther : Fragment() {
                 parameters.putString("fields", "id,first_name,last_name,email,gender")
                 request.parameters = parameters
                 request.executeAsync()
+
+                regViewModel.sendSocialData(userID, "facebook", accessTokenFB)
+
             }
 
             override fun onCancel() {
