@@ -62,7 +62,7 @@
 			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
-		<Button
+		<org.telegram.passport.TelegramLoginButton
 			android:id = "@+id/btn_user_telegram_auth"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
@@ -70,8 +70,7 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "16dp"
-			android:background = "@drawable/shape_button"
-			android:text = "@string/btn_user_vk_auth_text"
+			app:cornerRoundness = "0.5"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
