@@ -87,4 +87,7 @@ dependencies {
 
     // API OK
     implementation 'ru.ok:odnoklassniki-android-sdk:2.0.3'
+
+    // API TELEGRAM
+    implementation 'org.telegram:passport:1.1'
 }
