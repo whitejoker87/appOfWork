@@ -344,10 +344,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun convertInstagramCode(code: String) {
 
         Retrofit.api?.getInstagramAccessToken(
-                context.resources.getString(R.string.client_id),
-                context.resources.getString(R.string.client_secret),
+                context.resources.getString(R.string.instagram_client_id),
+                context.resources.getString(R.string.instagram_client_secret),
                 "authorization_code",
-                context.resources.getString(R.string.redirect_url), code)?.enqueue(object : Callback<AuthInstagram> {
+                context.resources.getString(R.string.instagram_redirect_url), code)?.enqueue(object : Callback<AuthInstagram> {
             override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
                 if (response.body() != null) {
 

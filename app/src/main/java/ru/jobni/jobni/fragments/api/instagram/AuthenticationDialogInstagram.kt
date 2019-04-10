@@ -11,11 +11,11 @@ import ru.jobni.jobni.R
 
 class AuthenticationDialogInstagram(context: Context, private val listenerInstagram: AuthenticationListenerInstagram) : Dialog(context) {
 
-    private val request_url: String = context.resources.getString(R.string.base_url) +
+    private val request_url: String = context.resources.getString(R.string.instagram_base_url) +
             "oauth/authorize/?client_id=" +
-            context.resources.getString(R.string.client_id) +
+            context.resources.getString(R.string.instagram_client_id) +
             "&redirect_uri=" +
-            context.resources.getString(R.string.redirect_url) +
+            context.resources.getString(R.string.instagram_redirect_url) +
             "&response_type=code" +
             "&display=touch&scope=public_content"
 

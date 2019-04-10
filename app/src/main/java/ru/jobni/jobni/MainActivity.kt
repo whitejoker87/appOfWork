@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
     private val GALLERY_REQUEST = 1
     private val VK_REQUEST = 1
 
-
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
     private lateinit var drawer: DrawerLayout
@@ -275,7 +274,7 @@ class MainActivity : AppCompatActivity() {
 
         regViewModel.getSocialRegStart().observe(this, Observer {
             if (it) {
-                when(viewModelMain.getSocialLaunch().value){
+                when (viewModelMain.getSocialLaunch().value) {
                     "RegVK" -> VK.login(this, arrayListOf())
 //                    "RegOK" -> regViewModel.setBtnUserLogged("ok")
 //                    "RegInst" -> regViewModel.setBtnUserLogged("inst")
@@ -298,8 +297,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        regViewModel.isPhotoDialogEnabled().observe(this, Observer {
-                aBoolean -> if (aBoolean != null) if (aBoolean) photoDialogBottomSheetEnable()
+        regViewModel.isPhotoDialogEnabled().observe(this, Observer { aBoolean ->
+            if (aBoolean != null) if (aBoolean) photoDialogBottomSheetEnable()
         })
 
         regViewModel.getPhotoLaunch().observe(this, Observer {
@@ -308,7 +307,8 @@ class MainActivity : AppCompatActivity() {
                 when (it) {
                     "camera" -> {
                         regViewModel.setPhotoLaunch("")
-                        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                        val permissions =
+                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             requestPermissions(permissions, WRITE_REQUEST_CODE)
                         } else
@@ -412,7 +412,8 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
 
-            /* VK callback block */val callback = object : VKAuthCallback {
+            /* VK callback block */
+            val callback = object : VKAuthCallback {
                 override fun onLogin(token: VKAccessToken) {
 
                     val accessToken = token.accessToken
@@ -420,10 +421,10 @@ class MainActivity : AppCompatActivity() {
                     val userLogin = token.userId
 
                     if (viewModelMain.getSocialLaunch().value.equals("RegVK")) {
-                    regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
-                } else if (viewModelAuth.isVkAuthStart().value == true) {
-                    viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
-                }
+                        regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
+                    } else if (viewModelAuth.isVkAuthStart().value == true) {
+                        viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
+                    }
                 }
 
                 override fun onLoginFailed(errorCode: Int) {}
@@ -448,10 +449,7 @@ class MainActivity : AppCompatActivity() {
 //                }
             }
         }
-
-
     }
-
 
     private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -478,15 +476,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setFragmentNoBackStack(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 
     private fun setFragmentReturnBackStack() {
