@@ -22,7 +22,7 @@ data class AuthDiscord(
         @SerializedName("flags") val flags : Int,
         @SerializedName("avatar") val avatar : String,
         @SerializedName("discriminator") val discriminator : Int,
-        @SerializedName("id") val id : Int,
+        @SerializedName("id") val id : Long,
 
         // Jobni block
         @SerializedName("success") val success: Boolean,
