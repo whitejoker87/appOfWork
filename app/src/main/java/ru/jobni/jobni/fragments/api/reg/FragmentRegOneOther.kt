@@ -14,9 +14,7 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import org.json.JSONObject
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserFbBinding
 import ru.jobni.jobni.fragments.api.facebook.PrefUtil
-import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 import java.net.MalformedURLException
@@ -48,8 +46,8 @@ class FragmentRegOneOther : Fragment() {
 //    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         callbackManager = CallbackManager.Factory.create()

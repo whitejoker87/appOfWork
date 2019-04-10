@@ -47,7 +47,7 @@ class AuthenticationDialogInstagram(context: Context, private val listenerInstag
                 code = code.substring(code.lastIndexOf("=") + 1)
 
                 listenerInstagram.onTokenReceived(code)
-                //dismiss()
+                dismiss()
 
             } else if (url.contains("?error")) {
                 Log.e("code", "getting error fetching code")

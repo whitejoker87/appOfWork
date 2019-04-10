@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.UserDictionary
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -23,6 +24,7 @@ import com.google.android.material.tabs.TabLayout
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
+import com.vk.api.sdk.ui.VKWebViewAuthActivity
 import kotlinx.android.synthetic.main.nav_left.*
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
@@ -41,6 +43,8 @@ import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUserLogged
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUserLogged
+import ru.jobni.jobni.fragments.api.instagram.AuthenticationDialogInstagram
+import ru.jobni.jobni.fragments.api.instagram.AuthenticationListenerInstagram
 import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUser
 import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUserLogged
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
@@ -53,6 +57,9 @@ import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
+import ru.ok.android.sdk.Odnoklassniki
+import ru.ok.android.sdk.util.OkAuthType
+import ru.ok.android.sdk.util.OkScope
 
 
 class MainActivity : AppCompatActivity() {
@@ -64,6 +71,12 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA_REQUEST = 0
     private val GALLERY_REQUEST = 1
     private val VK_REQUEST = 1
+
+    // -------------- YOUR APP DATA GOES HERE(for OK) ------------
+    private val APP_ID = "1277635072"
+    private val APP_KEY = "CBALCICNEBABABABA"
+    private val REDIRECT_URL = "okauth://ok1277635072"
+    // -------------- YOUR APP DATA ENDS -----------------
 
 
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -221,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                 "AuthDiscordUserLogged" -> setFragment(FragmentAuthDiscordUserLogged())
                 "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
                 "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
-                "RegVK" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegSocial" -> regViewModel.setTypeAddRegFragment("soc")
                 "RegOK" -> regViewModel.setTypeAddRegFragment("soc")
                 "RegInst" -> regViewModel.setTypeAddRegFragment("soc")
                 "RegTel" -> regViewModel.setTypeAddRegFragment("soc")
@@ -305,9 +318,19 @@ class MainActivity : AppCompatActivity() {
         regViewModel.getSocialRegStart().observe(this, Observer {
             if (it) {
                 when(viewModelMain.getSocialLaunch().value){
-                    "RegVK" -> VK.login(this, arrayListOf())
-//                    "RegOK" -> regViewModel.setBtnUserLogged("ok")
-//                    "RegInst" -> regViewModel.setBtnUserLogged("inst")
+                    "RegSocial" -> VK.login(this, arrayListOf())
+                    "RegOK" -> Odnoklassniki.createInstance(this, APP_ID, APP_KEY)
+                            .requestAuthorization(this, REDIRECT_URL, OkAuthType.ANY, OkScope.VALUABLE_ACCESS)
+                    /*Ответ не обрабатывается*/
+                    "RegInst" -> {
+                         val authenticationDialogInstagram = AuthenticationDialogInstagram(this, object : AuthenticationListenerInstagram {
+                            override fun onTokenReceived(code: String) {
+                                regViewModel.convertInstagramCode(code)
+                            }
+                        })
+                        authenticationDialogInstagram.setCancelable(true)
+                        authenticationDialogInstagram.show()
+                    }
 //                    "RegTel" -> regViewModel.setBtnUserLogged("tel")
 //                    "RegGoogle" -> regViewModel.setBtnUserLogged("google")
 //                    "RegFB" -> regViewModel.setBtnUserLogged("fb")
@@ -449,7 +472,7 @@ class MainActivity : AppCompatActivity() {
 
                     val userLogin = token.userId
 
-                    if (viewModelMain.getSocialLaunch().value.equals("RegVK")) {
+                    if (viewModelMain.getSocialLaunch().value.equals("RegSocial")) {
                     regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
                 } else if (viewModelAuth.isVkAuthStart().value == true) {
                     viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)

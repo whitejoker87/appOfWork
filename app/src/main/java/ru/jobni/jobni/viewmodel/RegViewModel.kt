@@ -21,6 +21,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.BuildConfig
+import ru.jobni.jobni.R
+import ru.jobni.jobni.model.network.auth.AuthInstagram
 import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.getRealPath
@@ -50,7 +52,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     private val regPhoto = MutableLiveData<Drawable>()
     /*Ниже 3 типа листов контактов.
     Соззданы для того что бы корректно работал биндинг при заполнении
-    (двухсторонний биндинг в отношении списка из Contact отказался работать
+    (двухсторонний биндинг в отношении списка из RegContact отказался работать
     и было сделано 3 списка)*/
     /*Список контактов*/
     private val regContacts = MutableLiveData<ArrayList<String>>(arrayListOf())
@@ -330,20 +332,20 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val contactFace = RegVK(
+        val contactFace = RegSocial(
                 userLogin,
                 provider,
                 accessToken
         )
 
-        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseRegUser> {
+            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
                 if (response.body() != null) {
-
+                    Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
                 Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })
@@ -411,7 +413,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val bindEmail = BindEmail(
+        val bindEmail = RegBindEmail(
             regMail.value!!
         )
 
@@ -445,7 +447,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val bindPhone = BindPhone(
+        val bindPhone = RegBindPhone(
             regPhone.value!!
         )
 
@@ -513,7 +515,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val mailCode = ConfirmCode(
+        val mailCode = RegConfirmCode(
             regMailCode.value!!
         )
 
@@ -549,7 +551,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val mailCode = ConfirmCode(
+        val mailCode = RegConfirmCode(
             regPhoneCode.value!!
         )
 
@@ -628,13 +630,13 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         val id = sPrefAuthUser.getString(authUserSessionID, null)
         val cid = String.format("%s%s", "sessionid=", id)
 
-        val contacts = ArrayList<Any>()//Contact нужно было посылать с 2 и 3 полями
+        val contacts = ArrayList<Any>()//RegContact нужно было посылать с 2 и 3 полями
         val contactsString = regContacts.value!!
 
         /*Формируем из 3 листов Livedata один для отправки на сервер*/
         for (i in contactsString.indices) {
-            if (regContactsId.value!![i] > 0) contacts.add(Contact(regContactsId.value!![i], regContactsType.value!![i], contactsString[i]))
-            else contacts.add(ContactWithoutId(regContactsType.value!![i], contactsString[i]))
+            if (regContactsId.value!![i] > 0) contacts.add(RegContact(regContactsId.value!![i], regContactsType.value!![i], contactsString[i]))
+            else contacts.add(RegContactWithoutId(regContactsType.value!![i], contactsString[i]))
         }
 
         val contactFaceContacts = RegContactFaceContact(
@@ -706,7 +708,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 ////            Log.e("Error", "Exception loading drawable")
 ////        }
 //
-//        val contact = Contact("tel", regContact.value!!)
+//        val contact = RegContact("tel", regContact.value!!)
 //        val contacts = arrayListOf(contact)
 //        val registration = Registration(
 //            regMail.value!!,
@@ -944,4 +946,26 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         //setOutputPhotoUri(Uri.parse("file://" + image.absolutePath))
         return image
     }
+
+    fun convertInstagramCode(code: String) {
+
+        Retrofit.api?.getInstagramAccessToken(
+                context.resources.getString(R.string.client_id),
+                context.resources.getString(R.string.client_secret),
+                "authorization_code",
+                context.resources.getString(R.string.redirect_url), code)?.enqueue(object : Callback<AuthInstagram> {
+            override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
+                if (response.body() != null) {
+                    val access_token = response.body()?.access_token
+                    val user = response.body()?.user
+                    sendSocialData(user!!.id.toString(), "instagram", access_token!!)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthInstagram>, t: Throwable) {
+                Toast.makeText(context, "Error convertInstagramCode!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 }
