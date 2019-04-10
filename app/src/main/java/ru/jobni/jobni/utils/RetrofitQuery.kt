@@ -91,6 +91,9 @@ interface RetrofitQuery {
             @Field("scope") scope: String
     ): Call<AuthDiscord>
 
+    @GET("https://discordapp.com/api/v6/users/@me")
+    fun getDiscordUID(@Header("Authorization") basicAuth: String): Call<AuthDiscord>
+
     /*API Mailru*/
     @POST("api/authorization/social_account/")
     fun postMailruAuth(@Body userDiscord: AuthMailruJobni): Call<AuthMailru>

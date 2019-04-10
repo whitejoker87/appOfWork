@@ -290,6 +290,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 userLogin,
                 provider,
                 accessToken
+//              "ba352282246678fe6c7f60b6c7b23464640a34b3c0dffb9b9f9245e911ad2874a0831dba3d29849727d62"
         )
 
         Retrofit.api?.postVKAuth(contactFace)?.enqueue(object : Callback<AuthVK> {
@@ -369,11 +370,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun onAuthDiscordClick(accessToken: String) {
+    fun onAuthDiscordClick(accessToken: String, uid: String) {
 
         val provider = "discord"
         val contactFace = AuthDiscordJobni(
-                "", // где брать? дискорд не присылает - Сделать поле не обязательным?
+                uid,
                 provider,
                 accessToken
         )
@@ -412,7 +413,25 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                     val dscAccessToken = response.body()?.access_token
 
-                    onAuthDiscordClick(dscAccessToken!!)
+                    getDiscordUID(dscAccessToken!!)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun getDiscordUID(AccessToken: String) {
+
+        Retrofit.api?.getDiscordUID("Bearer $AccessToken")?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+                if (response.body() != null) {
+
+                    val dscUserUD = response.body()?.id.toString()
+
+                    onAuthDiscordClick(AccessToken, dscUserUD)
                 }
             }
 
