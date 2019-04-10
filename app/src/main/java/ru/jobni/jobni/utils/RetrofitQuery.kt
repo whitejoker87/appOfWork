@@ -98,6 +98,18 @@ interface RetrofitQuery {
     @POST("api/authorization/social_account/")
     fun postMailruAuth(@Body userDiscord: AuthMailruJobni): Call<AuthMailru>
 
+    /*API OK*/
+    @POST("https://api.ok.ru/api/users/getCurrentUser")
+    fun getUserDataOK(@Query("application_key") application_key: String,
+                      @Query("method") method: String,
+                      @Query("sig") sig: String,
+                      @Query("access_token") access_token: String
+    ): Call<AuthOK>
+
+    @POST("api/authorization/social_account/")
+    fun postOKAuth(@Body userOK: AuthOKJobni): Call<AuthOK>
+
+
     /*API authorization*/
     @POST("api/authorization/mailbox/")
     fun postAuthData(@Header("Authorization") basicAuth: String, @Body userMail: UserMailAuth): Call<AuthMail>

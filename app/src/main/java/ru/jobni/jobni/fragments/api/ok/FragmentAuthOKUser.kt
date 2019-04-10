@@ -42,15 +42,15 @@ class FragmentAuthOKUser : Fragment() {
         binding.viewmodelmain = viewModel
 
         ok = Odnoklassniki.createInstance(
-            context,
-            context?.resources?.getString(R.string.ok_client_id),
-            context?.resources?.getString(R.string.ok_public_key)
+                context,
+                context?.resources?.getString(R.string.ok_client_id),
+                context?.resources?.getString(R.string.ok_public_key)
         )
 
         binding.btnOkLogin.setOnClickListener {
             authenticationDialogOK = AuthenticationDialogOK(context!!, object : AuthenticationListenerOK {
-                override fun onTokenReceived(accessToken: String, vid: String) {
-                    viewModelAuth.onAuthMailruClick(accessToken, vid)
+                override fun onTokenReceived(accessToken: String, sig: String) {
+                    viewModelAuth.convertOKCode(accessToken, sig)
                 }
             })
             authenticationDialogOK!!.setCancelable(true)

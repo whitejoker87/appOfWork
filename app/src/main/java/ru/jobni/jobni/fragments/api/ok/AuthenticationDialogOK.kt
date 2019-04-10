@@ -8,6 +8,7 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import ru.jobni.jobni.R
+import java.security.MessageDigest
 
 class AuthenticationDialogOK(context: Context, private val listener: AuthenticationListenerOK) : Dialog(context) {
 
@@ -47,7 +48,9 @@ class AuthenticationDialogOK(context: Context, private val listener: Authenticat
                 val accessToken = url.substring(url.indexOf("access_token=") + 13, url.lastIndexOf("&session_secret_key"))
                 val sessionSecretKey = url.substring(url.indexOf("key=") + 4, url.lastIndexOf("&expires_in"))
 
-                listener.onTokenReceived(accessToken, sessionSecretKey)
+                val sig = toMD5Hash(sessionSecretKey)
+
+                listener.onTokenReceived(accessToken, sig)
 //                dismiss()
 
             } else if (url.contains("?error")) {
@@ -55,5 +58,36 @@ class AuthenticationDialogOK(context: Context, private val listener: Authenticat
                 dismiss()
             }
         }
+    }
+
+    private fun toMD5Hash(sessionSecretKey: String): String {
+
+        var result: String
+        val makeSig = "application_key=" + context.resources.getString(R.string.ok_public_key) + "method=users.getCurrentUser" + sessionSecretKey
+
+        try {
+            val md5 = MessageDigest.getInstance("MD5")
+            val md5HashBytes = md5.digest(makeSig.toByteArray()).toTypedArray()
+
+            result = byteArrayToHexString(md5HashBytes)
+
+        } catch (e: Exception) {
+            result = "error: ${e.message}"
+        }
+
+        return result.replace("-", "").toLowerCase()
+    }
+
+    private fun byteArrayToHexString(array: Array<Byte>): String {
+
+        val result = StringBuilder(array.size * 2)
+
+        for (byte in array) {
+            val toAppend = String.format("%2X", byte).replace(" ", "0") // hexadecimal
+            result.append(toAppend).append("-")
+        }
+        result.setLength(result.length - 1) // remove last '-'
+
+        return result.toString()
     }
 }

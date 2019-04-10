@@ -429,9 +429,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
                 if (response.body() != null) {
 
-                    val dscUserUD = response.body()?.id.toString()
+                    val dscUserID = response.body()?.id.toString()
 
-                    onAuthDiscordClick(AccessToken, dscUserUD)
+                    onAuthDiscordClick(AccessToken, dscUserID)
                 }
             }
 
@@ -473,6 +473,64 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(call: Call<AuthMailru>, t: Throwable) {
                 Toast.makeText(context, "Error onAuthMailruClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthOKChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setUserAuthid(false)
+
+        return false
+    }
+
+    fun onAuthOKClick(accessToken: String, uid: String) {
+
+        val provider = "odnoklassniki"
+        val contactFace = AuthOKJobni(
+                uid,
+                provider,
+                accessToken
+        )
+
+        Retrofit.api?.postOKAuth(contactFace)?.enqueue(object : Callback<AuthOK> {
+            override fun onResponse(call: Call<AuthOK>, response: Response<AuthOK>) {
+                if (response.body() != null) {
+
+                    if (response.body()!!.success) {
+                        setUserAuthid(true)
+                        setBtnUserLogged("ok")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AuthOK>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthOKClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun convertOKCode(accessToken: String, sig: String) {
+
+        Retrofit.api?.getUserDataOK(
+                context.resources.getString(R.string.ok_public_key),
+                "users.getCurrentUser",
+                sig,
+                accessToken)?.enqueue(object : Callback<AuthOK> {
+            override fun onResponse(call: Call<AuthOK>, response: Response<AuthOK>) {
+                if (response.body() != null) {
+
+                    val okUserID = response.body()?.uid.toString()
+
+                    onAuthOKClick(accessToken, okUserID)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthOK>, t: Throwable) {
+                Toast.makeText(context, "Error convertOKCode!", Toast.LENGTH_SHORT).show()
             }
         })
     }
