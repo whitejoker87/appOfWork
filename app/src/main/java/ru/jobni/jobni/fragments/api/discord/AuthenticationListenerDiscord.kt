@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.instagram
+package ru.jobni.jobni.fragments.api.discord
 
 interface AuthenticationListenerDiscord {
     fun onTokenReceived(code: String)
