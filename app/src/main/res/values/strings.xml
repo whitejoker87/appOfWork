@@ -176,6 +176,7 @@
 	<string name = "user_auth_phone_info_text">ИСПОЛЬЗУЙТЕ НОМЕР ТЕЛЕФОНА</string>
 	<string name = "user_auth_instagram_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ INSTAGRAM</string>
 	<string name = "user_auth_discord_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ DISCORD</string>
+	<string name = "user_auth_mailru_info_text">ИСПОЛЬЗУЙТЕ ДАННЫЕ МОЙ МИР</string>
 	<string name = "user_auth_delete_info_text">Авторизация сброшена</string>
 	<string name = "btn_change_user_pass_text">Сменить пароль</string>
 	<string name = "btn_change_user_mail_text">Сменить почту</string>

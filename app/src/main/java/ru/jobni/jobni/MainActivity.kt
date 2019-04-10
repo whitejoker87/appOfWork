@@ -43,6 +43,8 @@ import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
 import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUserLogged
 import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUser
 import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUserLogged
+import ru.jobni.jobni.fragments.api.mailru.FragmentAuthMailruUser
+import ru.jobni.jobni.fragments.api.mailru.FragmentAuthMailruUserLogged
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
@@ -217,6 +219,8 @@ class MainActivity : AppCompatActivity() {
                 "AuthInstagramUserLogged" -> setFragment(FragmentAuthInstagramUserLogged())
                 "AuthDiscordUser" -> setFragment(FragmentAuthDiscordUser())
                 "AuthDiscordUserLogged" -> setFragment(FragmentAuthDiscordUserLogged())
+                "AuthMailruUser" -> setFragment(FragmentAuthMailruUser())
+                "AuthMailruUserLogged" -> setFragment(FragmentAuthMailruUserLogged())
                 "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
                 "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
                 "RegVK" -> regViewModel.setTypeAddRegFragment("soc")

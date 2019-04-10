@@ -62,8 +62,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val authOKPass = MutableLiveData<String>()
 
     /*Блок VK*/
-    private val authVKUser = MutableLiveData<String>()
-    private val authVKPass = MutableLiveData<String>()
     private val vkAuthStart = MutableLiveData<Boolean>()
 
     /*Блок Phone*/
@@ -146,20 +144,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /* Блок VK авторизации */
-    fun getVKAuthUser(): String? = authVKUser.value
-
-    fun setVKAuthUser(query: String) {
-        this.authVKUser.value = query
-    }
-
-
-    fun getVKAuthPass(): String? = authVKPass.value
-
-    fun setVKAuthPass(query: String) {
-        this.authVKPass.value = query
-    }
-
-
     fun isVkAuthStart(): MutableLiveData<Boolean> = vkAuthStart
 
     fun setVkAuthStart(isStart: Boolean) {
@@ -415,6 +399,66 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun convertDiscordCode(code: String) {
+
+        Retrofit.api?.getDiscordAccessToken(
+                context.resources.getString(R.string.discord_client_id),
+                context.resources.getString(R.string.discord_client_secret),
+                "authorization_code",
+                code,
+                context.resources.getString(R.string.discord_redirect_url),
+                "identify")?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+                if (response.body() != null) {
+
+                    val dscAccessToken = response.body()?.access_token
+
+                    onAuthDiscordClick(dscAccessToken!!)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthMailruChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setUserAuthid(false)
+
+        return false
+    }
+
+    fun onAuthMailruClick(accessToken: String) {
+
+        val provider = "discord"
+        val contactFace = AuthDiscordJobni(
+                "", // где брать? дискорд не присылает - Сделать поле не обязательным?
+                provider,
+                accessToken
+        )
+
+        Retrofit.api?.postDiscordAuth(contactFace)?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+                if (response.body() != null) {
+
+                    if (response.body()!!.success) {
+                        setUserAuthid(true)
+                        setBtnUserLogged("discord")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthDiscordClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun convertMailruCode(code: String) {
 
         Retrofit.api?.getDiscordAccessToken(
                 context.resources.getString(R.string.discord_client_id),
