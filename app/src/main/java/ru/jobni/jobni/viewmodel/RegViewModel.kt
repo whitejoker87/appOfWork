@@ -22,6 +22,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.R
+import ru.jobni.jobni.model.network.auth.AuthDiscord
+import ru.jobni.jobni.model.network.auth.AuthDiscordJobni
 import ru.jobni.jobni.model.network.auth.AuthInstagram
 import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.utils.Retrofit
@@ -341,7 +343,8 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseRegUser> {
             override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
                 if (response.body() != null) {
-                    Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
+                    if (response.body()!!.success)
+                    else Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -968,4 +971,45 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
+    fun convertDiscordCode(code: String) {
+
+        Retrofit.api?.getDiscordAccessToken(
+            context.resources.getString(R.string.discord_client_id),
+            context.resources.getString(R.string.discord_client_secret),
+            "authorization_code",
+            code,
+            context.resources.getString(R.string.discord_redirect_url),
+            "identify")?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+                if (response.body() != null) {
+
+                    val dscAccessToken = response.body()?.access_token
+
+                    getDiscordUID(dscAccessToken!!)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun getDiscordUID(accessToken: String) {
+
+        Retrofit.api?.getDiscordUID("Bearer $accessToken")?.enqueue(object : Callback<AuthDiscord> {
+            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
+                if (response.body() != null) {
+
+                    val dscUserUD = response.body()?.id.toString()
+
+                    sendSocialData(dscUserUD, "discord", accessToken)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
+                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }

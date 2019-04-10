@@ -47,7 +47,7 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
                 code = code.substring(code.lastIndexOf("=") + 1)
 
                 listener.onTokenReceived(code)
-//                dismiss()
+                dismiss()
 
             } else if (url.contains("?error")) {
                 Log.e("code", "getting error fetching code")

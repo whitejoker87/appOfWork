@@ -48,7 +48,7 @@ class AuthenticationDialogMailru(context: Context, private val listener: Authent
                 val vid = url.substring(url.lastIndexOf("=") + 1)
 
                 listener.onTokenReceived(accessToken, vid)
-//                dismiss()
+                dismiss()
 
             } else if (url.contains("?error")) {
                 Log.e("access_token", "getting error fetching access_token")

@@ -37,6 +37,8 @@ import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
+import ru.jobni.jobni.fragments.api.discord.AuthenticationDialogDiscord
+import ru.jobni.jobni.fragments.api.discord.AuthenticationListenerDiscord
 import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUser
 import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUserLogged
 import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
@@ -47,6 +49,8 @@ import ru.jobni.jobni.fragments.api.instagram.AuthenticationDialogInstagram
 import ru.jobni.jobni.fragments.api.instagram.AuthenticationListenerInstagram
 import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUser
 import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUserLogged
+import ru.jobni.jobni.fragments.api.mailru.AuthenticationDialogMailru
+import ru.jobni.jobni.fragments.api.mailru.AuthenticationListenerMailru
 import ru.jobni.jobni.fragments.api.mailru.FragmentAuthMailruUser
 import ru.jobni.jobni.fragments.api.mailru.FragmentAuthMailruUserLogged
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
@@ -303,9 +307,25 @@ class MainActivity : AppCompatActivity() {
                     }
 //                    "RegTel" -> regViewModel.setBtnUserLogged("tel")
 //                    "RegGoogle" -> regViewModel.setBtnUserLogged("google")
-//                    "RegFB" -> regViewModel.setBtnUserLogged("fb")
-//                    "RegMailRu" -> regViewModel.setBtnUserLogged("mailru")
-//                    "RegDiscord" -> regViewModel.setBtnUserLogged("discord")
+//                    "RegFB" -> regViewModel.setBtnUserLogged("fb")/*Иным способом выводиться*/
+                    "RegMailRu" -> {
+                         val authenticationDialogMailru = AuthenticationDialogMailru(this, object : AuthenticationListenerMailru {
+                            override fun onTokenReceived(accessToken: String, vid: String) {
+                                regViewModel.sendSocialData(vid, "mailru", accessToken)
+                            }
+                        })
+                        authenticationDialogMailru.setCancelable(true)
+                        authenticationDialogMailru.show()
+                    }
+                    "RegDiscord" -> {
+                        val authenticationDialogDiscord = AuthenticationDialogDiscord(this, object : AuthenticationListenerDiscord {
+                            override fun onTokenReceived(code: String) {
+                                regViewModel.convertDiscordCode(code)
+                            }
+                        })
+                        authenticationDialogDiscord.setCancelable(true)
+                        authenticationDialogDiscord.show()
+                    }
 //                    "RegMic" -> regViewModel.setBtnUserLogged("mic")
                 }
             }
