@@ -224,6 +224,4 @@
 	<string name = "ok_public_key">CBALCICNEBABABABA</string>
 	<string name = "ok_base_url">https://connect.ok.ru/</string>
 	<string name = "ok_redirect_url">https://ok.ru/</string>
-	<string name = "ok_error">Error</string>
-	<string name = "ok_auth_cancelled">Authorization cancelled</string>
 </resources>
