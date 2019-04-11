@@ -7,29 +7,29 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.utils.Retrofit
 
 class AuthenticationDialogInstagram(context: Context, private val listenerInstagram: AuthenticationListenerInstagram) : Dialog(context) {
-
-    private val request_url: String = context.resources.getString(R.string.instagram_base_url) +
-            "oauth/authorize/" +
-            "?client_id=" + context.resources.getString(R.string.instagram_client_id) +
-            "&redirect_uri=" + context.resources.getString(R.string.instagram_redirect_url) +
-            "&scope=basic" +
-            "&response_type=code"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.auth_dialog_instagram)
-        initializeWebView()
+
+        onGetAuthSocial()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun initializeWebView() {
+    private fun initializeWebView(url: String) {
         val webView = findViewById<WebView>(R.id.web_view_instagram)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
-        webView.loadUrl(request_url)
+        webView.loadUrl(url)
         webView.webViewClient = InstaWebViewClient
     }
 
@@ -50,10 +50,11 @@ class AuthenticationDialogInstagram(context: Context, private val listenerInstag
             super.onPageFinished(view, url)
 
             if (url.contains("?code=")) {
-                // Выделить code из ответа
+                // Выделить code из ответа.
+                // Старая версия, нужно учитывать как его правильно вырезать из url
                 //val code = url.substring(url.lastIndexOf("=") + 1)
 
-                // Передать листнеру для дальнейшей работы с ним если нужно
+                // Передать листнеру code для дальнейшей работы с ним если нужно
                 //listenerInstagram.onTokenReceived(code)
                 // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
                 dismiss()
@@ -63,5 +64,23 @@ class AuthenticationDialogInstagram(context: Context, private val listenerInstag
                 dismiss()
             }
         }
+    }
+
+    fun onGetAuthSocial() {
+
+        val provider = "instagram"
+
+        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    val getUrl = response.raw().request().url().toString()
+                    initializeWebView(getUrl)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
