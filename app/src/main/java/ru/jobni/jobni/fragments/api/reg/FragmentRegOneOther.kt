@@ -14,7 +14,7 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import org.json.JSONObject
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.api.facebook.PrefUtil
+//import ru.jobni.jobni.fragments.api.facebook.PrefUtil
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 import java.net.MalformedURLException
@@ -46,7 +46,7 @@ class FragmentRegOneOther : Fragment() {
 
     private lateinit var callbackManager: CallbackManager
 
-    private var prefUtil: PrefUtil? = null
+//    private var prefUtil: PrefUtil? = null
 
 //    private var param1: String? = null
 
@@ -96,7 +96,7 @@ class FragmentRegOneOther : Fragment() {
                 val userID = loginResult.accessToken.userId
 
                 // save accessToken to SharedPreference
-                prefUtil?.saveAccessToken(accessTokenFB)
+//                prefUtil?.saveAccessToken(accessTokenFB)
 
                 val request = GraphRequest.newMeRequest(loginResult.accessToken) { jsonObject, response ->
                     // Getting FB User Data
@@ -205,7 +205,7 @@ class FragmentRegOneOther : Fragment() {
 
                 if (currentAccessToken == null) {
                     //User logged out
-                    prefUtil?.clearToken()
+//                    prefUtil?.clearToken()
                     LoginManager.getInstance().logOut()
                 }
             }
@@ -238,9 +238,9 @@ class FragmentRegOneOther : Fragment() {
                 bundle.putString("gender", `object`.getString("gender"))
 
 
-            prefUtil?.saveFacebookUserInfo(`object`.getString("first_name"),
-                    `object`.getString("last_name"), `object`.getString("email"),
-                    `object`.getString("gender"), profile_pic.toString())
+//            prefUtil?.saveFacebookUserInfo(`object`.getString("first_name"),
+//                    `object`.getString("last_name"), `object`.getString("email"),
+//                    `object`.getString("gender"), profile_pic.toString())
 
         } catch (e: Exception) {
             Log.d(AccessTokenManager.TAG, "BUNDLE Exception : $e")

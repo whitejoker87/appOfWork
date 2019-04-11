@@ -45,7 +45,7 @@ interface RetrofitQuery {
     fun getContactsForReg(@Header("Cookie") sessionID: String): Call<ResponseRegGetContacts>
 
     @POST("api/accounts/{type_social}/login/")
-    fun postSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
+    fun getDataSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
 
     @POST("api/accounts/{type_social}/login/?process=connect")
     fun getSocial(@Path("type_social") type_social: String): Call<ResponseBody>

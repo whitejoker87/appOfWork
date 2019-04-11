@@ -40,20 +40,20 @@ class FragmentAuthFBUser : Fragment() {
         // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизова)
         // чтобы например выйти из авторизации для последующих тестов.
         binding.btnUserFbLogin.setOnClickListener {
-            val authenticationDialogOKLogin = AuthenticationDialogFBLogin(context!!)
-            authenticationDialogOKLogin.setCancelable(true)
-            authenticationDialogOKLogin.show()
+            val authenticationDialogFBLogin = AuthenticationDialogFBLogin(context!!)
+            authenticationDialogFBLogin.setCancelable(true)
+            authenticationDialogFBLogin.show()
         }
 
         // Вызов окна авторизации
         binding.btnUserFbAuth.setOnClickListener {
-            val authenticationDialogGoogle = AuthenticationDialogFB(context!!, object : AuthenticationListenerFB {
+            val authenticationDialogFB = AuthenticationDialogFB(context!!, object : AuthenticationListenerFB {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }
             })
-            authenticationDialogGoogle.setCancelable(true)
-            authenticationDialogGoogle.show()
+            authenticationDialogFB.setCancelable(true)
+            authenticationDialogFB.show()
         }
 
         return view

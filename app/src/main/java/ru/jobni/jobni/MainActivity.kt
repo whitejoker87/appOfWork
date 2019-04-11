@@ -6,14 +6,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.UserDictionary
-import android.provider.UserDictionary.Words.APP_ID
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.CompoundButton
+import android.webkit.WebView
 import android.widget.Toast
-import androidx.annotation.IdRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -29,8 +26,6 @@ import com.google.android.material.tabs.TabLayout
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
-import com.vk.api.sdk.ui.VKWebViewAuthActivity
-import com.vk.api.sdk.ui.VKWebViewAuthActivity.Companion.REDIRECT_URL
 import kotlinx.android.synthetic.main.nav_left.*
 import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.databinding.ActivityMainBinding
@@ -42,6 +37,8 @@ import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangeMa
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangePass
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
+import ru.jobni.jobni.fragments.api.auth.vk.AuthenticationDialogVK
+import ru.jobni.jobni.fragments.api.auth.vk.AuthenticationListenerVK
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.api.discord.AuthenticationDialogDiscord
@@ -64,6 +61,7 @@ import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
+import ru.jobni.jobni.fragments.api.reg.SocialRegDialog
 import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUser
 import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
@@ -250,7 +248,7 @@ class MainActivity : AppCompatActivity() {
                 "AuthTelegramUserLogged" -> setFragment(FragmentAuthTelegramUserLogged())
                 "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
                 "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
-                "RegSocial" -> regViewModel.setTypeAddRegFragment("soc")
+                "RegVK" -> regViewModel.setTypeAddRegFragment("soc")
                 "RegOK" -> regViewModel.setTypeAddRegFragment("soc")
                 "RegInst" -> regViewModel.setTypeAddRegFragment("soc")
                 "RegTel" -> regViewModel.setTypeAddRegFragment("soc")
@@ -299,7 +297,16 @@ class MainActivity : AppCompatActivity() {
         regViewModel.getSocialRegStart().observe(this, Observer {
             if (it) {
                 when (viewModelMain.getSocialLaunch().value) {
-                    "RegSocial" -> VK.login(this, arrayListOf())
+                    "RegVK" -> //VK.login(this, arrayListOf())
+                    {
+                        val authenticationDialogVK = AuthenticationDialogVK(this, object : AuthenticationListenerVK {
+                            override fun onTokenReceived(code: String) {
+                                //Делаем с кодом что нибудь
+                            }
+                        })
+                        authenticationDialogVK.setCancelable(true)
+                        authenticationDialogVK.show()
+                    }
                     "RegOK" -> Odnoklassniki.createInstance(this, APP_ID, APP_KEY)
                         .requestAuthorization(this, REDIRECT_URL, OkAuthType.ANY, OkScope.VALUABLE_ACCESS)
                     /*Ответ не обрабатывается*/
@@ -307,7 +314,7 @@ class MainActivity : AppCompatActivity() {
                         val authenticationDialogInstagram =
                             AuthenticationDialogInstagram(this, object : AuthenticationListenerInstagram {
                                 override fun onTokenReceived(code: String) {
-                                    regViewModel.convertInstagramCode(code)
+                                    //Делаем с кодом что нибудь
                                 }
                             })
                         authenticationDialogInstagram.setCancelable(true)
@@ -315,17 +322,21 @@ class MainActivity : AppCompatActivity() {
                     }
 //                    "RegTel" -> regViewModel.setBtnUserLogged("tel")
 //                    "RegGoogle" -> regViewModel.setBtnUserLogged("google")
-//                    "RegFB" -> regViewModel.setBtnUserLogged("fb")/*Иным способом выводиться*/
-                    "RegMailRu" -> {
-                        val authenticationDialogMailru =
-                            AuthenticationDialogMailru(this, object : AuthenticationListenerMailru {
-                                override fun onTokenReceived(accessToken: String, vid: String) {
-                                    regViewModel.sendSocialData(vid, "mailru", accessToken)
-                                }
-                            })
-                        authenticationDialogMailru.setCancelable(true)
-                        authenticationDialogMailru.show()
+                    "RegFB" -> {//готов для webview
+                        val dialog = SocialRegDialog(this, "RegFB")
+                        dialog.setCancelable(true)
+                        dialog.show()
                     }
+//                    "RegMailRu" -> {
+//                        val authenticationDialogMailru =
+//                            AuthenticationDialogMailru(this, object : AuthenticationListenerMailru {
+//                                override fun onTokenReceived(accessToken: String, vid: String) {
+//                                    regViewModel.sendSocialData(vid, "mailru", accessToken)
+//                                }
+//                            })
+//                        authenticationDialogMailru.setCancelable(true)
+//                        authenticationDialogMailru.show()
+//                    }
                     "RegDiscord" -> {
                         val authenticationDialogDiscord =
                             AuthenticationDialogDiscord(this, object : AuthenticationListenerDiscord {

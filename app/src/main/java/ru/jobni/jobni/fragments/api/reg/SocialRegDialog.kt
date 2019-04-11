@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.facebook
+package ru.jobni.jobni.fragments.api.reg
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -7,21 +7,28 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.utils.Retrofit
+import ru.jobni.jobni.viewmodel.RegViewModel
 
-class AuthenticationDialogFB(context: Context, private val listener: AuthenticationListenerFB) : Dialog(context) {
+class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(contextIn) {
+
+    private val regViewModel: RegViewModel by lazy {
+        ViewModelProviders.of(context as FragmentActivity).get(RegViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.auth_dialog_mailru)
+        this.setContentView(R.layout.reg_dialog)
 
-        onGetAuthSocial()
+        regViewModel.getSocialReg(typeReg)
+
+        regViewModel.getUrlWebViewSocial().observe(contextIn as LifecycleOwner, Observer {
+            initializeWebView(it)
+        })
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -30,10 +37,10 @@ class AuthenticationDialogFB(context: Context, private val listener: Authenticat
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.loadUrl(url)
-        webView.webViewClient = FBWebViewClient
+        webView.webViewClient = SocRegWebViewClient
     }
 
-    private val FBWebViewClient = object : WebViewClient() {
+    private val SocRegWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             // Здесь можно разместить блок кода
@@ -64,23 +71,5 @@ class AuthenticationDialogFB(context: Context, private val listener: Authenticat
                 dismiss()
             }
         }
-    }
-
-    fun onGetAuthSocial() {
-
-        val provider = "facebook"
-
-        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
-                    val getUrl = response.raw().request().url().toString()
-                    initializeWebView(getUrl)
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }
