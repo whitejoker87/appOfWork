@@ -49,7 +49,7 @@ class AuthenticationDialogGoogle(context: Context, private val listener: Authent
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
-            if (url.contains("?code=")) {
+            if (url.contains("&code=")) {
                 // Выделить code из ответа.
                 // Старая версия, нужно учитывать как его правильно вырезать из url
                 //val code = url.substring(url.lastIndexOf("=") + 1)
