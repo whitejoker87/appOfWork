@@ -12,12 +12,11 @@ import ru.jobni.jobni.R
 class AuthenticationDialogInstagram(context: Context, private val listenerInstagram: AuthenticationListenerInstagram) : Dialog(context) {
 
     private val request_url: String = context.resources.getString(R.string.instagram_base_url) +
-            "oauth/authorize/?client_id=" +
-            context.resources.getString(R.string.instagram_client_id) +
-            "&redirect_uri=" +
-            context.resources.getString(R.string.instagram_redirect_url) +
-            "&response_type=code" +
-            "&display=touch&scope=public_content"
+            "oauth/authorize/" +
+            "?client_id=" + context.resources.getString(R.string.instagram_client_id) +
+            "&redirect_uri=" + context.resources.getString(R.string.instagram_redirect_url) +
+            "&scope=basic" +
+            "&response_type=code"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +35,13 @@ class AuthenticationDialogInstagram(context: Context, private val listenerInstag
     private val InstaWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            // Здесь можно разместить блок кода
+            // с проверкой при переходе на указаный адрес, что то делать
+            // Например закрывать окно WebView
+            /*if (url.startsWith(request_url)) {
+                dismiss()
+                return true
+            }*/
             return false
         }
 
@@ -43,11 +49,13 @@ class AuthenticationDialogInstagram(context: Context, private val listenerInstag
             super.onPageFinished(view, url)
 
             if (url.contains("?code=")) {
-                var code = url
-                code = code.substring(code.lastIndexOf("=") + 1)
+                // Выделить code из ответа
+                //val code = url.substring(url.lastIndexOf("=") + 1)
 
-                listenerInstagram.onTokenReceived(code)
-                //dismiss()
+                // Передать листнеру для дальнейшей работы с ним если нужно
+                //listenerInstagram.onTokenReceived(code)
+                // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
+                dismiss()
 
             } else if (url.contains("?error")) {
                 Log.e("code", "getting error fetching code")
