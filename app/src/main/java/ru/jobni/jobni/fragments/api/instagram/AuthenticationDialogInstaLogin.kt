@@ -24,8 +24,8 @@ class AuthenticationDialogInstaLogin(context: Context) : Dialog(context) {
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.loadUrl(request_url)
-        webView.webViewClient = VKWebViewClient
+        webView.webViewClient = InstagramWebViewClient
     }
 
-    private val VKWebViewClient = object : WebViewClient() {}
+    private val InstagramWebViewClient = object : WebViewClient() {}
 }
