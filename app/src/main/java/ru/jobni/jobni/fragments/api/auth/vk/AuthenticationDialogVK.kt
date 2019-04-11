@@ -7,29 +7,29 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.utils.Retrofit
 
 class AuthenticationDialogVK(context: Context, private val listenerVK: AuthenticationListenerVK) : Dialog(context) {
-
-    private val request_url: String = context.resources.getString(R.string.vk_base_url) +
-            "authorize?" +
-            "client_id=" + context.resources.getString(R.string.vk_client_id) +
-            "&redirect_uri=" + context.resources.getString(R.string.vk_redirect_url) +
-            "&scope=" +
-            "&response_type=code"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.auth_dialog_vk)
-        initializeWebView()
+
+        onGetAuthSocial()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun initializeWebView() {
+    private fun initializeWebView(url: String) {
         val webView = findViewById<WebView>(R.id.web_view_vk)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
-        webView.loadUrl(request_url)
+        webView.loadUrl(url)
         webView.webViewClient = VKWebViewClient
     }
 
@@ -49,8 +49,9 @@ class AuthenticationDialogVK(context: Context, private val listenerVK: Authentic
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
-            if (url.contains("#code=")) {
-                // Выделить code из ответа
+            if (url.contains("?code=")) {
+                // Выделить code из ответа.
+                // Старая версия, нужно учитывать как его правильно вырезать из url
                 //val code = url.substring(url.lastIndexOf("=") + 1)
 
                 // Передать листнеру для дальнейшей работы с ним если нужно
@@ -63,5 +64,23 @@ class AuthenticationDialogVK(context: Context, private val listenerVK: Authentic
                 dismiss()
             }
         }
+    }
+
+    fun onGetAuthSocial() {
+
+        val provider = "vk"
+
+        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    val getUrl = response.raw().request().url().toString()
+                    initializeWebView(getUrl)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
