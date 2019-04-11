@@ -48,7 +48,7 @@ class FragmentAuthVKUser : Fragment() {
         binding.btnUserVkAuth.setOnClickListener {
             val authenticationDialogVK = AuthenticationDialogVK(context!!, object : AuthenticationListenerVK {
                 override fun onTokenReceived(code: String) {
-                    viewModelAuth.convertInstagramCode(code)
+                    //Делаем с кодом что нибудь
                 }
             })
             authenticationDialogVK.setCancelable(true)

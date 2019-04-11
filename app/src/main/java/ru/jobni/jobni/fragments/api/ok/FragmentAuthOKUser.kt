@@ -49,8 +49,8 @@ class FragmentAuthOKUser : Fragment() {
         // Вызов окна авторизации
         binding.btnOkAuth.setOnClickListener{
             authenticationDialogOK = AuthenticationDialogOK(context!!, object : AuthenticationListenerOK {
-                override fun onTokenReceived(accessToken: String, sig: String) {
-                    viewModelAuth.convertOKCode(accessToken, sig)
+                override fun onTokenReceived(code: String) {
+                    //Делаем с кодом что нибудь
                 }
             })
             authenticationDialogOK!!.setCancelable(true)

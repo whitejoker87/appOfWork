@@ -49,7 +49,7 @@ class FragmentAuthGoogleUser : Fragment() {
         binding.btnUserGoogleAuth.setOnClickListener {
             val authenticationDialogGoogle = AuthenticationDialogGoogle(context!!, object : AuthenticationListenerGoogle {
                 override fun onTokenReceived(code: String) {
-                    //viewModelAuth.convertOKCode(code)
+                    //Делаем с кодом что нибудь
                 }
             })
             authenticationDialogGoogle.setCancelable(true)

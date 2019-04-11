@@ -62,28 +62,29 @@
 			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
-		<com.facebook.login.widget.LoginButton
-			android:id = "@+id/login_button_fb"
+		<Button
+			android:id = "@+id/btn_user_fb_auth"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "30dp"
-			app:layout_constraintHorizontal_bias = "0.5"
+			android:layout_marginTop = "16dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/btn_user_vk_auth_text"
 			/>
 
-		<!--<Button-->
-			<!--android:id = "@+id/btn_enter"-->
-			<!--android:layout_width = "wrap_content"-->
-			<!--android:layout_height = "wrap_content"-->
-			<!--app:layout_constraintTop_toBottomOf = "@+id/include_social_network"-->
-			<!--app:layout_constraintStart_toStartOf = "@+id/iv_background"-->
-			<!--app:layout_constraintEnd_toEndOf = "@+id/iv_background"-->
-			<!--android:layout_marginTop = "60dp"-->
-			<!--android:background = "@drawable/shape_button"-->
-			<!--android:text = "@string/enter"-->
-			<!--app:layout_constraintHorizontal_bias = "0.498"-->
-			<!--/>-->
+		<Button
+			android:id = "@+id/btn_user_fb_login"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "84dp"
+			android:background = "@drawable/shape_button"
+			android:text = "login"
+			app:layout_constraintHorizontal_bias = "0.498"
+			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -49,7 +49,7 @@ class FragmentAuthInstagramUser : Fragment() {
         binding.btnInstagramAuth.setOnClickListener {
             val authenticationDialogInstagram = AuthenticationDialogInstagram(context!!, object : AuthenticationListenerInstagram {
                 override fun onTokenReceived(code: String) {
-                    viewModelAuth.convertInstagramCode(code)
+                    //Делаем с кодом что нибудь
                 }
             })
             authenticationDialogInstagram.setCancelable(true)

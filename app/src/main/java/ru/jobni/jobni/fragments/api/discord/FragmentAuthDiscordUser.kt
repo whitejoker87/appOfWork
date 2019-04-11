@@ -61,7 +61,7 @@ class FragmentAuthDiscordUser : Fragment() {
         binding.btnUserDiscordAuth.setOnClickListener {
             val authenticationDialogDiscord = AuthenticationDialogDiscord(context!!, object : AuthenticationListenerDiscord {
                 override fun onTokenReceived(code: String) {
-                    viewModelAuth.convertInstagramCode(code)
+                    //Делаем с кодом что нибудь
                 }
             })
             authenticationDialogDiscord.setCancelable(true)
