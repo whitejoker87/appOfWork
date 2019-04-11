@@ -38,7 +38,16 @@ class FragmentAuthOKUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
+        // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизова)
+        // чтобы например выйти из авторизации для последующих тестов.
         binding.btnOkLogin.setOnClickListener {
+            val authenticationDialogOKLogin = AuthenticationDialogOKLogin(context!!)
+            authenticationDialogOKLogin.setCancelable(true)
+            authenticationDialogOKLogin.show()
+        }
+
+        // Вызов окна авторизации
+        binding.btnOkAuth.setOnClickListener{
             authenticationDialogOK = AuthenticationDialogOK(context!!, object : AuthenticationListenerOK {
                 override fun onTokenReceived(accessToken: String, sig: String) {
                     viewModelAuth.convertOKCode(accessToken, sig)

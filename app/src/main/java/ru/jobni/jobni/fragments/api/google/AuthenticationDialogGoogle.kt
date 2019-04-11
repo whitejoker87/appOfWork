@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.mailru
+package ru.jobni.jobni.fragments.api.google
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -15,25 +15,25 @@ import retrofit2.Response
 import ru.jobni.jobni.R
 import ru.jobni.jobni.utils.Retrofit
 
-class AuthenticationDialogMailru(context: Context, private val listener: AuthenticationListenerMailru) : Dialog(context) {
+class AuthenticationDialogGoogle(context: Context, private val listener: AuthenticationListenerGoogle) : Dialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.auth_dialog_mailru)
+        this.setContentView(R.layout.auth_dialog_google)
 
         onGetAuthSocial()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initializeWebView(url: String) {
-        val webView = findViewById<WebView>(R.id.web_view_mailru)
+        val webView = findViewById<WebView>(R.id.web_view_google)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.loadUrl(url)
-        webView.webViewClient = MailruWebViewClient
+        webView.webViewClient = GoogleWebViewClient
     }
 
-    private val MailruWebViewClient = object : WebViewClient() {
+    private val GoogleWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             // Здесь можно разместить блок кода
@@ -68,7 +68,7 @@ class AuthenticationDialogMailru(context: Context, private val listener: Authent
 
     fun onGetAuthSocial() {
 
-        val provider = "mailru"
+        val provider = "google"
 
         Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {

@@ -49,6 +49,25 @@ class FragmentAuthDiscordUser : Fragment() {
             authenticationDialogDiscord!!.show()
         }
 
+        // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизова)
+        // чтобы например выйти из авторизации для последующих тестов.
+        binding.btnUserDiscordLogin.setOnClickListener {
+            val authenticationDialogDiscordLogin = AuthenticationDialogDiscordLogin(context!!)
+            authenticationDialogDiscordLogin.setCancelable(true)
+            authenticationDialogDiscordLogin.show()
+        }
+
+        // Вызов окна авторизации
+        binding.btnUserDiscordAuth.setOnClickListener {
+            val authenticationDialogDiscord = AuthenticationDialogDiscord(context!!, object : AuthenticationListenerDiscord {
+                override fun onTokenReceived(code: String) {
+                    viewModelAuth.convertInstagramCode(code)
+                }
+            })
+            authenticationDialogDiscord.setCancelable(true)
+            authenticationDialogDiscord.show()
+        }
+
         return view
     }
 }

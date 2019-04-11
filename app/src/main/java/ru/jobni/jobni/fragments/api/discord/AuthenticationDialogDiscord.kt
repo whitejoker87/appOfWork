@@ -7,35 +7,42 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.utils.Retrofit
 
 class AuthenticationDialogDiscord(context: Context, private val listener: AuthenticationListenerDiscord) : Dialog(context) {
-
-    private val request_url: String = context.resources.getString(R.string.discord_base_url) +
-            "oauth2/authorize" +
-            "?response_type=code" +
-            "&client_id=" + context.resources.getString(R.string.discord_client_id) +
-            "&scope=identify" +
-            "&redirect_uri=" + context.resources.getString(R.string.discord_redirect_url)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.auth_dialog_discord)
-        initializeWebView()
+
+        onGetAuthSocial()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun initializeWebView() {
+    private fun initializeWebView(url: String) {
         val webView = findViewById<WebView>(R.id.web_view_discord)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
-        webView.loadUrl(request_url)
+        webView.loadUrl(url)
         webView.webViewClient = DiscordWebViewClient
     }
 
     private val DiscordWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            // Здесь можно разместить блок кода
+            // с проверкой при переходе на указаный адрес, что то делать
+            // Например закрывать окно WebView
+            /*if (url.startsWith(request_url)) {
+                dismiss()
+                return true
+            }*/
             return false
         }
 
@@ -43,10 +50,13 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
             super.onPageFinished(view, url)
 
             if (url.contains("?code=")) {
-                var code = url
-                code = code.substring(code.lastIndexOf("=") + 1)
+                // Выделить code из ответа.
+                // Старая версия, нужно учитывать как его правильно вырезать из url
+                //val code = url.substring(url.lastIndexOf("=") + 1)
 
-                listener.onTokenReceived(code)
+                // Передать листнеру для дальнейшей работы с ним если нужно
+                //listenerVK.onTokenReceived(code)
+                // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
                 dismiss()
 
             } else if (url.contains("?error")) {
@@ -54,5 +64,23 @@ class AuthenticationDialogDiscord(context: Context, private val listener: Authen
                 dismiss()
             }
         }
+    }
+
+    fun onGetAuthSocial() {
+
+        val provider = "discord"
+
+        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    val getUrl = response.raw().request().url().toString()
+                    initializeWebView(getUrl)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

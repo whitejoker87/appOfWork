@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.instagram
+package ru.jobni.jobni.fragments.api.discord
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -8,24 +8,24 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import ru.jobni.jobni.R
 
-class AuthenticationDialogInstaLogin(context: Context) : Dialog(context) {
+class AuthenticationDialogDiscordLogin(context: Context) : Dialog(context) {
 
-    private val request_url: String = "https://www.instagram.com/accounts/login/"
+    private val request_url: String = "https://discordapp.com/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.auth_dialog_instagram_login)
+        this.setContentView(R.layout.auth_dialog_discord_login)
         initializeWebView()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initializeWebView() {
-        val webView = findViewById<WebView>(R.id.web_view_instagram_login)
+        val webView = findViewById<WebView>(R.id.web_view_discord_login)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.loadUrl(request_url)
-        webView.webViewClient = InstagramWebViewClient
+        webView.webViewClient = DiscordWebViewClient
     }
 
-    private val InstagramWebViewClient = object : WebViewClient() {}
+    private val DiscordWebViewClient = object : WebViewClient() {}
 }

@@ -47,11 +47,9 @@ interface RetrofitQuery {
     @POST("api/accounts/{type_social}/login/")
     fun postSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
 
-    /*старый нерабочий вариант*/
-//    @POST("api/registration/photo/")
-//    fun postPhotoReg(@Header("Cookie") sessionID: String, @Body file: RequestBody): Call<ResponseBody>
+    @POST("api/accounts/{type_social}/login/?process=connect")
+    fun getSocial(@Path("type_social") type_social: String): Call<ResponseBody>
 
-    @Multipart
     @POST("api/registration/photo/")
     fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseBody>
     /*заготовка для отправки картинки*/
@@ -112,7 +110,6 @@ interface RetrofitQuery {
 
     @POST("api/authorization/social_account/")
     fun postOKAuth(@Body userOK: AuthOKJobni): Call<AuthOK>
-
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")

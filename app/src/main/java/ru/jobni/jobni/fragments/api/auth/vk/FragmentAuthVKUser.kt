@@ -36,6 +36,25 @@ class FragmentAuthVKUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
+        // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизова)
+        // чтобы например выйти из авторизации для последующих тестов.
+        binding.btnUserVkLogin.setOnClickListener {
+            val authenticationDialogVKLogin = AuthenticationDialogVKLogin(context!!)
+            authenticationDialogVKLogin.setCancelable(true)
+            authenticationDialogVKLogin.show()
+        }
+
+        // Вызов окна авторизации
+        binding.btnUserVkAuth.setOnClickListener {
+            val authenticationDialogVK = AuthenticationDialogVK(context!!, object : AuthenticationListenerVK {
+                override fun onTokenReceived(code: String) {
+                    viewModelAuth.convertInstagramCode(code)
+                }
+            })
+            authenticationDialogVK.setCancelable(true)
+            authenticationDialogVK.show()
+        }
+
         return view
     }
 }

@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.mailru
+package ru.jobni.jobni.fragments.api.auth.vk
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -15,25 +15,25 @@ import retrofit2.Response
 import ru.jobni.jobni.R
 import ru.jobni.jobni.utils.Retrofit
 
-class AuthenticationDialogMailru(context: Context, private val listener: AuthenticationListenerMailru) : Dialog(context) {
+class AuthenticationDialogVK(context: Context, private val listenerVK: AuthenticationListenerVK) : Dialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.auth_dialog_mailru)
+        this.setContentView(R.layout.auth_dialog_vk)
 
         onGetAuthSocial()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initializeWebView(url: String) {
-        val webView = findViewById<WebView>(R.id.web_view_mailru)
+        val webView = findViewById<WebView>(R.id.web_view_vk)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.loadUrl(url)
-        webView.webViewClient = MailruWebViewClient
+        webView.webViewClient = VKWebViewClient
     }
 
-    private val MailruWebViewClient = object : WebViewClient() {
+    private val VKWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             // Здесь можно разместить блок кода
@@ -49,7 +49,7 @@ class AuthenticationDialogMailru(context: Context, private val listener: Authent
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
-            if (url.contains("&code=")) {
+            if (url.contains("?code=")) {
                 // Выделить code из ответа.
                 // Старая версия, нужно учитывать как его правильно вырезать из url
                 //val code = url.substring(url.lastIndexOf("=") + 1)
@@ -68,7 +68,7 @@ class AuthenticationDialogMailru(context: Context, private val listener: Authent
 
     fun onGetAuthSocial() {
 
-        val provider = "mailru"
+        val provider = "vk"
 
         Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {

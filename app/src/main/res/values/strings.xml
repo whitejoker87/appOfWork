@@ -209,6 +209,9 @@
 	<string name = "btn_company_vacancy_archive_text">В архив</string>
 	<string name = "btn_user_vk_auth_text">Пройти авторизацию</string>
 	<string name = "tv_vk">ОТВЯЗАТЬ УЧЕТНУЮ ЗАПИСЬ</string>
+	<string name = "vk_client_id">6746499</string>
+	<string name = "vk_redirect_url">https://vk.com/</string>
+	<string name = "vk_base_url">https://oauth.vk.com/</string>
 	<string name = "instagram_client_id">de279bd8e8e242e2aa5acb80d3dfcd6b</string>
 	<string name = "instagram_client_secret">f9b1bf2579ec46a4be9084236dc79b40</string>
 	<string name = "instagram_redirect_url">https://instagram.com/</string>
