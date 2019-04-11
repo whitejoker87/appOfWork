@@ -11,17 +11,10 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserOkBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
-import ru.ok.android.sdk.Odnoklassniki
-import ru.ok.android.sdk.util.OkAuthType
-import ru.ok.android.sdk.util.OkScope
 
 class FragmentAuthOKUser : Fragment() {
 
-    // -------------- YOUR APP DATA GOES HERE ------------
-    private val APP_ID = "1277635072"
-    private val APP_KEY = "CBALCICNEBABABABA"
-    private val REDIRECT_URL = "okauth://ok1277635072"
-    // -------------- YOUR APP DATA ENDS -----------------
+    private var authenticationDialogOK: AuthenticationDialogOK? = null
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -45,14 +38,14 @@ class FragmentAuthOKUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
-        val odnoklassniki = Odnoklassniki.createInstance(context, APP_ID, APP_KEY)
-
         binding.btnOkLogin.setOnClickListener {
-            odnoklassniki.requestAuthorization(activity, REDIRECT_URL, OkAuthType.ANY, OkScope.VALUABLE_ACCESS)
-        }
-
-        binding.btnOkLogout.setOnClickListener {
-            odnoklassniki.clearTokens()
+            authenticationDialogOK = AuthenticationDialogOK(context!!, object : AuthenticationListenerOK {
+                override fun onTokenReceived(accessToken: String, sig: String) {
+                    viewModelAuth.convertOKCode(accessToken, sig)
+                }
+            })
+            authenticationDialogOK!!.setCancelable(true)
+            authenticationDialogOK!!.show()
         }
 
         return view

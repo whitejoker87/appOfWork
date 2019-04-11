@@ -15,8 +15,6 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthInstagramUser : Fragment() {
 
-    private var authenticationDialogInstagram: AuthenticationDialogInstagram? = null
-
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -39,14 +37,23 @@ class FragmentAuthInstagramUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
-        binding.btnInstagramEnter.setOnClickListener{
-            authenticationDialogInstagram = AuthenticationDialogInstagram(context!!, object : AuthenticationListenerInstagram {
-                    override fun onTokenReceived(code: String) {
-                        viewModelAuth.convertInstagramCode(code)
-                    }
-                })
-            authenticationDialogInstagram!!.setCancelable(true)
-            authenticationDialogInstagram!!.show()
+        // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизова)
+        // чтобы например выйти из авторизации для последующих тестов.
+        binding.btnInstagramLogin.setOnClickListener {
+            val authenticationDialogInstagram = AuthenticationDialogInstaLogin(context!!)
+            authenticationDialogInstagram.setCancelable(true)
+            authenticationDialogInstagram.show()
+        }
+
+        // Вызов окна авторизации
+        binding.btnInstagramAuth.setOnClickListener {
+            val authenticationDialogInstagram = AuthenticationDialogInstagram(context!!, object : AuthenticationListenerInstagram {
+                override fun onTokenReceived(code: String) {
+                    viewModelAuth.convertInstagramCode(code)
+                }
+            })
+            authenticationDialogInstagram.setCancelable(true)
+            authenticationDialogInstagram.show()
         }
 
         return view

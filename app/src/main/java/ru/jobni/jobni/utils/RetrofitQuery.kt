@@ -77,8 +77,8 @@ interface RetrofitQuery {
             @Field("code") code: String
     ): Call<AuthInstagram>
 
-    @POST("api/accounts/instagram/login/?process=login")
-    fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
+    @POST("api/authorization/social_account/")
+    fun postInstagramAuth(@Body userInstagram: AuthInstagramJobni): Call<AuthInstagram>
 
     /*API Discord*/
     @POST("api/authorization/social_account/")
@@ -101,6 +101,18 @@ interface RetrofitQuery {
     /*API Mailru*/
     @POST("api/authorization/social_account/")
     fun postMailruAuth(@Body userDiscord: AuthMailruJobni): Call<AuthMailru>
+
+    /*API OK*/
+    @POST("https://api.ok.ru/api/users/getCurrentUser")
+    fun getUserDataOK(@Query("application_key") application_key: String,
+                      @Query("method") method: String,
+                      @Query("sig") sig: String,
+                      @Query("access_token") access_token: String
+    ): Call<AuthOK>
+
+    @POST("api/authorization/social_account/")
+    fun postOKAuth(@Body userOK: AuthOKJobni): Call<AuthOK>
+
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")

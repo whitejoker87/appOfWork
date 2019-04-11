@@ -86,7 +86,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.41.0'
 
     // API OK
-    implementation 'ru.ok:odnoklassniki-android-sdk:2.0.3'
+    implementation 'ru.ok:odnoklassniki-android-sdk:2.1.6'
 
     // API TELEGRAM
     implementation 'org.telegram:passport:1.1'

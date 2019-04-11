@@ -9,7 +9,22 @@ data class AuthInstagram(
 
         @SerializedName("error_type") val error_type: String,
         @SerializedName("code") val code: Int,
-        @SerializedName("error_message") val error_message: String
+        @SerializedName("error_message") val error_message: String,
+
+        // Jobni block
+        @SerializedName("success") val success: Boolean,
+        @SerializedName("errors") val errors: ErrorsInstagram
+)
+
+data class ErrorsInstagram(
+        @SerializedName("social_account") val social_account : List<String>,
+        @SerializedName("authorization") val authorization: List<String>
+)
+
+data class AuthInstagramJobni(
+        @SerializedName("uid")val uid: String,
+        @SerializedName("provider")val provider: String,
+        @SerializedName("access_token")val access_token: String
 )
 
 data class User(

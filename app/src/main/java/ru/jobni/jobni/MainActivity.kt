@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.UserDictionary
+import android.provider.UserDictionary.Words.APP_ID
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -29,6 +30,7 @@ import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.ui.VKWebViewAuthActivity
+import com.vk.api.sdk.ui.VKWebViewAuthActivity.Companion.REDIRECT_URL
 import kotlinx.android.synthetic.main.nav_left.*
 import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.databinding.ActivityMainBinding
@@ -513,10 +515,7 @@ class MainActivity : AppCompatActivity() {
 //                }
             }
         }
-
-
     }
-
 
     private val mOnNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
 

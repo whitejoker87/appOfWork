@@ -6,7 +6,6 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -320,21 +319,30 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun onAuthInstagramClick() {
+    fun onAuthInstagramClick(accessToken: String, uid: String) {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
+        val provider = "instagram"
+        val contactFace = AuthInstagramJobni(
+                uid,
+                provider,
+                accessToken
+        )
 
-        Retrofit.api?.postInstagramAuth(cid)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        Retrofit.api?.postInstagramAuth(contactFace)?.enqueue(object : Callback<AuthInstagram> {
+            override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
                 if (response.body() != null) {
 
-                    setUserAuthid(true)
-                    setBtnUserLogged("instagram")
+                    if (response.body()!!.success) {
+                        setUserAuthid(true)
+                        setBtnUserLogged("instagram")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<AuthInstagram>, t: Throwable) {
                 Toast.makeText(context, "Error onAuthInstagramClick!", Toast.LENGTH_SHORT).show()
             }
         })
@@ -344,16 +352,17 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun convertInstagramCode(code: String) {
 
         Retrofit.api?.getInstagramAccessToken(
-                context.resources.getString(R.string.client_id),
-                context.resources.getString(R.string.client_secret),
+                context.resources.getString(R.string.instagram_client_id),
+                context.resources.getString(R.string.instagram_client_secret),
                 "authorization_code",
-                context.resources.getString(R.string.redirect_url), code)?.enqueue(object : Callback<AuthInstagram> {
+                context.resources.getString(R.string.instagram_redirect_url), code)?.enqueue(object : Callback<AuthInstagram> {
             override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
                 if (response.body() != null) {
 
-                    val access_token = response.body()?.access_token
-                    val user = response.body()?.user
+                    val accessToken = response.body()?.access_token.toString()
+                    val userID = response.body()?.user.toString()
 
+                    onAuthInstagramClick(accessToken, userID)
                 }
             }
 
@@ -411,9 +420,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
                 if (response.body() != null) {
 
-                    val dscAccessToken = response.body()?.access_token
+                    val dscAccessToken = response.body()?.access_token.toString()
 
-                    getDiscordUID(dscAccessToken!!)
+                    getDiscordUID(dscAccessToken)
                 }
             }
 
@@ -429,9 +438,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
                 if (response.body() != null) {
 
-                    val dscUserUD = response.body()?.id.toString()
+                    val dscUserID = response.body()?.id.toString()
 
-                    onAuthDiscordClick(AccessToken, dscUserUD)
+                    onAuthDiscordClick(AccessToken, dscUserID)
                 }
             }
 
@@ -473,6 +482,64 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(call: Call<AuthMailru>, t: Throwable) {
                 Toast.makeText(context, "Error onAuthMailruClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onAuthOKChangeClick(): Boolean {
+        setBtnUserLogged("")
+        setUserAuthid(false)
+
+        return false
+    }
+
+    fun onAuthOKClick(accessToken: String, uid: String) {
+
+        val provider = "odnoklassniki"
+        val contactFace = AuthOKJobni(
+                uid,
+                provider,
+                accessToken
+        )
+
+        Retrofit.api?.postOKAuth(contactFace)?.enqueue(object : Callback<AuthOK> {
+            override fun onResponse(call: Call<AuthOK>, response: Response<AuthOK>) {
+                if (response.body() != null) {
+
+                    if (response.body()!!.success) {
+                        setUserAuthid(true)
+                        setBtnUserLogged("ok")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AuthOK>, t: Throwable) {
+                Toast.makeText(context, "Error onAuthOKClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun convertOKCode(accessToken: String, sig: String) {
+
+        Retrofit.api?.getUserDataOK(
+                context.resources.getString(R.string.ok_public_key),
+                "users.getCurrentUser",
+                sig,
+                accessToken)?.enqueue(object : Callback<AuthOK> {
+            override fun onResponse(call: Call<AuthOK>, response: Response<AuthOK>) {
+                if (response.body() != null) {
+
+                    val okUserID = response.body()?.uid.toString()
+
+                    onAuthOKClick(accessToken, okUserID)
+                }
+            }
+
+            override fun onFailure(call: Call<AuthOK>, t: Throwable) {
+                Toast.makeText(context, "Error convertOKCode!", Toast.LENGTH_SHORT).show()
             }
         })
     }

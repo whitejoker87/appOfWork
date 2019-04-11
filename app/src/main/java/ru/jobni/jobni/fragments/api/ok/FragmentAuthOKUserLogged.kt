@@ -11,6 +11,7 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserOkLoggedBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
+import ru.ok.android.sdk.Odnoklassniki
 
 class FragmentAuthOKUserLogged : Fragment() {
 
@@ -34,6 +35,19 @@ class FragmentAuthOKUserLogged : Fragment() {
         binding.viewmodelauth = viewModelAuth
 
         binding.viewmodelmain = viewModel
+
+        val ok = Odnoklassniki.createInstance(
+                context,
+                context?.resources?.getString(R.string.ok_client_id),
+                context?.resources?.getString(R.string.ok_public_key)
+        )
+
+        binding.btnChangeUserAuth.setOnClickListener {
+            // Сбросить токен от сдк однокласников
+            ok.clearTokens()
+            // Вызвать метод сброса авторизации
+            viewModelAuth.onAuthOKChangeClick()
+        }
 
         return view
     }
