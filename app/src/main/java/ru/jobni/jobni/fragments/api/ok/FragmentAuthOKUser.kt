@@ -11,13 +11,10 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserOkBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
-import ru.ok.android.sdk.Odnoklassniki
 
 class FragmentAuthOKUser : Fragment() {
 
     private var authenticationDialogOK: AuthenticationDialogOK? = null
-
-    private lateinit var ok: Odnoklassniki
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -41,12 +38,6 @@ class FragmentAuthOKUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
-        ok = Odnoklassniki.createInstance(
-                context,
-                context?.resources?.getString(R.string.ok_client_id),
-                context?.resources?.getString(R.string.ok_public_key)
-        )
-
         binding.btnOkLogin.setOnClickListener {
             authenticationDialogOK = AuthenticationDialogOK(context!!, object : AuthenticationListenerOK {
                 override fun onTokenReceived(accessToken: String, sig: String) {
@@ -55,10 +46,6 @@ class FragmentAuthOKUser : Fragment() {
             })
             authenticationDialogOK!!.setCancelable(true)
             authenticationDialogOK!!.show()
-        }
-
-        binding.btnOkLogout.setOnClickListener {
-            ok.clearTokens()
         }
 
         return view
