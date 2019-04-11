@@ -63,8 +63,8 @@
 			/>
 
 		<Button
-			android:id = "@+id/btn_ok_login"
-			android:layout_width = "230dp"
+			android:id = "@+id/btn_ok_auth"
+			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
@@ -74,5 +74,17 @@
 			android:text = "@string/nav_header_btn_auth_text"
 			/>
 
+		<Button
+			android:id = "@+id/btn_ok_login"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
+			app:layout_constraintStart_toStartOf = "@+id/iv_background"
+			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
+			android:layout_marginTop = "84dp"
+			android:background = "@drawable/shape_button"
+			android:text = "login"
+			app:layout_constraintHorizontal_bias = "0.496"
+			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,87 +7,80 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.jobni.jobni.R
-import java.security.MessageDigest
+import ru.jobni.jobni.utils.Retrofit
 
 class AuthenticationDialogOK(context: Context, private val listener: AuthenticationListenerOK) : Dialog(context) {
 
-    private val request_url: String = context.resources.getString(R.string.ok_base_url) +
-            "oauth/authorize?" +
-            "client_id=" + context.resources.getString(R.string.ok_client_id) +
-            "&scope=VALUABLE_ACCESS" +
-            "&response_type=token" +
-            "&redirect_uri=" + context.resources.getString(R.string.ok_redirect_url) +
-            "&layout=m"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.auth_dialog_mailru)
-        initializeWebView()
+        this.setContentView(R.layout.auth_dialog_ok)
+
+        onGetAuthSocial()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun initializeWebView() {
-        val webView = findViewById<WebView>(R.id.web_view_mailru)
+    private fun initializeWebView(url: String) {
+        val webView = findViewById<WebView>(R.id.web_view_ok)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
-        webView.loadUrl(request_url)
-        webView.webViewClient = MailruWebViewClient
+        webView.loadUrl(url)
+        webView.webViewClient = OKWebViewClient
     }
 
-    private val MailruWebViewClient = object : WebViewClient() {
+    private val OKWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            // Здесь можно разместить блок кода
+            // с проверкой при переходе на указаный адрес, что то делать
+            // Например закрывать окно WebView
+            /*if (url.startsWith(request_url)) {
+                dismiss()
+                return true
+            }*/
             return false
         }
 
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
-            if (url.contains("#access_token=")) {
-                val accessToken = url.substring(url.indexOf("access_token=") + 13, url.lastIndexOf("&session_secret_key"))
-                val sessionSecretKey = url.substring(url.indexOf("key=") + 4, url.lastIndexOf("&expires_in"))
+            if (url.contains("?code=")) {
+                // Выделить code из ответа.
+                // Старая версия, нужно учитывать как его правильно вырезать из url
+                //val code = url.substring(url.lastIndexOf("=") + 1)
 
-                val sig = toMD5Hash(sessionSecretKey)
-
-                listener.onTokenReceived(accessToken, sig)
-//                dismiss()
+                // Передать листнеру для дальнейшей работы с ним если нужно
+                //listenerVK.onTokenReceived(code)
+                // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
+                dismiss()
 
             } else if (url.contains("?error")) {
-                Log.e("access_token", "getting error fetching access_token")
+                Log.e("code", "getting error fetching code")
                 dismiss()
             }
         }
     }
 
-    private fun toMD5Hash(sessionSecretKey: String): String {
+    fun onGetAuthSocial() {
 
-        var result: String
-        val makeSig = "application_key=" + context.resources.getString(R.string.ok_public_key) + "method=users.getCurrentUser" + sessionSecretKey
+        val provider = "odnoklassniki"
 
-        try {
-            val md5 = MessageDigest.getInstance("MD5")
-            val md5HashBytes = md5.digest(makeSig.toByteArray()).toTypedArray()
+        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    val getUrl = response.raw().request().url().toString()
+                    initializeWebView(getUrl)
+                }
+            }
 
-            result = byteArrayToHexString(md5HashBytes)
-
-        } catch (e: Exception) {
-            result = "error: ${e.message}"
-        }
-
-        return result.replace("-", "").toLowerCase()
-    }
-
-    private fun byteArrayToHexString(array: Array<Byte>): String {
-
-        val result = StringBuilder(array.size * 2)
-
-        for (byte in array) {
-            val toAppend = String.format("%2X", byte).replace(" ", "0") // hexadecimal
-            result.append(toAppend).append("-")
-        }
-        result.setLength(result.length - 1) // remove last '-'
-
-        return result.toString()
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
