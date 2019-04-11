@@ -7,53 +7,80 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.jobni.jobni.R
+import ru.jobni.jobni.utils.Retrofit
 
 class AuthenticationDialogMailru(context: Context, private val listener: AuthenticationListenerMailru) : Dialog(context) {
-
-    private val request_url: String = context.resources.getString(R.string.mailru_base_url) +
-            "oauth/authorize?" +
-            "client_id=" + context.resources.getString(R.string.mailru_client_id) +
-            "&response_type=token" +
-            "&scope=events" +
-            "&redirect_uri=" + context.resources.getString(R.string.mailru_redirect_url) +
-            "&display=mobile"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.auth_dialog_mailru)
-        initializeWebView()
+
+        onGetAuthSocial()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun initializeWebView() {
+    private fun initializeWebView(url: String) {
         val webView = findViewById<WebView>(R.id.web_view_mailru)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
-        webView.loadUrl(request_url)
+        webView.loadUrl(url)
         webView.webViewClient = MailruWebViewClient
     }
 
     private val MailruWebViewClient = object : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            // Здесь можно разместить блок кода
+            // с проверкой при переходе на указаный адрес, что то делать
+            // Например закрывать окно WebView
+            /*if (url.startsWith(request_url)) {
+                dismiss()
+                return true
+            }*/
             return false
         }
 
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
-            if (url.contains("&access_token=")) {
-                val accessToken = url.substring(url.indexOf("access_token=") + 13, url.lastIndexOf("&token_type"))
-                val vid = url.substring(url.lastIndexOf("=") + 1)
+            if (url.contains("&code=")) {
+                // Выделить code из ответа.
+                // Старая версия, нужно учитывать как его правильно вырезать из url
+                //val code = url.substring(url.lastIndexOf("=") + 1)
 
-                listener.onTokenReceived(accessToken, vid)
-//                dismiss()
+                // Передать листнеру для дальнейшей работы с ним если нужно
+                //listenerVK.onTokenReceived(code)
+                // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
+                dismiss()
 
             } else if (url.contains("?error")) {
-                Log.e("access_token", "getting error fetching access_token")
+                Log.e("code", "getting error fetching code")
                 dismiss()
             }
         }
+    }
+
+    fun onGetAuthSocial() {
+
+        val provider = "mailru"
+
+        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    val getUrl = response.raw().request().url().toString()
+                    initializeWebView(getUrl)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

@@ -49,6 +49,24 @@ class FragmentAuthMailruUser : Fragment() {
             authenticationDialogMailru!!.show()
         }
 
+        // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизова)
+        // чтобы например выйти из авторизации для последующих тестов.
+        binding.btnUserMailruLogin.setOnClickListener {
+            val authenticationDialogMailruLogin = AuthenticationDialogMailruLogin(context!!)
+            authenticationDialogMailruLogin.setCancelable(true)
+            authenticationDialogMailruLogin.show()
+        }
+
+        // Вызов окна авторизации
+        binding.btnUserMailruAuth.setOnClickListener{
+            authenticationDialogMailru = AuthenticationDialogMailru(context!!, object : AuthenticationListenerMailru {
+                override fun onTokenReceived(accessToken: String, vid: String) {
+                    viewModelAuth.onAuthMailruClick(accessToken, vid)
+                }
+            })
+            authenticationDialogMailru!!.setCancelable(true)
+            authenticationDialogMailru!!.show()
+        }
         return view
     }
 }
