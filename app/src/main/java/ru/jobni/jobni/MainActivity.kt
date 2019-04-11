@@ -10,6 +10,10 @@ import android.provider.UserDictionary
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.CompoundButton
+import android.widget.Toast
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
@@ -26,6 +30,7 @@ import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.ui.VKWebViewAuthActivity
 import kotlinx.android.synthetic.main.nav_left.*
+import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.api.auth.FragmentAuth
@@ -291,17 +296,18 @@ class MainActivity : AppCompatActivity() {
 
         regViewModel.getSocialRegStart().observe(this, Observer {
             if (it) {
-                when(viewModelMain.getSocialLaunch().value){
+                when (viewModelMain.getSocialLaunch().value) {
                     "RegSocial" -> VK.login(this, arrayListOf())
                     "RegOK" -> Odnoklassniki.createInstance(this, APP_ID, APP_KEY)
-                            .requestAuthorization(this, REDIRECT_URL, OkAuthType.ANY, OkScope.VALUABLE_ACCESS)
+                        .requestAuthorization(this, REDIRECT_URL, OkAuthType.ANY, OkScope.VALUABLE_ACCESS)
                     /*Ответ не обрабатывается*/
                     "RegInst" -> {
-                         val authenticationDialogInstagram = AuthenticationDialogInstagram(this, object : AuthenticationListenerInstagram {
-                            override fun onTokenReceived(code: String) {
-                                regViewModel.convertInstagramCode(code)
-                            }
-                        })
+                        val authenticationDialogInstagram =
+                            AuthenticationDialogInstagram(this, object : AuthenticationListenerInstagram {
+                                override fun onTokenReceived(code: String) {
+                                    regViewModel.convertInstagramCode(code)
+                                }
+                            })
                         authenticationDialogInstagram.setCancelable(true)
                         authenticationDialogInstagram.show()
                     }
@@ -309,20 +315,22 @@ class MainActivity : AppCompatActivity() {
 //                    "RegGoogle" -> regViewModel.setBtnUserLogged("google")
 //                    "RegFB" -> regViewModel.setBtnUserLogged("fb")/*Иным способом выводиться*/
                     "RegMailRu" -> {
-                         val authenticationDialogMailru = AuthenticationDialogMailru(this, object : AuthenticationListenerMailru {
-                            override fun onTokenReceived(accessToken: String, vid: String) {
-                                regViewModel.sendSocialData(vid, "mailru", accessToken)
-                            }
-                        })
+                        val authenticationDialogMailru =
+                            AuthenticationDialogMailru(this, object : AuthenticationListenerMailru {
+                                override fun onTokenReceived(accessToken: String, vid: String) {
+                                    regViewModel.sendSocialData(vid, "mailru", accessToken)
+                                }
+                            })
                         authenticationDialogMailru.setCancelable(true)
                         authenticationDialogMailru.show()
                     }
                     "RegDiscord" -> {
-                        val authenticationDialogDiscord = AuthenticationDialogDiscord(this, object : AuthenticationListenerDiscord {
-                            override fun onTokenReceived(code: String) {
-                                regViewModel.convertDiscordCode(code)
-                            }
-                        })
+                        val authenticationDialogDiscord =
+                            AuthenticationDialogDiscord(this, object : AuthenticationListenerDiscord {
+                                override fun onTokenReceived(code: String) {
+                                    regViewModel.convertDiscordCode(code)
+                                }
+                            })
                         authenticationDialogDiscord.setCancelable(true)
                         authenticationDialogDiscord.show()
                     }
@@ -340,8 +348,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        regViewModel.isPhotoDialogEnabled().observe(this, Observer {
-                aBoolean -> if (aBoolean != null) if (aBoolean) photoDialogBottomSheetEnable()
+        regViewModel.isPhotoDialogEnabled().observe(this, Observer { aBoolean ->
+            if (aBoolean != null) if (aBoolean) photoDialogBottomSheetEnable()
         })
 
         regViewModel.getPhotoLaunch().observe(this, Observer {
@@ -350,7 +358,8 @@ class MainActivity : AppCompatActivity() {
                 when (it) {
                     "camera" -> {
                         regViewModel.setPhotoLaunch("")
-                        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                        val permissions =
+                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             requestPermissions(permissions, WRITE_REQUEST_CODE)
                         } else
@@ -452,9 +461,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) {
+        /*for telegram*/
+        if (requestCode == 105) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Telegram login ok", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == TelegramPassport.RESULT_ERROR) {
+                AlertDialog.Builder(this)
+                    .setTitle("error!")
+                    .setMessage(data!!.getStringExtra("error"))
+                    .setPositiveButton("OKNORM", null)
+                    .show();
+            } else Toast.makeText(this, "cancel login telega", Toast.LENGTH_SHORT).show()
+        }
 
-            /* VK callback block */val callback = object : VKAuthCallback {
+        else if (resultCode == RESULT_OK) {
+
+            /* VK callback block */
+            val callback = object : VKAuthCallback {
                 override fun onLogin(token: VKAccessToken) {
 
                     val accessToken = token.accessToken
@@ -462,10 +485,10 @@ class MainActivity : AppCompatActivity() {
                     val userLogin = token.userId
 
                     if (viewModelMain.getSocialLaunch().value.equals("RegSocial")) {
-                    regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
-                } else if (viewModelAuth.isVkAuthStart().value == true) {
-                    viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
-                }
+                        regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
+                    } else if (viewModelAuth.isVkAuthStart().value == true) {
+                        viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
+                    }
                 }
 
                 override fun onLoginFailed(errorCode: Int) {}
@@ -520,15 +543,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setFragmentNoBackStack(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 
     private fun setFragmentReturnBackStack() {

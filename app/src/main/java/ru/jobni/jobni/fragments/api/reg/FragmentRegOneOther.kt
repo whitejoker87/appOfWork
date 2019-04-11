@@ -19,6 +19,18 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 import java.net.MalformedURLException
 import java.net.URL
+import ru.jobni.jobni.MainActivity
+import org.telegram.passport.TelegramPassport
+import org.telegram.passport.PassportScope
+import org.telegram.passport.PassportScopeElementOne
+import org.telegram.passport.PassportScopeElementOneOfSeveral
+import java.util.UUID.randomUUID
+import android.widget.SeekBar
+import org.telegram.passport.TelegramLoginButton
+import android.widget.CompoundButton
+import androidx.annotation.IdRes
+import java.util.*
+
 
 class FragmentRegOneOther : Fragment() {
 
@@ -44,6 +56,10 @@ class FragmentRegOneOther : Fragment() {
 //            param1 = it.getString(ARG_PARAM1)
 //        }
 //    }
+
+
+    private lateinit var loginButton: TelegramLoginButton
+    private val payload = UUID.randomUUID().toString()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -106,6 +122,60 @@ class FragmentRegOneOther : Fragment() {
                 deleteAccessToken()
             }
         })
+
+
+
+        /*for Telegram*/
+        loginButton = binding.loginButtonTel
+		loginButton.setOnClickListener {
+            val params = TelegramPassport.AuthRequest()
+            params.botID = 443863171
+            params.nonce = payload
+            params.publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+                    "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzmgKr0fPP4rB/TsNEweC\n" +
+                    "hoG3ntUxuBTmHsFBW6CpABGdaTmKZSjAI/cTofhBgtRQIOdX0YRGHHHhwyLf49Wv\n" +
+                    "9l+XexbJOa0lTsJSNMj8Y/9sZbqUl5ur8ZOTM0sxbXC0XKexu1tM9YavH+Lbrobk\n" +
+                    "jt0+cmo/zEYZWNtLVihnR2IDv+7tSgiDoFWi/koAUdfJ1VMw+hReUaLg3vE9CmPK\n" +
+                    "tQiTy+NvmrYaBPb75I0Jz3Lrz1+mZSjLKO25iT84RIsxarBDd8iYh2avWkCmvtiR\n" +
+                    "Lcif8wLxi2QWC1rZoCA3Ip+Hg9J9vxHlzl6xT01WjUStMhfwrUW6QBpur7FJ+aKM\n" +
+                    "oaMoHieFNCG4qIkWVEHHSsUpLum4SYuEnyNH3tkjbrdldZanCvanGq+TZyX0buRt\n" +
+                    "4zk7FGcu8iulUkAP/o/WZM0HKinFN/vuzNVA8iqcO/BBhewhzpqmmTMnWmAO8WPP\n" +
+                    "DJMABRtXJnVuPh1CI5pValzomLJM4/YvnJGppzI1QiHHNA9JtxVmj2xf8jaXa1LJ\n" +
+                    "WUNJK+RvUWkRUxpWiKQQO9FAyTPLRtDQGN9eUeDR1U0jqRk/gNT8smHGN6I4H+NR\n" +
+                    "3X3/1lMfcm1dvk654ql8mxjCA54IpTPr/icUMc7cSzyIiQ7Tp9PZTl1gHh281ZWf\n" +
+                    "P7d2+fuJMlkjtM7oAwf+tI8CAwEAAQ==\n" +
+                    "-----END PUBLIC KEY-----"
+            params.scope = PassportScope(
+//                PassportScopeElementOneOfSeveral(PassportScope.PASSPORT, PassportScope.IDENTITY_CARD).withSelfie(),
+//                PassportScopeElementOne(PassportScope.PERSONAL_DETAILS).withNativeNames(),
+//                PassportScope.DRIVER_LICENSE,
+//                PassportScope.ADDRESS,
+//                PassportScope.ADDRESS_DOCUMENT,
+//                PassportScope.PHONE_NUMBER
+            )
+            TelegramPassport.request(activity, params, 105)
+        }
+
+//		cornerRoundnessSlider=findViewById(R.id.corner_roundness_slider);
+//		cornerRoundnessSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+//			@Override
+//			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+//				loginButton.setCornerRoundness(progress/(float)seekBar.getMax());
+//			}
+//
+//			@Override
+//			public void onStartTrackingTouch(SeekBar seekBar){
+//
+//			}
+//
+//			@Override
+//			public void onStopTrackingTouch(SeekBar seekBar){
+//
+//			}
+//        })
+
+
+
         return view
     }
 
@@ -178,5 +248,4 @@ class FragmentRegOneOther : Fragment() {
 
         return bundle
     }
-
 }
