@@ -6,7 +6,6 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -320,21 +319,30 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun onAuthInstagramClick() {
+    fun onAuthInstagramClick(accessToken: String, uid: String) {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
+        val provider = "instagram"
+        val contactFace = AuthInstagramJobni(
+                uid,
+                provider,
+                accessToken
+        )
 
-        Retrofit.api?.postInstagramAuth(cid)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        Retrofit.api?.postInstagramAuth(contactFace)?.enqueue(object : Callback<AuthInstagram> {
+            override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
                 if (response.body() != null) {
 
-                    setUserAuthid(true)
-                    setBtnUserLogged("instagram")
+                    if (response.body()!!.success) {
+                        setUserAuthid(true)
+                        setBtnUserLogged("instagram")
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<AuthInstagram>, t: Throwable) {
                 Toast.makeText(context, "Error onAuthInstagramClick!", Toast.LENGTH_SHORT).show()
             }
         })
@@ -351,9 +359,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
                 if (response.body() != null) {
 
-                    val access_token = response.body()?.access_token
-                    val user = response.body()?.user
+                    val accessToken = response.body()?.access_token.toString()
+                    val userID = response.body()?.user.toString()
 
+                    onAuthInstagramClick(accessToken, userID)
                 }
             }
 
@@ -411,9 +420,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
                 if (response.body() != null) {
 
-                    val dscAccessToken = response.body()?.access_token
+                    val dscAccessToken = response.body()?.access_token.toString()
 
-                    getDiscordUID(dscAccessToken!!)
+                    getDiscordUID(dscAccessToken)
                 }
             }
 

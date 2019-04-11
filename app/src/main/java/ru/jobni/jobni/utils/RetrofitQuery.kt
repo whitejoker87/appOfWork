@@ -73,8 +73,8 @@ interface RetrofitQuery {
             @Field("code") code: String
     ): Call<AuthInstagram>
 
-    @POST("api/accounts/instagram/login/?process=login")
-    fun postInstagramAuth(@Header("Cookie") sessionID: String): Call<ResponseBody>
+    @POST("api/authorization/social_account/")
+    fun postInstagramAuth(@Body userInstagram: AuthInstagramJobni): Call<AuthInstagram>
 
     /*API Discord*/
     @POST("api/authorization/social_account/")
