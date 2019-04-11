@@ -62,56 +62,29 @@
 			app:viewmodelauth = "@{viewmodelauth}"
 			/>
 
-		<com.google.android.gms.common.SignInButton
-			android:id = "@+id/sign_in_button"
+		<Button
+			android:id = "@+id/btn_user_google_auth"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "60dp"
-			android:enabled = "false"
-			app:layout_constraintHorizontal_bias = "0.5"
+			android:layout_marginTop = "16dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/btn_user_vk_auth_text"
 			/>
 
 		<Button
-			android:id = "@+id/sign_out_button"
+			android:id = "@+id/btn_user_google_login"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/sign_in_button"
+			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "8dp"
+			android:layout_marginTop = "84dp"
 			android:background = "@drawable/shape_button"
-			android:text = "Sign Out"
-			android:enabled = "true"
-			app:layout_constraintHorizontal_bias = "0.5"
-			/>
-
-		<Button
-			android:id = "@+id/revoke_access_button"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/sign_out_button"
-			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "8dp"
-			android:background = "@drawable/shape_button"
-			android:text = "Revoke Access"
-			android:enabled = "true"
-			app:layout_constraintHorizontal_bias = "0.5"
-			/>
-
-		<TextView
-			android:id = "@+id/statuslabel"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/revoke_access_button"
-			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "8dp"
-			android:text = "Status"
-			app:layout_constraintHorizontal_bias = "0.5"
+			android:text = "login"
+			app:layout_constraintHorizontal_bias = "0.498"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
