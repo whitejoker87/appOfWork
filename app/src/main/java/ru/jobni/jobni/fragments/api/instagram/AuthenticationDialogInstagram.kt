@@ -28,6 +28,7 @@ class AuthenticationDialogInstagram(context: Context, private val listenerInstag
     private fun initializeWebView() {
         val webView = findViewById<WebView>(R.id.web_view_instagram)
         webView.settings.javaScriptEnabled = true
+        webView.settings.domStorageEnabled = true
         webView.loadUrl(request_url)
         webView.webViewClient = InstaWebViewClient
     }
