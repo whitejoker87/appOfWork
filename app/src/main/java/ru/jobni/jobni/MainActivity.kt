@@ -300,7 +300,7 @@ class MainActivity : AppCompatActivity() {
                 when (viewModelMain.getSocialLaunch().value) {
                     "RegVK" -> //VK.login(this, arrayListOf())
                     {
-                        val authenticationDialogVK = AuthDialogVK(this, object : AuthListenerVK {
+                        val authenticationDialogVK = AuthDialogVK(this, "RegVK", object : AuthListenerVK {
                             override fun onTokenReceived(code: String) {
                                 //Делаем с кодом что нибудь
                             }

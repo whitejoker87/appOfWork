@@ -7,21 +7,28 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.utils.Retrofit
+import ru.jobni.jobni.viewmodel.AuthViewModel
 
-class AuthDialogVK(context: Context, private val listenerVK: AuthListenerVK) : Dialog(context) {
+class AuthDialogVK(private val _context: Context, val typeProvider: String, private val listenerVK: AuthListenerVK) : Dialog(_context) {
+
+    private val authViewModel: AuthViewModel by lazy {
+        ViewModelProviders.of(_context as FragmentActivity).get(AuthViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.auth_dialog_social)
 
-        onGetAuthSocial()
+        authViewModel.onGetAuthSocial(typeProvider)
+
+        authViewModel.getUrlWebViewSocial().observe(_context as LifecycleOwner, Observer {
+            initializeWebView(it)
+        })
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -59,28 +66,15 @@ class AuthDialogVK(context: Context, private val listenerVK: AuthListenerVK) : D
                 // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
                 dismiss()
 
+                // Выставить авторизацию, как успешную
+                authViewModel.setUserAuthid(true)
+                authViewModel.setBtnUserLogged("vk")
+
+
             } else if (url.contains("?error")) {
                 Log.e("code", "getting error fetching code")
                 dismiss()
             }
         }
-    }
-
-    fun onGetAuthSocial() {
-
-        val provider = "vk"
-
-        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
-                    val getUrl = response.raw().request().url().toString()
-                    initializeWebView(getUrl)
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }

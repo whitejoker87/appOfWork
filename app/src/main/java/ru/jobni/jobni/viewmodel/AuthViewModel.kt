@@ -6,6 +6,7 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,9 +41,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
 
-    /*цвет кнопки при логине пользователя*/
+    /*общие значения при логине пользователя*/
+    // Цвет кнопки
     private val btnUserLogged = MutableLiveData<String>("")
+    // Статус пользователя - ЗАЛОГИНИЛСЯ
     private val isUserAuthid = MutableLiveData<Boolean>()
+    // Получения ссылки для социальных аккаунтов
+    private val urlWebViewSocial = MutableLiveData<String>()
 
     /*Блок Mail*/
     private val authMail = MutableLiveData<String>()
@@ -80,6 +85,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun isUserAuthid(): MutableLiveData<Boolean> = isUserAuthid
+
+
+    fun setUrlWebViewSocial(url: String) {
+        urlWebViewSocial.value = url
+    }
+
+    fun getUrlWebViewSocial(): MutableLiveData<String> = urlWebViewSocial
 
 
     /* Блок обычной авторизации */
@@ -181,6 +193,23 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         setUserAuthid(false)
 
         return false
+    }
+
+
+    fun onGetAuthSocial(provider: String) {
+
+        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+                    val getUrl = response.raw().request().url().toString()
+                    setUrlWebViewSocial(getUrl)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     fun onAuthMailUserClick() {
