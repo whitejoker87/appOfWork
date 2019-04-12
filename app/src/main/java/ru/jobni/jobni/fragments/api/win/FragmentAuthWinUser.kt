@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.mailru
+package ru.jobni.jobni.fragments.api.win
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +8,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserMailruBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserWinBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
-class FragmentAuthMailruUser : Fragment() {
+class FragmentAuthWinUser : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -23,11 +23,11 @@ class FragmentAuthMailruUser : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationUserMailruBinding
+    private lateinit var binding: CAuthorizationUserWinBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_mailru, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_win, container, false)
 
         binding.lifecycleOwner = this
 
@@ -39,15 +39,15 @@ class FragmentAuthMailruUser : Fragment() {
 
         // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизова)
         // чтобы например выйти из авторизации для последующих тестов.
-        binding.btnUserMailruLogin.setOnClickListener {
-            val authenticationDialogMailruLogin = AuthenticationDialogMailruLogin(context!!)
-            authenticationDialogMailruLogin.setCancelable(true)
-            authenticationDialogMailruLogin.show()
+        binding.btnUserWinLogin.setOnClickListener {
+            val authenticationDialogWinLogin = AuthenticationDialogWinLogin(context!!)
+            authenticationDialogWinLogin.setCancelable(true)
+            authenticationDialogWinLogin.show()
         }
 
         // Вызов окна авторизации
-        binding.btnUserMailruAuth.setOnClickListener{
-            val authenticationDialogMailru = AuthenticationDialogMailru(context!!, object : AuthenticationListenerMailru {
+        binding.btnUserWinAuth.setOnClickListener {
+            val authenticationDialogMailru = AuthenticationDialogWin(context!!, object : AuthenticationListenerWin {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }

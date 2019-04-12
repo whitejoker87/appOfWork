@@ -51,6 +51,8 @@ import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
 import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUser
 import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUserLogged
+import ru.jobni.jobni.fragments.api.win.FragmentAuthWinUser
+import ru.jobni.jobni.fragments.api.win.FragmentAuthWinUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
@@ -224,6 +226,8 @@ class MainActivity : AppCompatActivity() {
                 "AuthMailruUserLogged" -> setFragment(FragmentAuthMailruUserLogged())
                 "AuthTelegramUser" -> setFragment(FragmentAuthTelegramUser())
                 "AuthTelegramUserLogged" -> setFragment(FragmentAuthTelegramUserLogged())
+                "AuthWinUser" -> setFragment(FragmentAuthWinUser())
+                "AuthWinUserLogged" -> setFragment(FragmentAuthWinUserLogged())
                 "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
                 "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
                 "RegVK" -> regViewModel.setTypeAddRegFragment("soc")
