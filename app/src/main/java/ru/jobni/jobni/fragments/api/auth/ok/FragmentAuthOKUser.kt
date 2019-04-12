@@ -14,6 +14,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthOKUser : Fragment() {
 
+    private val socialProvider = "odnoklassniki"
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -46,7 +48,7 @@ class FragmentAuthOKUser : Fragment() {
 
         // Вызов окна авторизации
         binding.btnOkAuth.setOnClickListener{
-            val authDialogOK = AuthDialogOK(context!!, object : AuthListenerOK {
+            val authDialogOK = AuthDialogOK(context!!, socialProvider, object : AuthListenerOK {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }

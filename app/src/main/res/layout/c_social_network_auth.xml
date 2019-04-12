@@ -74,9 +74,9 @@
 			app:layout_constraintStart_toStartOf = "@+id/btn_mail_ru"
 			app:layout_constraintEnd_toEndOf = "@+id/btn_discord"
 			app:srcCompat = "@drawable/ic_ok"
-			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("ok")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:clickable = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("")) ? true : safeUnbox(viewmodelauth.btnUserLogged.equals("ok")) ? true : false}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("ok") ? "AuthOKUserLogged" : "AuthOKUser")}'
+			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("odnoklassniki")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:clickable = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("")) ? true : safeUnbox(viewmodelauth.btnUserLogged.equals("odnoklassniki")) ? true : false}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("odnoklassniki") ? "AuthOKUserLogged" : "AuthOKUser")}'
 			/>
 
 		<ImageButton
