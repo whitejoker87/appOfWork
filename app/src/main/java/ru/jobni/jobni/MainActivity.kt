@@ -313,7 +313,7 @@ class MainActivity : AppCompatActivity() {
                     /*Ответ не обрабатывается*/
                     "RegInst" -> {
                         val authenticationDialogInstagram =
-                            AuthDialogInstagram(this, object : AuthListenerInstagram {
+                            AuthDialogInstagram(this, "RegInst", object : AuthListenerInstagram {
                                 override fun onTokenReceived(code: String) {
                                     //Делаем с кодом что нибудь
                                 }
@@ -340,7 +340,7 @@ class MainActivity : AppCompatActivity() {
 //                    }
                     "RegDiscord" -> {
                         val authenticationDialogDiscord =
-                            AuthDialogDiscord(this, object : AuthListenerDiscord {
+                            AuthDialogDiscord(this, "RegDiscord", object : AuthListenerDiscord {
                                 override fun onTokenReceived(code: String) {
                                     regViewModel.convertDiscordCode(code)
                                 }
@@ -500,8 +500,6 @@ class MainActivity : AppCompatActivity() {
 
                     if (viewModelMain.getSocialLaunch().value.equals("RegSocial")) {
                         regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
-                    } else if (viewModelAuth.isVkAuthStart().value == true) {
-                        viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
                     }
                 }
 

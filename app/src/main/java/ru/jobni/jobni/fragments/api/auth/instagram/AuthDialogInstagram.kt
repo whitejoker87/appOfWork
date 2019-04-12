@@ -36,6 +36,9 @@ class AuthDialogInstagram(private val _context: Context, val typeProvider: Strin
         val webView = findViewById<WebView>(R.id.web_view_social)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
+        webView.settings.useWideViewPort = true
+        webView.settings.loadWithOverviewMode = true
+        webView.setInitialScale(50)
         webView.loadUrl(url)
         webView.webViewClient = InstagramWebViewClient
     }
