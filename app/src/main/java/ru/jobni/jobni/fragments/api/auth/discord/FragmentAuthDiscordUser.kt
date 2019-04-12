@@ -15,6 +15,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthDiscordUser : Fragment() {
 
+    private val socialProvider = "discord"
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -47,7 +49,7 @@ class FragmentAuthDiscordUser : Fragment() {
 
         // Вызов окна авторизации
         binding.btnUserDiscordAuth.setOnClickListener {
-            val authDialogDiscord = AuthDialogDiscord(context!!, object : AuthListenerDiscord {
+            val authDialogDiscord = AuthDialogDiscord(context!!, socialProvider, object : AuthListenerDiscord {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }
