@@ -15,6 +15,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthMailruUser : Fragment() {
 
+    private val socialProvider = "mailru"
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -47,7 +49,7 @@ class FragmentAuthMailruUser : Fragment() {
 
         // Вызов окна авторизации
         binding.btnUserMailruAuth.setOnClickListener{
-            val authDialogMailru = AuthDialogMailru(context!!, object : AuthListenerMailru {
+            val authDialogMailru = AuthDialogMailru(context!!, socialProvider, object : AuthListenerMailru {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }
