@@ -130,9 +130,9 @@
 			app:layout_constraintEnd_toStartOf = "@+id/btn_mail_ru"
 			android:layout_marginEnd = "12dp"
 			app:srcCompat = "@drawable/ic_facebook"
-			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("fb")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:clickable = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("")) ? true : safeUnbox(viewmodelauth.btnUserLogged.equals("fb")) ? true : false}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("fb") ? "AuthFBUserLogged" : "AuthFBUser")}'
+			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("facebook")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:clickable = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("")) ? true : safeUnbox(viewmodelauth.btnUserLogged.equals("facebook")) ? true : false}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("facebook") ? "AuthFBUserLogged" : "AuthFBUser")}'
 			/>
 
 		<ImageButton
