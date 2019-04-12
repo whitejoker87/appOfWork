@@ -10,7 +10,7 @@ import ru.jobni.jobni.R
 
 class AuthenticationDialogWinLogin(context: Context) : Dialog(context) {
 
-    private val request_url: String = "https://www.microsoft.com"
+    private val request_url: String = "https://account.microsoft.com/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
