@@ -1,5 +1,6 @@
 package ru.jobni.jobni.fragments.api.reg
 
+//import ru.jobni.jobni.fragments.api.facebook.PrefUtil
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,22 +14,14 @@ import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import org.json.JSONObject
+import org.telegram.passport.PassportScope
+import org.telegram.passport.TelegramLoginButton
+import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.R
-//import ru.jobni.jobni.fragments.api.facebook.PrefUtil
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 import java.net.MalformedURLException
 import java.net.URL
-import ru.jobni.jobni.MainActivity
-import org.telegram.passport.TelegramPassport
-import org.telegram.passport.PassportScope
-import org.telegram.passport.PassportScopeElementOne
-import org.telegram.passport.PassportScopeElementOneOfSeveral
-import java.util.UUID.randomUUID
-import android.widget.SeekBar
-import org.telegram.passport.TelegramLoginButton
-import android.widget.CompoundButton
-import androidx.annotation.IdRes
 import java.util.*
 
 

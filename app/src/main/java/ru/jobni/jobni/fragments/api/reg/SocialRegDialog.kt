@@ -33,7 +33,7 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initializeWebView(url: String) {
-        val webView = findViewById<WebView>(R.id.web_view_mailru)
+        val webView = findViewById<WebView>(R.id.web_view_social_reg)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.loadUrl(url)

@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -31,12 +30,16 @@ import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.api.auth.FragmentAuth
+import ru.jobni.jobni.fragments.api.auth.discord.AuthDialogDiscord
+import ru.jobni.jobni.fragments.api.auth.discord.AuthListenerDiscord
 import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUser
 import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUserLogged
 import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUserLogged
 import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUser
 import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUserLogged
+import ru.jobni.jobni.fragments.api.auth.instagram.AuthDialogInstagram
+import ru.jobni.jobni.fragments.api.auth.instagram.AuthListenerInstagram
 import ru.jobni.jobni.fragments.api.auth.instagram.FragmentAuthInstagramUser
 import ru.jobni.jobni.fragments.api.auth.instagram.FragmentAuthInstagramUserLogged
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUser
@@ -51,6 +54,8 @@ import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
 import ru.jobni.jobni.fragments.api.auth.telegram.FragmentAuthTelegramUser
 import ru.jobni.jobni.fragments.api.auth.telegram.FragmentAuthTelegramUserLogged
+import ru.jobni.jobni.fragments.api.auth.vk.AuthDialogVK
+import ru.jobni.jobni.fragments.api.auth.vk.AuthListenerVK
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.api.auth.win.FragmentAuthWinUser
@@ -58,8 +63,6 @@ import ru.jobni.jobni.fragments.api.auth.win.FragmentAuthWinUserLogged
 import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
 import ru.jobni.jobni.fragments.api.reg.SocialRegDialog
-import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUser
-import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
@@ -297,7 +300,7 @@ class MainActivity : AppCompatActivity() {
                 when (viewModelMain.getSocialLaunch().value) {
                     "RegVK" -> //VK.login(this, arrayListOf())
                     {
-                        val authenticationDialogVK = AuthenticationDialogVK(this, object : AuthenticationListenerVK {
+                        val authenticationDialogVK = AuthDialogVK(this, object : AuthListenerVK {
                             override fun onTokenReceived(code: String) {
                                 //Делаем с кодом что нибудь
                             }
@@ -310,7 +313,7 @@ class MainActivity : AppCompatActivity() {
                     /*Ответ не обрабатывается*/
                     "RegInst" -> {
                         val authenticationDialogInstagram =
-                            AuthenticationDialogInstagram(this, object : AuthenticationListenerInstagram {
+                            AuthDialogInstagram(this, object : AuthListenerInstagram {
                                 override fun onTokenReceived(code: String) {
                                     //Делаем с кодом что нибудь
                                 }
@@ -337,7 +340,7 @@ class MainActivity : AppCompatActivity() {
 //                    }
                     "RegDiscord" -> {
                         val authenticationDialogDiscord =
-                            AuthenticationDialogDiscord(this, object : AuthenticationListenerDiscord {
+                            AuthDialogDiscord(this, object : AuthListenerDiscord {
                                 override fun onTokenReceived(code: String) {
                                     regViewModel.convertDiscordCode(code)
                                 }
