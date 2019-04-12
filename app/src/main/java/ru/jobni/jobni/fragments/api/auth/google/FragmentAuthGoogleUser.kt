@@ -15,6 +15,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthGoogleUser : Fragment() {
 
+    private val socialProvider = "google"
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -47,7 +49,7 @@ class FragmentAuthGoogleUser : Fragment() {
 
         // Вызов окна авторизации
         binding.btnUserGoogleAuth.setOnClickListener {
-            val authDialogGoogle = AuthDialogGoogle(context!!, object : AuthListenerGoogle {
+            val authDialogGoogle = AuthDialogGoogle(context!!, socialProvider, object : AuthListenerGoogle {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }
