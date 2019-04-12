@@ -9,6 +9,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.WebView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
@@ -24,6 +27,7 @@ import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import kotlinx.android.synthetic.main.nav_left.*
+import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.api.auth.FragmentAuth
@@ -53,13 +57,18 @@ import ru.jobni.jobni.fragments.api.auth.win.FragmentAuthWinUser
 import ru.jobni.jobni.fragments.api.auth.win.FragmentAuthWinUserLogged
 import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
+import ru.jobni.jobni.fragments.api.reg.SocialRegDialog
+import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUser
+import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
-
+import ru.ok.android.sdk.Odnoklassniki
+import ru.ok.android.sdk.util.OkAuthType
+import ru.ok.android.sdk.util.OkScope
 
 class MainActivity : AppCompatActivity() {
 
@@ -70,6 +79,13 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA_REQUEST = 0
     private val GALLERY_REQUEST = 1
     private val VK_REQUEST = 1
+
+    // -------------- YOUR APP DATA GOES HERE(for OK) ------------
+    private val APP_ID = "1277635072"
+    private val APP_KEY = "CBALCICNEBABABABA"
+    private val REDIRECT_URL = "okauth://ok1277635072"
+    // -------------- YOUR APP DATA ENDS -----------------
+
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
@@ -279,14 +295,56 @@ class MainActivity : AppCompatActivity() {
         regViewModel.getSocialRegStart().observe(this, Observer {
             if (it) {
                 when (viewModelMain.getSocialLaunch().value) {
-                    "RegVK" -> VK.login(this, arrayListOf())
-//                    "RegOK" -> regViewModel.setBtnUserLogged("ok")
-//                    "RegInst" -> regViewModel.setBtnUserLogged("inst")
+                    "RegVK" -> //VK.login(this, arrayListOf())
+                    {
+                        val authenticationDialogVK = AuthenticationDialogVK(this, object : AuthenticationListenerVK {
+                            override fun onTokenReceived(code: String) {
+                                //Делаем с кодом что нибудь
+                            }
+                        })
+                        authenticationDialogVK.setCancelable(true)
+                        authenticationDialogVK.show()
+                    }
+                    "RegOK" -> Odnoklassniki.createInstance(this, APP_ID, APP_KEY)
+                        .requestAuthorization(this, REDIRECT_URL, OkAuthType.ANY, OkScope.VALUABLE_ACCESS)
+                    /*Ответ не обрабатывается*/
+                    "RegInst" -> {
+                        val authenticationDialogInstagram =
+                            AuthenticationDialogInstagram(this, object : AuthenticationListenerInstagram {
+                                override fun onTokenReceived(code: String) {
+                                    //Делаем с кодом что нибудь
+                                }
+                            })
+                        authenticationDialogInstagram.setCancelable(true)
+                        authenticationDialogInstagram.show()
+                    }
 //                    "RegTel" -> regViewModel.setBtnUserLogged("tel")
 //                    "RegGoogle" -> regViewModel.setBtnUserLogged("google")
-//                    "RegFB" -> regViewModel.setBtnUserLogged("fb")
-//                    "RegMailRu" -> regViewModel.setBtnUserLogged("mailru")
-//                    "RegDiscord" -> regViewModel.setBtnUserLogged("discord")
+                    "RegFB" -> {//готов для webview
+                        val dialog = SocialRegDialog(this, "RegFB")
+                        dialog.setCancelable(true)
+                        dialog.show()
+                    }
+//                    "RegMailRu" -> {
+//                        val authenticationDialogMailru =
+//                            AuthenticationDialogMailru(this, object : AuthenticationListenerMailru {
+//                                override fun onTokenReceived(accessToken: String, vid: String) {
+//                                    regViewModel.sendSocialData(vid, "mailru", accessToken)
+//                                }
+//                            })
+//                        authenticationDialogMailru.setCancelable(true)
+//                        authenticationDialogMailru.show()
+//                    }
+                    "RegDiscord" -> {
+                        val authenticationDialogDiscord =
+                            AuthenticationDialogDiscord(this, object : AuthenticationListenerDiscord {
+                                override fun onTokenReceived(code: String) {
+                                    regViewModel.convertDiscordCode(code)
+                                }
+                            })
+                        authenticationDialogDiscord.setCancelable(true)
+                        authenticationDialogDiscord.show()
+                    }
 //                    "RegMic" -> regViewModel.setBtnUserLogged("mic")
                 }
             }
@@ -414,7 +472,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) {
+        /*for telegram*/
+        if (requestCode == 105) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Telegram login ok", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == TelegramPassport.RESULT_ERROR) {
+                AlertDialog.Builder(this)
+                    .setTitle("error!")
+                    .setMessage(data!!.getStringExtra("error"))
+                    .setPositiveButton("OKNORM", null)
+                    .show();
+            } else Toast.makeText(this, "cancel login telega", Toast.LENGTH_SHORT).show()
+        }
+
+        else if (resultCode == RESULT_OK) {
 
             /* VK callback block */
             val callback = object : VKAuthCallback {
@@ -424,8 +495,8 @@ class MainActivity : AppCompatActivity() {
 
                     val userLogin = token.userId
 
-                    if (viewModelMain.getSocialLaunch().value.equals("RegVK")) {
-                        regViewModel.btnVKClick(userLogin.toString(), "vk", accessToken)
+                    if (viewModelMain.getSocialLaunch().value.equals("RegSocial")) {
+                        regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
                     } else if (viewModelAuth.isVkAuthStart().value == true) {
                         viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
                     }

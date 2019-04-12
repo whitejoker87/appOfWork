@@ -1,6 +1,6 @@
 package ru.jobni.jobni.utils
 
-import okhttp3.RequestBody
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -21,16 +21,16 @@ interface RetrofitQuery {
     fun postRegistrationUser(): Call<ResponseRegStart>
 
     @POST("api/registration/bind_email/")
-    fun sendBindEmail(@Header("Cookie") sessionID: String, @Body bindEmail: BindEmail): Call<ResponseRegUser>
+    fun sendBindEmail(@Header("Cookie") sessionID: String, @Body regBindEmail: RegBindEmail): Call<ResponseRegUser>
 
     @POST("api/registration/bind_phone/")
-    fun sendBindPhone(@Header("Cookie") sessionID: String, @Body bindPhone: BindPhone): Call<ResponseRegUser>
+    fun sendBindPhone(@Header("Cookie") sessionID: String, @Body regBindPhone: RegBindPhone): Call<ResponseRegUser>
 
     @POST("api/registration/email_code/")
-    fun validateMailCode(@Header("Cookie") sessionID: String, @Body confirmCode: ConfirmCode): Call<ResponseRegConfirm>
+    fun validateMailCode(@Header("Cookie") sessionID: String, @Body regConfirmCode: RegConfirmCode): Call<ResponseRegConfirm>
 
     @POST("api/registration/phone_code/")
-    fun validatePhoneCode(@Header("Cookie") sessionID: String, @Body confirmCode: ConfirmCode): Call<ResponseRegConfirm>
+    fun validatePhoneCode(@Header("Cookie") sessionID: String, @Body regConfirmCode: RegConfirmCode): Call<ResponseRegConfirm>
 
     @POST("api/registration/password/")
     fun sendRegistrationPass(@Header("Cookie") sessionID: String, @Body pass: RegPass): Call<ResponseRegPass>
@@ -45,14 +45,13 @@ interface RetrofitQuery {
     fun getContactsForReg(@Header("Cookie") sessionID: String): Call<ResponseRegGetContacts>
 
     @POST("api/accounts/{type_social}/login/")
-    fun postSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
+    fun getDataSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
 
     @POST("api/accounts/{type_social}/login/?process=connect")
     fun getSocial(@Path("type_social") type_social: String): Call<ResponseBody>
 
     @POST("api/registration/photo/")
-    fun postPhotoReg(@Header("Cookie") sessionID: String, @Body file: RequestBody): Call<ResponseBody>
-
+    fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseBody>
     /*заготовка для отправки картинки*/
 //    @Multipart
 //    @POST("api/registration/")
@@ -60,7 +59,7 @@ interface RetrofitQuery {
 
     /*API VK*/
     @POST("api/registration/social_account/")
-    fun postVKReg(@Header("Cookie") sessionID: String, @Body userMail: RegVK): Call<ResponseBody>
+    fun postSocialReg(@Header("Cookie") sessionID: String, @Body socAccount: RegSocial): Call<ResponseRegUser>
 
     @POST("api/authorization/social_account/")
     fun postVKAuth(@Body userMail: AuthVKJobni): Call<AuthVK>
