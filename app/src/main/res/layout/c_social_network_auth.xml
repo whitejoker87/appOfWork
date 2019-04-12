@@ -175,9 +175,9 @@
 			app:layout_constraintStart_toEndOf = "@+id/btn_discord"
 			android:layout_marginStart = "12dp"
 			app:srcCompat = "@drawable/ic_microsoft"
-			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("micro")) ? @drawable/shape_button : @drawable/shape_badge}'
-			android:clickable = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("")) ? true : safeUnbox(viewmodelauth.btnUserLogged.equals("micro")) ? true : false}'
-			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("micro") ? "AuthWinUserLogged" : "AuthWinUser")}'
+			android:background = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("microsoft")) ? @drawable/shape_button : @drawable/shape_badge}'
+			android:clickable = '@{safeUnbox(viewmodelauth.btnUserLogged.equals("")) ? true : safeUnbox(viewmodelauth.btnUserLogged.equals("microsoft")) ? true : false}'
+			android:onClick = '@{() -> viewmodelmain.setSocialLaunch(viewmodelauth.btnUserLogged.equals("microsoft") ? "AuthWinUserLogged" : "AuthWinUser")}'
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

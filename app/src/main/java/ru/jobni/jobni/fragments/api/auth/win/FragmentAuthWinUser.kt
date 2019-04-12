@@ -15,6 +15,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthWinUser : Fragment() {
 
+    private val socialProvider = "microsoft"
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -47,7 +49,7 @@ class FragmentAuthWinUser : Fragment() {
 
         // Вызов окна авторизации
         binding.btnUserWinAuth.setOnClickListener {
-            val authenticationDialogMailru = AuthDialogWin(context!!, object : AuthListenerWin {
+            val authenticationDialogMailru = AuthDialogWin(context!!, socialProvider, object : AuthListenerWin {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }
