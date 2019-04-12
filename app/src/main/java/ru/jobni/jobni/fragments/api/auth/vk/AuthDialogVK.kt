@@ -99,12 +99,14 @@ class AuthDialogVK(private val _context: Context, val typeProvider: String, priv
 
             var rawCookieHeader: String? = null
             val parsedURL = URL(url)
-            // Полученный ответ от CookieManager примерно такой - sessionid=do9futqubj58c08tu96qvkz4le4x5wap
-            // Вырежим sessionid отдельно и получим - do9futqubj58c08tu96qvkz4le4x5wap
-            rawCookieHeader = cookieManager.getCookie(parsedURL.host) //.substringBefore(";").substringAfter("=")
+            rawCookieHeader = cookieManager.getCookie(parsedURL.host)
 
             if (rawCookieHeader == null)
                 return null
+
+            // Полученный ответ от CookieManager примерно такой - sessionid=do9futqubj58c08tu96qvkz4le4x5wap
+            // Вырежим sessionid отдельно и получим - do9futqubj58c08tu96qvkz4le4x5wap
+            rawCookieHeader.substringAfter("=")
 
             // Запишем полученный sessionid
             val editor = sPrefAuthUser.edit()
