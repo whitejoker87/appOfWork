@@ -5,16 +5,25 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.viewmodel.AuthViewModel
+import java.net.MalformedURLException
+import java.net.URL
 
 class AuthDialogVK(private val _context: Context, val typeProvider: String, private val listenerVK: AuthListenerVK) : Dialog(_context) {
+
+    // Данные при авторизации, читаем здесь для sessionID
+    private val authUserSessionID = "userSessionID"
+
+    var sPrefAuthUser = _context.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
     private val authViewModel: AuthViewModel by lazy {
         ViewModelProviders.of(_context as FragmentActivity).get(AuthViewModel::class.java)
@@ -59,6 +68,8 @@ class AuthDialogVK(private val _context: Context, val typeProvider: String, priv
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
+            getCookie(url)
+
             if (url.contains("?code=")) {
                 // Выделить code из ответа.
                 // Старая версия, нужно учитывать как его правильно вырезать из url
@@ -78,6 +89,29 @@ class AuthDialogVK(private val _context: Context, val typeProvider: String, priv
                 Log.e("code", "getting error fetching code")
                 dismiss()
             }
+        }
+
+        // Нужно получить sessionid после успешной авторизации
+        @Throws(MalformedURLException::class)
+        fun getCookie(url: String): String? {
+
+            val cookieManager = CookieManager.getInstance() ?: return null
+
+            var rawCookieHeader: String? = null
+            val parsedURL = URL(url)
+            // Полученный ответ от CookieManager примерно такой - sessionid=do9futqubj58c08tu96qvkz4le4x5wap
+            // Вырежим sessionid отдельно и получим - do9futqubj58c08tu96qvkz4le4x5wap
+            rawCookieHeader = cookieManager.getCookie(parsedURL.host) //.substringBefore(";").substringAfter("=")
+
+            if (rawCookieHeader == null)
+                return null
+
+            // Запишем полученный sessionid
+            val editor = sPrefAuthUser.edit()
+            editor?.putString(authUserSessionID, rawCookieHeader)
+            editor?.apply()
+
+            return rawCookieHeader
         }
     }
 }

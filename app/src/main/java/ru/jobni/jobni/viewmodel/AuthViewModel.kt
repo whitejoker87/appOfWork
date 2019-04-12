@@ -35,7 +35,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
 
 
-    // Данные при регистрации, читаем здесь для sessionID
+    // Данные при авторизации, читаем здесь для sessionID
     private val authUserSessionID = "userSessionID"
 
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
@@ -305,6 +305,24 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(@NonNull call: Call<AuthPhone>, @NonNull t: Throwable) {
                 Toast.makeText(context, "Error onAuthPhoneUserClick!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onGetSocialAccList() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val sessionID = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.getSocialAccList(sessionID)?.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.body() != null) {
+
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
             }
         })
     }
