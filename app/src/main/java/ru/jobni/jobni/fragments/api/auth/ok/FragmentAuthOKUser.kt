@@ -1,4 +1,4 @@
-package ru.jobni.jobni.fragments.api.auth.vk
+package ru.jobni.jobni.fragments.api.auth.ok
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.databinding.CAuthorizationUserVkBinding
+import ru.jobni.jobni.databinding.CAuthorizationUserOkBinding
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
-class FragmentAuthVKUser : Fragment() {
+class FragmentAuthOKUser : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
@@ -22,11 +22,11 @@ class FragmentAuthVKUser : Fragment() {
         ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
-    private lateinit var binding: CAuthorizationUserVkBinding
+    private lateinit var binding: CAuthorizationUserOkBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_vk, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.c_authorization_user_ok, container, false)
 
         binding.lifecycleOwner = this
 
@@ -38,21 +38,21 @@ class FragmentAuthVKUser : Fragment() {
 
         // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизован)
         // чтобы например выйти из авторизации для последующих тестов.
-        binding.btnUserVkLogin.setOnClickListener {
-            val authDialogVKLogin = AuthDialogVKLogin(context!!)
-            authDialogVKLogin.setCancelable(true)
-            authDialogVKLogin.show()
+        binding.btnOkLogin.setOnClickListener {
+            val authDialogOKLogin = AuthDialogOKLogin(context!!)
+            authDialogOKLogin.setCancelable(true)
+            authDialogOKLogin.show()
         }
 
         // Вызов окна авторизации
-        binding.btnUserVkAuth.setOnClickListener {
-            val authDialogVK = AuthDialogVK(context!!, object : AuthListenerVK {
+        binding.btnOkAuth.setOnClickListener{
+            val authDialogOK = AuthDialogOK(context!!, object : AuthListenerOK {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }
             })
-            authDialogVK.setCancelable(true)
-            authDialogVK.show()
+            authDialogOK.setCancelable(true)
+            authDialogOK.show()
         }
 
         return view

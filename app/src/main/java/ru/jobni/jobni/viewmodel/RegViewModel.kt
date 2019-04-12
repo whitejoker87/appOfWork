@@ -22,7 +22,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.R
-import ru.jobni.jobni.fragments.api.reg.SocialRegDialog
 import ru.jobni.jobni.model.network.auth.AuthDiscord
 import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.utils.Retrofit

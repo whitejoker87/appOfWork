@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -31,39 +30,44 @@ import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.api.auth.FragmentAuth
+import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUser
+import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUserLogged
+import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUser
+import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUserLogged
+import ru.jobni.jobni.fragments.api.auth.discord.AuthDialogDiscord
+import ru.jobni.jobni.fragments.api.auth.discord.AuthListenerDiscord
+import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUser
+import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUserLogged
+import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUser
+import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUserLogged
+import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUser
+import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUserLogged
+import ru.jobni.jobni.fragments.api.auth.instagram.AuthDialogInstagram
+import ru.jobni.jobni.fragments.api.auth.instagram.AuthListenerInstagram
+import ru.jobni.jobni.fragments.api.auth.instagram.FragmentAuthInstagramUser
+import ru.jobni.jobni.fragments.api.auth.instagram.FragmentAuthInstagramUserLogged
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUser
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLogged
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangeMail
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangePass
+import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUser
+import ru.jobni.jobni.fragments.api.auth.mailru.FragmentAuthMailruUser
+import ru.jobni.jobni.fragments.api.auth.mailru.FragmentAuthMailruUserLogged
+import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUser
+import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
-import ru.jobni.jobni.fragments.api.auth.vk.AuthenticationDialogVK
-import ru.jobni.jobni.fragments.api.auth.vk.AuthenticationListenerVK
+import ru.jobni.jobni.fragments.api.auth.telegram.FragmentAuthTelegramUser
+import ru.jobni.jobni.fragments.api.auth.telegram.FragmentAuthTelegramUserLogged
+import ru.jobni.jobni.fragments.api.auth.vk.AuthDialogVK
+import ru.jobni.jobni.fragments.api.auth.vk.AuthListenerVK
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
-import ru.jobni.jobni.fragments.api.discord.AuthenticationDialogDiscord
-import ru.jobni.jobni.fragments.api.discord.AuthenticationListenerDiscord
-import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUser
-import ru.jobni.jobni.fragments.api.discord.FragmentAuthDiscordUserLogged
-import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUser
-import ru.jobni.jobni.fragments.api.facebook.FragmentAuthFBUserLogged
-import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUser
-import ru.jobni.jobni.fragments.api.google.FragmentAuthGoogleUserLogged
-import ru.jobni.jobni.fragments.api.instagram.AuthenticationDialogInstagram
-import ru.jobni.jobni.fragments.api.instagram.AuthenticationListenerInstagram
-import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUser
-import ru.jobni.jobni.fragments.api.instagram.FragmentAuthInstagramUserLogged
-import ru.jobni.jobni.fragments.api.mailru.AuthenticationDialogMailru
-import ru.jobni.jobni.fragments.api.mailru.AuthenticationListenerMailru
-import ru.jobni.jobni.fragments.api.mailru.FragmentAuthMailruUser
-import ru.jobni.jobni.fragments.api.mailru.FragmentAuthMailruUserLogged
-import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUser
-import ru.jobni.jobni.fragments.api.ok.FragmentAuthOKUserLogged
+import ru.jobni.jobni.fragments.api.auth.win.FragmentAuthWinUser
+import ru.jobni.jobni.fragments.api.auth.win.FragmentAuthWinUserLogged
 import ru.jobni.jobni.fragments.api.reg.AttachPhotoBottomSheetDialogFragment
 import ru.jobni.jobni.fragments.api.reg.FragmentReg
 import ru.jobni.jobni.fragments.api.reg.SocialRegDialog
-import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUser
-import ru.jobni.jobni.fragments.api.telegram.FragmentAuthTelegramUserLogged
 import ru.jobni.jobni.fragments.menuleft.*
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOff
 import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
@@ -246,6 +250,8 @@ class MainActivity : AppCompatActivity() {
                 "AuthMailruUserLogged" -> setFragment(FragmentAuthMailruUserLogged())
                 "AuthTelegramUser" -> setFragment(FragmentAuthTelegramUser())
                 "AuthTelegramUserLogged" -> setFragment(FragmentAuthTelegramUserLogged())
+                "AuthWinUser" -> setFragment(FragmentAuthWinUser())
+                "AuthWinUserLogged" -> setFragment(FragmentAuthWinUserLogged())
                 "RegUserMail" -> regViewModel.setTypeAddRegFragment("mail")
                 "RegUserPhone" -> regViewModel.setTypeAddRegFragment("phone")
                 "RegVK" -> regViewModel.setTypeAddRegFragment("soc")
