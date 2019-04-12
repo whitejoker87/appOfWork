@@ -296,59 +296,19 @@ class MainActivity : AppCompatActivity() {
 
         regViewModel.getSocialRegStart().observe(this, Observer {
             if (it) {
-                when (viewModelMain.getSocialLaunch().value) {
-                    "RegVK" -> //VK.login(this, arrayListOf())
-                    {
-                        val authenticationDialogVK = AuthenticationDialogVK(this, object : AuthenticationListenerVK {
-                            override fun onTokenReceived(code: String) {
-                                //Делаем с кодом что нибудь
-                            }
-                        })
-                        authenticationDialogVK.setCancelable(true)
-                        authenticationDialogVK.show()
-                    }
-                    "RegOK" -> Odnoklassniki.createInstance(this, APP_ID, APP_KEY)
-                        .requestAuthorization(this, REDIRECT_URL, OkAuthType.ANY, OkScope.VALUABLE_ACCESS)
-                    /*Ответ не обрабатывается*/
-                    "RegInst" -> {
-                        val authenticationDialogInstagram =
-                            AuthenticationDialogInstagram(this, object : AuthenticationListenerInstagram {
-                                override fun onTokenReceived(code: String) {
-                                    //Делаем с кодом что нибудь
-                                }
-                            })
-                        authenticationDialogInstagram.setCancelable(true)
-                        authenticationDialogInstagram.show()
-                    }
-//                    "RegTel" -> regViewModel.setBtnUserLogged("tel")
-//                    "RegGoogle" -> regViewModel.setBtnUserLogged("google")
-                    "RegFB" -> {//готов для webview
-                        val dialog = SocialRegDialog(this, "RegFB")
-                        dialog.setCancelable(true)
-                        dialog.show()
-                    }
-//                    "RegMailRu" -> {
-//                        val authenticationDialogMailru =
-//                            AuthenticationDialogMailru(this, object : AuthenticationListenerMailru {
-//                                override fun onTokenReceived(accessToken: String, vid: String) {
-//                                    regViewModel.sendSocialData(vid, "mailru", accessToken)
-//                                }
-//                            })
-//                        authenticationDialogMailru.setCancelable(true)
-//                        authenticationDialogMailru.show()
-//                    }
-                    "RegDiscord" -> {
-                        val authenticationDialogDiscord =
-                            AuthenticationDialogDiscord(this, object : AuthenticationListenerDiscord {
-                                override fun onTokenReceived(code: String) {
-                                    regViewModel.convertDiscordCode(code)
-                                }
-                            })
-                        authenticationDialogDiscord.setCancelable(true)
-                        authenticationDialogDiscord.show()
-                    }
-//                    "RegMic" -> regViewModel.setBtnUserLogged("mic")
-                }
+                makeSocialRegDialog(viewModelMain.getSocialLaunch().value!!)
+//                when (viewModelMain.getSocialLaunch().value) {
+//                    "RegVK" -> { }//VK.login(this, arrayListOf())
+//                    "RegOK" -> { }/*Odnoklassniki.createInstance(this, APP_ID, APP_KEY)
+//                        .requestAuthorization(this, REDIRECT_URL, OkAuthType.ANY, OkScope.VALUABLE_ACCESS)*/
+//                    "RegInst" -> { }
+////                    "RegTel" -> regViewModel.setBtnUserLogged("tel")
+//                    "RegGoogle" -> {}
+//                    "RegFB" -> { }
+//                    "RegMailRu" -> { }
+//                    "RegDiscord" -> { }
+////                    "RegMic" -> regViewModel.setBtnUserLogged("mic")
+//                }
             }
         })
 
@@ -580,6 +540,12 @@ class MainActivity : AppCompatActivity() {
     fun photoDialogBottomSheetEnable() {
         val bottomSheetDialogFragment = AttachPhotoBottomSheetDialogFragment()
         bottomSheetDialogFragment.show(supportFragmentManager, bottomSheetDialogFragment.tag)
+    }
+
+    fun makeSocialRegDialog(typeReg: String) {
+        val dialog = SocialRegDialog(this, typeReg)
+        dialog.setCancelable(true)
+        dialog.show()
     }
 
 //    private fun openRightMenu() {

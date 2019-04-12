@@ -14,14 +14,20 @@ import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.viewmodel.RegViewModel
 
+
 class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(contextIn) {
 
     private val regViewModel: RegViewModel by lazy {
-        ViewModelProviders.of(context as FragmentActivity).get(RegViewModel::class.java)
+        ViewModelProviders.of(contextIn as FragmentActivity).get(RegViewModel::class.java)
     }
+
+//    private lateinit var binding: RegDialogBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //binding = RegDialogBinding.inflate(LayoutInflater.from(context))
+        //setContentView(binding.root)
+
         this.setContentView(R.layout.reg_dialog)
 
         regViewModel.getSocialReg(typeReg)
@@ -33,9 +39,11 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initializeWebView(url: String) {
-        val webView = findViewById<WebView>(R.id.web_view_mailru)
+        val webView = findViewById<WebView>(R.id.web_view_social_reg)
+        //val webView = binding.webViewSocialReg
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
+        webView.settings
         webView.loadUrl(url)
         webView.webViewClient = SocRegWebViewClient
     }
@@ -56,7 +64,7 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
-            if (url.contains("?code=")) {
+            if (url.contains("?code=") || url.contains("&code=")) {
                 // Выделить code из ответа.
                 // Старая версия, нужно учитывать как его правильно вырезать из url
                 //val code = url.substring(url.lastIndexOf("=") + 1)
