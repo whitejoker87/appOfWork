@@ -70,9 +70,9 @@
 			app:layout_constraintStart_toStartOf = "@+id/iv_background"
 			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
 			android:layout_marginTop = "16dp"
-			android:background = "@drawable/shape_badge"
+			android:background = "@drawable/shape_button"
 			android:text = "@string/btn_change_user_auth_text"
-			android:onClick = "@{() -> viewmodelauth.onAuthPhoneUserChangeClick()}"
+			android:onClick = "@{() -> viewmodelauth.onAuthUserChangeClick()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
