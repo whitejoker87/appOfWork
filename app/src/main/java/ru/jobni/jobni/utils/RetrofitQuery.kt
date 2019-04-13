@@ -48,7 +48,10 @@ interface RetrofitQuery {
     fun getDataSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
 
     @GET("api/accounts/socialaccounts/")
-    fun getSocialAccList(@Header("Cookie") sessionID: String): Call<ResponseBody>
+    fun getSocialAccList(@Header("Cookie") sessionID: String): Call<AuthSocial>
+
+    @DELETE("api/accounts/disconnect/{id}/")
+    fun deleteSocialAcc(@Header("Cookie") sessionID: String, @Path("id") socialID: Int): Call<AuthSocial>
 
     @POST("api/registration/photo/")
     fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseBody>
