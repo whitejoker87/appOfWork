@@ -15,6 +15,8 @@ import ru.jobni.jobni.R
 import ru.jobni.jobni.viewmodel.RegViewModel
 
 
+
+
 class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(contextIn) {
 
     private val regViewModel: RegViewModel by lazy {
@@ -28,7 +30,7 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
         //binding = RegDialogBinding.inflate(LayoutInflater.from(context))
         //setContentView(binding.root)
 
-        this.setContentView(R.layout.reg_dialog)
+        this.setContentView(ru.jobni.jobni.R.layout.reg_dialog)
 
         regViewModel.getSocialReg(typeReg)
 
@@ -39,11 +41,15 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initializeWebView(url: String) {
-        val webView = findViewById<WebView>(R.id.web_view_social_reg)
+        val webView = findViewById<WebView>(ru.jobni.jobni.R.id.web_view_social_reg)
         //val webView = binding.webViewSocialReg
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
-        webView.settings
+        webView.settings.useWideViewPort = true
+        webView.settings.loadWithOverviewMode = true
+//        webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY)
+//        webView.setScrollbarFadingEnabled(false)
+        webView.setInitialScale(50)
         webView.loadUrl(url)
         webView.webViewClient = SocRegWebViewClient
     }
@@ -63,6 +69,10 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
 
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
+
+//            view.loadUrl("javascript:(function(){var m=document.createElement('META');" +
+//                    " m.name='viewport'; m.content='width=device-width, user-scalable=yes';" +
+//                    " document.body.appendChild(m);})()")
 
             if (url.contains("?code=") || url.contains("&code=")) {
                 // Выделить code из ответа.

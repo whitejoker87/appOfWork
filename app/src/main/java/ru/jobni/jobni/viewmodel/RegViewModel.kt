@@ -909,15 +909,15 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
         val provider: String
         when (typeReg) {
-//            "RegVK" -> provider = "vk"
-//            "RegOK" -> provider = "odnoklassniki"
-//            "RegInst" -> provider = "instagram"
-//            "RegTel" -> provider = "telegram"
-//            "RegGoogle" -> provider = "google"
+            "RegVK" -> provider = "vk"
+            "RegOK" -> provider = "odnoklassniki"
+            "RegInst" -> provider = "instagram"
+            "RegTel" -> provider = "telegram"
+            "RegGoogle" -> provider = "google"
             "RegFB" -> provider = "facebook"
-//            "RegMailRu" -> provider = "mailru"
-//            "RegDiscord" -> provider = "discord"
-//            "RegMic" -> provider = "microsoft"
+            "RegMailRu" -> provider = "mailru"
+            "RegDiscord" -> provider = "discord"
+            "RegMic" -> provider = "microsoft"
             else -> provider = ""
         }
 

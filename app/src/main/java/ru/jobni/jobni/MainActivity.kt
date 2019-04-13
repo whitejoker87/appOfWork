@@ -38,10 +38,6 @@ import ru.jobni.jobni.fragments.api.auth.discord.AuthDialogDiscord
 import ru.jobni.jobni.fragments.api.auth.discord.AuthListenerDiscord
 import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUser
 import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUserLogged
-import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUser
-import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUserLogged
-import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUser
-import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUserLogged
 import ru.jobni.jobni.fragments.api.auth.instagram.AuthDialogInstagram
 import ru.jobni.jobni.fragments.api.auth.instagram.AuthListenerInstagram
 import ru.jobni.jobni.fragments.api.auth.instagram.FragmentAuthInstagramUser
@@ -53,7 +49,6 @@ import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangePa
 import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.auth.mailru.FragmentAuthMailruUser
 import ru.jobni.jobni.fragments.api.auth.mailru.FragmentAuthMailruUserLogged
-import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
@@ -455,27 +450,27 @@ class MainActivity : AppCompatActivity() {
 
         else if (resultCode == RESULT_OK) {
 
-            /* VK callback block */
-            val callback = object : VKAuthCallback {
-                override fun onLogin(token: VKAccessToken) {
-
-                    val accessToken = token.accessToken
-
-                    val userLogin = token.userId
-
-                    if (viewModelMain.getSocialLaunch().value.equals("RegSocial")) {
-                        regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
-                    } else if (viewModelAuth.isVkAuthStart().value == true) {
-                        viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
-                    }
-                }
-
-                override fun onLoginFailed(errorCode: Int) {}
-
-            }
-            if (!VK.onActivityResult(requestCode, resultCode, data, callback)) {
-                super.onActivityResult(requestCode, resultCode, data)
-            }
+//            /* VK callback block */
+//            val callback = object : VKAuthCallback {
+//                override fun onLogin(token: VKAccessToken) {
+//
+//                    val accessToken = token.accessToken
+//
+//                    val userLogin = token.userId
+//
+//                    if (viewModelMain.getSocialLaunch().value.equals("RegSocial")) {
+//                        regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
+//                    } else if (viewModelAuth.isVkAuthStart().value == true) {
+//                        viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
+//                    }
+//                }
+//
+//                override fun onLoginFailed(errorCode: Int) {}
+//
+//            }
+//            if (!VK.onActivityResult(requestCode, resultCode, data, callback)) {
+//                super.onActivityResult(requestCode, resultCode, data)
+//            }
 
             //val uri: Uri? = null
             when (requestCode) {

@@ -14,9 +14,7 @@ import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import org.json.JSONObject
-import org.telegram.passport.PassportScope
-import org.telegram.passport.TelegramLoginButton
-import org.telegram.passport.TelegramPassport
+import org.telegram.passport.*
 import ru.jobni.jobni.R
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
@@ -139,12 +137,12 @@ class FragmentRegOneOther : Fragment() {
                     "P7d2+fuJMlkjtM7oAwf+tI8CAwEAAQ==\n" +
                     "-----END PUBLIC KEY-----"
             params.scope = PassportScope(
-//                PassportScopeElementOneOfSeveral(PassportScope.PASSPORT, PassportScope.IDENTITY_CARD).withSelfie(),
-//                PassportScopeElementOne(PassportScope.PERSONAL_DETAILS).withNativeNames(),
-//                PassportScope.DRIVER_LICENSE,
-//                PassportScope.ADDRESS,
-//                PassportScope.ADDRESS_DOCUMENT,
-//                PassportScope.PHONE_NUMBER
+                PassportScopeElementOneOfSeveral(PassportScope.PASSPORT, PassportScope.IDENTITY_CARD).withSelfie(),
+                PassportScopeElementOne(PassportScope.PERSONAL_DETAILS).withNativeNames(),
+                PassportScope.DRIVER_LICENSE,
+                PassportScope.ADDRESS,
+                PassportScope.ADDRESS_DOCUMENT,
+                PassportScope.PHONE_NUMBER
             )
             TelegramPassport.request(activity, params, 105)
         }
