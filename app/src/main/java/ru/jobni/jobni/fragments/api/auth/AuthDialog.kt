@@ -86,6 +86,10 @@ class AuthDialog(
                         authViewModel.setUserAuthid(true)
                         authViewModel.setBtnUserLogged("google")
                     }
+                    typeProvider.contains("facebook") -> {
+                        authViewModel.setUserAuthid(true)
+                        authViewModel.setBtnUserLogged("facebook")
+                    }
                 }
             }
         }

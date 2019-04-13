@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserFbBinding
+import ru.jobni.jobni.fragments.api.auth.AuthDialog
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
@@ -39,23 +40,11 @@ class FragmentAuthFBUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
-        // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизован)
-        // чтобы например выйти из авторизации для последующих тестов.
-        binding.btnUserFbLogin.setOnClickListener {
-            val authDialogFBLogin = AuthDialogFBLogin(context!!)
-            authDialogFBLogin.setCancelable(true)
-            authDialogFBLogin.show()
-        }
-
         // Вызов окна авторизации
         binding.btnUserFbAuth.setOnClickListener {
-            val authDialogFB = AuthDialogFB(context!!, socialProvider, object : AuthListenerFB {
-                override fun onTokenReceived(code: String) {
-                    //Делаем с кодом что нибудь
-                }
-            })
-            authDialogFB.setCancelable(true)
-            authDialogFB.show()
+            val authDialog = AuthDialog(context!!, socialProvider)
+            authDialog.setCancelable(true)
+            authDialog.show()
         }
 
         return view
