@@ -61,12 +61,19 @@ class AuthDialog(
                 dismiss()
 
                 // Выставить авторизацию, как успешную
-                if (typeProvider.contains("instagram")){
-                    authViewModel.setUserAuthid(true)
-                    authViewModel.setBtnUserLogged("instagram")
-                } else if (typeProvider.contains("vk")){
-                    authViewModel.setUserAuthid(true)
-                    authViewModel.setBtnUserLogged("vk")
+                when {
+                    typeProvider.contains("instagram") -> {
+                        authViewModel.setUserAuthid(true)
+                        authViewModel.setBtnUserLogged("instagram")
+                    }
+                    typeProvider.contains("vk") -> {
+                        authViewModel.setUserAuthid(true)
+                        authViewModel.setBtnUserLogged("vk")
+                    }
+                    typeProvider.contains("microsoft") -> {
+                        authViewModel.setUserAuthid(true)
+                        authViewModel.setBtnUserLogged("microsoft")
+                    }
                 }
             }
         }
