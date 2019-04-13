@@ -47,14 +47,12 @@ interface RetrofitQuery {
     @POST("api/accounts/{type_social}/login/")
     fun getDataSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
 
-    @POST("api/accounts/{type_social}/login/?process=login")
-    fun getSocial(@Path("type_social") type_social: String): Call<ResponseBody>
-
     @GET("api/accounts/socialaccounts/")
     fun getSocialAccList(@Header("Cookie") sessionID: String): Call<ResponseBody>
 
     @POST("api/registration/photo/")
     fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseBody>
+
     /*заготовка для отправки картинки*/
 //    @Multipart
 //    @POST("api/registration/")

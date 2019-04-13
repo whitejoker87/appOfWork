@@ -182,8 +182,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    // Временный метод для разных авторизаций
     fun onAuthUserChangeClick(): Boolean {
+        val editor = sPrefUserAuth.edit()
+        editor?.remove(userAuthSessionID)
+        editor?.apply()
 
         setBtnUserLogged("")
         setUserAuthid(false)
@@ -204,22 +206,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-
-    fun onGetAuthSocial(provider: String) {
-
-        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
-                    val getUrl = response.raw().request().url().toString()
-                    setUrlWebViewSocial(getUrl)
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
 
     fun onAuthMailUserClick() {
 
