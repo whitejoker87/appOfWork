@@ -15,6 +15,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthInstagramUser : Fragment() {
 
+    private val socialProvider = "instagram"
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -47,7 +49,7 @@ class FragmentAuthInstagramUser : Fragment() {
 
         // Вызов окна авторизации
         binding.btnInstagramAuth.setOnClickListener {
-            val authDialogInstagram = AuthDialogInstagram(context!!, object : AuthListenerInstagram {
+            val authDialogInstagram = AuthDialogInstagram(context!!, socialProvider, object : AuthListenerInstagram {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }

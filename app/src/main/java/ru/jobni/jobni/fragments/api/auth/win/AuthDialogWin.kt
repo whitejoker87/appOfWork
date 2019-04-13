@@ -7,21 +7,28 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
-import ru.jobni.jobni.utils.Retrofit
+import ru.jobni.jobni.viewmodel.AuthViewModel
 
-class AuthDialogWin(context: Context, private val listener: AuthListenerWin) : Dialog(context) {
+class AuthDialogWin(private val _context: Context, val typeProvider: String, private val listener: AuthListenerWin) : Dialog(_context) {
+
+    private val authViewModel: AuthViewModel by lazy {
+        ViewModelProviders.of(_context as FragmentActivity).get(AuthViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.auth_dialog_social)
 
-        onGetAuthSocial()
+        authViewModel.onGetAuthSocial(typeProvider)
+
+        authViewModel.getUrlWebViewSocial().observe(_context as LifecycleOwner, Observer {
+            initializeWebView(it)
+        })
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -29,6 +36,9 @@ class AuthDialogWin(context: Context, private val listener: AuthListenerWin) : D
         val webView = findViewById<WebView>(R.id.web_view_social)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
+        webView.settings.useWideViewPort = true
+        webView.settings.loadWithOverviewMode = true
+        webView.setInitialScale(50)
         webView.loadUrl(url)
         webView.webViewClient = WinWebViewClient
     }
@@ -59,28 +69,14 @@ class AuthDialogWin(context: Context, private val listener: AuthListenerWin) : D
                 // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
                 dismiss()
 
+                // Выставить авторизацию, как успешную
+                authViewModel.setUserAuthid(true)
+                authViewModel.setBtnUserLogged("microsoft")
+
             } else if (url.contains("?error")) {
                 Log.e("code", "getting error fetching code")
                 dismiss()
             }
         }
-    }
-
-    fun onGetAuthSocial() {
-
-        val provider = "microsoft"
-
-        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
-                    val getUrl = response.raw().request().url().toString()
-                    initializeWebView(getUrl)
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }

@@ -15,6 +15,8 @@ import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentAuthFBUser : Fragment() {
 
+    private val socialProvider = "facebook"
+
     private val viewModel: MainViewModel by lazy {
         ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
     }
@@ -47,7 +49,7 @@ class FragmentAuthFBUser : Fragment() {
 
         // Вызов окна авторизации
         binding.btnUserFbAuth.setOnClickListener {
-            val authDialogFB = AuthDialogFB(context!!, object : AuthListenerFB {
+            val authDialogFB = AuthDialogFB(context!!, socialProvider, object : AuthListenerFB {
                 override fun onTokenReceived(code: String) {
                     //Делаем с кодом что нибудь
                 }

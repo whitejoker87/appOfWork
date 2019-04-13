@@ -23,6 +23,9 @@ class AuthDialogOKLogin(context: Context) : Dialog(context) {
         val webView = findViewById<WebView>(R.id.web_view_social_login)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
+        webView.settings.useWideViewPort = true
+        webView.settings.loadWithOverviewMode = true
+        webView.setInitialScale(50)
         webView.loadUrl(request_url)
         webView.webViewClient = OKWebViewClient
     }
