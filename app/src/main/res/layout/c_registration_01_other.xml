@@ -88,7 +88,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/shape_button"
                 android:text="@string/bind_account"
-                android:onClick="@{() -> viewmodelreg.setSocialRegStart(true)}"
+                android:onClick="@{() -> viewmodelreg.startRegistration()}"
                 android:visibility='@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")? View.GONE : View.VISIBLE)}'
         />
 

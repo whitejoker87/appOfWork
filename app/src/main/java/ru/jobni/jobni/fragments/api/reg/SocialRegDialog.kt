@@ -82,11 +82,11 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
                 // Передать листнеру для дальнейшей работы с ним если нужно
                 //listenerVK.onTokenReceived(code)
                 // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
-                dismiss()
+                //dismiss()
 
             } else if (url.contains("?error")) {
                 Log.e("code", "getting error fetching code")
-                dismiss()
+                //dismiss()
             }
         }
     }
