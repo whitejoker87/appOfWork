@@ -181,19 +181,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun onAuthMailUserChangeClick(): Boolean {
-        val editor = sPrefAuthMailUser.edit()
-        editor?.remove(authMailSessionID)
-        editor?.remove(authMailUser)
-        editor?.remove(authMailPass)
-        editor?.apply()
-
-        setBtnUserLogged("")
-        setUserAuthid(false)
-
-        return false
-    }
-
 
     fun onGetAuthSocial(provider: String) {
 
@@ -230,10 +217,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                        val editor = sPrefAuthMailUser.edit()
-                        editor?.putString(authMailSessionID, sessionID)
-                        editor?.putString(authMailUser, getAuthMail())
-                        editor?.putString(authMailPass, getAuthPass())
+                        val editor = sPrefUserAuth.edit()
+                        editor?.putString(userAuthSessionID, sessionID)
                         editor?.apply()
 
                         setUserAuthid(true)
