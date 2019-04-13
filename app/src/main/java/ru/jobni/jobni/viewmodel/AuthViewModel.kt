@@ -21,13 +21,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     val context = application
 
-    private val authMailSessionID = "userMailSessionID"
-    private val authMailUser = "userMail"
-    private val authMailPass = "userPass"
-
-    var sPrefAuthMailUser = application.getSharedPreferences("authMail", AppCompatActivity.MODE_PRIVATE)
-
-
     // Данные при авторизации, читаем здесь для sessionID
     private val userAuthSessionID = "userSessionID"
 
@@ -181,22 +174,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-
-    fun onGetAuthSocial(provider: String) {
-
-//        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
-//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//                if (response.body() != null) {
-//                    val getUrl = response.raw().request().url().toString()
-//                    setUrlWebViewSocial(getUrl)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-    }
 
     fun onAuthMailUserClick() {
 
