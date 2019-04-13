@@ -4,26 +4,29 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import java.net.MalformedURLException
 import java.net.URL
 
-class AuthDialogVK(private val _context: Context, val typeProvider: String, private val listenerVK: AuthListenerVK) : Dialog(_context) {
+class AuthDialogVK(
+        private val _context: Context,
+        private val typeProvider: String,
+        private val listenerVK: AuthListenerVK
+) : Dialog(_context) {
 
-    // Данные при авторизации, читаем здесь для sessionID
-    private val authUserSessionID = "userSessionID"
+    private val requestUrl =
+            String.format("%s%s%s", "https://dev.jobni.ru/api/accounts/", typeProvider, "/login/?process=login")
 
-    var sPrefAuthUser = _context.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
+    // Данные для авторизации
+    private val userAuthSessionID = "userSessionID"
+    var sPrefUserAuth = _context.getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
 
     private val authViewModel: AuthViewModel by lazy {
         ViewModelProviders.of(_context as FragmentActivity).get(AuthViewModel::class.java)
@@ -33,11 +36,7 @@ class AuthDialogVK(private val _context: Context, val typeProvider: String, priv
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.auth_dialog_social)
 
-        authViewModel.onGetAuthSocial(typeProvider)
-
-        authViewModel.getUrlWebViewSocial().observe(_context as LifecycleOwner, Observer {
-            initializeWebView(it)
-        })
+        initializeWebView(requestUrl)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -47,7 +46,7 @@ class AuthDialogVK(private val _context: Context, val typeProvider: String, priv
         webView.settings.domStorageEnabled = true
         webView.settings.useWideViewPort = true
         webView.settings.loadWithOverviewMode = true
-        webView.setInitialScale(50)
+        webView.setInitialScale(80)
         webView.loadUrl(url)
         webView.webViewClient = VKWebViewClient
     }
@@ -58,7 +57,7 @@ class AuthDialogVK(private val _context: Context, val typeProvider: String, priv
             // Здесь можно разместить блок кода
             // с проверкой при переходе на указаный адрес, что то делать
             // Например закрывать окно WebView
-            /*if (url.startsWith(request_url)) {
+            /*if (url.startsWith(requestUrl)) {
                 dismiss()
                 return true
             }*/
@@ -68,52 +67,42 @@ class AuthDialogVK(private val _context: Context, val typeProvider: String, priv
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
+            // Нужно получить sessionid после успешной авторизации
             getCookie(url)
 
-            if (url.contains("?code=")) {
-                // Выделить code из ответа.
-                // Старая версия, нужно учитывать как его правильно вырезать из url
-                //val code = url.substring(url.lastIndexOf("=") + 1)
-
-                // Передать листнеру для дальнейшей работы с ним если нужно
-                //listenerVK.onTokenReceived(code)
-                // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
+            if (url.contains(_context.getString(R.string.jobni_callback_url_for_social_network))) {
+                // Закрыть окно если строка содержит адрес callback
                 dismiss()
 
                 // Выставить авторизацию, как успешную
                 authViewModel.setUserAuthid(true)
                 authViewModel.setBtnUserLogged("vk")
-
-
-            } else if (url.contains("?error")) {
-                Log.e("code", "getting error fetching code")
-                dismiss()
             }
         }
+    }
 
-        // Нужно получить sessionid после успешной авторизации
-        @Throws(MalformedURLException::class)
-        fun getCookie(url: String): String? {
+    @Throws(MalformedURLException::class)
+    fun getCookie(url: String): String? {
 
-            val cookieManager = CookieManager.getInstance() ?: return null
+        val cookieManager = CookieManager.getInstance() ?: return null
 
-            var rawCookieHeader: String? = null
-            val parsedURL = URL(url)
-            rawCookieHeader = cookieManager.getCookie(parsedURL.host)
+        var rawCookieHeader: String? = null
+        var sessionID: String? = null
+        val parsedURL = URL(url)
+        rawCookieHeader = cookieManager.getCookie(parsedURL.host)
 
-            if (rawCookieHeader == null)
-                return null
+        if (rawCookieHeader == null)
+            return null
 
-            // Полученный ответ от CookieManager примерно такой - sessionid=do9futqubj58c08tu96qvkz4le4x5wap
-            // Вырежим sessionid отдельно и получим - do9futqubj58c08tu96qvkz4le4x5wap
-            rawCookieHeader.substringAfter("=")
+        // Полученный ответ от CookieManager.
+        // Вырежим sessionid и получим примерно - do9futqubj58c08tu96qvkz4le4x5wap
+        sessionID = rawCookieHeader.substringAfter(";").substringAfter("=")
 
-            // Запишем полученный sessionid
-            val editor = sPrefAuthUser.edit()
-            editor?.putString(authUserSessionID, rawCookieHeader)
-            editor?.apply()
+        // Запишем полученный sessionid
+        val editor = sPrefUserAuth.edit()
+        editor?.putString(userAuthSessionID, sessionID)
+        editor?.apply()
 
-            return rawCookieHeader
-        }
+        return rawCookieHeader
     }
 }

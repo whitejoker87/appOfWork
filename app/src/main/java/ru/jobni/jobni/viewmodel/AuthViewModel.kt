@@ -35,6 +35,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
 
 
+    private val userAuthSessionID = "userSessionID"
+
+    var sPrefUserAuth = application.getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
+
+
     // Данные при авторизации, читаем здесь для sessionID
     private val authUserSessionID = "userSessionID"
 
@@ -311,7 +316,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onGetSocialAccList() {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val id = sPrefUserAuth.getString(userAuthSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
         Retrofit.api?.getSocialAccList(sessionID)?.enqueue(object : Callback<ResponseBody> {
