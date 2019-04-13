@@ -207,6 +207,22 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    fun onGetAuthSocial(provider: String) {
+
+//        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
+//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                if (response.body() != null) {
+//                    val getUrl = response.raw().request().url().toString()
+//                    setUrlWebViewSocial(getUrl)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+    }
+
     fun onAuthMailUserClick() {
 
         val userData = UserMailAuth(getAuthMail(), getAuthPass())

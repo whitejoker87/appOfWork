@@ -42,9 +42,9 @@ class FragmentAuthInstagramUser : Fragment() {
 
         // Вызов окна авторизации
         binding.btnInstagramAuth.setOnClickListener {
-            val authDialogInstagram = AuthDialog(context!!, socialProvider)
-            authDialogInstagram.setCancelable(true)
-            authDialogInstagram.show()
+            val authDialog = AuthDialog(context!!, socialProvider)
+            authDialog.setCancelable(true)
+            authDialog.show()
         }
 
         return view
