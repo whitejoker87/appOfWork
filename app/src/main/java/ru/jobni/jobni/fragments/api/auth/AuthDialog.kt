@@ -90,6 +90,10 @@ class AuthDialog(
                         authViewModel.setUserAuthid(true)
                         authViewModel.setBtnUserLogged("facebook")
                     }
+                    typeProvider.contains("discord") -> {
+                        authViewModel.setUserAuthid(true)
+                        authViewModel.setBtnUserLogged("discord")
+                    }
                 }
             }
         }
