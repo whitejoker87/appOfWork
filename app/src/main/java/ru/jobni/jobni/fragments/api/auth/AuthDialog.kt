@@ -74,6 +74,10 @@ class AuthDialog(
                         authViewModel.setUserAuthid(true)
                         authViewModel.setBtnUserLogged("microsoft")
                     }
+                    typeProvider.contains("odnoklassniki") -> {
+                        authViewModel.setUserAuthid(true)
+                        authViewModel.setBtnUserLogged("odnoklassniki")
+                    }
                 }
             }
         }
