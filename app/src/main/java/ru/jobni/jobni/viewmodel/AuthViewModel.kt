@@ -28,22 +28,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     var sPrefAuthMailUser = application.getSharedPreferences("authMail", AppCompatActivity.MODE_PRIVATE)
 
 
-    private val authPhoneSessionID = "userPhoneSessionID"
-    private val authPhoneUser = "userPhone"
-    private val authPhoneUserPassword = "userPhonePassword"
-
-    var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
-
-
+    // Данные при авторизации, читаем здесь для sessionID
     private val userAuthSessionID = "userSessionID"
 
     var sPrefUserAuth = application.getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
-
-
-    // Данные при авторизации, читаем здесь для sessionID
-    private val authUserSessionID = "userSessionID"
-
-    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
 
 
     /*общие значения при логине пользователя*/
@@ -263,19 +251,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    fun onAuthPhoneUserChangeClick(): Boolean {
-        val editor = sPrefAuthPhoneUser.edit()
-        editor?.remove(authPhoneSessionID)
-        editor?.remove(authPhoneUser)
-        editor?.remove(authPhoneUserPassword)
-        editor?.apply()
-
-        setBtnUserLogged("")
-        setUserAuthid(false)
-
-        return false
-    }
-
     fun onAuthPhoneUserClick() {
 
         val userData = UserPhoneAuth(getAuthPhone(), getAuthPhonePassword())
@@ -295,10 +270,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                        val editor = sPrefAuthPhoneUser.edit()
-                        editor?.putString(authPhoneSessionID, sessionID)
-                        editor?.putString(authPhoneUser, getAuthPhone())
-                        editor?.putString(authPhoneUserPassword, getAuthPhonePassword())
+                        val editor = sPrefUserAuth.edit()
+                        editor?.putString(userAuthSessionID, sessionID)
                         editor?.apply()
 
                         setUserAuthid(true)
