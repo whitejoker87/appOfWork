@@ -82,6 +82,10 @@ class AuthDialog(
                         authViewModel.setUserAuthid(true)
                         authViewModel.setBtnUserLogged("mailru")
                     }
+                    typeProvider.contains("google") -> {
+                        authViewModel.setUserAuthid(true)
+                        authViewModel.setBtnUserLogged("google")
+                    }
                 }
             }
         }

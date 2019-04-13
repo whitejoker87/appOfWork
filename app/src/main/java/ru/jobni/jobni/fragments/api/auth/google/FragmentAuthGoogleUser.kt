@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserGoogleBinding
+import ru.jobni.jobni.fragments.api.auth.AuthDialog
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
@@ -39,23 +40,11 @@ class FragmentAuthGoogleUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
-        // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизован)
-        // чтобы например выйти из авторизации для последующих тестов.
-        binding.btnUserGoogleLogin.setOnClickListener {
-            val authDialogGoogleLogin = AuthDialogGoogleLogin(context!!)
-            authDialogGoogleLogin.setCancelable(true)
-            authDialogGoogleLogin.show()
-        }
-
         // Вызов окна авторизации
         binding.btnUserGoogleAuth.setOnClickListener {
-            val authDialogGoogle = AuthDialogGoogle(context!!, socialProvider, object : AuthListenerGoogle {
-                override fun onTokenReceived(code: String) {
-                    //Делаем с кодом что нибудь
-                }
-            })
-            authDialogGoogle.setCancelable(true)
-            authDialogGoogle.show()
+            val authDialog = AuthDialog(context!!, socialProvider)
+            authDialog.setCancelable(true)
+            authDialog.show()
         }
 
         return view
