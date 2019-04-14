@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -95,6 +96,9 @@ class AuthDialog(
                         authViewModel.setBtnUserLogged("discord")
                     }
                 }
+            }
+            else if (url.contains("?errors=")){
+                Log.e("?errors=", "getting error fetching auth")
             }
         }
     }

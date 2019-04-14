@@ -279,6 +279,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                         if (response.body()!!.results.isNotEmpty()) {
                             val uid = response.body()!!.results[0].id
                             onDeleteSocialAcc(uid)
+                        } else {
+                            Toast.makeText(context, "response.body()!!.results isEmpty", Toast.LENGTH_LONG).show()
                         }
 
                     } else if (!(response.body()!!.success)) {
