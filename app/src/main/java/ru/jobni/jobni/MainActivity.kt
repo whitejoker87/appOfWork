@@ -318,7 +318,7 @@ class MainActivity : AppCompatActivity() {
                 when (viewModelMain.getSocialLaunch().value) {
                     "RegUserMail" -> regViewModel.postBindEmail()
                     "RegUserPhone" -> regViewModel.postBindPhone()
-                    else -> regViewModel.setSocialRegStart(true)//переделать на конкретные значения
+                    else -> regViewModel.setSocialRegStart(true)//todo: переделать на конкретные значения
                 }
             }
         })

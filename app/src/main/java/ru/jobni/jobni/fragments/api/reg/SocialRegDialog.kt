@@ -82,6 +82,7 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
                 // Передать листнеру для дальнейшей работы с ним если нужно
                 //listenerVK.onTokenReceived(code)
                 // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
+                if (!regViewModel.getResultReg2Success().value!!) regViewModel.postPassword()//работает только для первой реги
                 //dismiss()
 
             } else if (url.contains("?error")) {

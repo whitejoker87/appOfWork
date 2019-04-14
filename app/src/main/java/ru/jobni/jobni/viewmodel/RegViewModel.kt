@@ -336,32 +336,6 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun sendSocialData(userLogin: String, provider: String, accessToken: String) {
-
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
-
-        val contactFace = RegSocial(
-            userLogin,
-            provider,
-            accessToken
-        )
-
-        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseRegUser> {
-            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
-                if (response.body() != null) {
-                    if (response.body()!!.success)
-                    else Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-
     /*для выполнения 1 этапа регистрации(пустой запрос для старта)*/
     fun startRegistration() {
 
@@ -486,6 +460,33 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
                 if (!getResultReg2Success().value!!) setResultReg1Success(false)
+            }
+        })
+    }
+
+
+    /*Для первого этапа регистрации для соцсетей*/
+    fun sendSocialData(userLogin: String, provider: String, accessToken: String) {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val contactFace = RegSocial(
+            userLogin,
+            provider,
+            accessToken
+        )
+
+        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseRegUser> {
+            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
+                if (response.body() != null) {
+                    if (response.body()!!.success)
+                    else Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -630,7 +631,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     "surname":["Это поле не может быть пустым."],
                     "middlename":["Это поле не может быть пустым."]}}*/
                     if (response.body()!!.success) {
-                        setResultReg2Success(response.body()!!.success)
+//                        setResultReg2Success(response.body()!!.success)
                         Toast.makeText(context, "Успешно добавлено контактное лицо!", Toast.LENGTH_LONG).show()
                     } else Toast.makeText(context, "Безуспешно не добавлено контактное лицо", Toast.LENGTH_LONG).show()
                 }
