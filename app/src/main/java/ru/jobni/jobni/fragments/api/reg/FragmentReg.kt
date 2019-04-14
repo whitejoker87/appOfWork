@@ -52,6 +52,12 @@ class FragmentReg : Fragment() {
             adapter.typeReg = it
         })
 
+//        regViewModel.getResultReg2Success().observe(this, Observer {
+//            if (it) {
+//                adapter.showNextPhase(1)
+//            }
+//        })
+
         return view
     }
 

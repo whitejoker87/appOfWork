@@ -323,17 +323,29 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /*other methods*/
-    fun regOrBindMail() {
+    /*При привязке первой учетной записи получаем sessionid и пароль последующие нет*/
+    fun regOrBind(type: String) {
         if (getResultReg2Success().value!!) { //если пароль уже выдали и пройдена регистрация на 1 основной контакт
-            postBindEmail()
+            when(type) {
+                "mail" -> postBindEmail()
+                "phone" -> postBindPhone()
+                "soc" -> setSocialRegStart(true)
+            }
+
         } else startRegistration()
     }
 
-    fun regOrBindPhone() {
-        if (getResultReg2Success().value!!) { //если пароль уже выдали и пройдена регистрация на 1 основной контакт
-            postBindPhone()
-        } else startRegistration()
-    }
+//    fun regOrBindPhone() {
+//        if (getResultReg2Success().value!!) { //если пароль уже выдали и пройдена регистрация на 1 основной контакт
+//            postBindPhone()
+//        } else startRegistration()
+//    }
+//
+//    fun regOrBindSoc() {
+//        if (getResultReg2Success().value!!) { //если пароль уже выдали и пройдена регистрация на 1 основной контакт
+//            setSocialRegStart(true)
+//        } else startRegistration()
+//    }
 
 
     /*для выполнения 1 этапа регистрации(пустой запрос для старта)*/
@@ -922,18 +934,21 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             else -> provider = ""
         }
 
-        Retrofit.api?.getDataSocialReg(cid, provider, process)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
-                    val getUrl = response.raw().request().url().toString()
-                    setUrlWebViewSocial(getUrl)
-                }
-            }
+        val requestUrl = "https://dev.jobni.ru/api/accounts/${provider}/login/?process=${process}"
+        setUrlWebViewSocial(requestUrl)
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-            }
-        })
+//        Retrofit.api?.getDataSocialReg(cid, provider, process)?.enqueue(object : Callback<ResponseBody> {
+//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                if (response.body() != null) {
+//                    val getUrl = response.raw().request().url().toString()
+//                    setUrlWebViewSocial(getUrl)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+//            }
+//        })
     }
 
     /*открываем камеру для фото*/
