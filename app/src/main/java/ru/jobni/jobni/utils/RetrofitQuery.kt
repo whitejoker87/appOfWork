@@ -7,6 +7,7 @@ import retrofit2.http.*
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
 import ru.jobni.jobni.model.network.auth.*
+import ru.jobni.jobni.model.network.company.CompanyBalance
 import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.company.CompanyVacancyList
 import ru.jobni.jobni.model.network.registration.*
@@ -138,16 +139,15 @@ interface RetrofitQuery {
     @GET("api/vacancy/{id}/details/")
     fun loadVacancyCard(@Path("id") id: Int, @Query("detail") detail: Int): Call<CardVacancyDetail>
 
-    @GET("api/company/{id}/get_short_representation_of_vacancies/")
-    fun ownerOrWorkerCompanyVacancy(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<ArrayList<CompanyVacancyList>>
+    @GET("api/employer/companies/{id}/vacancies/")
+    fun ownerOrWorkerCompanyVacancy(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<CompanyVacancyList>
 
     /*API company*/
-    @GET("api/company/get_short_representation_of_companies/")
-    fun ownerOrWorker(@Header("Cookie") sessionID: String): Call<ArrayList<CompanyList>>
+    @GET("api/employer/companies/my_companies/")
+    fun ownerOrWorker(@Header("Cookie") sessionID: String): Call<CompanyList>
 
-    @GET("api/company/{id}/balance/")
-    fun ownerOrWorkerBalance(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<Int>
-
+    @GET("api/employer/companies/{id}/balance/")
+    fun ownerOrWorkerBalance(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<CompanyBalance>
 }
 
 
