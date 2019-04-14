@@ -55,6 +55,12 @@ interface RetrofitQuery {
 //    @POST("api/registration/")
 //    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
+    @GET("api/accounts/socialaccounts/")
+    fun getSocialAccList(@Header("Cookie") sessionID: String): Call<AuthSocial>
+
+    @DELETE("api/accounts/disconnect/{id}/")
+    fun deleteSocialAcc(@Header("Cookie") sessionID: String, @Path("id") socialID: Int): Call<AuthSocial>
+
     /*API VK*/
     @POST("api/registration/social_account/")
     fun postSocialReg(@Header("Cookie") sessionID: String, @Body socAccount: RegSocial): Call<ResponseRegUser>
