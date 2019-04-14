@@ -23,39 +23,31 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.vk.api.sdk.VK
-import com.vk.api.sdk.auth.VKAccessToken
-import com.vk.api.sdk.auth.VKAuthCallback
 import kotlinx.android.synthetic.main.nav_left.*
 import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.databinding.ActivityMainBinding
 import ru.jobni.jobni.fragments.*
 import ru.jobni.jobni.fragments.api.auth.FragmentAuth
+import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUser
+import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUserLogged
 import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUser
 import ru.jobni.jobni.fragments.api.auth.facebook.FragmentAuthFBUserLogged
 import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUser
 import ru.jobni.jobni.fragments.api.auth.google.FragmentAuthGoogleUserLogged
-import ru.jobni.jobni.fragments.api.auth.discord.AuthDialogDiscord
-import ru.jobni.jobni.fragments.api.auth.discord.AuthListenerDiscord
-import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUser
-import ru.jobni.jobni.fragments.api.auth.discord.FragmentAuthDiscordUserLogged
-import ru.jobni.jobni.fragments.api.auth.instagram.AuthDialogInstagram
-import ru.jobni.jobni.fragments.api.auth.instagram.AuthListenerInstagram
 import ru.jobni.jobni.fragments.api.auth.instagram.FragmentAuthInstagramUser
 import ru.jobni.jobni.fragments.api.auth.instagram.FragmentAuthInstagramUserLogged
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUser
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLogged
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangeMail
 import ru.jobni.jobni.fragments.api.auth.mail.FragmentAuthMailUserLoggedChangePass
-import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.auth.mailru.FragmentAuthMailruUser
 import ru.jobni.jobni.fragments.api.auth.mailru.FragmentAuthMailruUserLogged
+import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUser
 import ru.jobni.jobni.fragments.api.auth.ok.FragmentAuthOKUserLogged
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUser
 import ru.jobni.jobni.fragments.api.auth.phone.FragmentAuthPhoneUserLogged
 import ru.jobni.jobni.fragments.api.auth.telegram.FragmentAuthTelegramUser
 import ru.jobni.jobni.fragments.api.auth.telegram.FragmentAuthTelegramUserLogged
-import ru.jobni.jobni.fragments.api.auth.vk.AuthDialogVK
-import ru.jobni.jobni.fragments.api.auth.vk.AuthListenerVK
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUser
 import ru.jobni.jobni.fragments.api.auth.vk.FragmentAuthVKUserLogged
 import ru.jobni.jobni.fragments.api.auth.win.FragmentAuthWinUser
@@ -69,9 +61,6 @@ import ru.jobni.jobni.utils.menuleft.NavPALeftAuthOn
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
-import ru.ok.android.sdk.Odnoklassniki
-import ru.ok.android.sdk.util.OkAuthType
-import ru.ok.android.sdk.util.OkScope
 
 class MainActivity : AppCompatActivity() {
 

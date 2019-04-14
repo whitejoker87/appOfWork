@@ -6,7 +6,6 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,6 +13,7 @@ import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
 import ru.jobni.jobni.model.network.auth.AuthMail
 import ru.jobni.jobni.model.network.auth.AuthPhone
+import ru.jobni.jobni.model.network.auth.AuthSocial
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -21,25 +21,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     val context = application
 
-    private val authMailSessionID = "userMailSessionID"
-    private val authMailUser = "userMail"
-    private val authMailPass = "userPass"
-
-    var sPrefAuthMailUser = application.getSharedPreferences("authMail", AppCompatActivity.MODE_PRIVATE)
-
-
-    private val authPhoneSessionID = "userPhoneSessionID"
-    private val authPhoneUser = "userPhone"
-    private val authPhoneUserPassword = "userPhonePassword"
-
-    var sPrefAuthPhoneUser = application.getSharedPreferences("authPhone", AppCompatActivity.MODE_PRIVATE)
-
-
     // Данные при авторизации, читаем здесь для sessionID
-    private val authUserSessionID = "userSessionID"
+    private val userAuthSessionID = "userSessionID"
 
-    var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
-
+    var sPrefUserAuth = application.getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
 
     /*общие значения при логине пользователя*/
     // Цвет кнопки
@@ -177,21 +162,23 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    // Временный метод для разных авторизаций
+    private val socialAccDeleted = MutableLiveData<Boolean>()
+
+    fun isSocialAccDeleted(): MutableLiveData<Boolean> = socialAccDeleted
+
+    fun setSocialAccDeleted(isStart: Boolean) {
+        socialAccDeleted.value = isStart
+    }
+
     fun onAuthUserChangeClick(): Boolean {
 
-        setBtnUserLogged("")
-        setUserAuthid(false)
+        onGetSocialAccList()
 
-        return false
-    }
-
-    fun onAuthMailUserChangeClick(): Boolean {
-        val editor = sPrefAuthMailUser.edit()
-        editor?.remove(authMailSessionID)
-        editor?.remove(authMailUser)
-        editor?.remove(authMailPass)
-        editor?.apply()
+        if (socialAccDeleted.value == true) {
+            val editor = sPrefUserAuth.edit()
+            editor?.remove(userAuthSessionID)
+            editor?.apply()
+        }
 
         setBtnUserLogged("")
         setUserAuthid(false)
@@ -199,22 +186,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return false
     }
 
-
-    fun onGetAuthSocial(provider: String) {
-
-        Retrofit.api?.getSocial(provider)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
-                    val getUrl = response.raw().request().url().toString()
-                    setUrlWebViewSocial(getUrl)
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
 
     fun onAuthMailUserClick() {
 
@@ -235,10 +206,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                        val editor = sPrefAuthMailUser.edit()
-                        editor?.putString(authMailSessionID, sessionID)
-                        editor?.putString(authMailUser, getAuthMail())
-                        editor?.putString(authMailPass, getAuthPass())
+                        val editor = sPrefUserAuth.edit()
+                        editor?.putString(userAuthSessionID, sessionID)
                         editor?.apply()
 
                         setUserAuthid(true)
@@ -254,19 +223,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 Toast.makeText(context, "Error onAuthMailUserClick!", Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    fun onAuthPhoneUserChangeClick(): Boolean {
-        val editor = sPrefAuthPhoneUser.edit()
-        editor?.remove(authPhoneSessionID)
-        editor?.remove(authPhoneUser)
-        editor?.remove(authPhoneUserPassword)
-        editor?.apply()
-
-        setBtnUserLogged("")
-        setUserAuthid(false)
-
-        return false
     }
 
     fun onAuthPhoneUserClick() {
@@ -288,10 +244,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         val sessionID = resultListHeaders?.substringBefore(";")?.substringAfter("=")
 
-                        val editor = sPrefAuthPhoneUser.edit()
-                        editor?.putString(authPhoneSessionID, sessionID)
-                        editor?.putString(authPhoneUser, getAuthPhone())
-                        editor?.putString(authPhoneUserPassword, getAuthPhonePassword())
+                        val editor = sPrefUserAuth.edit()
+                        editor?.putString(userAuthSessionID, sessionID)
                         editor?.apply()
 
                         setUserAuthid(true)
@@ -311,18 +265,55 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onGetSocialAccList() {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val id = sPrefUserAuth.getString(userAuthSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
-        Retrofit.api?.getSocialAccList(sessionID)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        Retrofit.api?.getSocialAccList(sessionID)?.enqueue(object : Callback<AuthSocial> {
+            override fun onResponse(call: Call<AuthSocial>, response: Response<AuthSocial>) {
                 if (response.body() != null) {
 
+                    if (response.body()!!.success) {
+                        // Массив при ответе должен содержать одну запись, так как
+                        // чел. может быть одновременно авторизован одной учетной записью.
+                        // Поэтому забираем нулевое значение - 0
+                        if (response.body()!!.results.isNotEmpty()) {
+                            val uid = response.body()!!.results[0].id
+                            onDeleteSocialAcc(uid)
+                        }
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.detail}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<AuthSocial>, t: Throwable) {
                 Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun onDeleteSocialAcc(socialAccID: Int) {
+
+        val id = sPrefUserAuth.getString(userAuthSessionID, null)
+        val sessionID = String.format("%s%s", "sessionid=", id)
+
+        Retrofit.api?.deleteSocialAcc(sessionID, socialAccID)?.enqueue(object : Callback<AuthSocial> {
+            override fun onResponse(call: Call<AuthSocial>, response: Response<AuthSocial>) {
+                if (response.body() != null) {
+
+                    if (response.body()!!.success) {
+                        Toast.makeText(context, "Аккаунт отвязан!", Toast.LENGTH_SHORT).show()
+                        setSocialAccDeleted(true)
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.detail}", Toast.LENGTH_LONG).show()
+                        setSocialAccDeleted(true)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AuthSocial>, t: Throwable) {
+                Toast.makeText(context, "Error onDeleteSocialAcc!", Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -61,18 +61,5 @@
 			app:viewmodelauth = "@{viewmodelauth}"
 			app:viewmodelmain = "@{viewmodelmain}"
 			/>
-
-		<Button
-			android:id = "@+id/btn_change_user_auth"
-			android:layout_width = "180dp"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
-			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "16dp"
-			android:background = "@drawable/shape_button"
-			android:text = "get social"
-			android:onClick = "@{() -> viewmodelauth.onGetSocialAccList()}"
-			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CAuthorizationUserDiscordBinding
+import ru.jobni.jobni.fragments.api.auth.AuthDialog
 import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 
@@ -39,23 +40,11 @@ class FragmentAuthDiscordUser : Fragment() {
 
         binding.viewmodelmain = viewModel
 
-        // По кнопке логина просто переходим на сайт провайдера в свой личный кабинет (если авторизован)
-        // чтобы например выйти из авторизации для последующих тестов.
-        binding.btnUserDiscordLogin.setOnClickListener {
-            val authDialogDiscordLogin = AuthDialogDiscordLogin(context!!)
-            authDialogDiscordLogin.setCancelable(true)
-            authDialogDiscordLogin.show()
-        }
-
         // Вызов окна авторизации
         binding.btnUserDiscordAuth.setOnClickListener {
-            val authDialogDiscord = AuthDialogDiscord(context!!, socialProvider, object : AuthListenerDiscord {
-                override fun onTokenReceived(code: String) {
-                    //Делаем с кодом что нибудь
-                }
-            })
-            authDialogDiscord.setCancelable(true)
-            authDialogDiscord.show()
+            val authDialog = AuthDialog(context!!, socialProvider)
+            authDialog.setCancelable(true)
+            authDialog.show()
         }
 
         return view
