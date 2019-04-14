@@ -13,7 +13,6 @@ import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
 import ru.jobni.jobni.model.network.auth.AuthMail
 import ru.jobni.jobni.model.network.auth.AuthPhone
-import ru.jobni.jobni.model.network.auth.AuthSocial
 import ru.jobni.jobni.utils.Retrofit
 
 
@@ -170,20 +169,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         socialAccDeleted.value = isStart
     }
 
-    fun onAuthUserChangeClick(): Boolean {
+    fun onAuthUserChangeClick() {
 
-        onGetSocialAccList()
-
-        if (socialAccDeleted.value == true) {
-            val editor = sPrefUserAuth.edit()
-            editor?.remove(userAuthSessionID)
-            editor?.apply()
-        }
+        val editor = sPrefUserAuth.edit()
+        editor?.remove(userAuthSessionID)
+        editor?.apply()
 
         setBtnUserLogged("")
         setUserAuthid(false)
-
-        return false
     }
 
 
@@ -259,63 +252,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(@NonNull call: Call<AuthPhone>, @NonNull t: Throwable) {
                 Toast.makeText(context, "Error onAuthPhoneUserClick!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun onGetSocialAccList() {
-
-        val id = sPrefUserAuth.getString(userAuthSessionID, null)
-        val sessionID = String.format("%s%s", "sessionid=", id)
-
-        Retrofit.api?.getSocialAccList(sessionID)?.enqueue(object : Callback<AuthSocial> {
-            override fun onResponse(call: Call<AuthSocial>, response: Response<AuthSocial>) {
-                if (response.body() != null) {
-
-                    if (response.body()!!.success) {
-                        // Массив при ответе должен содержать одну запись, так как
-                        // чел. может быть одновременно авторизован одной учетной записью.
-                        // Поэтому забираем нулевое значение - 0
-                        if (response.body()!!.results.isNotEmpty()) {
-                            val uid = response.body()!!.results[0].id
-                            onDeleteSocialAcc(uid)
-                        } else {
-                            Toast.makeText(context, "response.body()!!.results isEmpty", Toast.LENGTH_LONG).show()
-                        }
-
-                    } else if (!(response.body()!!.success)) {
-                        Toast.makeText(context, "${response.body()!!.detail}", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<AuthSocial>, t: Throwable) {
-                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun onDeleteSocialAcc(socialAccID: Int) {
-
-        val id = sPrefUserAuth.getString(userAuthSessionID, null)
-        val sessionID = String.format("%s%s", "sessionid=", id)
-
-        Retrofit.api?.deleteSocialAcc(sessionID, socialAccID)?.enqueue(object : Callback<AuthSocial> {
-            override fun onResponse(call: Call<AuthSocial>, response: Response<AuthSocial>) {
-                if (response.body() != null) {
-
-                    if (response.body()!!.success) {
-                        Toast.makeText(context, "Аккаунт отвязан!", Toast.LENGTH_SHORT).show()
-                        setSocialAccDeleted(true)
-                    } else if (!(response.body()!!.success)) {
-                        Toast.makeText(context, "${response.body()!!.detail}", Toast.LENGTH_LONG).show()
-                        setSocialAccDeleted(true)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<AuthSocial>, t: Throwable) {
-                Toast.makeText(context, "Error onDeleteSocialAcc!", Toast.LENGTH_SHORT).show()
             }
         })
     }
