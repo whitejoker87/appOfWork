@@ -421,9 +421,9 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         /*for telegram*/
-        if (requestCode == 105) {
+        if (requestCode == 107) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Telegram login ok", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Telegram login ok", Toast.LENGTH_SHORT).show()
             } else if (resultCode == TelegramPassport.RESULT_ERROR) {
                 AlertDialog.Builder(this)
                     .setTitle("error!")

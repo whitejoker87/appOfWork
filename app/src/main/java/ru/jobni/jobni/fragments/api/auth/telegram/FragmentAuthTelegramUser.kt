@@ -18,7 +18,7 @@ import java.util.*
 
 class FragmentAuthTelegramUser : Fragment() {
 
-    private val TG_PASSPORT_RESULT = 7
+    private val TG_PASSPORT_RESULT = 107
     private val payload = UUID.randomUUID().toString()
 
     private val viewModel: MainViewModel by lazy {
@@ -44,20 +44,21 @@ class FragmentAuthTelegramUser : Fragment() {
         binding.viewmodelmain = viewModel
 
         binding.btnUserTelegramAuth.setOnClickListener {
+
             val req = TelegramPassport.AuthRequest()
-            req.botID = 649847916
+            req.botID = 754325666
             req.publicKey = "-----BEGIN PUBLIC KEY-----\n" +
-                    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAruw2yP/BCcsJliRoW5eB\n" +
-                    "VBVle9dtjJw+OYED160Wybum9SXtBBLXriwt4rROd9csv0t0OHCaTmRqBcQ0J8fx\n" +
-                    "hN6/cpR1GWgOZRUAiQxoMnlt0R93LCX/j1dnVa/gVbCjdSxpbrfY2g2L4frzjJvd\n" +
-                    "l84Kd9ORYjDEAyFnEA7dD556OptgLQQ2e2iVNq8NZLYTzLp5YpOdO1doK+ttrltg\n" +
-                    "gTCy5SrKeLoCPPbOgGsdxJxyz5KKcZnSLj16yE5HvJQn0CNpRdENvRUXe6tBP78O\n" +
-                    "39oJ8BTHp9oIjd6XWXAsp2CvK45Ol8wFXGF710w9lwCGNbmNxNYhtIkdqfsEcwR5\n" +
-                    "JwIDAQAB\n" +
+                    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqOzs+28ZpVTAzYfvY+rP\n" +
+                    "LP1JYUXMROxqK4rUGZlPReAQQvUc61pM8DmFK9iNQvBJj6TXcV41wl5OVTscbtrR\n" +
+                    "mX5dIhVgCsYAFmgL6HVnON/sC1TSr5j4JiWux9yReeSCuI83f0ie3QPQ3pY8WUNh\n" +
+                    "TgmU/752CPzm4ZemGdFrXk7mJG8sCoWsX9S0gdjce4e8r6/FgRWTcw2AD0tRVaDI\n" +
+                    "9EsUb3l0O71M1E/ZKtvf8PNmfBoAZImy6A3PTQ9Rdgku1Z4m4GMpn2vsxva5wjx9\n" +
+                    "V4IXjaznA5sW+13CFzgnGBSOf1LSgpxrbzCr5nyoYy4plS+5gtsCXa8dJe2T4naL\n" +
+                    "kQIDAQAB\n" +
                     "-----END PUBLIC KEY-----"
             req.nonce = payload
             req.scope = PassportScope(
-                PassportScope.PHONE_NUMBER
+                    PassportScope.PHONE_NUMBER
             )
             TelegramPassport.request(activity, req, TG_PASSPORT_RESULT)
         }
