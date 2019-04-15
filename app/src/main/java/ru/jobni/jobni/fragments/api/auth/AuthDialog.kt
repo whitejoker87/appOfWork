@@ -21,8 +21,11 @@ class AuthDialog(
         private val typeProvider: String
 ) : Dialog(_context) {
 
-    private val requestUrl =
-            String.format("%s%s%s", "https://dev.jobni.ru/api/accounts/", typeProvider, "/login/?process=login")
+    private val requestUrl = String.format("%s%s%s", "https://dev.jobni.ru/api/accounts/", typeProvider, "/login/?process=login")
+    // Ключ для обработки url
+    // Если url уже содержит строку callback не прерывать процесс.
+    // Выполнять процесс только когда sessionid получен
+    private var checkSessionID: Boolean? = false
 
     // Данные для авторизации
     private val userAuthSessionID = "userSessionID"
@@ -59,8 +62,10 @@ class AuthDialog(
             getCookie(url)
 
             if (url.contains(_context.getString(R.string.jobni_callback_url_for_social_network))) {
-                // Закрыть окно если строка содержит адрес callback
-                dismiss()
+                if (checkSessionID == true) {
+                    // Закрыть окно если строка содержит адрес callback
+                    dismiss()
+                }
 
                 // Выставить авторизацию, как успешную
                 when {
@@ -97,8 +102,7 @@ class AuthDialog(
                         authViewModel.setBtnUserLogged("discord")
                     }
                 }
-            }
-            else if (url.contains("?errors=")){
+            } else if (url.contains("?errors=")) {
                 Log.e("?errors=", "getting error fetching auth")
             }
         }
@@ -119,12 +123,16 @@ class AuthDialog(
 
         // Полученный ответ от CookieManager.
         // Вырежим sessionid и получим примерно - do9futqubj58c08tu96qvkz4le4x5wap
-        sessionID = rawCookieHeader.substringAfter(";").substringAfter("=")
+        if (rawCookieHeader.contains("sessionid=")) {
+            sessionID = rawCookieHeader.substringAfter(";").substringAfter("=")
 
-        // Запишем полученный sessionid
-        val editor = sPrefUserAuth.edit()
-        editor?.putString(userAuthSessionID, sessionID)
-        editor?.apply()
+            // Запишем полученный sessionid
+            val editor = sPrefUserAuth.edit()
+            editor?.putString(userAuthSessionID, sessionID)
+            editor?.apply()
+
+            checkSessionID = true
+        }
 
         return rawCookieHeader
     }
