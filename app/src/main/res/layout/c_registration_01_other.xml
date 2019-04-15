@@ -78,17 +78,47 @@
                 app:viewmodelmain="@{viewmodelmain}"
         />
 
+        <EditText
+                android:id = "@+id/password_social"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                app:layout_constraintTop_toBottomOf = "@+id/include_social_network"
+                app:layout_constraintStart_toStartOf = "parent"
+                app:layout_constraintEnd_toEndOf = "parent"
+                android:layout_marginTop = "16dp"
+                style = "@style/text_color_and_size"
+                android:inputType = "textPassword"
+                android:hint = "@string/password_1"
+                android:text = "@={viewmodelreg.regPassword}"
+                android:visibility='@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")? View.GONE : (viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE))}'
+        />
+
+        <EditText
+                android:id = "@+id/password_confirm_social"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                app:layout_constraintTop_toBottomOf = "@+id/password_social"
+                app:layout_constraintStart_toStartOf = "parent"
+                app:layout_constraintEnd_toEndOf = "parent"
+                android:layout_marginTop = "16dp"
+                style = "@style/text_color_and_size"
+                android:inputType = "textPassword"
+                android:hint = "@string/password_4"
+                android:text = "@={viewmodelreg.regPassConfirm}"
+                android:visibility='@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")? View.GONE : (viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE))}'
+        />
+
         <Button
-                android:id="@+id/bind_account"
+                android:id="@+id/btn_send_mail_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/include_social_network"
+                app:layout_constraintTop_toBottomOf="@+id/password_confirm_social"
                 app:layout_constraintStart_toStartOf="@+id/background"
                 app:layout_constraintEnd_toEndOf="@+id/background"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/shape_button"
                 android:text="@string/bind_account"
-                android:onClick="@{() -> viewmodelreg.startRegistration()}"
+                android:onClick='@{() -> viewmodelreg.regOrBind("soc")}'
                 android:visibility='@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")? View.GONE : View.VISIBLE)}'
         />
 

@@ -3,21 +3,34 @@ package ru.jobni.jobni.fragments.api.reg
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.webkit.CookieManager
+import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import ru.jobni.jobni.R
+import kotlinx.android.synthetic.main.fragment_bottom_sheet_photo.*
 import ru.jobni.jobni.viewmodel.RegViewModel
+import java.net.MalformedURLException
+import java.net.URL
+import android.webkit.CookieSyncManager
+import android.R
 
 
 
 
 class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(contextIn) {
+
+    var sPrefAuthUser = contextIn.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
+    private val authUserSessionID = "userSessionID"
 
     private val regViewModel: RegViewModel by lazy {
         ViewModelProviders.of(contextIn as FragmentActivity).get(RegViewModel::class.java)
@@ -45,13 +58,15 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
         //val webView = binding.webViewSocialReg
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
-        webView.settings.useWideViewPort = true
+//        webView.settings.useWideViewPort = true
         webView.settings.loadWithOverviewMode = true
+        webView.settings.userAgentString = "Chrome/44.0.0.0 Mobile"
 //        webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY)
 //        webView.setScrollbarFadingEnabled(false)
-        webView.setInitialScale(50)
-        webView.loadUrl(url)
-        webView.webViewClient = SocRegWebViewClient
+//        webView.setInitialScale(50)
+        setCookie(webView, url)//направляем на установку куки и дальше
+//        webView.loadUrl(url)
+//        webView.webViewClient = SocRegWebViewClient
     }
 
     private val SocRegWebViewClient = object : WebViewClient() {
@@ -73,21 +88,71 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
 //            view.loadUrl("javascript:(function(){var m=document.createElement('META');" +
 //                    " m.name='viewport'; m.content='width=device-width, user-scalable=yes';" +
 //                    " document.body.appendChild(m);})()")
+//            if (url.contains("?errors=")) {
+//                Log.e("code", "ошибка при регистрации")
+//                //dismiss()
+//            }
 
-            if (url.contains("?code=") || url.contains("&code=")) {
-                // Выделить code из ответа.
-                // Старая версия, нужно учитывать как его правильно вырезать из url
-                //val code = url.substring(url.lastIndexOf("=") + 1)
-
-                // Передать листнеру для дальнейшей работы с ним если нужно
-                //listenerVK.onTokenReceived(code)
-                // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
-                //dismiss()
-
-            } else if (url.contains("?error")) {
-                Log.e("code", "getting error fetching code")
-                //dismiss()
+            if (url.contains(contextIn.getString(ru.jobni.jobni.R.string.jobni_callback_url_for_social_network))) {
+                if (url.contains(contextIn.getString(ru.jobni.jobni.R.string.social_network_reg_sucess))) {
+                    Log.e("code", "social auth success111")
+                    Toast.makeText(context, "Регистрация соцсети пройдена!", Toast.LENGTH_LONG).show()
+                    if (!regViewModel.getResultReg2Success().value!!) /*regViewModel.setResultReg2Success(true)*/regViewModel.postPassword()//работает только для первой реги
+                    // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
+                    view.clearCache(true)
+                    view.clearHistory()
+                    clearCookies(contextIn)
+                    //dismiss()
+                } else if (url.contains(contextIn.getString(ru.jobni.jobni.R.string.social_network_reg_already_exists))){
+                    Log.e("code", "account already exists")
+                    Toast.makeText(context, "Аккаунт привязан к другому полщовтаелю!", Toast.LENGTH_LONG).show()
+                    view.clearCache(true)
+                    view.clearHistory()
+                    clearCookies(contextIn)
+                    regViewModel.setResultReg1Success(false)
+                    //dismiss()
+                }
             }
         }
     }
+
+    @Throws(MalformedURLException::class)
+    fun setCookie(view: WebView, url: String) {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val cookieManager = CookieManager.getInstance()
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.setAcceptThirdPartyCookies (view, true)
+        } else cookieManager.setAcceptCookie (true)
+
+        //асинхронно устанавиваем куки и продолжаем загрузку
+        cookieManager.setCookie(url,cid) {
+            if (it){
+                view.loadUrl(url)
+                view.webViewClient = SocRegWebViewClient
+            }
+        }
+    }
+
+    fun clearCookies(context: Context) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().removeAllCookies(null)
+            CookieManager.getInstance().flush()
+        } else {
+            val cookieSyncMngr = CookieSyncManager.createInstance(context)
+            cookieSyncMngr.startSync()
+            val cookieManager = CookieManager.getInstance()
+            cookieManager.removeAllCookie()
+            cookieManager.removeSessionCookie()
+            cookieSyncMngr.stopSync()
+            cookieSyncMngr.sync()
+        }
+    }
+
 }

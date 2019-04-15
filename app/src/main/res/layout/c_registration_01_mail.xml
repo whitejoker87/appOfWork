@@ -124,7 +124,7 @@
 		/>
 
 		<Button
-			android:id = "@+id/bind_account"
+			android:id = "@+id/btn_send_mail_code"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/password_2"
@@ -132,15 +132,15 @@
 			app:layout_constraintEnd_toEndOf = "@+id/background"
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
-			android:text = "@string/bind_account"
-			android:onClick = '@{() -> viewmodelreg.regOrBindMail()}'
+			android:text = "@string/code_send"
+			android:onClick = '@{() -> viewmodelreg.regOrBind("mail")}'
 			/>
 
 		<EditText
 			android:id = "@+id/code_mail"
 			android:layout_width = "0dp"
 			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/bind_account"
+			app:layout_constraintTop_toBottomOf = "@+id/btn_send_mail_code"
 			app:layout_constraintStart_toStartOf = "@+id/mail"
 			app:layout_constraintEnd_toEndOf = "@+id/mail"
 			android:layout_marginTop = "16dp"
@@ -159,7 +159,7 @@
 			app:layout_constraintEnd_toEndOf = "@+id/background"
 			android:layout_marginTop = "16dp"
 			android:background = "@drawable/shape_button"
-			android:text = "Подтвердить почту"
+			android:text = "@string/bind_account"
 			android:onClick = "@{() -> viewmodelreg.confirmEmail()}"
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>

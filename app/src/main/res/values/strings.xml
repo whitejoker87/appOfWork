@@ -107,7 +107,7 @@
 	<string name = "surname">Фамилия</string>
 	<string name = "name">Имя</string>
 	<string name = "middle_name">Отчество</string>
-	<string name = "phone_code_send">Отправить код</string>
+	<string name = "code_send">Отправить код</string>
 	<string name = "bind_account">Привязать аккаунт</string>
 	<string name = "mail_change">Сменить почту</string>
 	<string name = "password_change">Сменить пароль</string>
@@ -207,4 +207,6 @@
 	<string name = "btn_company_vacancy_archive_text">В архив</string>
 	<string name = "btn_user_auth_text">Пройти авторизацию</string>
 	<string name = "jobni_callback_url_for_social_network">https://dev.jobni.ru/api/social/</string>
+	<string name = "social_network_reg_sucess">https://dev.jobni.ru/?messages=%D0%90%D0%BA%D0%BA%D0%B0%D1%83%D0%BD%D1%82%20%D1%81%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D1%81%D0%B5%D1%82%D0%B8%20%D0%B1%D1%8B%D0%BB%20%D0%BF%D1%80%D0%B8%D0%BA%D1%80%D0%B5%D0%BF%D0%BB%D1%91%D0%BD.</string>
+	<string name = "social_network_reg_already_exists">https://dev.jobni.ru/?errors=%D0%90%D0%BA%D0%BA%D0%B0%D1%83%D0%BD%D1%82%20%D1%81%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D1%81%D0%B5%D1%82%D0%B8%20%D1%83%D0%B6%D0%B5%20%D0%BF%D1%80%D0%B8%D0%BA%D1%80%D0%B5%D0%BF%D0%BB%D0%B5%D0%BD%20%D0%BA%20%D0%B4%D1%80%D1%83%D0%B3%D0%BE%D0%BC%D1%83%20%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8E.</string>
 </resources>

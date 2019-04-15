@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.MainActivity
@@ -86,6 +88,14 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
             }
         })
 
+//        viewModel.getResultReg2Success().observe(mContext as LifecycleOwner, Observer {
+//            if (it) {
+//                holder.itemView.performClick()
+//                viewModel.setResultReg2Success(false)
+//
+//            }
+//        })
+
         holder.bind(position)
     }
 
@@ -134,6 +144,11 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
 
         // Once all fragment replacement is done we can show the hidden container
         //holder.regFragmentPhaseContainer.visibility = View.VISIBLE
+    }
+
+    fun showNextPhase(numPhase: Int) {
+        notifyDataSetChanged()
+        notifyItemChanged(numPhase)
     }
 
     class ViewHolder(private val binding: RegPhaseRecyclerItemBinding, private val viewModel: RegViewModel) :

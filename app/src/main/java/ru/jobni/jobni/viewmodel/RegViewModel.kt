@@ -73,12 +73,12 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     private val resultReg1Success =
         MutableLiveData<Boolean>(false)//флаг пройденного начала регистрации. получен первый sessionid
     private val resultReg2Success = MutableLiveData<Boolean>(false)//флаг зарегистрированного пароля
-    private val resultReg3Success = MutableLiveData<Boolean>(false)
+    private val resultReg3Success = MutableLiveData<Boolean>(false)//флаг отправленных ФИО
 
     private val resultAuthSuccess = MutableLiveData<Boolean>(false)
     private val typeAddRegFragment = MutableLiveData<String>("")
 
-    private val socialRegStart = MutableLiveData<Boolean>()
+    private val socialRegStart = MutableLiveData<Boolean>(false)
 
     /*For observe to launch fragment*/
     private val fragmentLaunch = MutableLiveData<String>()
@@ -321,15 +321,15 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
 
     /*other methods*/
-    fun regOrBindMail() {
+    /*При привязке первой учетной записи получаем sessionid и пароль последующие нет*/
+    fun regOrBind(type: String) {
         if (getResultReg2Success().value!!) { //если пароль уже выдали и пройдена регистрация на 1 основной контакт
-            postBindEmail()
-        } else startRegistration()
-    }
+            when(type) {
+                "mail" -> postBindEmail()
+                "phone" -> postBindPhone()
+                "soc" -> setSocialRegStart(true)
+            }
 
-    fun regOrBindPhone() {
-        if (getResultReg2Success().value!!) { //если пароль уже выдали и пройдена регистрация на 1 основной контакт
-            postBindPhone()
         } else startRegistration()
     }
 
@@ -463,6 +463,33 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    /*Для первого этапа регистрации для соцсетей*/
+    fun sendSocialData(userLogin: String, provider: String, accessToken: String) {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val contactFace = RegSocial(
+            userLogin,
+            provider,
+            accessToken
+        )
+
+        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseRegUser> {
+            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
+                if (response.body() != null) {
+                    if (response.body()!!.success)
+                    else Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
     /*для выполнения 2 этапа регистрации(отправка паролей)*/
     fun postPassword() {
 
@@ -481,7 +508,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     if (response.body()!!.success) {
                         getSIDFromRegOne(response.headers())
                         Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
-                        setResultReg2Success(true)
+                        if (getSocialRegStart().value!!) setResultReg2Success(true)//завершаем этап пароля только для соцсетей(т.к не ткода подтверждения)
                     } else if (!(response.body()!!.success)) {
                         Toast.makeText(context, "Пароль не принят! ${response.body()!!.errors}", Toast.LENGTH_LONG)
                             .show()
@@ -519,6 +546,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
+                        setResultReg2Success(true)//завершение этапа пароля и кода и переход к этапу ФИО
                         Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
                     } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
@@ -555,6 +583,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
+                        setResultReg2Success(true)//завершение этапа пароля и кода и переход к этапу ФИО
                         Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
                     } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
@@ -602,7 +631,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     "surname":["Это поле не может быть пустым."],
                     "middlename":["Это поле не может быть пустым."]}}*/
                     if (response.body()!!.success) {
-                        setResultReg2Success(response.body()!!.success)
+                        setResultReg3Success(response.body()!!.success)
                         Toast.makeText(context, "Успешно добавлено контактное лицо!", Toast.LENGTH_LONG).show()
                     } else Toast.makeText(context, "Безуспешно не добавлено контактное лицо", Toast.LENGTH_LONG).show()
                 }
@@ -652,7 +681,6 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                         * {"success":false,"errors":{"contact_face":["Нельзя повторно пройти регистрацию"]}}*/
                         response.body()?.let {
                             if (it.success) {
-                                setResultReg3Success(it.success)
                                 Toast.makeText(
                                     context,
                                     "Успешно добавлено контактное лицо ${resultReg3Success}",
@@ -893,18 +921,21 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             else -> provider = ""
         }
 
-        Retrofit.api?.getDataSocialReg(cid, provider, process)?.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.body() != null) {
-                    val getUrl = response.raw().request().url().toString()
-                    setUrlWebViewSocial(getUrl)
-                }
-            }
+        val requestUrl = "https://dev.jobni.ru/api/accounts/${provider}/login/?process=${process}"
+        setUrlWebViewSocial(requestUrl)
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
-            }
-        })
+//        Retrofit.api?.getDataSocialReg(cid, provider, process)?.enqueue(object : Callback<ResponseBody> {
+//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                if (response.body() != null) {
+//                    val getUrl = response.raw().request().url().toString()
+//                    setUrlWebViewSocial(getUrl)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                Toast.makeText(context, "Error onGetAuthSocial!", Toast.LENGTH_SHORT).show()
+//            }
+//        })
     }
 
     /*открываем камеру для фото*/
