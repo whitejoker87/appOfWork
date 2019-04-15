@@ -81,4 +81,7 @@ dependencies {
 
     // API TELEGRAM
     implementation 'org.telegram:passport:1.1'
+
+    //fab for 3 phase reg
+    implementation "com.leinardi.android:speed-dial:2.0.1"
 }
