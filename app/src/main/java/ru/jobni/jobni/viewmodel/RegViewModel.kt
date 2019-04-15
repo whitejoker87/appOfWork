@@ -463,31 +463,31 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    /*Для первого этапа регистрации для соцсетей*/
-    fun sendSocialData(userLogin: String, provider: String, accessToken: String) {
-
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
-
-        val contactFace = RegSocial(
-            userLogin,
-            provider,
-            accessToken
-        )
-
-        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseRegUser> {
-            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
-                if (response.body() != null) {
-                    if (response.body()!!.success)
-                    else Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
+//    /*Для первого этапа регистрации для соцсетей*/
+//    fun sendSocialData(userLogin: String, provider: String, accessToken: String) {
+//
+//        val id = sPrefAuthUser.getString(authUserSessionID, null)
+//        val cid = String.format("%s%s", "sessionid=", id)
+//
+//        val contactFace = RegSocial(
+//            userLogin,
+//            provider,
+//            accessToken
+//        )
+//
+//        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseRegUser> {
+//            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
+//                if (response.body() != null) {
+//                    if (response.body()!!.success)
+//                    else Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
+//                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//    }
 
 
     /*для выполнения 2 этапа регистрации(отправка паролей)*/
