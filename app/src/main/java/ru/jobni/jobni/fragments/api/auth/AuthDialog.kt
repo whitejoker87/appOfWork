@@ -109,8 +109,8 @@ class AuthDialog(
 
         val cookieManager = CookieManager.getInstance() ?: return null
 
-        var rawCookieHeader: String
-        var sessionID: String
+        var rawCookieHeader: String? = null
+        var sessionID: String? = null
         val parsedURL = URL(url)
         rawCookieHeader = cookieManager.getCookie(parsedURL.host)
 
