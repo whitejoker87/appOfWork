@@ -14,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
 import ru.jobni.jobni.viewmodel.MainViewModel
 
+
 @BindingMethods(
         BindingMethod(
                 type = BindingAdapters::class,
@@ -149,6 +150,26 @@ object BindingAdapters {
                 .into(view)
     }
 
+    // https://stackoverflow.com/questions/47335090/safeunbox-cannot-be-inverted/47337166#47337166
+    // This solution can be replicated to any property like visibility,
+    // enabled etc. and to any boxed primitive like Integer, Float etc.
+    @BindingAdapter("android:checked")
+    fun setChecked(checkableView: CompoundButton, isChecked: Boolean?) {
+        checkableView.isChecked = isChecked ?: false
+    }
+
+    // You can also provide the value to be used in case your LiveData value is null like this:
+    // And call it like this:
+    //
+    //<CheckBox
+    //    ...
+    //    android:checked='@{viewModel.value}'
+    //    app:nullValue="@{false}"
+    //    />
+    @BindingAdapter(value = ["android:checked", "nullValue"], requireAll = false)
+    fun setChecked(checkableView: CompoundButton, isChecked: Boolean?, nullValue: Boolean) {
+        checkableView.isChecked = isChecked ?: nullValue
+    }
 
 //    @BindingAdapter("app:onNavigationItemSelected")
 //    fun setOnNavigationItemSelected(

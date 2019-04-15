@@ -69,7 +69,7 @@ class FragmentNavLeftUserAuthOff : Fragment() {
             }
         })
 
-        navAdapter.setChildClickListener { v, checked, group, childIndex ->
+        navAdapter.setChildClickListener { _, _, group, childIndex ->
             val child = group.items[childIndex] as NavigationChild
 
             if (childIndex == 0) {

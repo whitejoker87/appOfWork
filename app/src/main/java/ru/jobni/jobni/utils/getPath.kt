@@ -1,13 +1,8 @@
 package ru.jobni.jobni.utils
 
-import android.app.Application
 import android.content.Context
-import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
-import android.os.Build
-import android.provider.DocumentsContract
-import android.util.Log
 
 
 //fun getRealPath(context: Context, uri: Uri): String? {
@@ -59,10 +54,10 @@ import android.util.Log
 
 fun getRealPath(context: Context, uri: Uri): String? {
     var cursor = context.contentResolver.query(uri, null, null, null, null)
-    cursor.moveToFirst()
-    var image_id = cursor.getString(0)
-    image_id = image_id.substring(image_id.lastIndexOf(":") + 1)
-    cursor.close()
+    cursor?.moveToFirst()
+    var image_id = cursor?.getString(0)
+    image_id = image_id?.substring(image_id.lastIndexOf(":") + 1)
+    cursor?.close()
     cursor = context.contentResolver.query(
         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
         null,
@@ -70,8 +65,8 @@ fun getRealPath(context: Context, uri: Uri): String? {
         arrayOf(image_id),
         null
     )
-    cursor.moveToFirst()
-    val path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-    cursor.close()
+    cursor?.moveToFirst()
+    val path = cursor?.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+    cursor?.close()
     return path
 }
