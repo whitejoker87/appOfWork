@@ -154,6 +154,7 @@ object BindingAdapters {
     // This solution can be replicated to any property like visibility,
     // enabled etc. and to any boxed primitive like Integer, Float etc.
     @BindingAdapter("android:checked")
+    @JvmStatic
     fun setChecked(checkableView: CompoundButton, isChecked: Boolean?) {
         checkableView.isChecked = isChecked ?: false
     }
@@ -167,6 +168,7 @@ object BindingAdapters {
     //    app:nullValue="@{false}"
     //    />
     @BindingAdapter(value = ["android:checked", "nullValue"], requireAll = false)
+    @JvmStatic
     fun setChecked(checkableView: CompoundButton, isChecked: Boolean?, nullValue: Boolean) {
         checkableView.isChecked = isChecked ?: nullValue
     }
