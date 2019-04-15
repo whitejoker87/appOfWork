@@ -6,7 +6,9 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
-import ru.jobni.jobni.model.network.auth.*
+import ru.jobni.jobni.model.network.auth.AuthMail
+import ru.jobni.jobni.model.network.auth.AuthPhone
+import ru.jobni.jobni.model.network.auth.AuthSocial
 import ru.jobni.jobni.model.network.company.CompanyBalance
 import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.company.CompanyVacancyList
@@ -58,63 +60,6 @@ interface RetrofitQuery {
 
     @GET("api/accounts/socialaccounts/")
     fun getSocialAccList(@Header("Cookie") sessionID: String): Call<AuthSocial>
-
-    @DELETE("api/accounts/disconnect/{id}/")
-    fun deleteSocialAcc(@Header("Cookie") sessionID: String, @Path("id") socialID: Int): Call<AuthSocial>
-
-    /*API VK*/
-    @POST("api/registration/social_account/")
-    fun postSocialReg(@Header("Cookie") sessionID: String, @Body socAccount: RegSocial): Call<ResponseRegUser>
-
-    @POST("api/authorization/social_account/")
-    fun postVKAuth(@Body userMail: AuthVKJobni): Call<AuthVK>
-
-    /*API Instagram*/
-    @FormUrlEncoded
-    @POST("https://api.instagram.com/oauth/access_token")
-    fun getInstagramAccessToken(
-            @Field("client_id") client_id: String,
-            @Field("client_secret") client_secret: String,
-            @Field("grant_type") grant_type: String,
-            @Field("redirect_uri") redirect_uri: String,
-            @Field("code") code: String
-    ): Call<AuthInstagram>
-
-    @POST("api/authorization/social_account/")
-    fun postInstagramAuth(@Body userInstagram: AuthInstagramJobni): Call<AuthInstagram>
-
-    /*API Discord*/
-    @POST("api/authorization/social_account/")
-    fun postDiscordAuth(@Body userDiscord: AuthDiscordJobni): Call<AuthDiscord>
-
-    @FormUrlEncoded
-    @POST("https://discordapp.com/api/v6/oauth2/token")
-    fun getDiscordAccessToken(
-            @Field("client_id") client_id: String,
-            @Field("client_secret") client_secret: String,
-            @Field("grant_type") grant_type: String,
-            @Field("code") code: String,
-            @Field("redirect_uri") redirect_uri: String,
-            @Field("scope") scope: String
-    ): Call<AuthDiscord>
-
-    @GET("https://discordapp.com/api/v6/users/@me")
-    fun getDiscordUID(@Header("Authorization") basicAuth: String): Call<AuthDiscord>
-
-    /*API Mailru*/
-    @POST("api/authorization/social_account/")
-    fun postMailruAuth(@Body userDiscord: AuthMailruJobni): Call<AuthMailru>
-
-    /*API OK*/
-    @POST("https://api.ok.ru/api/users/getCurrentUser")
-    fun getUserDataOK(@Query("application_key") application_key: String,
-                      @Query("method") method: String,
-                      @Query("sig") sig: String,
-                      @Query("access_token") access_token: String
-    ): Call<AuthOK>
-
-    @POST("api/authorization/social_account/")
-    fun postOKAuth(@Body userOK: AuthOKJobni): Call<AuthOK>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")

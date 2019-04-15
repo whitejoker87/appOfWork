@@ -46,7 +46,7 @@
 			android:textStyle = "bold"
 			android:textColor = "@color/font_color"
 			android:textSize = "14sp"
-			android:text = "@string/tv_vk"
+			android:text = "@string/user_auth_options_text"
 			/>
 
 		<include

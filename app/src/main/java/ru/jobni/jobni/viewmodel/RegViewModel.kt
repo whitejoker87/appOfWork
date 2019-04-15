@@ -21,8 +21,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.BuildConfig
-import ru.jobni.jobni.R
-import ru.jobni.jobni.model.network.auth.AuthDiscord
 import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.getRealPath
@@ -333,32 +331,6 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         if (getResultReg2Success().value!!) { //если пароль уже выдали и пройдена регистрация на 1 основной контакт
             postBindPhone()
         } else startRegistration()
-    }
-
-
-    fun sendSocialData(userLogin: String, provider: String, accessToken: String) {
-
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
-        val cid = String.format("%s%s", "sessionid=", id)
-
-        val contactFace = RegSocial(
-            userLogin,
-            provider,
-            accessToken
-        )
-
-        Retrofit.api?.postSocialReg(cid, contactFace)?.enqueue(object : Callback<ResponseRegUser> {
-            override fun onResponse(call: Call<ResponseRegUser>, response: Response<ResponseRegUser>) {
-                if (response.body() != null) {
-                    if (response.body()!!.success)
-                    else Toast.makeText(context, "Error! ${response.body()!!.errors.uid}", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseRegUser>, t: Throwable) {
-                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
 
@@ -996,70 +968,5 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         //setOutputPhotoUri(Uri.fromFile(image))
         //setOutputPhotoUri(Uri.parse("file://" + image.absolutePath))
         return image
-    }
-
-//    fun convertInstagramCode(code: String) {
-//
-//        Retrofit.api?.getInstagramAccessToken(
-//                context.resources.getString(R.string.client_id),
-//                context.resources.getString(R.string.client_secret),
-//                "authorization_code",
-//                context.resources.getString(R.string.redirect_url), code)?.enqueue(object : Callback<AuthInstagram> {
-//            override fun onResponse(call: Call<AuthInstagram>, response: Response<AuthInstagram>) {
-//                if (response.body() != null) {
-//                    val access_token = response.body()?.access_token
-//                    val user = response.body()?.user
-//                    sendSocialData(user!!.id.toString(), "instagram", access_token!!)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<AuthInstagram>, t: Throwable) {
-//                Toast.makeText(context, "Error convertInstagramCode!", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-
-
-    fun convertDiscordCode(code: String) {
-
-        Retrofit.api?.getDiscordAccessToken(
-            context.resources.getString(R.string.discord_client_id),
-            context.resources.getString(R.string.discord_client_secret),
-            "authorization_code",
-            code,
-            context.resources.getString(R.string.discord_redirect_url),
-            "identify"
-        )?.enqueue(object : Callback<AuthDiscord> {
-            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
-                if (response.body() != null) {
-
-                    val dscAccessToken = response.body()?.access_token
-
-                    getDiscordUID(dscAccessToken!!)
-                }
-            }
-
-            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
-                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun getDiscordUID(accessToken: String) {
-
-        Retrofit.api?.getDiscordUID("Bearer $accessToken")?.enqueue(object : Callback<AuthDiscord> {
-            override fun onResponse(call: Call<AuthDiscord>, response: Response<AuthDiscord>) {
-                if (response.body() != null) {
-
-                    val dscUserUD = response.body()?.id.toString()
-
-                    sendSocialData(dscUserUD, "discord", accessToken)
-                }
-            }
-
-            override fun onFailure(call: Call<AuthDiscord>, t: Throwable) {
-                Toast.makeText(context, "Error convertDiscordCode!", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }

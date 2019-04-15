@@ -1,25 +1,17 @@
 package ru.jobni.jobni.fragments.api.reg
 
 //import ru.jobni.jobni.fragments.api.facebook.PrefUtil
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.facebook.*
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
-import org.json.JSONObject
 import org.telegram.passport.*
 import ru.jobni.jobni.R
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
-import java.net.MalformedURLException
-import java.net.URL
 import java.util.*
 
 

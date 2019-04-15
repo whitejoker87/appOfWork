@@ -1,8 +1,6 @@
 package ru.jobni.jobni.utils
 
 import android.app.Application
-import com.vk.api.sdk.VK
-import com.vk.api.sdk.VKTokenExpiredHandler
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -23,9 +21,6 @@ class Retrofit : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // VKAccessToken Проверка (например, пользователь сменил пароль)
-        VK.addTokenExpiredHandler(tokenTracker)
-
         retrofit = Retrofit.Builder()
                 .baseUrl(DEV_URL) //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
@@ -40,13 +35,6 @@ class Retrofit : Application() {
         const val BASE_URL = "https://test.jobni.ru/"
         const val DEV_URL = "https://dev.jobni.ru/"
         const val TEMP_URL = "https://dev.jobni.ru:444/"
-    }
-
-    private val tokenTracker = object : VKTokenExpiredHandler {
-        override fun onTokenExpired() {
-            // VKAccessToken is invalid
-            // Запускать фрагмент где нужно по новой авторизоваться
-        }
     }
 
     private fun getUnsafeOkHttpClient(): OkHttpClient {

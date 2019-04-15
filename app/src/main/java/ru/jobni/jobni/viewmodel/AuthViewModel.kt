@@ -38,21 +38,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val authMail = MutableLiveData<String>()
     private val authPass = MutableLiveData<String>()
 
-    /*Блок FB*/
-    private val authFBUser = MutableLiveData<String>()
-    private val authFBPass = MutableLiveData<String>()
-
-    /*Блок Google+*/
-    private val authGoogleUser = MutableLiveData<String>()
-    private val authGooglePass = MutableLiveData<String>()
-
-    /*Блок OK*/
-    private val authOKUser = MutableLiveData<String>()
-    private val authOKPass = MutableLiveData<String>()
-
-    /*Блок VK*/
-    private val vkAuthStart = MutableLiveData<Boolean>()
-
     /*Блок Phone*/
     private val authPhone = MutableLiveData<String>("")
     private val authPhonePassword = MutableLiveData<String>("")
@@ -72,14 +57,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun isUserAuthid(): MutableLiveData<Boolean> = isUserAuthid
 
 
-    fun setUrlWebViewSocial(url: String) {
-        urlWebViewSocial.value = url
-    }
-
-    fun getUrlWebViewSocial(): MutableLiveData<String> = urlWebViewSocial
-
-
-    /* Блок обычной авторизации */
+    /* Блок Mail авторизации */
     fun getAuthMail(): String? = authMail.value
 
     fun setAuthMail(query: String) {
@@ -91,59 +69,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setAuthPass(query: String) {
         this.authPass.value = query
-    }
-
-
-    /* Блок facebook авторизации */
-    fun getFBAuthUser(): String? = authFBUser.value
-
-    fun setFBAuthUser(query: String) {
-        this.authFBUser.value = query
-    }
-
-
-    fun getFBAuthPass(): String? = authFBPass.value
-
-    fun setFBAuthPass(query: String) {
-        this.authFBPass.value = query
-    }
-
-
-    /* Блок google+ авторизации */
-    fun getGoogleAuthUser(): String? = authGoogleUser.value
-
-    fun setGoogleAuthUser(query: String) {
-        this.authGoogleUser.value = query
-    }
-
-
-    fun getGoogleAuthPass(): String? = authGooglePass.value
-
-    fun setGoogleAuthPass(query: String) {
-        this.authGooglePass.value = query
-    }
-
-
-    /* Блок OK авторизации */
-    fun getOKAuthUser(): String? = authOKUser.value
-
-    fun setOKAuthUser(query: String) {
-        this.authOKUser.value = query
-    }
-
-
-    fun getOKAuthPass(): String? = authOKPass.value
-
-    fun setOKAuthPass(query: String) {
-        this.authOKPass.value = query
-    }
-
-
-    /* Блок VK авторизации */
-    fun isVkAuthStart(): MutableLiveData<Boolean> = vkAuthStart
-
-    fun setVkAuthStart(isStart: Boolean) {
-        vkAuthStart.value = isStart
     }
 
 
@@ -161,14 +86,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         this.authPhonePassword.value = query
     }
 
-
-    private val socialAccDeleted = MutableLiveData<Boolean>()
-
-    fun isSocialAccDeleted(): MutableLiveData<Boolean> = socialAccDeleted
-
-    fun setSocialAccDeleted(isStart: Boolean) {
-        socialAccDeleted.value = isStart
-    }
 
     fun onAuthUserChangeClick() {
 
@@ -271,7 +188,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                         // чел. может быть одновременно авторизован одной учетной записью.
                         // Поэтому забираем нулевое значение - 0
                         if (response.body()!!.results.isNotEmpty()) {
-                            val uid = response.body()!!.results[0].id
+                            //val uid = response.body()!!.results[0].id
                             //onDeleteSocialAcc(uid)
                         } else {
                             Toast.makeText(context, "response.body()!!.results isEmpty", Toast.LENGTH_LONG).show()
@@ -288,31 +205,5 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
     }
-
-    fun onDeleteSocialAcc(socialAccID: Int) {
-
-        val id = sPrefUserAuth.getString(userAuthSessionID, null)
-        val sessionID = String.format("%s%s", "sessionid=", id)
-
-        Retrofit.api?.deleteSocialAcc(sessionID, socialAccID)?.enqueue(object : Callback<AuthSocial> {
-            override fun onResponse(call: Call<AuthSocial>, response: Response<AuthSocial>) {
-                if (response.body() != null) {
-
-                    if (response.body()!!.success) {
-                        Toast.makeText(context, "Аккаунт отвязан!", Toast.LENGTH_SHORT).show()
-                        setSocialAccDeleted(true)
-                    } else if (!(response.body()!!.success)) {
-                        Toast.makeText(context, "${response.body()!!.detail}", Toast.LENGTH_LONG).show()
-                        setSocialAccDeleted(true)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<AuthSocial>, t: Throwable) {
-                Toast.makeText(context, "Error onDeleteSocialAcc!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
 }
 
