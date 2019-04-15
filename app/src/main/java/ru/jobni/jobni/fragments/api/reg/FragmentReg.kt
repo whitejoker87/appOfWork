@@ -48,15 +48,24 @@ class FragmentReg : Fragment() {
         adapter = RegRecyclerAdapter(activity as Context)
         recycler_reg.adapter = adapter
 
+        //переход на типы реги первого этапа
         regViewModel.getTypeAddRegFragment().observe(this, Observer {
             adapter.typeReg = it
         })
 
-//        regViewModel.getResultReg2Success().observe(this, Observer {
-//            if (it) {
-//                adapter.showNextPhase(1)
-//            }
-//        })
+        //переход на 2 этап реги
+        regViewModel.getResultReg2Success().observe(this, Observer {
+            if (it) {
+                recycler_reg.findViewHolderForAdapterPosition(1)?.itemView?.performClick()
+            }
+        })
+
+        //переход на 3 этап реги
+        regViewModel.getResultReg3Success().observe(this, Observer {
+            if (it) {
+                recycler_reg.findViewHolderForAdapterPosition(2)?.itemView?.performClick()
+            }
+        })
 
         return view
     }

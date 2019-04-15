@@ -75,12 +75,12 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     private val resultReg1Success =
         MutableLiveData<Boolean>(false)//флаг пройденного начала регистрации. получен первый sessionid
     private val resultReg2Success = MutableLiveData<Boolean>(false)//флаг зарегистрированного пароля
-    private val resultReg3Success = MutableLiveData<Boolean>(false)
+    private val resultReg3Success = MutableLiveData<Boolean>(false)//флаг отправленных ФИО
 
     private val resultAuthSuccess = MutableLiveData<Boolean>(false)
     private val typeAddRegFragment = MutableLiveData<String>("")
 
-    private val socialRegStart = MutableLiveData<Boolean>()
+    private val socialRegStart = MutableLiveData<Boolean>(false)
 
     /*For observe to launch fragment*/
     private val fragmentLaunch = MutableLiveData<String>()
@@ -522,7 +522,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     if (response.body()!!.success) {
                         getSIDFromRegOne(response.headers())
                         Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
-                        setResultReg2Success(true)
+                        if (getSocialRegStart().value!!) setResultReg2Success(true)//завершаем этап пароля только для соцсетей(т.к не ткода подтверждения)
                     } else if (!(response.body()!!.success)) {
                         Toast.makeText(context, "Пароль не принят! ${response.body()!!.errors}", Toast.LENGTH_LONG)
                             .show()
@@ -560,6 +560,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
+                        setResultReg2Success(true)//завершение этапа пароля и кода и переход к этапу ФИО
                         Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
                     } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
@@ -596,6 +597,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
+                        setResultReg2Success(true)//завершение этапа пароля и кода и переход к этапу ФИО
                         Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
                     } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
@@ -643,7 +645,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     "surname":["Это поле не может быть пустым."],
                     "middlename":["Это поле не может быть пустым."]}}*/
                     if (response.body()!!.success) {
-//                        setResultReg2Success(response.body()!!.success)
+                        setResultReg3Success(response.body()!!.success)
                         Toast.makeText(context, "Успешно добавлено контактное лицо!", Toast.LENGTH_LONG).show()
                     } else Toast.makeText(context, "Безуспешно не добавлено контактное лицо", Toast.LENGTH_LONG).show()
                 }
@@ -693,7 +695,6 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                         * {"success":false,"errors":{"contact_face":["Нельзя повторно пройти регистрацию"]}}*/
                         response.body()?.let {
                             if (it.success) {
-                                setResultReg3Success(it.success)
                                 Toast.makeText(
                                     context,
                                     "Успешно добавлено контактное лицо ${resultReg3Success}",

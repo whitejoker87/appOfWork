@@ -18,10 +18,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_photo.*
-import ru.jobni.jobni.R
 import ru.jobni.jobni.viewmodel.RegViewModel
 import java.net.MalformedURLException
 import java.net.URL
+import android.webkit.CookieSyncManager
+import android.R
+
+
 
 
 class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(contextIn) {
@@ -57,6 +60,7 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
         webView.settings.domStorageEnabled = true
 //        webView.settings.useWideViewPort = true
         webView.settings.loadWithOverviewMode = true
+        webView.settings.userAgentString = "Chrome/44.0.0.0 Mobile"
 //        webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY)
 //        webView.setScrollbarFadingEnabled(false)
 //        webView.setInitialScale(50)
@@ -89,15 +93,25 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
 //                //dismiss()
 //            }
 
-            if (url.contains(contextIn.getString(R.string.jobni_callback_url_for_social_network))) {
-                if (url.contains(contextIn.getString(R.string.social_network_reg_sucess))) {
+            if (url.contains(contextIn.getString(ru.jobni.jobni.R.string.jobni_callback_url_for_social_network))) {
+                if (url.contains(contextIn.getString(ru.jobni.jobni.R.string.social_network_reg_sucess))) {
                     Log.e("code", "social auth success111")
                     Toast.makeText(context, "Регистрация соцсети пройдена!", Toast.LENGTH_LONG).show()
+                    if (!regViewModel.getResultReg2Success().value!!) /*regViewModel.setResultReg2Success(true)*/regViewModel.postPassword()//работает только для первой реги
+                    // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
+                    view.clearCache(true)
+                    view.clearHistory()
+                    clearCookies(contextIn)
+                    //dismiss()
+                } else if (url.contains(contextIn.getString(ru.jobni.jobni.R.string.social_network_reg_already_exists))){
+                    Log.e("code", "account already exists")
+                    Toast.makeText(context, "Аккаунт привязан к другому полщовтаелю!", Toast.LENGTH_LONG).show()
+                    view.clearCache(true)
+                    view.clearHistory()
+                    clearCookies(contextIn)
+                    regViewModel.setResultReg1Success(false)
+                    //dismiss()
                 }
-
-                if (!regViewModel.getResultReg2Success().value!!) /*regViewModel.setResultReg2Success(true)*/regViewModel.postPassword()//работает только для первой реги
-                // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
-                //dismiss()
             }
         }
     }
@@ -110,17 +124,35 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
 
         val cookieManager = CookieManager.getInstance()
 
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.setAcceptThirdPartyCookies (view, true)
         } else cookieManager.setAcceptCookie (true)
 
         //асинхронно устанавиваем куки и продолжаем загрузку
-        cookieManager.setCookie(url,cid, object :ValueCallback<Boolean>{
-            override fun onReceiveValue(value: Boolean?) {
+        cookieManager.setCookie(url,cid) {
+            if (it){
                 view.loadUrl(url)
                 view.webViewClient = SocRegWebViewClient
             }
-        })
+        }
+    }
+
+    fun clearCookies(context: Context) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().removeAllCookies(null)
+            CookieManager.getInstance().flush()
+        } else {
+            val cookieSyncMngr = CookieSyncManager.createInstance(context)
+            cookieSyncMngr.startSync()
+            val cookieManager = CookieManager.getInstance()
+            cookieManager.removeAllCookie()
+            cookieManager.removeSessionCookie()
+            cookieSyncMngr.stopSync()
+            cookieSyncMngr.sync()
+        }
     }
 
 }

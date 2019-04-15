@@ -90,10 +90,9 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
 
 //        viewModel.getResultReg2Success().observe(mContext as LifecycleOwner, Observer {
 //            if (it) {
-//                holder.regFragmentPhaseContainer.visibility = View.VISIBLE
-//                setFragmentInItem(holder, 1)
+//                holder.itemView.performClick()
 //                viewModel.setResultReg2Success(false)
-//                notifyDataSetChanged()
+//
 //            }
 //        })
 
