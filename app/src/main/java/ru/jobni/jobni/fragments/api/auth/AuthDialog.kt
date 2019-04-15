@@ -45,6 +45,7 @@ class AuthDialog(
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.loadWithOverviewMode = true
+        webView.settings.userAgentString = "Chrome/44.0.0.0 Mobile"
         webView.loadUrl(url)
         webView.webViewClient = VKWebViewClient
     }

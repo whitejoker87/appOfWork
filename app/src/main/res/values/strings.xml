@@ -228,5 +228,5 @@
 	<string name = "ok_public_key">CBALCICNEBABABABA</string>
 	<string name = "ok_base_url">https://connect.ok.ru/</string>
 	<string name = "ok_redirect_url">https://ok.ru/</string>
-	<string name = "jobni_callback_url_for_social_network">https://dev.jobni.ru</string>
+	<string name = "jobni_callback_url_for_social_network">https://dev.jobni.ru/api/social/</string>
 </resources>
