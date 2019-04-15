@@ -17,7 +17,7 @@ data class ResultSocial(
 
         @SerializedName("id") val id: Int,
         @SerializedName("provider") val provider: String,
-        @SerializedName("uid") val uid: Long,
+        @SerializedName("uid") val uid: Float,
         @SerializedName("last_login") val last_login: String,
         @SerializedName("date_joined") val date_joined: String
 )

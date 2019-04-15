@@ -201,34 +201,12 @@
 	<string name = "nav_header_btn_auth_click">Auth</string>
 	<string name = "data_protection">Согласие на хранение и защиту персональных данных</string>
 	<string name = "public_offers">Согласие публичной оферты</string>
-	<integer name = "com_vk_sdk_AppId">6746499</integer>
-	<string name = "facebook_app_id">2250712614985944</string>
-	<string name = "fb_login_protocol_scheme">fb2250712614985944</string>
 	<string name = "btn_company_vacancy_show_text">Опубликовать</string>
 	<string name = "btn_company_vacancy_edit_text">Редактировать</string>
 	<string name = "btn_company_vacancy_delete_text">Удалить</string>
 	<string name = "btn_company_vacancy_archive_text">В архив</string>
-	<string name = "btn_user_vk_auth_text">Пройти авторизацию</string>
-	<string name = "tv_vk">ОТВЯЗАТЬ УЧЕТНУЮ ЗАПИСЬ</string>
-	<string name = "vk_client_id">6746499</string>
-	<string name = "vk_redirect_url">https://vk.com/</string>
-	<string name = "vk_base_url">https://oauth.vk.com/</string>
-	<string name = "instagram_client_id">de279bd8e8e242e2aa5acb80d3dfcd6b</string>
-	<string name = "instagram_client_secret">f9b1bf2579ec46a4be9084236dc79b40</string>
-	<string name = "instagram_redirect_url">https://instagram.com/</string>
-	<string name = "instagram_base_url">https://api.instagram.com/</string>
-	<string name = "discord_client_id">564805611997626388</string>
-	<string name = "discord_client_secret">IumshvS2iBrxR5m73veXQeZ92z1RKRfN</string>
-	<string name = "discord_base_url">https://discordapp.com/api/</string>
-	<string name = "discord_redirect_url">https://discordapp.com/</string>
-	<string name = "mailru_client_id">764749</string>
-	<string name = "mailru_base_url">https://connect.mail.ru/</string>
-	<string name = "mailru_redirect_url">https://mail.ru/</string>
-	<string name = "ok_client_id">1277635072</string>
-	<string name = "ok_public_key">CBALCICNEBABABABA</string>
-	<string name = "ok_base_url">https://connect.ok.ru/</string>
-	<string name = "ok_redirect_url">https://ok.ru/</string>
-	<string name = "jobni_callback_url_for_social_network">https://dev.jobni.ru</string>
+	<string name = "btn_user_auth_text">Пройти авторизацию</string>
+	<string name = "jobni_callback_url_for_social_network">https://dev.jobni.ru/api/social/</string>
 	<string name = "social_network_reg_sucess">https://dev.jobni.ru/?messages=%D0%90%D0%BA%D0%BA%D0%B0%D1%83%D0%BD%D1%82%20%D1%81%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D1%81%D0%B5%D1%82%D0%B8%20%D0%B1%D1%8B%D0%BB%20%D0%BF%D1%80%D0%B8%D0%BA%D1%80%D0%B5%D0%BF%D0%BB%D1%91%D0%BD.</string>
 	<string name = "social_network_reg_already_exists">https://dev.jobni.ru/?errors=%D0%90%D0%BA%D0%BA%D0%B0%D1%83%D0%BD%D1%82%20%D1%81%D0%BE%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9%20%D1%81%D0%B5%D1%82%D0%B8%20%D1%83%D0%B6%D0%B5%20%D0%BF%D1%80%D0%B8%D0%BA%D1%80%D0%B5%D0%BF%D0%BB%D0%B5%D0%BD%20%D0%BA%20%D0%B4%D1%80%D1%83%D0%B3%D0%BE%D0%BC%D1%83%20%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8E.</string>
 </resources>

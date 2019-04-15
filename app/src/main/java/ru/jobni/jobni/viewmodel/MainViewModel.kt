@@ -1,19 +1,12 @@
 package ru.jobni.jobni.viewmodel
 
 import android.app.Application
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
 import android.os.Handler
-import android.provider.MediaStore
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,17 +16,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.jobni.jobni.BuildConfig
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.*
 import ru.jobni.jobni.model.menu.left.RepositoryOwner
-import ru.jobni.jobni.model.network.company.CompanyList
-import ru.jobni.jobni.model.network.company.CompanyVacancyList
+import ru.jobni.jobni.model.network.company.*
 import ru.jobni.jobni.model.network.vacancy.*
 import ru.jobni.jobni.utils.Retrofit
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,6 +35,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     var sPref = application.getSharedPreferences("firstLaunchSavedData", AppCompatActivity.MODE_PRIVATE)
     var sPrefAuthUser = application.getSharedPreferences("authUser", AppCompatActivity.MODE_PRIVATE)
+
+    // Данные при авторизации, читаем здесь для sessionID
+    private val userAuthSessionID = "userSessionID"
+    var sPrefUserAuth = application.getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
 
     private val suggestionsNamesList = MutableLiveData<ArrayList<SuggestionEntity>>(ArrayList())
 
@@ -262,82 +254,98 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /*открытие правого меню*/
     fun loadLeftMenuOwnerData() {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val id = sPrefUserAuth.getString(userAuthSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
-        Retrofit.api?.ownerOrWorker(sessionID)?.enqueue(object : Callback<ArrayList<CompanyList>> {
-            override fun onResponse(@NonNull call: Call<ArrayList<CompanyList>>, @NonNull response: Response<ArrayList<CompanyList>>) {
+        Retrofit.api?.ownerOrWorker(sessionID)?.enqueue(object : Callback<CompanyList> {
+            override fun onResponse(@NonNull call: Call<CompanyList>, @NonNull response: Response<CompanyList>) {
                 if (response.body() != null) {
 
-                    val resultList: ArrayList<CompanyList> = response.body()!!
-                    if(repositoryOwner.receiveCompanyList.isEmpty()){
-                        repositoryOwner.saveCompanyList(resultList)
-                    } else {
-                        repositoryOwner.receiveCompanyList.clear()
-                        repositoryOwner.saveCompanyList(resultList)
+                    if (response.body()!!.success) {
+
+                        val resultList: ArrayList<ResultsCompanyList> = response.body()!!.results
+                        if (repositoryOwner.receiveCompanyList.isEmpty()) {
+                            repositoryOwner.saveCompanyList(resultList)
+                        } else {
+                            repositoryOwner.receiveCompanyList.clear()
+                            repositoryOwner.saveCompanyList(resultList)
+                        }
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<ArrayList<CompanyList>>, @NonNull t: Throwable) {}
+            override fun onFailure(@NonNull call: Call<CompanyList>, @NonNull t: Throwable) {}
         })
     }
 
     /*Баланс для левого меню*/
     fun loadLeftMenuOwnerCompanyBalance(position: Int) {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val id = sPrefUserAuth.getString(userAuthSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
-        Retrofit.api?.ownerOrWorkerBalance(sessionID, position)?.enqueue(object : Callback<Int> {
-            override fun onResponse(@NonNull call: Call<Int>, @NonNull response: Response<Int>) {
+        Retrofit.api?.ownerOrWorkerBalance(sessionID, position)?.enqueue(object : Callback<CompanyBalance> {
+            override fun onResponse(@NonNull call: Call<CompanyBalance>, @NonNull response: Response<CompanyBalance>) {
                 if (response.code() == 401 || response.code() == 200) {
 
                 }
 
                 if (response.body() != null) {
+                    if (response.body()!!.success) {
 
-                    val resultList: Int = response.body()!!
-                    setCompanyBalance(resultList.toString())
+                        val resultList: Int = response.body()!!.result.balance
+                        setCompanyBalance(resultList.toString())
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<Int>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<CompanyBalance>, @NonNull t: Throwable) {
             }
         })
     }
 
     fun loadLeftMenuOwnerCompanyVacancy(companyID: Int) {
 
-        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val id = sPrefUserAuth.getString(userAuthSessionID, null)
         val sessionID = String.format("%s%s", "sessionid=", id)
 
         // Почистить репозиторий перед заполнением списка вакансий
         repositoryCompanyVacancy.clearRepository()
 
-        Retrofit.api?.ownerOrWorkerCompanyVacancy(sessionID, companyID)?.enqueue(object : Callback<ArrayList<CompanyVacancyList>> {
-            override fun onResponse(@NonNull call: Call<ArrayList<CompanyVacancyList>>, @NonNull response: Response<ArrayList<CompanyVacancyList>>) {
+        Retrofit.api?.ownerOrWorkerCompanyVacancy(sessionID, companyID)?.enqueue(object : Callback<CompanyVacancyList> {
+            override fun onResponse(@NonNull call: Call<CompanyVacancyList>, @NonNull response: Response<CompanyVacancyList>) {
                 if (response.code() == 401 || response.code() == 200) {
 
                 }
 
                 if (response.body() != null) {
+                    if (response.body()!!.success) {
 
-                    val resultList: ArrayList<CompanyVacancyList> = response.body()!!
+                        val resultList: ArrayList<ResultsCompanyVacancyList> = response.body()!!.results
 
-                    for (i in 0 until resultList.size) {
-                        repositoryCompanyVacancy.saveCompanyVacancy(
-                            CompanyVacancyEntity(
-                                resultList[i].id,
-                                resultList[i].name,
-                                resultList[i].archival
+                        for (i in 0 until resultList.size) {
+                            repositoryCompanyVacancy.saveCompanyVacancy(
+                                    CompanyVacancyEntity(
+                                            resultList[i].id,
+                                            resultList[i].name,
+                                            resultList[i].archival
+                                    )
                             )
-                        )
+                        }
+
+                    } else if (!(response.body()!!.success)) {
+                        Toast.makeText(context, "${response.body()!!.errors}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
-            override fun onFailure(@NonNull call: Call<ArrayList<CompanyVacancyList>>, @NonNull t: Throwable) {
+            override fun onFailure(@NonNull call: Call<CompanyVacancyList>, @NonNull t: Throwable) {
             }
         })
     }

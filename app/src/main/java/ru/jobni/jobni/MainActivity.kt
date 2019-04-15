@@ -22,7 +22,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
-import com.vk.api.sdk.VK
 import kotlinx.android.synthetic.main.nav_left.*
 import org.telegram.passport.TelegramPassport
 import ru.jobni.jobni.databinding.ActivityMainBinding
@@ -280,10 +279,6 @@ class MainActivity : AppCompatActivity() {
             closeKeyboard()
         })
 
-        viewModelAuth.isVkAuthStart().observe(this, Observer {
-            VK.login(this, arrayListOf())
-        })
-
         regViewModel.getSocialRegStart().observe(this, Observer {
             if (it) {
                 makeSocialRegDialog(viewModelMain.getSocialLaunch().value!!)
@@ -434,34 +429,11 @@ class MainActivity : AppCompatActivity() {
                     .setTitle("error!")
                     .setMessage(data!!.getStringExtra("error"))
                     .setPositiveButton("OKNORM", null)
-                    .show();
+                    .show()
             } else Toast.makeText(this, "cancel login telega", Toast.LENGTH_SHORT).show()
         }
 
         else if (resultCode == RESULT_OK) {
-
-//            /* VK callback block */
-//            val callback = object : VKAuthCallback {
-//                override fun onLogin(token: VKAccessToken) {
-//
-//                    val accessToken = token.accessToken
-//
-//                    val userLogin = token.userId
-//
-//                    if (viewModelMain.getSocialLaunch().value.equals("RegSocial")) {
-//                        regViewModel.sendSocialData(userLogin.toString(), "vk", accessToken)
-//                    } else if (viewModelAuth.isVkAuthStart().value == true) {
-//                        viewModelAuth.onAuthVKClick(userLogin.toString(), "vk", accessToken)
-//                    }
-//                }
-//
-//                override fun onLoginFailed(errorCode: Int) {}
-//
-//            }
-//            if (!VK.onActivityResult(requestCode, resultCode, data, callback)) {
-//                super.onActivityResult(requestCode, resultCode, data)
-//            }
-
             //val uri: Uri? = null
             when (requestCode) {
                 GALLERY_REQUEST -> {
@@ -472,9 +444,6 @@ class MainActivity : AppCompatActivity() {
                     regViewModel.setOutputPhotoUri(regViewModel.getOutputPhotoUri().value!!)
                     regViewModel.regContactPhotoSend()
                 }
-//                VK_REQUEST -> {
-//
-//                }
             }
         }
     }

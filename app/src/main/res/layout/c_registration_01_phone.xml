@@ -100,7 +100,7 @@
                 android:inputType = "textPassword"
                 android:hint = "@string/password_1"
                 android:text = "@={viewmodelreg.regPassword}"
-                android:visibility="@{viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE}"
+                android:visibility="@{safeUnbox(viewmodelreg.resultReg2Success) ? View.GONE : View.VISIBLE}"
         />
 
         <EditText
@@ -115,7 +115,7 @@
                 android:inputType = "textPassword"
                 android:hint = "@string/password_4"
                 android:text = "@={viewmodelreg.regPassConfirm}"
-                android:visibility="@{viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE}"
+                android:visibility="@{safeUnbox(viewmodelreg.resultReg2Success) ? View.GONE : View.VISIBLE}"
         />
 
 		<Button

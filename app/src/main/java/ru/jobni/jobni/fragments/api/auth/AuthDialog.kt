@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -44,6 +45,7 @@ class AuthDialog(
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.loadWithOverviewMode = true
+        webView.settings.userAgentString = "Chrome/44.0.0.0 Mobile"
         webView.loadUrl(url)
         webView.webViewClient = VKWebViewClient
     }
@@ -95,6 +97,9 @@ class AuthDialog(
                         authViewModel.setBtnUserLogged("discord")
                     }
                 }
+            }
+            else if (url.contains("?errors=")){
+                Log.e("?errors=", "getting error fetching auth")
             }
         }
     }

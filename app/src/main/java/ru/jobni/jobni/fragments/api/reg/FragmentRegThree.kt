@@ -39,7 +39,7 @@ class FragmentRegThree : Fragment() {
         recycler_reg_contacts.adapter = adapter
 
         viewModel.getRegContacts().observe(this, Observer {
-            it?.let { adapter.contacts = it as MutableList<String> }
+            it?.let { adapter.contacts = it }
         })
 
         return view

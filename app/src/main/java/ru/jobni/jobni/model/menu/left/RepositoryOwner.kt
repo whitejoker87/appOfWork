@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import ru.jobni.jobni.R
 import ru.jobni.jobni.model.menu.NavigationChild
 import ru.jobni.jobni.model.menu.NavigationParent
-import ru.jobni.jobni.model.network.company.CompanyList
+import ru.jobni.jobni.model.network.company.ResultsCompanyList
 import java.util.*
 import kotlin.collections.ArrayList
 
 object RepositoryOwner {
 
-    val companyLiveData = MutableLiveData<MutableList<CompanyList>>()
-    val receiveCompanyList: MutableList<CompanyList> = mutableListOf()
+    val companyLiveData = MutableLiveData<MutableList<ResultsCompanyList>>()
+    val receiveCompanyList: MutableList<ResultsCompanyList> = mutableListOf()
 
     val setCompanyList = ArrayList<NavigationParent>()
 
@@ -21,11 +21,11 @@ object RepositoryOwner {
         companyLiveData.value = receiveCompanyList
     }
 
-    fun getCompany(): LiveData<MutableList<CompanyList>> {
+    fun getCompany(): LiveData<MutableList<ResultsCompanyList>> {
         return companyLiveData
     }
 
-    fun saveCompanyList(companyList: ArrayList<CompanyList>) {
+    fun saveCompanyList(companyList: ArrayList<ResultsCompanyList>) {
         // Отсчистить список при заполнении
         receiveCompanyList.clear()
         receiveCompanyList.addAll(companyList)

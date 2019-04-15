@@ -6,7 +6,10 @@ import retrofit2.Call
 import retrofit2.http.*
 import ru.jobni.jobni.model.auth.mail.UserMailAuth
 import ru.jobni.jobni.model.auth.phone.UserPhoneAuth
-import ru.jobni.jobni.model.network.auth.*
+import ru.jobni.jobni.model.network.auth.AuthMail
+import ru.jobni.jobni.model.network.auth.AuthPhone
+import ru.jobni.jobni.model.network.auth.AuthSocial
+import ru.jobni.jobni.model.network.company.CompanyBalance
 import ru.jobni.jobni.model.network.company.CompanyList
 import ru.jobni.jobni.model.network.company.CompanyVacancyList
 import ru.jobni.jobni.model.network.registration.*
@@ -47,12 +50,6 @@ interface RetrofitQuery {
     @POST("api/accounts/{type_social}/login/")
     fun getDataSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
 
-    @GET("api/accounts/socialaccounts/")
-    fun getSocialAccList(@Header("Cookie") sessionID: String): Call<AuthSocial>
-
-    @DELETE("api/accounts/disconnect/{id}/")
-    fun deleteSocialAcc(@Header("Cookie") sessionID: String, @Path("id") socialID: Int): Call<AuthSocial>
-
     @POST("api/registration/photo/")
     fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseBody>
 
@@ -61,59 +58,8 @@ interface RetrofitQuery {
 //    @POST("api/registration/")
 //    fun sendRegistrationData(/*@Part("info")  info: RequestBody*/@Part info: MultipartBody.Part, @Part image: MultipartBody.Part): Call<ResponseBody>
 
-    /*API VK*/
-    @POST("api/registration/social_account/")
-    fun postSocialReg(@Header("Cookie") sessionID: String, @Body socAccount: RegSocial): Call<ResponseRegUser>
-
-    @POST("api/authorization/social_account/")
-    fun postVKAuth(@Body userMail: AuthVKJobni): Call<AuthVK>
-
-    /*API Instagram*/
-    @FormUrlEncoded
-    @POST("https://api.instagram.com/oauth/access_token")
-    fun getInstagramAccessToken(
-            @Field("client_id") client_id: String,
-            @Field("client_secret") client_secret: String,
-            @Field("grant_type") grant_type: String,
-            @Field("redirect_uri") redirect_uri: String,
-            @Field("code") code: String
-    ): Call<AuthInstagram>
-
-    @POST("api/authorization/social_account/")
-    fun postInstagramAuth(@Body userInstagram: AuthInstagramJobni): Call<AuthInstagram>
-
-    /*API Discord*/
-    @POST("api/authorization/social_account/")
-    fun postDiscordAuth(@Body userDiscord: AuthDiscordJobni): Call<AuthDiscord>
-
-    @FormUrlEncoded
-    @POST("https://discordapp.com/api/v6/oauth2/token")
-    fun getDiscordAccessToken(
-            @Field("client_id") client_id: String,
-            @Field("client_secret") client_secret: String,
-            @Field("grant_type") grant_type: String,
-            @Field("code") code: String,
-            @Field("redirect_uri") redirect_uri: String,
-            @Field("scope") scope: String
-    ): Call<AuthDiscord>
-
-    @GET("https://discordapp.com/api/v6/users/@me")
-    fun getDiscordUID(@Header("Authorization") basicAuth: String): Call<AuthDiscord>
-
-    /*API Mailru*/
-    @POST("api/authorization/social_account/")
-    fun postMailruAuth(@Body userDiscord: AuthMailruJobni): Call<AuthMailru>
-
-    /*API OK*/
-    @POST("https://api.ok.ru/api/users/getCurrentUser")
-    fun getUserDataOK(@Query("application_key") application_key: String,
-                      @Query("method") method: String,
-                      @Query("sig") sig: String,
-                      @Query("access_token") access_token: String
-    ): Call<AuthOK>
-
-    @POST("api/authorization/social_account/")
-    fun postOKAuth(@Body userOK: AuthOKJobni): Call<AuthOK>
+    @GET("api/accounts/socialaccounts/")
+    fun getSocialAccList(@Header("Cookie") sessionID: String): Call<AuthSocial>
 
     /*API authorization*/
     @POST("api/authorization/mailbox/")
@@ -138,16 +84,15 @@ interface RetrofitQuery {
     @GET("api/vacancy/{id}/details/")
     fun loadVacancyCard(@Path("id") id: Int, @Query("detail") detail: Int): Call<CardVacancyDetail>
 
-    @GET("api/company/{id}/get_short_representation_of_vacancies/")
-    fun ownerOrWorkerCompanyVacancy(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<ArrayList<CompanyVacancyList>>
+    @GET("api/employer/companies/{id}/vacancies/")
+    fun ownerOrWorkerCompanyVacancy(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<CompanyVacancyList>
 
     /*API company*/
-    @GET("api/company/get_short_representation_of_companies/")
-    fun ownerOrWorker(@Header("Cookie") sessionID: String): Call<ArrayList<CompanyList>>
+    @GET("api/employer/companies/my_companies/")
+    fun ownerOrWorker(@Header("Cookie") sessionID: String): Call<CompanyList>
 
-    @GET("api/company/{id}/balance/")
-    fun ownerOrWorkerBalance(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<Int>
-
+    @GET("api/employer/companies/{id}/balance/")
+    fun ownerOrWorkerBalance(@Header("Cookie") sessionID: String, @Path("id") id: Int): Call<CompanyBalance>
 }
 
 
