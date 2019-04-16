@@ -121,9 +121,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // Загрузка данных для правого меню
-        viewModelMain.loadRightMenuData()
-
         // Если чел. ранее авторизовался, проверяем это здесь
         val userAuthid = viewModelAuth.sPrefUserAuth.getString("userSessionID", null)
         val userBtn = viewModelAuth.sPrefUserAuth.getString("userBtnProvider", null)
@@ -153,6 +150,9 @@ class MainActivity : AppCompatActivity() {
         leftMenuPAdapters()
 
         viewModelMain.isOpenDrawerRight().observe(this, Observer { isOpen ->
+            // Загрузка данных для правого меню
+            viewModelMain.loadRightMenuData()
+
             if (isOpen) {
                 drawer.openDrawer(GravityCompat.END)
                 //ниже закрываем клавиатуру если открыта
