@@ -69,14 +69,6 @@ class MainActivity : AppCompatActivity() {
     private val WRITE_REQUEST_CODE = 0
     private val CAMERA_REQUEST = 0
     private val GALLERY_REQUEST = 1
-    private val VK_REQUEST = 1
-
-    // -------------- YOUR APP DATA GOES HERE(for OK) ------------
-    private val APP_ID = "1277635072"
-    private val APP_KEY = "CBALCICNEBABABABA"
-    private val REDIRECT_URL = "okauth://ok1277635072"
-    // -------------- YOUR APP DATA ENDS -----------------
-
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
