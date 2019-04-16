@@ -121,7 +121,17 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModelMain.loadRightMenuData()
+        // Загрузка данных для правого меню
+        //viewModelMain.loadRightMenuData()
+
+        // Если чел. ранее авторизовался, проверяем это здесь
+        val userAuthid = getSharedPreferences("userAuth", MODE_PRIVATE).getString("userSessionID", null)
+        val userBtn = getSharedPreferences("userAuth", MODE_PRIVATE).getString("userBtnProvider", null)
+
+        if(!userAuthid.isNullOrEmpty() && !userBtn.isNullOrEmpty()){
+            viewModelAuth.setUserAuthid(true)
+            viewModelAuth.setBtnUserLogged(userBtn)
+        }
 
         //viewModelMain.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
         viewModelMain.saveLaunchFlag(false)//отладка первого запуска true

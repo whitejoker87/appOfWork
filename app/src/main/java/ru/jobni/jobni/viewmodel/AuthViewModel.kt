@@ -23,6 +23,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     // Данные при авторизации, читаем здесь для sessionID
     private val userAuthSessionID = "userSessionID"
+    private val userAuthBtnProvider = "userBtnProvider"
 
     var sPrefUserAuth = application.getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
 
@@ -91,6 +92,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
         val editor = sPrefUserAuth.edit()
         editor?.remove(userAuthSessionID)
+        editor?.remove(userAuthBtnProvider)
         editor?.apply()
 
         setBtnUserLogged("")
@@ -101,6 +103,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun onAuthMailUserClick() {
 
         val userData = UserMailAuth(getAuthMail(), getAuthPass())
+        val provider = "mail"
 
         Retrofit.api?.postAuthData("AuthMailUser", userData)?.enqueue(object : Callback<AuthMail> {
             override fun onResponse(@NonNull call: Call<AuthMail>, @NonNull response: Response<AuthMail>) {
@@ -119,6 +122,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         val editor = sPrefUserAuth.edit()
                         editor?.putString(userAuthSessionID, sessionID)
+                        editor?.putString(userAuthBtnProvider, provider)
                         editor?.apply()
 
                         setUserAuthid(true)
@@ -139,6 +143,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun onAuthPhoneUserClick() {
 
         val userData = UserPhoneAuth(getAuthPhone(), getAuthPhonePassword())
+        val provider = "phone"
 
         Retrofit.api?.postAuthDataPhone("AuthPhoneUser", userData)?.enqueue(object : Callback<AuthPhone> {
             override fun onResponse(@NonNull call: Call<AuthPhone>, @NonNull response: Response<AuthPhone>) {
@@ -157,6 +162,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         val editor = sPrefUserAuth.edit()
                         editor?.putString(userAuthSessionID, sessionID)
+                        editor?.putString(userAuthBtnProvider, provider)
                         editor?.apply()
 
                         setUserAuthid(true)

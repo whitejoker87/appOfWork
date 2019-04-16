@@ -29,6 +29,7 @@ class AuthDialog(
 
     // Данные для авторизации
     private val userAuthSessionID = "userSessionID"
+    private val userAuthBtnProvider = "userBtnProvider"
     var sPrefUserAuth = _context.getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
 
     private val authViewModel: AuthViewModel by lazy {
@@ -55,6 +56,8 @@ class AuthDialog(
 
     private val VKWebViewClient = object : WebViewClient() {
 
+        val editor = sPrefUserAuth.edit()
+
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
@@ -63,6 +66,9 @@ class AuthDialog(
 
             if (url.contains(_context.getString(R.string.jobni_callback_url_for_social_network))) {
                 if (checkSessionID == true) {
+                    //запишем данные для кнопки если SessionID получен
+                    editor?.putString(userAuthBtnProvider, typeProvider)
+                    editor?.apply()
                     // Закрыть окно если строка содержит адрес callback
                     dismiss()
                 }
