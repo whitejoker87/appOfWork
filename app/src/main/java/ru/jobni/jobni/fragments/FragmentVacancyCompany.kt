@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
 import ru.jobni.jobni.databinding.CCardVacancyOpenMapOpenBinding
-import ru.jobni.jobni.model.RepositoryCompanyVacancy
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 class FragmentVacancyCompany : Fragment() {
@@ -25,18 +24,12 @@ class FragmentVacancyCompany : Fragment() {
 
     private lateinit var binding: CCardVacancyOpenMapOpenBinding
 
-    private val repository: RepositoryCompanyVacancy = RepositoryCompanyVacancy
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.c_card_vacancy_open_map_open, container, false)
 
         binding.lifecycleOwner = this
 
         val view = binding.root
-
-        // Бля биндинга нужно не пустое значение
-        // В нашем случаи берем первую вакансию в списке
-//        binding.vacancy = repository.getCompanyVacancy().value?.get(0)
 
         binding.viewmodel = viewModel
 
@@ -62,11 +55,6 @@ class FragmentVacancyCompany : Fragment() {
                 viewModel.setLoadCardVisible(true)
             }
         })
-
-//        viewModel.getModelCompanyVacancy().observe(this, Observer { vacancy ->
-//            vacancy?.let { binding.vacancy = vacancy.companyVacancyListList[viewModel.vacancyPosition]
-//            }
-//        })
 
         return view
     }
