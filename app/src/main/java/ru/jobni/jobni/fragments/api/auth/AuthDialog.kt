@@ -8,7 +8,6 @@ import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import ru.jobni.jobni.R
@@ -27,10 +26,11 @@ class AuthDialog(
     // Выполнять процесс только когда sessionid получен
     private var checkSessionID: Boolean? = false
 
-    // Данные для авторизации
+    // Данные для авторизации SharedPreferences.
+    // Название полей соответствуют AuthViewModel
+    // Так как нам нужно именно эти данные прочитать позже
     private val userAuthSessionID = "userSessionID"
     private val userAuthBtnProvider = "userBtnProvider"
-    var sPrefUserAuth = _context.getSharedPreferences("userAuth", AppCompatActivity.MODE_PRIVATE)
 
     private val authViewModel: AuthViewModel by lazy {
         ViewModelProviders.of(_context as FragmentActivity).get(AuthViewModel::class.java)
@@ -56,8 +56,6 @@ class AuthDialog(
 
     private val VKWebViewClient = object : WebViewClient() {
 
-        val editor = sPrefUserAuth.edit()
-
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
@@ -67,46 +65,14 @@ class AuthDialog(
             if (url.contains(_context.getString(R.string.jobni_callback_url_for_social_network))) {
                 if (checkSessionID == true) {
                     //запишем данные для кнопки если SessionID получен
+                    val editor = authViewModel.sPrefUserAuth.edit()
                     editor?.putString(userAuthBtnProvider, typeProvider)
                     editor?.apply()
+                    //Выставить авторизацию, как успешную
+                    authViewModel.setUserAuthid(true)
+                    authViewModel.setBtnUserLogged(typeProvider)
                     // Закрыть окно если строка содержит адрес callback
                     dismiss()
-                }
-
-                // Выставить авторизацию, как успешную
-                when {
-                    typeProvider.contains("instagram") -> {
-                        authViewModel.setUserAuthid(true)
-                        authViewModel.setBtnUserLogged("instagram")
-                    }
-                    typeProvider.contains("vk") -> {
-                        authViewModel.setUserAuthid(true)
-                        authViewModel.setBtnUserLogged("vk")
-                    }
-                    typeProvider.contains("microsoft") -> {
-                        authViewModel.setUserAuthid(true)
-                        authViewModel.setBtnUserLogged("microsoft")
-                    }
-                    typeProvider.contains("odnoklassniki") -> {
-                        authViewModel.setUserAuthid(true)
-                        authViewModel.setBtnUserLogged("odnoklassniki")
-                    }
-                    typeProvider.contains("mailru") -> {
-                        authViewModel.setUserAuthid(true)
-                        authViewModel.setBtnUserLogged("mailru")
-                    }
-                    typeProvider.contains("google") -> {
-                        authViewModel.setUserAuthid(true)
-                        authViewModel.setBtnUserLogged("google")
-                    }
-                    typeProvider.contains("facebook") -> {
-                        authViewModel.setUserAuthid(true)
-                        authViewModel.setBtnUserLogged("facebook")
-                    }
-                    typeProvider.contains("discord") -> {
-                        authViewModel.setUserAuthid(true)
-                        authViewModel.setBtnUserLogged("discord")
-                    }
                 }
             } else if (url.contains("?errors=")) {
                 Log.e("?errors=", "getting error fetching auth")
@@ -133,10 +99,11 @@ class AuthDialog(
             sessionID = rawCookieHeader.substringAfter(";").substringAfter("=")
 
             // Запишем полученный sessionid
-            val editor = sPrefUserAuth.edit()
+            val editor = authViewModel.sPrefUserAuth.edit()
             editor?.putString(userAuthSessionID, sessionID)
             editor?.apply()
 
+            // sessionid получен, поэтому ключ в режим TRUE
             checkSessionID = true
         }
 

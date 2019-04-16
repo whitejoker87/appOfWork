@@ -125,8 +125,8 @@ class MainActivity : AppCompatActivity() {
         //viewModelMain.loadRightMenuData()
 
         // Если чел. ранее авторизовался, проверяем это здесь
-        val userAuthid = getSharedPreferences("userAuth", MODE_PRIVATE).getString("userSessionID", null)
-        val userBtn = getSharedPreferences("userAuth", MODE_PRIVATE).getString("userBtnProvider", null)
+        val userAuthid = viewModelAuth.sPrefUserAuth.getString("userSessionID", null)
+        val userBtn = viewModelAuth.sPrefUserAuth.getString("userBtnProvider", null)
 
         if(!userAuthid.isNullOrEmpty() && !userBtn.isNullOrEmpty()){
             viewModelAuth.setUserAuthid(true)
