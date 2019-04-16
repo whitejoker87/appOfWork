@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         // Загрузка данных для правого меню
-        //viewModelMain.loadRightMenuData()
+        viewModelMain.loadRightMenuData()
 
         // Если чел. ранее авторизовался, проверяем это здесь
         val userAuthid = viewModelAuth.sPrefUserAuth.getString("userSessionID", null)
