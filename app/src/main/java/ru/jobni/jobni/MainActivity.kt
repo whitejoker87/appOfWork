@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -66,7 +67,9 @@ class MainActivity : AppCompatActivity() {
     private val SET_FOCUS: String = "SetFocus"
     private val SET_CARDS: String = "SetCards"
 
-    private val WRITE_REQUEST_CODE = 0
+    private val CAMERA_REQUEST_CODE = 0
+    private val GALLERY_REQUEST_CODE = 1
+
     private val CAMERA_REQUEST = 0
     private val GALLERY_REQUEST = 1
     private val VK_REQUEST = 1
@@ -269,7 +272,7 @@ class MainActivity : AppCompatActivity() {
             if (!it) {
                 val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    ActivityCompat.requestPermissions(this, permissions, WRITE_REQUEST_CODE)
+                    ActivityCompat.requestPermissions(this, permissions, CAMERA_REQUEST_CODE)
                 }
             } else regViewModel.openCamera()
         })
@@ -317,18 +320,29 @@ class MainActivity : AppCompatActivity() {
                 when (it) {
                     "camera" -> {
                         regViewModel.setPhotoLaunch("")
+//                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR)
+//                            != PackageManager.PERMISSION_GRANTED) {
+//                            // Permission is not granted
+//                        }
                         val permissions =
                             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            requestPermissions(permissions, WRITE_REQUEST_CODE)
+                            requestPermissions(permissions, CAMERA_REQUEST_CODE)
                         } else
                             regViewModel.openCamera()
                     }
                     "gallery" -> {
                         regViewModel.setPhotoLaunch("")
-                        val photoPickerIntent = Intent(Intent.ACTION_PICK)
-                        photoPickerIntent.type = "image/*"
-                        startActivityForResult(photoPickerIntent, GALLERY_REQUEST)
+                        val permissions =
+                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            requestPermissions(permissions, GALLERY_REQUEST_CODE)
+                        } else {
+                            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                            photoPickerIntent.type = "image/*"
+                            startActivityForResult(photoPickerIntent, GALLERY_REQUEST)
+                        }
+
 
 //                        val pickPhoto = Intent(
 //                            Intent.ACTION_PICK,
@@ -411,9 +425,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            WRITE_REQUEST_CODE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            CAMERA_REQUEST_CODE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 regViewModel.openCamera()
                 //regViewModel.setPrivilegesForFileDone(true)
+            }
+            GALLERY_REQUEST_CODE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                photoPickerIntent.type = "image/*"
+                startActivityForResult(photoPickerIntent, GALLERY_REQUEST)
             }
         }
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="viewmodel" type="ru.jobni.jobni.viewmodel.RegViewModel"/>
         <variable name="position" type="int"/>
@@ -13,9 +14,10 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   style="@style/text_color_and_size"
-
-                  android:hint="@string/phone_number"
+                  app:hintContact="@{viewmodel.regContactsType[position]}"
                   android:textAlignment="textEnd"
                   android:text="@={viewmodel.regContacts[position]}"/>
     </LinearLayout>
 </layout>
+
+        <!--android:hint='@{viewmodel.regContactsType[position].equals("phone") ? @string/phone_number : "не телефон" }'-->

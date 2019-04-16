@@ -33,20 +33,36 @@
 			app:layout_constraintVertical_bias = "1.0"
 			/>
 
-		<androidx.recyclerview.widget.RecyclerView
-			android:id = "@+id/rv_reg_contact"
+		<TextView
+			android:id = "@+id/tv_title_reg_contact"
 			android:layout_width = "0dp"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toTopOf = "@+id/background"
 			app:layout_constraintStart_toStartOf = "@+id/background"
 			app:layout_constraintEnd_toEndOf = "@+id/background"
 			android:layout_marginTop = "16dp"
+			android:layout_marginStart = "16dp"
+			android:layout_marginEnd = "16dp"
+			android:text = "Контакты:"
+			/>
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id = "@+id/rv_reg_contact"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintTop_toBottomOf = "@+id/tv_title_reg_contact"
+			app:layout_constraintBottom_toTopOf = "@+id/chb_consent_to_data_storage_and_protection"
+			app:layout_constraintStart_toStartOf = "@+id/background"
+			app:layout_constraintEnd_toEndOf = "@+id/background"
 			android:layout_margin = "16dp"
+			android:layout_marginTop = "16dp"
+			android:layout_marginBottom = "16dp"
 			app:layoutManager = "androidx.recyclerview.widget.LinearLayoutManager"
 			/>
 
 		<com.google.android.material.floatingactionbutton.FloatingActionButton
 			android:id = "@+id/floatingActionButton"
+			android:visibility = "gone"
 			android:layout_width = "wrap_content"
 			android:layout_height = "wrap_content"
 			app:layout_constraintTop_toBottomOf = "@+id/rv_reg_contact"
@@ -57,60 +73,62 @@
 			app:backgroundTint = "@color/theme_1_color_1"
 			android:focusable = "true"
 			android:clickable = "true"
-			android:onClick = "@{() -> viewmodel.btnAddContactClick()}"
-			android:visibility="gone"
+			android:onClick = '@{() -> viewmodel.btnAddContactClick("")}'
 			/>
 
-        <CheckBox
-                android:id="@+id/chb_consent_to_data_storage_and_protection"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/floatingActionButton"
-                app:layout_constraintStart_toStartOf="@+id/background"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/data_protection"
-                android:checked="@={viewmodel.regDataProtection}"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"/>
+		<CheckBox
+			android:id = "@+id/chb_consent_to_data_storage_and_protection"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintBottom_toTopOf = "@+id/chb_consent_public_offers"
+			app:layout_constraintStart_toStartOf = "@+id/background"
+			app:layout_constraintEnd_toEndOf = "@+id/background"
+			android:layout_marginBottom = "16dp"
+			android:layout_marginStart = "16dp"
+			android:layout_marginEnd = "16dp"
+			android:text = "@string/data_protection"
+			android:checked = "@={viewmodel.regDataProtection}"
+			/>
 
-        <CheckBox
-                android:id="@+id/chb_consent_public_offers"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/chb_consent_to_data_storage_and_protection"
-                app:layout_constraintStart_toStartOf="@+id/background"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/public_offers"
-                android:checked="@={viewmodel.regPublicOffers}"
-        />
+		<CheckBox
+			android:id = "@+id/chb_consent_public_offers"
+			android:layout_width = "0dp"
+			android:layout_height = "wrap_content"
+			app:layout_constraintBottom_toTopOf = "@+id/registration"
+			app:layout_constraintStart_toStartOf = "@+id/background"
+			android:layout_marginBottom = "32dp"
+			android:layout_marginStart = "16dp"
+			android:text = "@string/public_offers"
+			android:checked = "@={viewmodel.regPublicOffers}"
+			/>
 
-        <Button
-                android:id="@+id/registration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/chb_consent_public_offers"
-                app:layout_constraintBottom_toBottomOf="@+id/background"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/shape_button"
-                android:text="@string/registration"
-                android:onClick="@{() -> viewmodel.btnRegContactFaceContactClick()}"
-                android:layout_marginStart="16dp" app:layout_constraintStart_toStartOf="parent"/>
+		<Button
+			android:id = "@+id/registration"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintBottom_toBottomOf = "@+id/background"
+			app:layout_constraintStart_toStartOf = "@+id/background"
+			android:layout_marginBottom = "32dp"
+			android:layout_marginStart = "32dp"
+			android:background = "@drawable/shape_button"
+			android:text = "@string/registration"
+			android:onClick = "@{() -> viewmodel.btnRegContactFaceContactClick()}"
+			/>
 
-        <com.leinardi.android.speeddial.SpeedDialView
-                android:id="@+id/speedDial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                app:sdMainFabClosedSrc="@drawable/ic_plus"
-                app:sdMainFabOpenedSrc="@drawable/ic_plus"
-                app:sdMainFabClosedBackgroundColor="@color/theme_1_color_1"
-                app:sdMainFabOpenedBackgroundColor="@color/theme_1_color_1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="16dp" android:layout_marginEnd="16dp" android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/chb_consent_public_offers"/>
-
+		<com.leinardi.android.speeddial.SpeedDialView
+			android:id = "@+id/speedDial"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			app:layout_constraintBottom_toBottomOf = "@+id/background"
+			app:layout_constraintEnd_toEndOf = "@+id/background"
+			android:layout_marginBottom = "16dp"
+			android:layout_marginEnd = "32dp"
+			android:layout_gravity = "bottom|end"
+			app:sdMainFabClosedSrc = "@drawable/ic_plus"
+			app:sdMainFabOpenedSrc = "@drawable/ic_plus"
+			app:sdMainFabClosedBackgroundColor = "@color/theme_1_color_1"
+			app:sdMainFabOpenedBackgroundColor = "@color/theme_1_color_1"
+			app:onClickSpeedDialItem="@{viewmodel.onClickSpeedDialViewItem}"
+			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

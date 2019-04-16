@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.leinardi.android.speeddial.SpeedDialActionItem
+import com.leinardi.android.speeddial.SpeedDialView
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -21,6 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.jobni.jobni.BuildConfig
+import ru.jobni.jobni.R
 import ru.jobni.jobni.model.network.registration.*
 import ru.jobni.jobni.utils.Retrofit
 import ru.jobni.jobni.utils.getRealPath
@@ -508,7 +511,10 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                     if (response.body()!!.success) {
                         getSIDFromRegOne(response.headers())
                         Toast.makeText(context, "Пароль в порядке!", Toast.LENGTH_LONG).show()
-                        if (getSocialRegStart().value!!) setResultReg2Success(true)//завершаем этап пароля только для соцсетей(т.к не ткода подтверждения)
+                        if (getSocialRegStart().value!!) {
+                            if (getRegReferer().value!!.isNotEmpty()) sendRegReferer()
+                            else setResultReg2Success(true)
+                        }//завершаем этап пароля только для соцсетей(т.к не ткода подтверждения)
                     } else if (!(response.body()!!.success)) {
                         Toast.makeText(context, "Пароль не принят! ${response.body()!!.errors}", Toast.LENGTH_LONG)
                             .show()
@@ -546,7 +552,8 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
-                        setResultReg2Success(true)//завершение этапа пароля и кода и переход к этапу ФИО
+                        if (getRegReferer().value!!.isNotEmpty()) sendRegReferer()
+                        else setResultReg2Success(true)//завершение этапа пароля и кода и переход к этапу ФИО
                         Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
                     } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
@@ -583,7 +590,8 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.body() != null) {
 
                     if (response.body()!!.success) {
-                        setResultReg2Success(true)//завершение этапа пароля и кода и переход к этапу ФИО
+                        if (getRegReferer().value!!.isNotEmpty()) sendRegReferer()
+                        else setResultReg2Success(true) //завершение этапа пароля и кода и переход к этапу ФИО
                         Toast.makeText(context, "Код подтвержден!", Toast.LENGTH_LONG).show()
 
                     } else Toast.makeText(context, "Код лох! ${response.body()!!.errors}", Toast.LENGTH_LONG).show()
@@ -600,6 +608,33 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    /*Выполнение этапа отправки referer*/
+    fun sendRegReferer() {
+
+        val id = sPrefAuthUser.getString(authUserSessionID, null)
+        val cid = String.format("%s%s", "sessionid=", id)
+
+        val referer = RegReferer(
+            regReferer.value!!
+        )
+        Retrofit.api?.sendRegistrationReferer(cid, referer)?.enqueue(object : Callback<ResponseRegReferer> {
+
+            override fun onResponse(call: Call<ResponseRegReferer>, response: Response<ResponseRegReferer>) {
+                if (response.body() != null) {
+                    if (response.body()!!.success) {
+                        setResultReg2Success(true)//переход ко 2 этапу реги
+                        Toast.makeText(context, "Успешно добавлена рефералка!", Toast.LENGTH_LONG).show()
+                    }//{"success":false,"errors":{"referer":["Указан неверный реферал"]}}
+                    else Toast.makeText(context, "Безуспешно не добавлено ничего раеферального", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseRegReferer>, t: Throwable) {
+                Toast.makeText(context, "Error! in рефа", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     /*Для выполнения 3 этапа регистрации(Имя Фамилия Отчество)*/
     fun btnRegContactFaceClick() {
 
@@ -612,16 +647,6 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             regMiddlename.value!!
         )
         Retrofit.api?.sendRegistrationContactFace(cid, contactFace)?.enqueue(object : Callback<ResponseRegContactFace> {
-
-            /*{"contacts":
-            [
-            {"id":87,
-            "contact_type":"Почта",
-            "contact":"anonimalesha@mail.ru"}
-            ],
-            "result":
-            {"success":true,
-            "error_text":[]}}*/
 
             override fun onResponse(call: Call<ResponseRegContactFace>, response: Response<ResponseRegContactFace>) {
                 if (response.body() != null) {
@@ -852,9 +877,9 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 
     /*Для добавления контакта в список на 4 этапе регистрации*/
-    fun btnAddContactClick() {
+    fun btnAddContactClick(type: String) {
         regContactsId.add(0)
-        regContactsType.add("phone")
+        regContactsType.add(type)
         regContacts.add("")
     }
 
@@ -999,5 +1024,30 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         //setOutputPhotoUri(Uri.fromFile(image))
         //setOutputPhotoUri(Uri.parse("file://" + image.absolutePath))
         return image
+    }
+
+    /*слушатель нажатия на пункт fab в 3 этапе реги*/
+    val onClickSpeedDialViewItem = object : SpeedDialView.OnActionSelectedListener {
+        override fun onActionSelected(speedDialActionItem: SpeedDialActionItem): Boolean {
+            when(speedDialActionItem.id) {
+                R.id.action_user -> {
+                    btnAddContactClick("email")
+                    return false
+                }
+                R.id.action_phone -> {
+                    btnAddContactClick("phone")
+                    return false
+                }
+                R.id.action_skype -> {
+                    btnAddContactClick("skype")
+                    return false
+                }
+                R.id.action_phone_home -> {
+                    btnAddContactClick("home_phone")
+                    return false
+                }
+                else -> return false
+            }
+        }
     }
 }

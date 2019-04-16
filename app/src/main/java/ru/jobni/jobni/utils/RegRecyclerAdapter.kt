@@ -53,7 +53,7 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding: ru.jobni.jobni.databinding.RegPhaseRecyclerItemBinding =
+        val binding: RegPhaseRecyclerItemBinding =
             DataBindingUtil.inflate(inflater, R.layout.reg_phase_recycler_item, parent, false)
         return ViewHolder(binding, viewModel)
     }
@@ -87,15 +87,6 @@ class RegRecyclerAdapter(/*private val mObjects: List<String>,*/ private val mCo
                 }
             }
         })
-
-//        viewModel.getResultReg2Success().observe(mContext as LifecycleOwner, Observer {
-//            if (it) {
-//                holder.itemView.performClick()
-//                viewModel.setResultReg2Success(false)
-//
-//            }
-//        })
-
         holder.bind(position)
     }
 

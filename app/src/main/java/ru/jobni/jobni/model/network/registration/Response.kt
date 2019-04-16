@@ -31,6 +31,11 @@ data class ResponseRegPass(
         @SerializedName("errors")val errors: RegPassErrors
 
 )
+data class ResponseRegReferer(
+        @SerializedName("success")val success: Boolean,
+        @SerializedName("errors")val errors: RegRefererErrors
+
+)
 //{"success":true,"result":{"id":8}}
 //{"success":false,"errors":{"non_field_errors":["Учетные данные не были предоставлены."]}}
 //{"success":false,"errors":{"code":["Время жизни кода активации вышло, зарегистрируйтесь заново"]}}

@@ -18,6 +18,10 @@ data class RegPass(
         @SerializedName("password_confirm")val password_confirm: String
 )
 
+data class RegReferer(
+        @SerializedName("referer")val referer: String
+)
+
 data class RegBindEmail(
         @SerializedName("email")val email: String
 )

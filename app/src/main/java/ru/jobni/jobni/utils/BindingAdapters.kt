@@ -11,7 +11,9 @@ import androidx.databinding.BindingMethods
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.leinardi.android.speeddial.SpeedDialView
 import com.squareup.picasso.Picasso
+import ru.jobni.jobni.R
 import ru.jobni.jobni.viewmodel.MainViewModel
 
 
@@ -171,6 +173,26 @@ object BindingAdapters {
     @JvmStatic
     fun setChecked(checkableView: CompoundButton, isChecked: Boolean?, nullValue: Boolean) {
         checkableView.isChecked = isChecked ?: nullValue
+    }
+
+    //слушаем нажатие на fab в 3 реге
+    @BindingAdapter("onClickSpeedDialItem")
+    @JvmStatic
+    fun setOnClickItemListener(view: SpeedDialView, listener: SpeedDialView.OnActionSelectedListener) {
+        view.setOnActionSelectedListener(listener)
+    }
+
+    //для подсказок контакта 3 рега
+    @BindingAdapter("hintContact")
+    @JvmStatic
+    fun hintContact(view: EditText, typeContact: String) {
+        when(typeContact) {
+            "email" -> view.hint = "name@domain.ru"
+            "phone" -> view.hint = "+79991234567"
+            "skype" -> view.hint = "login of skype"
+            "home_phone" -> view.hint = "+78219876543"
+            else -> view.hint = "это мне неведомо"
+        }
     }
 
 //    @BindingAdapter("app:onNavigationItemSelected")

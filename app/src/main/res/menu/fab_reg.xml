@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.leinardi.android.speeddial.sample.MainActivity">
-    <item
-            android:id="@+id/action_use_cases"
-            android:orderInCategory="100"
-            android:title="test"
-            app:showAsAction="never" />
+<menu xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	xmlns:tools = "http://schemas.android.com/tools"
+	tools:context = "com.leinardi.android.speeddial.sample.MainActivity"
+	>
+	<item android:id = "@+id/action_user"
+		android:icon = "@drawable/ic_user"
+		android:orderInCategory = "100"
+		android:title = "mail"
+		app:showAsAction = "never"
+		/>
+	<item android:id = "@+id/action_phone"
+		android:icon = "@drawable/ic_phone"
+		android:orderInCategory = "100"
+		android:title = "phone"
+		app:showAsAction = "never"
+		/>
+
+	<item android:id = "@+id/action_skype"
+		android:icon = "@drawable/skype"
+		android:orderInCategory = "100"
+		android:title = "skype"
+		app:showAsAction = "never"
+		/>
+
+	<item android:id = "@+id/action_phone_home"
+		android:icon = "@drawable/baseline_home_black_24dp"
+		android:orderInCategory = "100"
+		android:title = "home_phone"
+		app:showAsAction = "never"
+		/>
 </menu>

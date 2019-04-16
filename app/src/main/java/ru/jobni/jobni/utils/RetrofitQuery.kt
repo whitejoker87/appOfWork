@@ -38,6 +38,10 @@ interface RetrofitQuery {
     @POST("api/registration/password/")
     fun sendRegistrationPass(@Header("Cookie") sessionID: String, @Body pass: RegPass): Call<ResponseRegPass>
 
+    @POST("api/registration/referer/")
+    fun sendRegistrationReferer(@Header("Cookie") sessionID: String, @Body referer: RegReferer): Call<ResponseRegReferer>
+
+
     @POST("api/registration/contact_face/")
     fun sendRegistrationContactFace(@Header("Cookie") sessionID: String, @Body contactFace: RegContactFace): Call<ResponseRegContactFace>
 

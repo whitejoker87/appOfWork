@@ -14,6 +14,10 @@ data class RegPassErrors(
         @SerializedName("code")val code: List<String>
 )
 
+data class RegRefererErrors(
+        @SerializedName("referer")val referer: List<String>
+)
+
 data class RegContactFaceErrors(
         @SerializedName("name")val name: List<String>,
         @SerializedName("surname")val surname: List<String>,
