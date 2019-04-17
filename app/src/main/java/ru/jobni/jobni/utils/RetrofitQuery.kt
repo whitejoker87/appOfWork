@@ -48,12 +48,16 @@ interface RetrofitQuery {
     @POST("api/registration/contact_face_contact/")
     fun sendRegistrationContactFaceContact(@Header("Cookie") sessionID: String, @Body contacts: RegContactFaceContact): Call<ResponseRegContactFaceContacts>
 
-    @GET("api/registration/get_stages/")
+    /*старая версия получения конактов*/
+//    @GET("api/registration/get_stages/")
+//    fun getContactsForReg(@Header("Cookie") sessionID: String): Call<ResponseRegGetContacts>
+    @GET("api/type_authorization/")
     fun getContactsForReg(@Header("Cookie") sessionID: String): Call<ResponseRegGetContacts>
 
     @POST("api/accounts/{type_social}/login/")
     fun getDataSocialReg(@Header("Cookie") sessionID: String, @Path("type_social") type_social: String, @Query("process") process: String): Call<ResponseBody>
 
+    @Multipart
     @POST("api/registration/photo/")
     fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseBody>
 

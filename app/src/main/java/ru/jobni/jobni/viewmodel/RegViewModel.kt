@@ -679,14 +679,19 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
         /*Формируем из 3 листов Livedata один для отправки на сервер*/
         for (i in contactsString.indices) {
-            if (regContactsId.value!![i] > 0) contacts.add(
-                RegContact(
-                    regContactsId.value!![i],
-                    regContactsType.value!![i],
-                    contactsString[i]
-                )
-            )
-            else contacts.add(RegContactWithoutId(regContactsType.value!![i], contactsString[i]))
+//            if (regContactsId.value!![i] > 0) contacts.add(
+//                RegContact(
+//                    regContactsId.value!![i],
+//                    regContactsType.value!![i],
+//                    contactsString[i]
+//                )
+//            )
+//            else {
+                contacts.add(
+                    RegContactWithoutId(
+                        regContactsType.value!![i],
+                        contactsString[i]))
+//            }
         }
 
         val contactFaceContacts = RegContactFaceContact(
@@ -883,7 +888,50 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         regContacts.add("")
     }
 
-    /*Для загрузки прикрепленных контактов для испольщования в 4 этапе(пока костыль)*/
+    /*Для загрузки прикрепленных контактов для испольщования в 4 этапе(старая версия)*/
+//    fun getContactsForReg3Old() {
+//
+//        val id = sPrefAuthUser.getString(authUserSessionID, null)
+//        val cid = String.format("%s%s", "sessionid=", id)
+//
+//        Retrofit.api?.getContactsForReg(cid)?.enqueue(object : Callback<ResponseRegGetContacts> {
+//
+//            /*{"success":true,
+//            "result":
+//            {"name":"Иван",
+//            "surname":"Иванов",
+//            "middlename":"Иванович",
+//            "referer":"",
+//            "photo":"",
+//            "consent_to_data_storage_and_protection":false,
+//            "consent_public_offers":false,
+//            "login":"16",
+//            "password":true,
+//            "contacts":[{
+//            "contact_type":"mail",
+//            "contact_id":9,
+//            "contact":"3@3.ru",
+//            "incomplete_registration":true}]}}*/
+//            override fun onResponse(call: Call<ResponseRegGetContacts>, response: Response<ResponseRegGetContacts>) {
+//                if (response.body() != null) {
+//                    if (response.body()!!.success) {
+//                        response.body()!!.result.contacts.forEach {
+//                            regContactsId.add(it.contact_id)
+//                            regContactsType.add(it.contact_type)
+//                            regContacts.add(it.contact)
+//                        }
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ResponseRegGetContacts>, t: Throwable) {
+//
+//            }
+//        })
+//
+//    }
+
+    /*Для загрузки прикрепленных контактов для испольщования в 4 этапе(актуально)*/
     fun getContactsForReg3() {
 
         val id = sPrefAuthUser.getString(authUserSessionID, null)
@@ -892,26 +940,19 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         Retrofit.api?.getContactsForReg(cid)?.enqueue(object : Callback<ResponseRegGetContacts> {
 
             /*{"success":true,
-            "result":
-            {"name":"Иван",
-            "surname":"Иванов",
-            "middlename":"Иванович",
-            "referer":"",
-            "photo":"",
-            "consent_to_data_storage_and_protection":false,
-            "consent_public_offers":false,
-            "login":"16",
-            "password":true,
-            "contacts":[{
-            "contact_type":"mail",
-            "contact_id":9,
-            "contact":"3@3.ru",
-            "incomplete_registration":true}]}}*/
+            "next":null,
+            "previous":null,
+            "count":1,
+            "results":
+            [{"contact_id":132,
+            "contact_type":"phone",
+            "contact":"1231231230",
+            "incomplete_registration":true}]}*/
             override fun onResponse(call: Call<ResponseRegGetContacts>, response: Response<ResponseRegGetContacts>) {
                 if (response.body() != null) {
                     if (response.body()!!.success) {
-                        response.body()!!.result.contacts.forEach {
-                            regContactsId.add(it.contact_id)
+                        response.body()!!.results.forEach {
+                            //regContactsId.add(it.contact_id)
                             regContactsType.add(it.contact_type)
                             regContacts.add(it.contact)
                         }

@@ -70,9 +70,19 @@ data class ResponseRegContactFace(
 "contact_id":9,
 "contact":"3@3.ru",
 "incomplete_registration":true}]}}*/
+
+/*           /*{"success":true,
+            "next":null,
+            "previous":null,
+            "count":1,
+            "results":
+            [{"contact_id":132,
+            "contact_type":"phone",
+            "contact":"1231231230",
+            "incomplete_registration":true}]}*/*/
 data class ResponseRegGetContacts(
         @SerializedName("success")val success: Boolean,
-        @SerializedName("result")val result: RegGetContactsResult
+        @SerializedName("results")val results: List<ContactOptions>
 )
 //{"success":false,"errors":{"contact_face":["Нельзя повторно пройти регистрацию"]}}
 //{"success":true}
