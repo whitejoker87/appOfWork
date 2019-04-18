@@ -79,7 +79,6 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     private val resultReg3Success = MutableLiveData<Boolean>(false)//флаг отправленных ФИО
     private val resultReg4Success = MutableLiveData<Boolean>(false)//флаг законченной регистрации
 
-    private val resultAuthSuccess = MutableLiveData<Boolean>(false)
     private val typeAddRegFragment = MutableLiveData<String>("")
 
     private val socialRegStart = MutableLiveData<Boolean>(false)
@@ -252,11 +251,6 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         resultReg4Success.value = success
     }
 
-    fun getResultAuthSuccess(): MutableLiveData<Boolean> = resultAuthSuccess
-
-    fun setResultAuthSuccess(success: Boolean) {
-        resultAuthSuccess.value = success
-    }
 
     fun getTypeAddRegFragment(): MutableLiveData<String> = typeAddRegFragment
 
@@ -760,13 +754,19 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             "photo.jpg",
             RequestBody.create(MediaType.parse("image/jpg"), file)
         )
-        Retrofit.api?.postPhotoReg(cid, image)?.enqueue(object : Callback<ResponseBody> {
+        Retrofit.api?.postPhotoReg(cid, image)?.enqueue(object : Callback<ResponseRegStart> {
 
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            override fun onResponse(call: Call<ResponseRegStart>, response: Response<ResponseRegStart>) {
+                if (response.body() != null)
+                    if (response.body()!!.success) Toast.makeText(
+                        context,
+                        "Фото добавлено",
+                        Toast.LENGTH_LONG
+                    ).show()
 
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRegStart>, t: Throwable) {
 
             }
         });
@@ -1099,4 +1099,47 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    //для сброса значений регистрации при запуске ее повторно например
+    fun clearRegValues() {//Event wrapper по этой теме хорошо
+        regMail.value = ""
+        regPassword.value = ""
+        regPassConfirm.value = ""
+        regSurname.value = ""
+        regName.value = ""
+        regMiddlename.value = ""
+        regReferer.value = ""
+
+        regContacts.value = arrayListOf()
+        regContactsId.value = arrayListOf()
+        regContactsType.value = arrayListOf()
+        regPhone.value = ""
+        regPhoneCode.value = ""
+        regMailCode.value = ""
+        regDataProtection.value = false
+        regPublicOffers.value = false
+
+        numberOfVisibleItemReg.value = -1
+
+        resultReg1Success.value = false
+        resultReg2Success.value = false
+        resultReg3Success.value = false
+        resultReg4Success.value = false
+
+        typeAddRegFragment.value = ""
+
+        socialRegStart.value = false
+
+        photoLaunch.value = ""
+
+        isPhotoDialogEnabled.value = false
+
+        outputPhotoUri.value = Uri.EMPTY
+
+        mCurrentPhotoPath = ""
+        currentPhoto = File("")
+
+        urlWebViewSocial.value = ""
+    }
+
 }

@@ -22,9 +22,8 @@ import ru.jobni.jobni.viewmodel.RegViewModel
 import java.net.MalformedURLException
 import java.net.URL
 import android.webkit.CookieSyncManager
-import android.R
-
-
+import android.widget.ProgressBar
+import ru.jobni.jobni.R
 
 
 class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(contextIn) {
@@ -36,6 +35,7 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
         ViewModelProviders.of(contextIn as FragmentActivity).get(RegViewModel::class.java)
     }
 
+    private lateinit var progressBar: ProgressBar
 //    private lateinit var binding: RegDialogBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,9 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
         //binding = RegDialogBinding.inflate(LayoutInflater.from(context))
         //setContentView(binding.root)
 
-        this.setContentView(ru.jobni.jobni.R.layout.reg_dialog)
+        this.setContentView(R.layout.reg_dialog)
+
+        progressBar = findViewById(R.id.reg_progress_bar)
 
         regViewModel.getSocialReg(typeReg)
 
@@ -82,6 +84,11 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
             return false
         }
 
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            showProgressBar()
+            super.onPageStarted(view, url, favicon)
+        }
+
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
 
@@ -113,6 +120,7 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
                     //dismiss()
                 }
             }
+            hideProgressBar()
         }
     }
 
@@ -153,6 +161,14 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
             cookieSyncMngr.stopSync()
             cookieSyncMngr.sync()
         }
+    }
+
+    private fun showProgressBar() {
+        progressBar.animate().setDuration(200).alpha(1f).start()
+    }
+
+    private fun hideProgressBar() {
+        progressBar.animate().setDuration(200).alpha(0f).start()
     }
 
 }

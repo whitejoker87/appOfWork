@@ -46,10 +46,6 @@ class FragmentRegOnePhone : Fragment() {
         binding.viewmodelreg = regViewModel
         binding.viewmodelmain = mainViewModel
 
-        regViewModel.getResultAuthSuccess().observe(this, Observer {
-            //Toast.makeText(context, "Регистрация успешно проехала? ${it}", Toast.LENGTH_LONG).show()
-        })
-
         return view
     }
 

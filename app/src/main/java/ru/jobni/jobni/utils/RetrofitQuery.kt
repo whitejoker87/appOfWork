@@ -59,7 +59,7 @@ interface RetrofitQuery {
 
     @Multipart
     @POST("api/registration/photo/")
-    fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseBody>
+    fun postPhotoReg(@Header("Cookie") sessionID: String, @Part image: MultipartBody.Part): Call<ResponseRegStart>
 
     /*заготовка для отправки картинки*/
 //    @Multipart

@@ -39,6 +39,8 @@ class FragmentReg : Fragment() {
         val view = binding.root
         binding.viewmodel = mainViewModel
 
+        regViewModel.clearRegValues()//сброс заполеннных полей реги
+
         recycler_reg = binding.recyclerReg
         //recycler_reg.itemAnimator!!.changeDuration = 0
 //        val animator = recycler_reg.itemAnimator
