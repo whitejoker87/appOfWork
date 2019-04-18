@@ -108,17 +108,18 @@ class SocialRegDialog(val contextIn: Context, val typeReg: String) : Dialog(cont
                     // Закрыть окно при получении кода. Значит чел. прошел авторизацию.
                     view.clearCache(true)
                     view.clearHistory()
-                    clearCookies(contextIn)
+                    //clearCookies(contextIn)
                     //dismiss()
                 } else if (url.contains(contextIn.getString(ru.jobni.jobni.R.string.social_network_reg_already_exists))){
                     Log.e("code", "account already exists")
                     Toast.makeText(context, "Аккаунт привязан к другому полщовтаелю!", Toast.LENGTH_LONG).show()
                     view.clearCache(true)
                     view.clearHistory()
-                    clearCookies(contextIn)
+                    //clearCookies(contextIn)
                     regViewModel.setResultReg1Success(false)
                     //dismiss()
                 }
+                clearCookies(contextIn)
             }
             hideProgressBar()
         }

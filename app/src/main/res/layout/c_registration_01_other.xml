@@ -119,7 +119,7 @@
                 android:background="@drawable/shape_button"
                 android:text="@string/bind_account"
                 android:onClick='@{() -> viewmodelreg.regOrBind("soc")}'
-                android:visibility='@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")? View.GONE : View.VISIBLE)}'
+                android:visibility='@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")? View.GONE : (viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE))}'
         />
 
 
@@ -132,7 +132,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:cornerRoundness="0.5"
-                android:visibility='@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")? View.VISIBLE : View.GONE)}'/>
+                android:visibility='@{safeUnbox(viewmodelmain.socialLaunch.equals("RegTel")? (viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE) : View.GONE)}'/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

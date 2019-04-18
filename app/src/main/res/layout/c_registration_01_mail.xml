@@ -91,6 +91,7 @@
 			android:inputType = "textEmailAddress"
 			android:hint = "@string/mail_1"
 			android:text = "@={viewmodelreg.regMail}"
+			android:visibility='@{safeUnbox(viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE)}'
 			/>
 
 		<EditText
@@ -134,6 +135,7 @@
 			android:background = "@drawable/shape_button"
 			android:text = "@string/code_send"
 			android:onClick = '@{() -> viewmodelreg.regOrBind("mail")}'
+			android:visibility='@{safeUnbox(viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE)}'
 			/>
 
 		<EditText
@@ -148,6 +150,7 @@
 			android:inputType = "textPassword"
 			android:hint = "Введите код подтверждения"
 			android:text = "@={viewmodelreg.regMailCode}"
+			android:visibility='@{safeUnbox(viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE)}'
 			/>
 
 		<Button
@@ -161,6 +164,7 @@
 			android:background = "@drawable/shape_button"
 			android:text = "@string/bind_account"
 			android:onClick = "@{() -> viewmodelreg.confirmEmail()}"
+			android:visibility='@{safeUnbox(viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE)}'
 			/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

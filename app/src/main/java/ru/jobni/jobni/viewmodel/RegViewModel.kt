@@ -327,13 +327,12 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     /*other methods*/
     /*При привязке первой учетной записи получаем sessionid и пароль последующие нет*/
     fun regOrBind(type: String) {
-        if (getResultReg2Success().value!!) { //если пароль уже выдали и пройдена регистрация на 1 основной контакт
-            when(type) {
+        if (resultReg1Success.value!!) {//если уже есть сессия
+            when (type) {
                 "mail" -> postBindEmail()
                 "phone" -> postBindPhone()
                 "soc" -> setSocialRegStart(true)
             }
-
         } else startRegistration()
     }
 
