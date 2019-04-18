@@ -71,6 +71,7 @@ class FragmentReg : Fragment() {
         regViewModel.getResultReg4Success().observe(this, Observer {
             if (it) {
                 mainViewModel.setFragmentLaunch("Auth")
+                regViewModel.setResultReg4Success(false)//пеерключаем флаг для доступа к регистрации
             }
         })
 
