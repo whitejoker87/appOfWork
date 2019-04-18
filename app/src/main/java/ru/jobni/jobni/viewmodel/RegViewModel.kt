@@ -77,6 +77,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
         MutableLiveData<Boolean>(false)//флаг пройденного начала регистрации. получен первый sessionid
     private val resultReg2Success = MutableLiveData<Boolean>(false)//флаг зарегистрированного пароля
     private val resultReg3Success = MutableLiveData<Boolean>(false)//флаг отправленных ФИО
+    private val resultReg4Success = MutableLiveData<Boolean>(false)//флаг законченной регистрации
 
     private val resultAuthSuccess = MutableLiveData<Boolean>(false)
     private val typeAddRegFragment = MutableLiveData<String>("")
@@ -243,6 +244,12 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setResultReg3Success(success: Boolean) {
         resultReg3Success.value = success
+    }
+
+    fun getResultReg4Success(): MutableLiveData<Boolean> = resultReg4Success
+
+    fun setResultReg4Success(success: Boolean) {
+        resultReg4Success.value = success
     }
 
     fun getResultAuthSuccess(): MutableLiveData<Boolean> = resultAuthSuccess
@@ -713,10 +720,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
                             if (it.success) {
                                 Toast.makeText(
                                     context,
-                                    "Успешно добавлено контактное лицо ${resultReg3Success}",
+                                    "Успешно добавлены контакты всякие!!!",
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
+                                setResultReg4Success(it.success)
                                 /*{"contact":{"success":false,"error_text":["Это поле не может быть пустым."]}}*/
                             } else Toast.makeText(
                                 context,

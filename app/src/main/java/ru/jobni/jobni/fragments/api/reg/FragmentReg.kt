@@ -67,6 +67,13 @@ class FragmentReg : Fragment() {
             }
         })
 
+        //переход на окно авторизации после окончания реги
+        regViewModel.getResultReg4Success().observe(this, Observer {
+            if (it) {
+                mainViewModel.setFragmentLaunch("Auth")
+            }
+        })
+
         return view
     }
 
