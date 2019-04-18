@@ -72,14 +72,6 @@ class MainActivity : AppCompatActivity() {
 
     private val CAMERA_REQUEST = 0
     private val GALLERY_REQUEST = 1
-    private val VK_REQUEST = 1
-
-    // -------------- YOUR APP DATA GOES HERE(for OK) ------------
-    private val APP_ID = "1277635072"
-    private val APP_KEY = "CBALCICNEBABABABA"
-    private val REDIRECT_URL = "okauth://ok1277635072"
-    // -------------- YOUR APP DATA ENDS -----------------
-
 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var popup: PopupMenu
@@ -132,7 +124,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModelMain.loadRightMenuData()
+        // Если чел. ранее авторизовался, проверяем это здесь
+        val userAuthid = viewModelAuth.sPrefUserAuth.getString("userSessionID", null)
+        val userBtn = viewModelAuth.sPrefUserAuth.getString("userBtnProvider", null)
+
+        if(!userAuthid.isNullOrEmpty() && !userBtn.isNullOrEmpty()){
+            viewModelAuth.setUserAuthid(true)
+            viewModelAuth.setBtnUserLogged(userBtn)
+        }
 
         //viewModelMain.sPref = getSharedPreferences("firstLaunchSavedData", MODE_PRIVATE)
         viewModelMain.saveLaunchFlag(false)//отладка первого запуска true
@@ -154,6 +153,9 @@ class MainActivity : AppCompatActivity() {
         leftMenuPAdapters()
 
         viewModelMain.isOpenDrawerRight().observe(this, Observer { isOpen ->
+            // Загрузка данных для правого меню
+            viewModelMain.loadRightMenuData()
+
             if (isOpen) {
                 drawer.openDrawer(GravityCompat.END)
                 //ниже закрываем клавиатуру если открыта
