@@ -195,6 +195,16 @@ object BindingAdapters {
         }
     }
 
+    @BindingAdapter("phaseNumber", "reg2ready", "reg3ready")
+    @JvmStatic
+    fun clickableRegPhase(view: LinearLayout, phaseNumber: Int, reg2ready: Boolean, reg3ready: Boolean) {
+        when(phaseNumber) {
+            0 -> view.isClickable = true
+            1 -> view.isClickable = reg2ready
+            2 -> view.isClickable = reg3ready
+        }
+    }
+
 //    @BindingAdapter("app:onNavigationItemSelected")
 //    fun setOnNavigationItemSelected(
 //        view: BottomNavigationView, listener: BottomNavigationView

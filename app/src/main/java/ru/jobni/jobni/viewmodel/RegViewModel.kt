@@ -75,7 +75,7 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     private val resultReg1Success =
         MutableLiveData<Boolean>(false)//флаг пройденного начала регистрации. получен первый sessionid
-    private val resultReg2Success = MutableLiveData<Boolean>(false)//флаг зарегистрированного пароля
+    private val resultReg2Success = MutableLiveData<Boolean>(false)//флаг зарегистрированного пароля и кода подтверждения.  получен второй sessionid
     private val resultReg3Success = MutableLiveData<Boolean>(false)//флаг отправленных ФИО
     private val resultReg4Success = MutableLiveData<Boolean>(false)//флаг законченной регистрации
 
