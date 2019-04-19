@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import ru.jobni.jobni.databinding.FragmentRegRecyclerBinding
 import ru.jobni.jobni.utils.RegRecyclerAdapter
+import ru.jobni.jobni.viewmodel.AuthViewModel
 import ru.jobni.jobni.viewmodel.MainViewModel
 import ru.jobni.jobni.viewmodel.RegViewModel
 
@@ -27,6 +28,10 @@ class FragmentReg : Fragment() {
 
     private val regViewModel: RegViewModel by lazy {
         ViewModelProviders.of(activity!!).get(RegViewModel::class.java)
+    }
+
+    private val authViewModel: AuthViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(AuthViewModel::class.java)
     }
 
     private lateinit var binding: FragmentRegRecyclerBinding
@@ -72,7 +77,9 @@ class FragmentReg : Fragment() {
         //переход на окно авторизации после окончания реги
         regViewModel.getResultReg4Success().observe(this, Observer {
             if (it) {
-                mainViewModel.setFragmentLaunch("Auth")
+                authViewModel.setUserAuthid(true)
+                //authViewModel.setBtnUserLogged(typeProvider)
+                mainViewModel.setFragmentLaunch("Main_focus")
                 regViewModel.setResultReg4Success(false)//пеерключаем флаг для доступа к регистрации
             }
         })

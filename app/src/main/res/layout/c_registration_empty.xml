@@ -45,15 +45,16 @@
 			/>
 
 		<include
-			android:id = "@+id/include_social_network"
-			layout = "@layout/c_social_network_reg"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toTopOf = "@+id/iv_background"
-			app:layout_constraintStart_toStartOf = "@+id/iv_background"
-			app:layout_constraintEnd_toEndOf = "@+id/iv_background"
-			android:layout_marginTop = "36dp"
-			app:viewmodelmain = "@{viewmodelmain}"
-			/>
+				android:id="@+id/include_social_network"
+				layout="@layout/c_social_network_reg"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:layout_constraintTop_toTopOf="@+id/iv_background"
+				app:layout_constraintBottom_toBottomOf="@+id/iv_background"
+				app:layout_constraintStart_toStartOf="@+id/iv_background"
+				app:layout_constraintEnd_toEndOf="@+id/iv_background"
+				android:layout_marginTop="36dp"
+				app:viewmodelmain="@{viewmodelmain}"
+				android:layout_marginBottom="32dp" />
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
