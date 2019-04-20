@@ -106,6 +106,10 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     private val urlWebViewSocial = MutableLiveData<String>()
 
+    private val updateReg1 = MutableLiveData<Boolean>()
+
+    private val toastText = MutableLiveData<String>()
+
     fun setRegMail(mail: String) {
         regMail.value = mail
     }
@@ -284,11 +288,11 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getBitmapPhoto(): MutableLiveData<Bitmap> = bitmapPhoto
 
-    fun setPhotoDialogEnabled(dialogEnabled: Boolean) {
-        isPhotoDialogEnabled.value = dialogEnabled
+    fun setUpdateReg1(updated: Boolean) {
+        updateReg1.value = updated
     }
 
-    fun isPhotoDialogEnabled(): MutableLiveData<Boolean> = isPhotoDialogEnabled
+    fun isUpdateReg1(): MutableLiveData<Boolean> = updateReg1
 
     fun setOutputPhotoUri(setUri: Uri) {
         outputPhotoUri.value = setUri
@@ -324,10 +328,27 @@ class RegViewModel(application: Application) : AndroidViewModel(application) {
     fun getUrlWebViewSocial(): MutableLiveData<String> = urlWebViewSocial
 
 
+    fun setPhotoDialogEnabled(dialogEnabled: Boolean) {
+        isPhotoDialogEnabled.value = dialogEnabled
+    }
+
+    fun isPhotoDialogEnabled(): MutableLiveData<Boolean> = isPhotoDialogEnabled
+
+
+    fun setToastText(text: String) {
+        toastText.value = text
+    }
+
+    fun getToastText(): MutableLiveData<String> = toastText
+
+
     /*other methods*/
     /*При привязке первой учетной записи получаем sessionid и пароль последующие нет*/
     fun regOrBind(type: String) {
-        if (resultReg1Success.value!!) {//если уже есть сессия
+        if (getRegPassword().value!!.isEmpty() || getRegPassConfirm().value!!.isEmpty()) {
+            setToastText("Необходимо ввести пароль и его подтверждение!")
+        }
+        else if (resultReg1Success.value!!) {//если уже есть сессия
             when (type) {
                 "mail" -> postBindEmail()
                 "phone" -> postBindPhone()

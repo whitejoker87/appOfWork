@@ -1,6 +1,8 @@
 package ru.jobni.jobni.fragments.api.reg
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +46,29 @@ class FragmentRegOneMail : Fragment() {
 
         binding.viewmodelreg = regViewModel
         binding.viewmodelmain = mainViewModel
+
+        binding.mail.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                if (regViewModel.getRegMail().value!!.length > 0) binding.btnSendMailCode.visibility = View.VISIBLE
+//                else binding.btnSendMailCode.visibility = View.GONE
+                regViewModel.setUpdateReg1(true)
+            }
+
+        })
+
+        binding.btnSendMailCode.setOnClickListener {
+            View.OnClickListener {
+                regViewModel.regOrBind("mail")
+            }
+        }
 
 //        binding.includeSocialNetwork.btnUser.setOnClickListener {
 //            viewModel

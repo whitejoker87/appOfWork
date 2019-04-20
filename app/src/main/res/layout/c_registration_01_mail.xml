@@ -109,20 +109,21 @@
 			android:visibility="@{safeUnbox(viewmodelreg.resultReg2Success) ? View.GONE : View.VISIBLE}"
 			/>
 
-		<EditText
-		android:id = "@+id/password_2"
-		android:layout_width = "0dp"
-		android:layout_height = "wrap_content"
-		app:layout_constraintTop_toBottomOf = "@+id/password_1"
-		app:layout_constraintStart_toStartOf = "@+id/mail"
-		app:layout_constraintEnd_toEndOf = "@+id/mail"
-		android:layout_marginTop = "16dp"
-		style = "@style/text_color_and_size"
-		android:inputType = "textPassword"
-		android:hint = "@string/password_4"
-		android:text = "@={viewmodelreg.regPassConfirm}"
-		android:visibility="@{safeUnbox(viewmodelreg.resultReg2Success) ? View.GONE : View.VISIBLE}"
-		/>
+        <EditText
+                android:id="@+id/password_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/password_1"
+                app:layout_constraintStart_toStartOf="@+id/mail"
+                app:layout_constraintEnd_toEndOf="@+id/mail"
+                app:layout_constraintBottom_toBottomOf="@+id/background"
+                android:layout_marginTop="16dp"
+                style="@style/text_color_and_size"
+                android:inputType="textPassword"
+                android:hint="@string/password_4"
+                android:text="@={viewmodelreg.regPassConfirm}"
+                android:visibility="@{safeUnbox(viewmodelreg.resultReg2Success) ? View.GONE : View.VISIBLE}"
+                android:layout_marginBottom="16dp" app:layout_constraintVertical_bias="0.0"/>
 
 		<Button
 			android:id = "@+id/btn_send_mail_code"
@@ -135,7 +136,7 @@
 			android:background = "@drawable/shape_button"
 			android:text = "@string/code_send"
 			android:onClick = '@{() -> viewmodelreg.regOrBind("mail")}'
-			android:visibility='@{safeUnbox(viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE)}'
+			android:visibility='@{safeUnbox((viewmodelreg.regMail.length > 0)? (viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE) : View.GONE)}'
 			/>
 
 		<EditText
@@ -150,21 +151,22 @@
 			android:inputType = "textPassword"
 			android:hint = "Введите код подтверждения"
 			android:text = "@={viewmodelreg.regMailCode}"
-			android:visibility='@{safeUnbox(viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE)}'
+			android:visibility='@{safeUnbox((viewmodelreg.regMail.length > 0)? (viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE) : View.GONE)}'
 			/>
 
-		<Button
-			android:id = "@+id/btn_check_mail_code"
-			android:layout_width = "wrap_content"
-			android:layout_height = "wrap_content"
-			app:layout_constraintTop_toBottomOf = "@+id/code_mail"
-			app:layout_constraintStart_toStartOf = "@+id/background"
-			app:layout_constraintEnd_toEndOf = "@+id/background"
-			android:layout_marginTop = "16dp"
-			android:background = "@drawable/shape_button"
-			android:text = "@string/bind_account"
-			android:onClick = "@{() -> viewmodelreg.confirmEmail()}"
-			android:visibility='@{safeUnbox(viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE)}'
-			/>
+        <Button
+                android:id="@+id/btn_check_mail_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/code_mail"
+                app:layout_constraintStart_toStartOf="@+id/background"
+                app:layout_constraintEnd_toEndOf="@+id/background"
+                app:layout_constraintBottom_toBottomOf="@+id/background"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_button"
+                android:text="@string/bind_account"
+                android:onClick="@{() -> viewmodelreg.confirmEmail()}"
+                android:visibility='@{safeUnbox((viewmodelreg.regMail.length > 0)? (viewmodelreg.resultReg2Success? View.GONE : View.VISIBLE) : View.GONE)}'
+                android:layout_marginBottom="16dp" app:layout_constraintVertical_bias="0.0"/>
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

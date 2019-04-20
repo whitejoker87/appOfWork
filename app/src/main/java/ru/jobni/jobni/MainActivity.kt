@@ -358,6 +358,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        regViewModel.getToastText().observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        })
     }
 
     private fun leftMenuPAdapters() {

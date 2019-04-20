@@ -84,6 +84,13 @@ class FragmentReg : Fragment() {
             }
         })
 
+        regViewModel.isUpdateReg1().observe(this, Observer{
+            if (it){
+                adapter.notifyDataSetChanged()
+                regViewModel.setUpdateReg1(false)
+            }
+        } )
+
         return view
     }
 
